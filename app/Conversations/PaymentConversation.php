@@ -13,13 +13,15 @@ class PaymentConversation extends Conversation
     use CustomConversation;
 
 
-    protected $data;
+    protected $request_id;
+    protected $company_id;
     protected $bot;
 
-    public function __construct($bot, $data)
+    public function __construct($bot, $request_id,$company_id)
     {
         $this->bot = $bot;
-        $this->data = $data;
+        $this->request_id = $request_id;
+        $this->company_id = $company_id;
     }
 
     public function run()
@@ -43,14 +45,14 @@ class PaymentConversation extends Conversation
         $this->ask($question, function (Answer $answer) {
           $nedded_bonus = $answer->getText();
 
-          $recipient_user = User::where("telegram_chat_id",$this->data)->first();
+          $recipient_user = User::where("telegram_chat_id",$this->request_id)->first();
           if ($recipient_user->referral_bonus_count+$recipient_user->cashback_bonus_count>intval($nedded_bonus))
           {
               $keyboard = [
                   'inline_keyboard' => [
                       [
-                          ['text' => 'Списать '.$nedded_bonus." бонусов", 'callback_data' => "/payment_accept $nedded_bonus ".$this->user->id],
-                          ['text' => 'Отклонить', 'callback_data' => "/payment_decline $nedded_bonus ".$this->user->id]
+                          ['text' => 'Списать '.$nedded_bonus." бонусов", 'callback_data' => "/payment_accept $nedded_bonus ".$this->user->id." ".$this->company_id],
+                          ['text' => 'Отклонить', 'callback_data' => "/payment_decline $nedded_bonus ".$this->user->id." ".$this->company_id]
                       ]
                   ]
               ];

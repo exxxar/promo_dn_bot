@@ -50,6 +50,7 @@
         }
     </style>
 </head>
+
 <body>
 <div class="container">
     <div class="content">
@@ -58,6 +59,12 @@
         </div>
 
         <div class="links">
+            <script async src="https://telegram.org/js/telegram-widget.js?7" data-telegram-login="promo_dn_bot" data-size="large" data-onauth="onTelegramAuth(user)" data-request-access="write"></script>
+            <script type="text/javascript">
+                function onTelegramAuth(user) {
+                    alert('Logged in as ' + user.first_name + ' ' + user.last_name + ' (' + user.id + (user.username ? ', @' + user.username : '') + ')');
+                }
+            </script>
             <a href="/botman/tinker">Tinker</a>
             <a href="https://botman.io/docs" target="_blank">Documentation</a>
             <a href="https://twitter.com/botman_io" target="_blank">News</a>

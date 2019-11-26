@@ -12,6 +12,7 @@ use BotMan\BotMan\Messages\Incoming\Answer;
 use BotMan\BotMan\Messages\Outgoing\Question;
 use BotMan\BotMan\Messages\Outgoing\Actions\Button;
 use BotMan\BotMan\Messages\Conversations\Conversation;
+use Illuminate\Support\Facades\Log;
 
 class StartDataConversation extends Conversation
 {
@@ -41,138 +42,134 @@ class StartDataConversation extends Conversation
     public function startWithData()
     {
 
+        Log::info(print_r($this->data, true));
+
         $pattern = "/([0-9]{3})([0-9]{10})([0-9]{10})/";
         $string = base64_decode($this->data);
         preg_match_all($pattern, $string, $matches);
 
-        $code = $matches[1][0];
-        $user_id = $matches[2][0];
-        $promo_id = $matches[3][0];
+        Log::info(print_r($matches, true));
+
+        $tmp_dev_id = (string)env("DEVELOPER_ID");
+        while (strlen($tmp_dev_id) < 10)
+            $tmp_dev_id = "0" . $tmp_dev_id;
+
+        $this->code = count($matches[1]) > 0 ? $matches[1][0] : env("CUSTOME_CODE");
+        $this->request_user_id = count($matches[2]) > 0 ? $matches[1][0] : $tmp_dev_id;
+        $this->promo_id = count($matches[3]) > 0 ? $matches[1][0] : env("CUSTOME_PROMO");
 
 
         $telegramUser = $this->bot->getUser();
-
         $id = $telegramUser->getId();
-
-        $username = $telegramUser->getUsername();
-        $lastName = $telegramUser->getLastName();
-        $firstName = $telegramUser->getFirstName();
-
-        $user = \App\User::where("telegram_chat_id", $id)
+        $this->user = User::with(["companies"])
+            ->where("telegram_chat_id", $id)
             ->first();
 
+        if ($this->user == null)
+            $this->user = $this->$this->createUser($telegramUser);
 
-        if ($user == null) {
 
-            $user = \App\User::create([
-                'name' => $username,
-                'email' => "$id@t.me",
-                'password' => bcrypt($id),
-                'fio_from_telegram' => "$firstName $lastName",
-                'fio_from_request' => '',
-                'phone' => '',
-                'avatar_url' => '$telegramUser->getUserProfilePhotos()[0]->file_path',
-                'address' => '',
-                'sex' => 0,
-                'age' => 18,
-                'source' => "000",
-                'telegram_chat_id' => $id,
-                'referrals_count' => 0,
-                'referral_bonus_count' => 10,
-                'cashback_bonus_count' => 0,
-                'is_admin' => false,
-            ]);
-
-            $this->bot->reply("Вы у нас первый раз? - Мы дарим вам <b>10</b> бонусным баллов!");
-        }
-
-        $promo = \App\Promotion::find($promo_id);
-
-        switch ($code) {
-
+        switch ($this->code) {
             case "002":
-                if ($user->is_admin == 1) {
-                    $message = Question::create("Диалог списания средств:")
-                        ->addButtons(
-                            [
-                                Button::create("Начать процесс оплаты")->value("/payment " . $user_id)
-                            ]
-                        );
-                    $this->bot->reply($message);
-                }
-
-                $this->bot->reply('Спасибо, что пользуетесь нашей системой!)');
+                $this->activatePayment();
                 break;
+
             case "003":
-                if ($user->is_admin == 1) {
-                    $promo = Promotion::find(intval($this->data));
-
-                    $remote_user = User::where("", intval($user_id));
-
-                    $on_promo = UserHasPromo::where("telegram_chat_id", "=", $remote_user->id)
-                        ->where("promotion_id", "=", $promo->id)
-                        ->first();
-
-                    if ($on_promo == null && $promo->current_activation_count < $promo->activation_count) {
-                        $remote_user->promos()->attach($promo->id);
-
-                        $promo->current_activation_count += 1;
-                        $promo->save();
-
-
-                        $remote_user->referrals_count += 1;
-                        $remote_user->referral_bonus_count += $promo->refferal_bonus;
-
-                        $remote_user->save();
-
-                        $this->bot->sendRequest("sendMessage",
-                            ["chat_id" => $remote_user->telegram_chat_id, "text" => $promo->activation_tex]);
-                    }
-
-                    $ref = RefferalsHistory::where("user_recipient_id", $remote_user->id)->first();
-                    if ($ref->activated == 0) {
-                        $ref->activated = 1;
-                        $ref->save();
-
-                        $sender_user = User::where("id", $ref->user_sender_id)->first();
-                        $sender_user->referral_bonus_count += env("REFERRAL_BONUS");
-                        $sender_user->save();
-
-                        $this->bot->sendRequest("sendMessage",
-                            ["chat_id" => $sender_user->telegram_chat_id, "text" => "Вам начислено " . env("REFERRAL_BONUS") . " бонусов."]);
-                    }
-
-
-                    $this->bot->reply('Приз по акции успешно активирован');
-                }
-                $this->bot->reply('Спасибо, что пользуетесь нашей системой!)');
+                $this->activatePromo();
                 break;
 
             default:
-                $sender_user = \App\User::where("email", $user_id . "@t.me")
-                    ->first();
-
-                if ($sender_user != null) {
-                    RefferalsHistory::create([
-                        'user_sender_id' => $sender_user->id,
-                        'user_recipient_id' => $user->id,
-                        'activated' => 0,
-                    ]);
-
-                }
-
+                $this->activateRefferal();
                 break;
         }
-
-
         $this->bot->sendRequest("sendMessage",
-            ["text" => 'Добрый день! Приветствуем вас в нашем акционном боте! У нас вы сможете найти самые актуальные ак', 'reply_markup' => json_encode([
-                'keyboard' => $this->keyboard,
-                'one_time_keyboard' => true,
-                'resize_keyboard' => true
-            ])
+            ["text" => 'Добрый день! Приветствуем вас в нашем акционном боте!\n У нас вы сможете найти самые актуальные акции!',
+                'reply_markup' => json_encode([
+                    'keyboard' => $this->keyboard,
+                    'one_time_keyboard' => true,
+                    'resize_keyboard' => true
+                ])
             ]);
     }
 
+    protected function activatePayment()
+    {
+        if ($this->user->is_admin == 1) {
 
+            $tmp=[];
+
+            foreach ($this->user->companies as $company)
+                array_push($tmp,Button::create($company->title)->value("/payment " . $this->request_user_id." ".$company->id));
+
+            $message = Question::create("Диалог списания средств\nВыберите вашу компанию:")
+                ->addButtons($tmp);
+
+            $this->bot->reply($message);
+        }
+
+    }
+
+    protected function activatePromo()
+    {
+        if ($this->user->is_admin == 1) {
+            $promo = Promotion::find(intval($this->data));
+
+            $remote_user = User::where("", intval($this->request_user_id));
+
+            $on_promo = UserHasPromo::where("telegram_chat_id", "=", $remote_user->id)
+                ->where("promotion_id", "=", $promo->id)
+                ->first();
+
+            if ($on_promo == null && $promo->current_activation_count < $promo->activation_count) {
+                $remote_user->promos()->attach($promo->id);
+
+                $promo->current_activation_count += 1;
+                $promo->save();
+
+
+                $remote_user->referrals_count += 1;
+                $remote_user->referral_bonus_count += $promo->refferal_bonus;
+
+                $remote_user->save();
+
+                $this->bot->sendRequest("sendMessage", [
+                    "chat_id" => $remote_user->telegram_chat_id,
+                    "text" => $promo->activation_tex
+                ]);
+            }
+
+            $ref = RefferalsHistory::where("user_recipient_id", $remote_user->id)->first();
+            if ($ref->activated == 0) {
+                $ref->activated = 1;
+                $ref->save();
+
+                $sender_user = User::where("id", $ref->user_sender_id)->first();
+                $sender_user->referral_bonus_count += env("REFERRAL_BONUS");
+                $sender_user->save();
+
+                $this->bot->sendRequest("sendMessage", [
+                    "chat_id" => $sender_user->telegram_chat_id,
+                    "text" => "Вам начислено " . env("REFERRAL_BONUS") . " бонусов."
+                ]);
+            }
+
+            $this->bot->reply('Приз по акции успешно активирован');
+        }
+    }
+
+    protected function activateRefferal()
+    {
+        $sender_user = User::where("telegram_chat_id", $this->request_user_id)
+            ->first();
+
+        if ($sender_user != null) {
+            RefferalsHistory::create([
+                'user_sender_id' => $sender_user->id,
+                'user_recipient_id' => $this->user->id,
+                'activated' => 0,
+            ]);
+
+        }
+    }
 }
+

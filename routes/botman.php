@@ -15,16 +15,18 @@ use SimpleSoftwareIO\QrCode\Facades\QrCode;
 
 $botman = resolve('botman');
 
-$botman->hears('/start ([0-9a-zA-Z]+)', BotManController::class . '@startDataConversation');
 $botman->hears('/start', BotManController::class . '@startConversation');
+$botman->hears('/start ([0-9a-zA-Z]+)', BotManController::class . '@startDataConversation');
+
 $botman->hears('/promotion ([0-9]+)', BotManController::class . '@promoConversation');
-$botman->hears('/payment ([0-9]{1,10})', BotManController::class . '@paymentConversation');
+$botman->hears('/payment ([0-9]{1,10}) ([0-9]{1,10})', BotManController::class . '@paymentConversation');
 
 
 $botman->hears("\xE2\x9B\x84Новый год", function ($bot) {
     $keyboard = [
         'inline_keyboard' => [
-            [['text' => 'Посмотреть призы!', 'url' => env("APP_PROMO_LINK")]
+            [
+                ['text' => 'Посмотреть призы!', 'url' => env("APP_PROMO_LINK")],
             ]
         ]
     ];
@@ -33,7 +35,7 @@ $botman->hears("\xE2\x9B\x84Новый год", function ($bot) {
         ["text" => 'Мы готовим Вам на Новый год крутые подарки! Посмотри!', 'reply_markup' => json_encode($keyboard)
         ]);
 });
-$botman->hears("\xF0\x9F\x93\xB2QR", function ($bot) {
+$botman->hears("\xF0\x9F\x93\xB2Мои друзья", function ($bot) {
     $telegramUser = $bot->getUser();
 
     $id = $telegramUser->getId();
@@ -42,18 +44,39 @@ $botman->hears("\xF0\x9F\x93\xB2QR", function ($bot) {
 
     $ref = $user->referrals_count;
 
-    $bot->reply("Вы пригласили *$ref* друзей!\n_Делитесь Вашим QR-кодом и накапливайте баллы!_\n", ["parse_mode" => "Markdown"]);
+    $tmp_message = "Вы пригласили *$ref* друзей!\n_Делитесь Вашим QR-кодом и накапливайте баллы!_\n";
+
+    if ($ref > 0) {
+        $message = Question::create($tmp_message)
+            ->addButtons([
+                Button::create("Посмотреть друзей")->value("/friends 0")
+            ]);
+
+        $bot->reply($message, ["parse_mode" => "Markdown"]);
+    } else
+        $bot->reply($tmp_message, ["parse_mode" => "Markdown"]);
+
 
     $tmp_id = "$id";
     while (strlen($tmp_id) < 10)
         $tmp_id = "0" . $tmp_id;
 
     $code = base64_encode("001" . $tmp_id . "000000000");
-    $tmp_img = substr($code, 0, strlen($code) - 2);
-    $bot->reply(env("APP_URL") . "/image/" . $tmp_img,
-        ["parse_mode" => "Markdown"]);
+
+    $attachment = new Image("https://api.qrserver.com/v1/create-qr-code/?size=150x150&data=https://t.me/promo_dn_bot?start=$code");
+
+    // Build message object
+    $message = OutgoingMessage::create('_Ваш реферальный код_')
+        ->withAttachment($attachment);
+
+
+    // Reply message object
+    $bot->reply($message, ["parse_mode" => "Markdown"]);
+
+
 });
-$botman->hears("\xF0\x9F\x92\xB3Баллы", function ($bot) {
+
+$botman->hears("\xF0\x9F\x92\xB3Мои баллы", function ($bot) {
     $telegramUser = $bot->getUser();
 
     $id = $telegramUser->getId();
@@ -62,35 +85,45 @@ $botman->hears("\xF0\x9F\x92\xB3Баллы", function ($bot) {
 
     if ($user != null) {
         $summary = $user->referral_bonus_count + $user->cashback_bonus_count;
+        $cashback = $user->cashback_bonus_count;
 
-        $bot->reply("У вас *$summary* баллов!\n_Для оплаты дайте отсканировать данный QR-код сотруднику!_\n", ["parse_mode" => "Markdown"]);
+
+        $tmp_message = "У вас *$summary* баллов, из них *$cashback* - бонус CashBack!\n_Для оплаты дайте отсканировать данный QR-код сотруднику!_\n";
+        $payments = RefferalsPaymentHistory::where("user_id",$user->id)
+            ->get();
+
+        if (count($payments) > 0) {
+            $message = Question::create($tmp_message)
+                ->addButtons([
+                    Button::create("Посмотреть мои расходы")->value("/payments 0")
+                ]);
+
+            $bot->reply($message, ["parse_mode" => "Markdown"]);
+        } else
+            $bot->reply($tmp_message, ["parse_mode" => "Markdown"]);
+
 
         $tmp_id = "$id";
         while (strlen($tmp_id) < 10)
             $tmp_id = "0" . $tmp_id;
 
         $code = base64_encode("002" . $tmp_id . "000000000");
-        $tmp_img = substr($code, 0, strlen($code) - 2);
-        $bot->reply(env("APP_URL") . "/image/" . $tmp_img,
-            ["parse_mode" => "Markdown"]);
+
+
+        $attachment = new Image("https://api.qrserver.com/v1/create-qr-code/?size=150x150&data=https://t.me/promo_dn_bot?start=$code");
+
+        // Build message object
+        $message = OutgoingMessage::create('_Ваш код для оплаты_')
+            ->withAttachment($attachment);
+
+        // Reply message object
+        $bot->reply($message, ["parse_mode" => "Markdown"]);
+
     }
 
 });
-$botman->hears("\xF0\x9F\x92\xB0Кэшбэк", function ($bot) {
-    $telegramUser = $bot->getUser();
 
-    $id = $telegramUser->getId();
-
-    $user = \App\User::where("telegram_chat_id", $id)->first();
-
-    $cashback = $user->cashback_bonus_count;
-
-    $bot->reply("У вас накопилось *$cashback* рублей кэшбэка!",
-        ["parse_mode" => "Markdown"]);
-
-
-});
-$botman->hears("\xF0\x9F\x94\xA5Все категории", function ($bot) {
+$botman->hears("\xF0\x9F\x94\xA5По категориям", function ($bot) {
     $categories = \App\Category::all();
 
     $tmp = [];
@@ -105,7 +138,7 @@ $botman->hears("\xF0\x9F\x94\xA5Все категории", function ($bot) {
 
     $bot->reply($message);
 });
-$botman->hears("\xF0\x9F\x94\xA5Все компании", function ($bot) {
+$botman->hears("\xF0\x9F\x94\xA5По компаниям", function ($bot) {
     $companies = \App\Company::all();
 
     $tmp = [];
@@ -175,11 +208,11 @@ $botman->hears('/company ([0-9]+)', function ($bot, $company_id) {
     $attachment = new Image($company->logo_url);
 
     // Build message object
-    $message = OutgoingMessage::create($company->title."\n_".$company->description."_")
+    $message = OutgoingMessage::create($company->title . "\n_" . $company->description . "_")
         ->withAttachment($attachment);
 
     // Reply message object
-    $bot->reply($message,["parse_mode" => "Markdown"]);
+    $bot->reply($message, ["parse_mode" => "Markdown"]);
 
     $promotions = \App\Promotion::with(["users"])->where("company_id", "=", $company_id)
         ->get();
@@ -209,7 +242,7 @@ $botman->hears('/company ([0-9]+)', function ($bot, $company_id) {
 });
 
 
-$botman->hears('/payment_accept ([0-9]{1,10}) ([0-9]{3,10})', function ($bot, $value, $user_id) {
+$botman->hears('/payment_accept ([0-9]{1,10}) ([0-9]{3,10}) ([0-9]+)', function ($bot, $value, $user_id, $company_id) {
 
     $telegramUser = $this->bot->getUser();
     $id = $telegramUser->getId();
@@ -222,6 +255,7 @@ $botman->hears('/payment_accept ([0-9]{1,10}) ([0-9]{3,10})', function ($bot, $v
 
         RefferalsPaymentHistory::create([
             'user_id' => $user->id,
+            'company_id' => $company_id,
             'employee_id' => (User::where("telegram_chat_id", $user_id)->first())->id,
             'value' => intval($value),
         ]);
@@ -250,7 +284,7 @@ $botman->hears('/payment_accept ([0-9]{1,10}) ([0-9]{3,10})', function ($bot, $v
     }
 });
 
-$botman->hears('/payment_decline ([0-9]{1,10}) ([0-9]{3,10})', function ($bot, $value, $user_id) {
+$botman->hears('/payment_decline ([0-9]{1,10}) ([0-9]{3,10}) ([0-9]+)', function ($bot, $value, $user_id, $company_id) {
     $bot->reply('Оплата отклонена');
 
     $this->bot->sendRequest("sendMessage",
@@ -260,3 +294,123 @@ $botman->hears('/payment_decline ([0-9]{1,10}) ([0-9]{3,10})', function ($bot, $
         ]);
 
 });
+
+$botman->hears('/friends ([0-9]+)', function ($bot, $page) {
+
+    $telegramUser = $bot->getUser();
+
+    $id = $telegramUser->getId();
+
+    $user = \App\User::where("telegram_chat_id", $id)->first();
+
+    $refs = \App\RefferalsHistory::with(["recipient"])
+        ->where("user_sender_id", $user->id)
+        ->skip($page * 10)
+        ->take(10)
+        ->orderBy('id', 'DESC')
+        ->get();
+
+    $tmp = "";
+
+    foreach ($refs as $key => $ref) {
+        $userName = $ref->recipient->fio_from_telegram ??
+            $ref->recipient->fio_from_request ??
+            $ref->recipient->telegram_chat_id;
+        $tmp .= ($key + 1) . ". " . $userName . ($ref->activated == 0 ? "\xE2\x9D\x8E" : "\xE2\x9C\x85") . "\n";
+
+    }
+
+    $inline_keyboard = [];
+    if ($page == 0 && count($refs) == 10)
+        array_push($inline_keyboard, ['text' => 'Далее', 'callback_data' => '/friends ' . ($page + 1)]);
+
+    if ($page > 0) {
+        if (count($refs) == 0) {
+            array_push($inline_keyboard, ['text' => 'Назад', 'callback_data' => '/friends ' . ($page - 1)]);
+        }
+
+        if (count($refs) == 10) {
+            array_push($inline_keyboard, ['text' => 'Назад', 'callback_data' => '/friends ' . ($page - 1)]);
+            array_push($inline_keyboard, ['text' => 'Далее', 'callback_data' => '/friends ' . ($page + 1)]);
+        }
+
+        if (count($refs) > 0 && count($refs) < 10) {
+            array_push($inline_keyboard, ['text' => 'Назад', 'callback_data' => '/friends ' . ($page - 1)]);
+        }
+    }
+
+
+    $keyboard = [
+        'inline_keyboard' => [
+            $inline_keyboard
+        ]
+    ];
+
+    $bot->sendRequest("sendMessage",
+        [
+            "text" => strlen($tmp) > 0 ? $tmp : "У вас нет друзей:(",
+            'reply_markup' => json_encode($keyboard)
+        ]);
+
+
+});
+
+$botman->hears('/payments ([0-9]+)', function ($bot, $page) {
+
+    $telegramUser = $bot->getUser();
+
+    $id = $telegramUser->getId();
+
+    $user = \App\User::where("telegram_chat_id", $id)->first();
+
+    $refs = \App\RefferalsPaymentHistory::with(["company"])
+        ->where("user_id", $user->id)
+        ->skip($page * 10)
+        ->take(10)
+        ->orderBy('id', 'DESC')
+        ->get();
+
+    $tmp = "";
+
+    foreach ($refs as $key => $ref) {
+        $company_title = $ref->company->title ?? $ref->company->id;
+        $tmp .= "_".$ref->created_at."_ в " . $company_title . " потрачено *".$ref->value."* боунсов \n";
+
+    }
+
+    $inline_keyboard = [];
+    if ($page == 0 && count($refs) == 10)
+        array_push($inline_keyboard, ['text' => 'Далее', 'callback_data' => '/payments ' . ($page + 1)]);
+
+    if ($page > 0) {
+        if (count($refs) == 0) {
+            array_push($inline_keyboard, ['text' => 'Назад', 'callback_data' => '/payments ' . ($page - 1)]);
+        }
+
+        if (count($refs) == 10) {
+            array_push($inline_keyboard, ['text' => 'Назад', 'callback_data' => '/payments ' . ($page - 1)]);
+            array_push($inline_keyboard, ['text' => 'Далее', 'callback_data' => '/payments ' . ($page + 1)]);
+        }
+
+        if (count($refs) > 0 && count($refs) < 10) {
+            array_push($inline_keyboard, ['text' => 'Назад', 'callback_data' => '/payments ' . ($page - 1)]);
+        }
+    }
+
+
+    $keyboard = [
+        'inline_keyboard' => [
+            $inline_keyboard
+        ]
+    ];
+
+    $bot->sendRequest("sendMessage",
+        [
+            "text" => strlen($tmp) > 0 ? $tmp : "Вы не потратили свои бонусы.",
+            'reply_markup' => json_encode($keyboard),
+            "parse_mode" => "Markdown"
+        ]);
+
+
+});
+

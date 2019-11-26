@@ -18,10 +18,12 @@ class CreateRefferalsPaymentHistoriesTable extends Migration
             $table->increments('id');
             $table->unsignedInteger('user_id');
             $table->unsignedInteger('employee_id');
+            $table->unsignedInteger('company_id')->nullable();
             $table->integer('value');
 
             $table->foreign('employee_id')->references('id')->on('users');
             $table->foreign('user_id')->references('id')->on('users');
+            $table->foreign('company_id')->references('id')->on('companies');
 
             $table->timestamps();
         });

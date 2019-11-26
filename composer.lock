@@ -4,8 +4,59 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "f49754f328fbc0e31d101f3caa580bb4",
+    "content-hash": "93fa83101320fd22203ad72586336ce8",
     "packages": [
+        {
+            "name": "azate/laravel-telegram-login-auth",
+            "version": "v1.0.4",
+            "source": {
+                "type": "git",
+                "url": "https://github.com/azate/laravel-telegram-login-auth.git",
+                "reference": "de978a4bcbb09e9caa88d55adb5e117e2aed7316"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://api.github.com/repos/azate/laravel-telegram-login-auth/zipball/de978a4bcbb09e9caa88d55adb5e117e2aed7316",
+                "reference": "de978a4bcbb09e9caa88d55adb5e117e2aed7316",
+                "shasum": ""
+            },
+            "require": {
+                "illuminate/http": "5.5.x|5.6.x|5.7.x|5.8.*",
+                "illuminate/support": "5.5.x|5.6.x|5.7.x|5.8.*",
+                "nesbot/carbon": "^1.32|^2",
+                "php": "^7.0"
+            },
+            "type": "library",
+            "extra": {
+                "laravel": {
+                    "providers": [
+                        "Azate\\LaravelTelegramLoginAuth\\TelegramLoginServiceProvider"
+                    ]
+                }
+            },
+            "autoload": {
+                "psr-4": {
+                    "Azate\\LaravelTelegramLoginAuth\\": "src"
+                }
+            },
+            "notification-url": "https://packagist.org/downloads/",
+            "license": [
+                "MIT"
+            ],
+            "authors": [
+                {
+                    "name": "Artem Didyk",
+                    "email": "c5c77b6+1467d308@gmail.com"
+                }
+            ],
+            "description": "Laravel Telegram Login Auth",
+            "keywords": [
+                "auth",
+                "laravel",
+                "telegram"
+            ],
+            "time": "2019-03-07T09:50:04+00:00"
+        },
         {
             "name": "bacon/bacon-qr-code",
             "version": "1.0.3",

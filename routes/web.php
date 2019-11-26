@@ -23,6 +23,8 @@ Route::get('/botman/tinker', 'BotManController@tinker');
 
 Auth::routes();
 
+Route::get('auth/telegram/callback', 'TelegramAuthController@handleTelegramCallback')->name('auth.telegram.handle');
+
 Route::get('/home', 'HomeController@index')->name('home');
 
 Route::resources([

@@ -17,6 +17,8 @@ class CreateCashbackHistoriesTable extends Migration
         Schema::create('cashback_histories', function (Blueprint $table) {
             $table->increments('id');
             $table->integer('money_in_check');
+	        $table->string('user_phone')->default("")->nullable();
+	        $table->string('check_info',255)->default("");
             $table->integer('activated')->default(false);
             $table->unsignedInteger('employee_id');
 

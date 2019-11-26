@@ -46,8 +46,8 @@ class BotManController extends Controller
         $bot->startConversation(new StartDataConversation($bot,$data));
     }
 
-    public function paymentConversation(BotMan $bot,$data)
+    public function paymentConversation(BotMan $bot,$request_id,$company_id)
     {
-        $bot->startConversation(new PaymentConversation($bot,$data));
+        $bot->startConversation(new PaymentConversation($bot,$request_id,$company_id));
     }
 }

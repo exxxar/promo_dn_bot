@@ -4,9 +4,11 @@ namespace App\Conversations;
 
 use App\Promotion;
 use App\UserHasPromo;
+use BotMan\BotMan\Messages\Attachments\Image;
 use BotMan\BotMan\Messages\Conversations\Conversation;
 use BotMan\BotMan\Messages\Incoming\Answer;
 use BotMan\BotMan\Messages\Outgoing\Actions\Button;
+use BotMan\BotMan\Messages\Outgoing\OutgoingMessage;
 use BotMan\BotMan\Messages\Outgoing\Question;
 
 class PromoConversation extends Conversation
@@ -68,7 +70,7 @@ class PromoConversation extends Conversation
                 $this->user->fio_from_request = $answer->getText();
                 $this->user->save();
 
-                $this->say('Отлично, приятно познакомится ' . $this->username);
+                $this->say('Отлично, приятно познакомится ' .  $this->user->fio_from_request );
                 $this->askPhone();
             });
         } else
@@ -182,11 +184,15 @@ class PromoConversation extends Conversation
                 $tmp_promo_id = "0" . $tmp_promo_id;
 
             $code = base64_encode("003" . $tmp_id . $tmp_promo_id);
-            $tmp_img = substr($code, 0, strlen($code) - 2);
 
+            $attachment = new Image("https://api.qrserver.com/v1/create-qr-code/?size=150x150&data=https://t.me/promo_dn_bot?start=$code");
 
-            $this->bot->reply(env("APP_URL") . "/image/" . $tmp_img,
-                ["parse_mode" => "Markdown"]);
+            // Build message object
+            $message = OutgoingMessage::create('_Код для получения приза по акции_')
+                ->withAttachment($attachment);
+
+            // Reply message object
+            $this->bot->reply($message,["parse_mode" => "Markdown"]);
         }
 
     }

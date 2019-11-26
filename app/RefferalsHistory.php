@@ -15,11 +15,11 @@ class RefferalsHistory extends Model
 
     public function sender()
     {
-        return $this->hasOne('App\User','user_sender_id','id');
+        return $this->hasOne('App\User','id','user_sender_id');
     }
 
     public function recipient()
     {
-        return $this->hasOne('App\User','user_recipient_id','id');
+        return $this->hasOne('App\User','id',"user_recipient_id");
     }
 }

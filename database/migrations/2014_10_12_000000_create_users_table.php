@@ -21,14 +21,17 @@ class CreateUsersTable extends Migration
             $table->string('password');
 
             $table->string('fio_from_telegram')->default('');
-            $table->string('fio_from_request')->default('');
+            $table->string('fio_from_request')->default('')->nullable();
 
-            $table->string('phone')->unique();
+            $table->string('phone')->unique()->nullable();
 
-            $table->string('avatar_url',1000)->default('');
-            $table->string('address',500)->default('');
+            $table->string('avatar_url',1000)->default('')->nullable();
+            $table->string('address',500)->default('')->nullable();
             $table->tinyInteger('sex')->default(1)->nullable();
             $table->smallInteger('age')->default(18)->nullable();
+            $table->smallInteger('birthday')->default("")->nullable();
+
+
             $table->string('source')->default('');
 
             $table->string('telegram_chat_id')->unique();

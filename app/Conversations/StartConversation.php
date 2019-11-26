@@ -2,11 +2,14 @@
 
 namespace App\Conversations;
 
+use App\Category;
+use App\User;
 use Illuminate\Foundation\Inspiring;
 use BotMan\BotMan\Messages\Incoming\Answer;
 use BotMan\BotMan\Messages\Outgoing\Question;
 use BotMan\BotMan\Messages\Outgoing\Actions\Button;
 use BotMan\BotMan\Messages\Conversations\Conversation;
+use Illuminate\Support\Facades\Log;
 
 class StartConversation extends Conversation
 {
@@ -24,7 +27,7 @@ class StartConversation extends Conversation
      */
     public function run()
     {
-      $this->startWithEmptyData();
+        $this->startWithEmptyData();
     }
 
     /**
@@ -37,45 +40,23 @@ class StartConversation extends Conversation
 
         $id = $telegramUser->getId();
 
-        $username = $telegramUser->getUsername();
-        $lastName = $telegramUser->getLastName();
-        $firstName = $telegramUser->getFirstName();
-
-        $user = \App\User::where("email", "$id@t.me")
+        $user = User::where("telegram_chat_id", $id)
             ->first();
 
-        if ($user==null) {
+        if ($user == null)
+            $user = $this->createUser($telegramUser);
 
-            $user = \App\User::create([
-                'name' => $username,
-                'email' => "$id@t.me",
-                'password' => bcrypt($id),
-                'fio_from_telegram' => "$firstName $lastName",
-                'fio_from_request' => '',
-                'phone' => '',
-                'avatar_url' => '$telegramUser->getUserProfilePhotos()[0]->file_path',
-                'address' => '',
-                'sex' => 0,
-                'age' => 18,
-                'source' => "000",
-                'telegram_chat_id' => $id,
-                'referrals_count' => 0,
-                'referral_bonus_count' => 0,
-                'cashback_bonus_count' => 0,
-                'is_admin' => false,
-            ]);
 
-        }
-
-        $this->bot->sendRequest("sendMessage",
-            ["text" => "Добрый день! $id $username $firstName $lastName!Приветствуем вас в нашем акционном боте! У нас вы сможете найти самые актуальные ак", 'reply_markup' => json_encode([
+        $this->bot->sendRequest("sendMessage", [
+            "text" => "Добрый день!Приветствуем вас в нашем акционном боте! У нас вы сможете найти самые актуальные акции",
+            'reply_markup' => json_encode([
                 'keyboard' => $this->keyboard,
                 'one_time_keyboard' => true,
                 'resize_keyboard' => true
             ])
-            ]);
+        ]);
 
-        $categories = \App\Category::all();
+        $categories = Category::all();
 
         $tmp = [];
 
