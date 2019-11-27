@@ -36,7 +36,7 @@ class CompanyController extends Controller
     /**
      * Store a newly created resource in storage.
      *
-     * @param  \Illuminate\Http\Request  $request
+     * @param  \Illuminate\Http\Request $request
      * @return \Illuminate\Http\Response
      */
     public function store(Request $request)
@@ -65,13 +65,15 @@ class CompanyController extends Controller
             'updated_at' => Carbon::now(),
         ]);
 
-        return back()->with('success', 'Компания успешно добавлена');
+        return redirect()
+            ->route('companies.index')
+            ->with('success', 'Компания успешно добавлена');
     }
 
     /**
      * Display the specified resource.
      *
-     * @param  \App\Company  $company
+     * @param  \App\Company $company
      * @return \Illuminate\Http\Response
      */
     public function show($id)
@@ -85,7 +87,7 @@ class CompanyController extends Controller
     /**
      * Show the form for editing the specified resource.
      *
-     * @param  \App\Company  $company
+     * @param  \App\Company $company
      * @return \Illuminate\Http\Response
      */
     public function edit($id)
@@ -99,8 +101,8 @@ class CompanyController extends Controller
     /**
      * Update the specified resource in storage.
      *
-     * @param  \Illuminate\Http\Request  $request
-     * @param  \App\Company  $company
+     * @param  \Illuminate\Http\Request $request
+     * @param  \App\Company $company
      * @return \Illuminate\Http\Response
      */
     public function update(Request $request, $id)
@@ -126,13 +128,15 @@ class CompanyController extends Controller
         $company->logo_url = $request->get('logo_url') ?? '';
         $company->save();
 
-        return back()->with('success', 'Компания успешно отредактирована');
+        return redirect()
+            ->route('companies.show', $id)
+            ->with('success', 'Компания успешно отредактирована');
     }
 
     /**
      * Remove the specified resource from storage.
      *
-     * @param  \App\Company  $company
+     * @param  \App\Company $company
      * @return \Illuminate\Http\Response
      */
     public function destroy($id)
@@ -140,6 +144,8 @@ class CompanyController extends Controller
         //
         $company = Company::find($id);
         $company->delete();
-        return back()->with('success', 'Компания успешно удалена');
+        return redirect()
+            ->route('companies.index')
+            ->with('success', 'Компания успешно удалена');
     }
 }

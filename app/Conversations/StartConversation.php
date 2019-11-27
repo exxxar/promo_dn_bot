@@ -27,7 +27,11 @@ class StartConversation extends Conversation
      */
     public function run()
     {
-        $this->startWithEmptyData();
+        try {
+            $this->startWithEmptyData();
+        } catch (\Exception $e) {
+            $this->fallbackMenu("Добрый день!Приветствуем вас в нашем акционном боте! Сейчас у нас технические работы.");
+        }
     }
 
     /**
@@ -36,38 +40,36 @@ class StartConversation extends Conversation
     public function startWithEmptyData()
     {
 
-        try {
-            $telegramUser = $this->bot->getUser();
 
-            $id = $telegramUser->getId();
+        $telegramUser = $this->bot->getUser();
 
-            $user = User::where("telegram_chat_id", $id)
-                ->first();
+        $id = $telegramUser->getId();
 
-            if ($user == null)
-                $user = $this->createUser($telegramUser);
+        $user = User::where("telegram_chat_id", $id)
+            ->first();
 
-            $this->mainMenu("Добрый день!Приветствуем вас в нашем акционном боте! У нас вы сможете найти самые актуальные акции");
+        if ($user == null)
+            $user = $this->createUser($telegramUser);
 
-            $categories = Category::all();
+        $this->mainMenu("Добрый день!Приветствуем вас в нашем акционном боте! У нас вы сможете найти самые актуальные акции");
 
-            if (count($categories) > 0) {
-                $tmp = [];
+        $categories = Category::all();
 
-                foreach ($categories as $cat) {
-                    array_push($tmp, Button::create($cat->title)->value("/category " . $cat->id));
-                }
+        if (count($categories) > 0) {
+            $tmp = [];
 
-                $message = Question::create("Категории акций:")
-                    ->addButtons($tmp);
+            foreach ($categories as $cat) {
+                array_push($tmp, Button::create($cat->title)->value("/category " . $cat->id));
+            }
+
+            $message = Question::create("Категории акций:")
+                ->addButtons($tmp);
 
 
-                $this->bot->reply($message);
-            } else
-                $this->bot->reply("К сожалению, сейчас акций нет, но они появятся в ближайшее время!");
+            $this->bot->reply($message);
+        } else
+            $this->bot->reply("К сожалению, сейчас акций нет, но они появятся в ближайшее время!");
 
-        } catch (\Exception $e) {
-            $this->fallbackMenu("Добрый день!Приветствуем вас в нашем акционном боте! Сейчас у нас технические работы.");
-        }
+
     }
 }

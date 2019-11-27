@@ -55,7 +55,7 @@ class PromotionController extends Controller
             'promo_image_url'=> 'max:1000',
             'start_at'=> 'required',
             'end_at'=> 'required',
-            'immediately_activate'=> 'boolean',
+            'immediately_activate'=> 'required',
             'activation_count'=> 'required',
             'location_address'=> 'required',
             'company_id'=> 'required|integer',
@@ -82,7 +82,9 @@ class PromotionController extends Controller
             'updated_at' => Carbon::now(),
         ]);
 
-        return back()->with('success', 'Акция успешно добавлена');
+        return redirect()
+            ->route('promotions.index')
+            ->with('success', 'Акция успешно добавлена');
     }
 
     /**
@@ -157,7 +159,9 @@ class PromotionController extends Controller
         $promotion->refferal_bonus = $request->get("refferal_bonus");
         $promotion->save();
 
-        return back()->with('success', 'Акция успешно отредактирована');
+        return redirect()
+            ->route('promotions.index')
+            ->with('success', 'Акция успешно отредактирована');
     }
 
     /**
@@ -171,6 +175,8 @@ class PromotionController extends Controller
         //
         $promotion = Promotion::find($id);
         $promotion->delete();
-        return back()->with('success', 'Акция успешно удалена');
+        return redirect()
+            ->route('promotions.index')
+            ->with('success', 'Акция успешно удалена');
     }
 }

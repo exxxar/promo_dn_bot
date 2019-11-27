@@ -25,29 +25,42 @@ Auth::routes();
 
 Route::get('auth/telegram/callback', 'TelegramAuthController@handleTelegramCallback')->name('auth.telegram.handle');
 
-Route::get('/home', 'HomeController@index')->name('home');
 
-Route::resources([
-    'users' => 'UsersController',
-    'categories' => 'CategoryController',
-    'companies' => 'CompanyController',
-    'promotions' => 'PromotionController',
-    'cashback' => 'CashbackHistoryController',
-    'refferals' => 'RefferalsHistoryController',
-    'payments' => 'RefferalsPaymentHistoryController',
-]);
 
-Route::get("/users/cashback/{id}","UsersController@cashBackPage")->name("usercashback.index");
-Route::post("/users/cashback/add","UsersController@addCashBack")->name("usercashback.add");
 
-Route::get('/image/{img}', function ($img) {
+Route::prefix('admin')->group(function () {
 
-    $image = QrCode::format('png')
-        ->size(300)->errorCorrection('H')
-        ->generate("https://t.me/".env("APP_BOT_NAME")."?start=$img");
+    Route::get('/', 'HomeController@index')
+        ->name('home');
 
-    return response($image)->header('Content-type','image/jpeg')->header("Cache-Control", "no-cache");
+    Route::post('/', 'HomeController@index')
+        ->name('home.qr');
+
+
+    Route::post('/search', 'UsersController@search')
+        ->name('users.search');
+
+    Route::post("/users/cashback/add","UsersController@addCashBack")
+        ->name("users.cashback.add");
+
+    Route::get("/users/cashback/{id}","UsersController@cashBackPage")->name("users.cashback.index");
+
+    Route::resources([
+        'users' => 'UsersController',
+        'categories' => 'CategoryController',
+        'companies' => 'CompanyController',
+        'promotions' => 'PromotionController',
+        'cashback' => 'CashbackHistoryController',
+        'refferals' => 'RefferalsHistoryController',
+        'payments' => 'RefferalsPaymentHistoryController',
+    ]);
+
 });
+
+
+
+
+
 
 /*Route::get("/image/{img}",function ($img){
 

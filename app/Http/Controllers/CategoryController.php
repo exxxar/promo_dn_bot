@@ -48,17 +48,17 @@ class CategoryController extends Controller
             'image_url' => 'required',
         ]);
 
-        $title = Carbon::now();
-
         $category = Category::create([
-            'title' => $title,
+            'title' =>  $request->get('title') ?? '',
             'description' => $request->get('description') ?? '',
             'image_url' => $request->get('image_url') ?? '',
             'created_at' => Carbon::now(),
             'updated_at' => Carbon::now(),
         ]);
 
-        return back()->with('success', 'Категория успешно добавлена');
+        return redirect()
+            ->route('categories.index')
+            ->with('success', 'Категория успешно добавлена');
     }
 
     /**
@@ -109,7 +109,9 @@ class CategoryController extends Controller
         $category->image_url = $request->get('image_url') ?? '';
         $category->save();
 
-        return back()->with('success', 'Категория успешно обновлена');
+        return redirect()
+            ->route('categories.index')
+            ->with('success', 'Категория успешно обновлена');
     }
 
     /**
@@ -123,6 +125,8 @@ class CategoryController extends Controller
         //
         $category = Category::find($id);
         $category->delete();
-        return back()->with('success', 'Категория успешно удалена');
+        return redirect()
+            ->route('categories.index')
+            ->with('success', 'Категория успешно удалена');
     }
 }

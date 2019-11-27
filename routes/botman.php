@@ -18,7 +18,7 @@ $botman = resolve('botman');
 
 
 $botman->hears('/start', BotManController::class . '@startConversation');
-$botman->hears('/start ([0-9a-zA-Z]+)', BotManController::class . '@startDataConversation');
+$botman->hears('/start ([0-9a-zA-Z=]+)', BotManController::class . '@startDataConversation');
 
 $botman->hears('/promotion ([0-9]+)', BotManController::class . '@promoConversation');
 $botman->hears('/payment ([0-9]{1,10}) ([0-9]{1,10})', BotManController::class . '@paymentConversation');
@@ -65,7 +65,7 @@ $botman->hears("\xF0\x9F\x93\xB2Мои друзья", function ($bot) {
 
     $code = base64_encode("001" . $tmp_id . "000000000");
 
-    $attachment = new Image("https://api.qrserver.com/v1/create-qr-code/?size=150x150&data=https://t.me/promo_dn_bot?start=$code");
+    $attachment = new Image("https://api.qrserver.com/v1/create-qr-code/?size=150x150&data=https://t.me/".env("APP_BOT_NAME")."?start=$code");
 
     // Build message object
     $message = OutgoingMessage::create('_Ваш реферальный код_')
@@ -112,7 +112,7 @@ $botman->hears("\xF0\x9F\x92\xB3Мои баллы", function ($bot) {
         $code = base64_encode("002" . $tmp_id . "000000000");
 
 
-        $attachment = new Image("https://api.qrserver.com/v1/create-qr-code/?size=150x150&data=https://t.me/promo_dn_bot?start=$code");
+        $attachment = new Image("https://api.qrserver.com/v1/create-qr-code/?size=150x150&data=https://t.me/".env("APP_BOT_NAME")."?start=$code");
 
         // Build message object
         $message = OutgoingMessage::create('_Ваш код для оплаты_')
@@ -175,13 +175,17 @@ $botman->hears("\xE2\x9A\xA1Все акции", function ($bot) {
 });
 
 $botman->hears('stop', function ($bot) {
-    $bot->reply('stopped');
+    $bot->reply('Хорошо, продолжим позже!)');
 })->stopsConversation();
 
 $botman->hears('/category ([0-9]+)', function ($bot, $category_id) {
 
     $promotions = \App\Promotion::with(["users"])->where("category_id", "=", $category_id)
         ->get();
+
+
+
+
 
     $tmp = [];
 
@@ -192,7 +196,12 @@ $botman->hears('/category ([0-9]+)', function ($bot, $category_id) {
 
         $on_promo = $promo->users()->where('telegram_chat_id', "$id")->first();
 
-        if ($on_promo == null)
+        $time_0 = (date_timestamp_get(new DateTime($promo->start_at)));
+        $time_1 = (date_timestamp_get(new DateTime($promo->end_at)));
+
+        $time_2 = date_timestamp_get(now());
+
+        if ($on_promo == null&&$time_2>=$time_0&&$time_2<$time_1)
             array_push($tmp, Button::create($promo->title)->value("/promotion " . $promo->id));
     }
 
@@ -232,7 +241,12 @@ $botman->hears('/company ([0-9]+)', function ($bot, $company_id) {
 
         $on_promo = $promo->users()->where('telegram_chat_id', "$id")->first();
 
-        if ($on_promo == null)
+        $time_0 = (date_timestamp_get(new DateTime($promo->start_at)));
+        $time_1 = (date_timestamp_get(new DateTime($promo->end_at)));
+
+        $time_2 = date_timestamp_get(now());
+
+        if ($on_promo == null&&$time_2>=$time_0&&$time_2<$time_1)
             array_push($tmp, Button::create($promo->title)->value("/promotion " . $promo->id));
     }
 

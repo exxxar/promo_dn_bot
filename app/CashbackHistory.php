@@ -10,7 +10,11 @@ class CashbackHistory extends Model
         'money_in_check',
         'activated',
         'employee_id',
+        'check_info',
+        'user_phone'
+
     ];
+
 
     public function employee()
     {

@@ -33,7 +33,11 @@ class StartDataConversation extends Conversation
      */
     public function run()
     {
-        $this->startWithData();
+        try {
+            $this->startWithData();
+        } catch (\Exception $e) {
+            $this->fallbackMenu("Добрый день!Приветствуем вас в нашем акционном боте! Сейчас у нас технические работы.");
+        }
     }
 
     /**
@@ -41,48 +45,46 @@ class StartDataConversation extends Conversation
      */
     public function startWithData()
     {
+        $pattern = "/([0-9]{3})([0-9]{10})([0-9]{10})/";
+        $string = base64_decode($this->data);
+        preg_match_all($pattern, $string, $matches);
 
-        try {
-            $pattern = "/([0-9]{3})([0-9]{10})([0-9]{10})/";
-            $string = base64_decode($this->data);
-            preg_match_all($pattern, $string, $matches);
+        $tmp_dev_id = (string)env("DEVELOPER_ID");
+        while (strlen($tmp_dev_id) < 10)
+            $tmp_dev_id = "0" . $tmp_dev_id;
 
-            $tmp_dev_id = (string)env("DEVELOPER_ID");
-            while (strlen($tmp_dev_id) < 10)
-                $tmp_dev_id = "0" . $tmp_dev_id;
-
-            $this->code = count($matches[1]) > 0 ? $matches[1][0] : env("CUSTOME_CODE");
-            $this->request_user_id = count($matches[2]) > 0 ? $matches[1][0] : $tmp_dev_id;
-            $this->promo_id = count($matches[3]) > 0 ? $matches[1][0] : env("CUSTOME_PROMO");
+        $this->code = count($matches[1]) > 0 ? $matches[1][0] : env("CUSTOME_CODE");
+        $this->request_user_id = count($matches[2]) > 0 ? $matches[1][0] : $tmp_dev_id;
+        $this->promo_id = count($matches[3]) > 0 ? $matches[1][0] : env("CUSTOME_PROMO");
 
 
-            $telegramUser = $this->bot->getUser();
-            $id = $telegramUser->getId();
-            $this->user = User::with(["companies"])
-                ->where("telegram_chat_id", $id)
-                ->first();
+        $telegramUser = $this->bot->getUser();
+        $id = $telegramUser->getId();
+        $this->user = User::with(["companies"])
+            ->where("telegram_chat_id", $id)
+            ->first();
 
-            if ($this->user == null)
-                $this->user = $this->$this->createUser($telegramUser);
+        if ($this->user == null)
+            $this->user = $this->$this->createUser($telegramUser);
 
+        $canBeRefferal = true;
 
-            switch ($this->code) {
-                case "002":
-                    $this->activatePayment();
-                    break;
-
-                case "003":
-                    $this->activatePromo();
-                    break;
-
-                default:
-                    $this->activateRefferal();
-                    break;
+        if ($this->user->is_admin) {
+            if ($this->code == "002") {
+                $this->activatePayment();
+                $canBeRefferal = false;
             }
-            $this->mainMenu('Добрый день! Приветствуем вас в нашем акционном боте!\n У нас вы сможете найти самые актуальные акции!');
-        }catch (\Exception $e){
-            $this->fallbackMenu("Добрый день!Приветствуем вас в нашем акционном боте! Сейчас у нас технические работы.");
+            if ($this->code == "003") {
+                $this->activatePromo();
+                $canBeRefferal = false;
+            }
         }
+
+        if ($canBeRefferal)
+            $this->activateRefferal();
+
+        $this->mainMenu('Добрый день! Приветствуем вас в нашем акционном боте!\n У нас вы сможете найти самые актуальные акции!');
+
     }
 
     protected function activatePayment()

@@ -129,7 +129,9 @@ class UsersController extends Controller
         $user->is_admin = $request->get("is_admin");
         $user->save();
 
-        return back()->with('success', 'Пользователь успешно отредактирован');
+        return redirect()
+            ->route('users.index')
+            ->with('success', 'Пользователь успешно отредактирован');
     }
 
     /**
@@ -143,7 +145,9 @@ class UsersController extends Controller
         //
         $user = User::find($id);
         $user->delete();
-        return back()->with('success', 'Пользователь успешно удален');
+        return redirect()
+            ->route('users.index')
+            ->with('success', 'Пользователь успешно удален');
     }
 
     public function cashBackPage($id){
@@ -177,10 +181,14 @@ class UsersController extends Controller
             $botman->say("Вам зачислен кэшбэк в размере $bonus", $user->telegram_chat_id, TelegramDriver::class);
 
 
-            return back()->with('success', 'Кэшбэк успешно добавлен');
+            return redirect()
+                ->route('users.index')
+                ->with('success', 'Кэшбэк успешно добавлен');
         }
 
-        return back()->with('error', 'Авторизируйтесь!');
+        return redirect()
+            ->route('users.index')
+            ->with('error', 'Авторизируйтесь!');
 
     }
 }
