@@ -234,6 +234,12 @@ class PromoConversation extends Conversation
             if ($promo->immediately_activate == 1) {
                 $this->user->referral_bonus_count += $promo->refferal_bonus;
                 $this->bot->reply($promo->activation_text);
+
+                $this->user->promos()->attach($promo->id);
+
+                $promo->current_activation_count += 1;
+                $promo->save();
+
             }
         }
 
