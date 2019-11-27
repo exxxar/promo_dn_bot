@@ -20,8 +20,10 @@ class CreateRefferalsHistoriesTable extends Migration
             $table->unsignedInteger('user_recipient_id');
             $table->boolean('activated')->default(false);
 
-            $table->foreign('user_sender_id')->references('id')->on('users');
-            $table->foreign('user_recipient_id')->references('id')->on('users');
+            if (env("DB_CONNECTION")=='mysql') {
+                 $table->foreign('user_sender_id')->references('id')->on('users');
+                 $table->foreign('user_recipient_id')->references('id')->on('users');
+            }
 
             $table->timestamps();
         });

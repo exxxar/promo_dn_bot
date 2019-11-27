@@ -15,6 +15,8 @@ use SimpleSoftwareIO\QrCode\Facades\QrCode;
 
 $botman = resolve('botman');
 
+
+
 $botman->hears('/start', BotManController::class . '@startConversation');
 $botman->hears('/start ([0-9a-zA-Z]+)', BotManController::class . '@startDataConversation');
 
@@ -22,7 +24,7 @@ $botman->hears('/promotion ([0-9]+)', BotManController::class . '@promoConversat
 $botman->hears('/payment ([0-9]{1,10}) ([0-9]{1,10})', BotManController::class . '@paymentConversation');
 
 
-$botman->hears("\xE2\x9B\x84Новый год", function ($bot) {
+$botman->hears("\xE2\x9B\x84Мероприятия", function ($bot) {
     $keyboard = [
         'inline_keyboard' => [
             [
@@ -156,7 +158,11 @@ $botman->hears("\xF0\x9F\x94\xA5По компаниям", function ($bot) {
 $botman->hears("\xE2\x9A\xA1Все акции", function ($bot) {
     $keyboard = [
         'inline_keyboard' => [
-            [['text' => 'Перейти на сайт!', 'url' => env("APP_PROMO_LINK")]
+            [
+                ['text' => 'Все акции на нашем сайте!', 'url' => env("APP_PROMO_LINK")],
+            ],
+            [
+                ['text' => 'Празднуй новый год с нами!', 'url' => env("APP_PROMO_LINK")],
             ]
         ]
     ];

@@ -18,7 +18,7 @@ class RefferalsHistoryController extends Controller
         $refferals = RefferalsHistory::orderBy('id', 'DESC')->paginate(15);
 
         return view('admin.refferals_histories.index', compact('refferals'))
-            ->with('i', ($request->input('page', 1) - 1) * 15);
+            ->with('i', ($request->get('page', 1) - 1) * 15);
     }
 
     /**

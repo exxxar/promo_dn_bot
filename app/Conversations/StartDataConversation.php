@@ -42,64 +42,57 @@ class StartDataConversation extends Conversation
     public function startWithData()
     {
 
-        Log::info(print_r($this->data, true));
+        try {
+            $pattern = "/([0-9]{3})([0-9]{10})([0-9]{10})/";
+            $string = base64_decode($this->data);
+            preg_match_all($pattern, $string, $matches);
 
-        $pattern = "/([0-9]{3})([0-9]{10})([0-9]{10})/";
-        $string = base64_decode($this->data);
-        preg_match_all($pattern, $string, $matches);
+            $tmp_dev_id = (string)env("DEVELOPER_ID");
+            while (strlen($tmp_dev_id) < 10)
+                $tmp_dev_id = "0" . $tmp_dev_id;
 
-        Log::info(print_r($matches, true));
-
-        $tmp_dev_id = (string)env("DEVELOPER_ID");
-        while (strlen($tmp_dev_id) < 10)
-            $tmp_dev_id = "0" . $tmp_dev_id;
-
-        $this->code = count($matches[1]) > 0 ? $matches[1][0] : env("CUSTOME_CODE");
-        $this->request_user_id = count($matches[2]) > 0 ? $matches[1][0] : $tmp_dev_id;
-        $this->promo_id = count($matches[3]) > 0 ? $matches[1][0] : env("CUSTOME_PROMO");
+            $this->code = count($matches[1]) > 0 ? $matches[1][0] : env("CUSTOME_CODE");
+            $this->request_user_id = count($matches[2]) > 0 ? $matches[1][0] : $tmp_dev_id;
+            $this->promo_id = count($matches[3]) > 0 ? $matches[1][0] : env("CUSTOME_PROMO");
 
 
-        $telegramUser = $this->bot->getUser();
-        $id = $telegramUser->getId();
-        $this->user = User::with(["companies"])
-            ->where("telegram_chat_id", $id)
-            ->first();
+            $telegramUser = $this->bot->getUser();
+            $id = $telegramUser->getId();
+            $this->user = User::with(["companies"])
+                ->where("telegram_chat_id", $id)
+                ->first();
 
-        if ($this->user == null)
-            $this->user = $this->$this->createUser($telegramUser);
+            if ($this->user == null)
+                $this->user = $this->$this->createUser($telegramUser);
 
 
-        switch ($this->code) {
-            case "002":
-                $this->activatePayment();
-                break;
+            switch ($this->code) {
+                case "002":
+                    $this->activatePayment();
+                    break;
 
-            case "003":
-                $this->activatePromo();
-                break;
+                case "003":
+                    $this->activatePromo();
+                    break;
 
-            default:
-                $this->activateRefferal();
-                break;
+                default:
+                    $this->activateRefferal();
+                    break;
+            }
+            $this->mainMenu('Добрый день! Приветствуем вас в нашем акционном боте!\n У нас вы сможете найти самые актуальные акции!');
+        }catch (\Exception $e){
+            $this->fallbackMenu("Добрый день!Приветствуем вас в нашем акционном боте! Сейчас у нас технические работы.");
         }
-        $this->bot->sendRequest("sendMessage",
-            ["text" => 'Добрый день! Приветствуем вас в нашем акционном боте!\n У нас вы сможете найти самые актуальные акции!',
-                'reply_markup' => json_encode([
-                    'keyboard' => $this->keyboard,
-                    'one_time_keyboard' => true,
-                    'resize_keyboard' => true
-                ])
-            ]);
     }
 
     protected function activatePayment()
     {
         if ($this->user->is_admin == 1) {
 
-            $tmp=[];
+            $tmp = [];
 
             foreach ($this->user->companies as $company)
-                array_push($tmp,Button::create($company->title)->value("/payment " . $this->request_user_id." ".$company->id));
+                array_push($tmp, Button::create($company->title)->value("/payment " . $this->request_user_id . " " . $company->id));
 
             $message = Question::create("Диалог списания средств\nВыберите вашу компанию:")
                 ->addButtons($tmp);

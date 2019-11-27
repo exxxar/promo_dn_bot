@@ -29,7 +29,7 @@ class CreateUsersTable extends Migration
             $table->string('address',500)->default('')->nullable();
             $table->tinyInteger('sex')->default(1)->nullable();
             $table->smallInteger('age')->default(18)->nullable();
-            $table->smallInteger('birthday')->default("")->nullable();
+            $table->string('birthday')->default("")->nullable();
 
 
             $table->string('source')->default('');

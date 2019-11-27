@@ -19,7 +19,7 @@ class CompanyController extends Controller
         $companies = Company::orderBy('id', 'DESC')->paginate(15);
 
         return view('admin.companies.index', compact('companies'))
-            ->with('i', ($request->input('page', 1) - 1) * 15);
+            ->with('i', ($request->get('page', 1) - 1) * 15);
     }
 
     /**
@@ -53,14 +53,14 @@ class CompanyController extends Controller
         ]);
 
 
-        $company = new Company([
-            'title' => $request->input('title') ?? '',
-            'address' => $request->input('address') ?? '',
-            'description' => $request->input('description') ?? '',
-            'phone' => $request->input('phone') ?? '',
-            'email' => $request->input('email') ?? '',
-            'bailee' => $request->input('bailee') ?? '',
-            'logo_url' => $request->input('logo_url') ?? '',
+        $company = Company::create([
+            'title' => $request->get('title') ?? '',
+            'address' => $request->get('address') ?? '',
+            'description' => $request->get('description') ?? '',
+            'phone' => $request->get('phone') ?? '',
+            'email' => $request->get('email') ?? '',
+            'bailee' => $request->get('bailee') ?? '',
+            'logo_url' => $request->get('logo_url') ?? '',
             'created_at' => Carbon::now(),
             'updated_at' => Carbon::now(),
         ]);
@@ -117,13 +117,13 @@ class CompanyController extends Controller
 
 
         $company = Company::find($id);
-        $company->title = $request->input('title') ?? '';
-        $company->address = $request->input('address') ?? '';
-        $company->description = $request->input('description') ?? '';
-        $company->phone = $request->input('phone') ?? '';
-        $company->email = $request->input('email') ?? '';
-        $company->bailee = $request->input('bailee') ?? '';
-        $company->logo_url = $request->input('logo_url') ?? '';
+        $company->title = $request->get('title') ?? '';
+        $company->address = $request->get('address') ?? '';
+        $company->description = $request->get('description') ?? '';
+        $company->phone = $request->get('phone') ?? '';
+        $company->email = $request->get('email') ?? '';
+        $company->bailee = $request->get('bailee') ?? '';
+        $company->logo_url = $request->get('logo_url') ?? '';
         $company->save();
 
         return back()->with('success', 'Компания успешно отредактирована');

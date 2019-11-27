@@ -21,7 +21,7 @@ class UsersController extends Controller
         $users = User::orderBy('id', 'DESC')->paginate(15);
 
         return view('admin.users.index', compact('users'))
-            ->with('i', ($request->input('page', 1) - 1) * 15);
+            ->with('i', ($request->get('page', 1) - 1) * 15);
     }
 
     /**
@@ -62,23 +62,23 @@ class UsersController extends Controller
           ]);
 
           $user = new User([
-              'name' => $request->input('name'),
-              'email' => $request->input('email'),
-              'password' => Hash::make($request->input('password')),
+              'name' => $request->get('name'),
+              'email' => $request->get('email'),
+              'password' => Hash::make($request->get('password')),
 
-              'fio_from_telegram' => $request->input('fio_from_telegram') ?? '',
-              'fio_from_request' => $request->input('fio_from_request')?? '',
-              'phone' => $request->input('phone')?? '',
-              'avatar_url' => $request->input('avatar_url')?? '',
-              'address' => $request->input('address')?? '',
-              'sex' => $request->input('name')?? 1,
-              'age' => $request->input('name')?? 18,
-              'source' => $request->input('name')?? "001",
-              'telegram_chat_id' => $request->input('name'),
-              'referrals_count' => $request->input('name')?? 0,
-              'referral_bonus_count' => $request->input('name')?? 0,
-              'cashback_bonus_count' => $request->input('name')?? 0,
-              'is_admin' => $request->input('name')?? false,
+              'fio_from_telegram' => $request->get('fio_from_telegram') ?? '',
+              'fio_from_request' => $request->get('fio_from_request')?? '',
+              'phone' => $request->get('phone')?? '',
+              'avatar_url' => $request->get('avatar_url')?? '',
+              'address' => $request->get('address')?? '',
+              'sex' => $request->get('name')?? 1,
+              'age' => $request->get('name')?? 18,
+              'source' => $request->get('name')?? "001",
+              'telegram_chat_id' => $request->get('name'),
+              'referrals_count' => $request->get('name')?? 0,
+              'referral_bonus_count' => $request->get('name')?? 0,
+              'cashback_bonus_count' => $request->get('name')?? 0,
+              'is_admin' => $request->get('name')?? false,
           ]);
 
           return back()->with('success', 'Пользователь успешно добавлен');*/

@@ -34,11 +34,11 @@ class CreatePromotionsTable extends Migration
 
             $table->unsignedInteger('company_id')->nullable();
 
-            $table->foreign('company_id')->references('id')->on('companies');
+           // $table->foreign('company_id')->references('id')->on('companies');
 
             $table->unsignedInteger('category_id')->nullable();
 
-            $table->foreign('category_id')->references('id')->on('categories');
+            //$table->foreign('category_id')->references('id')->on('categories');
 
             $table->timestamps();
         });

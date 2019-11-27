@@ -5,7 +5,9 @@ namespace App\Http\Controllers;
 use App\Category;
 use App\Company;
 use App\Promotion;
+use Carbon\Carbon;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Log;
 
 class PromotionController extends Controller
 {
@@ -19,7 +21,7 @@ class PromotionController extends Controller
         $promotions = Promotion::orderBy('id', 'DESC')->paginate(15);
 
         return view('admin.promotions.index', compact('promotions'))
-            ->with('i', ($request->input('page', 1) - 1) * 15);
+            ->with('i', ($request->get('page', 1) - 1) * 15);
     }
 
     /**
@@ -44,6 +46,8 @@ class PromotionController extends Controller
      */
     public function store(Request $request)
     {
+
+        Log::info("title=".$request->get('title'));
         //
         $request->validate([
             'title'=> 'required',
@@ -59,21 +63,21 @@ class PromotionController extends Controller
             'refferal_bonus'=> 'integer',
         ]);
 
-        $promotions = new Promotion([
-            'title'=>$request->input('title')??'',
-            'description'=> $request->input('description')??'',
-            'promo_image_url'=> $request->input('promo_image_url')??'',
-            'start_at'=> $request->input('start_at')??'',
-            'end_at'=> $request->input('end_at')??'',
-            'activation_count'=> $request->input('activation_count')??'',
-            'location_address'=> $request->input('location_address')??'',
-            'company_id'=> $request->input('company_id'),
-            'category_id'=> $request->input('category_id'),
+        $promotions = Promotion::create([
+            'title'=>$request->get('title')??'',
+            'description'=> $request->get('description')??'',
+            'promo_image_url'=> $request->get('promo_image_url')??'',
+            'start_at'=> $request->get('start_at')??'',
+            'end_at'=> $request->get('end_at')??'',
+            'activation_count'=> $request->get('activation_count')??'',
+            'location_address'=> $request->get('location_address')??'',
+            'company_id'=> $request->get('company_id'),
+            'category_id'=> $request->get('category_id'),
             'current_activation_count'=>0,
-            'location_coords'=> $request->input('location_coords')??'',
-            'immediately_activate'=>$request->input('immediately_activate')??false,
-            'refferal_bonus'=>$request->input('refferal_bonus')??0,
-            'activation_text'=>$request->input('activation_text')??'',
+            'location_coords'=> $request->get('location_coords')??'',
+            'immediately_activate'=>$request->get('immediately_activate')??false,
+            'refferal_bonus'=>$request->get('refferal_bonus')??0,
+            'activation_text'=>$request->get('activation_text')??'',
             'created_at' => Carbon::now(),
             'updated_at' => Carbon::now(),
         ]);

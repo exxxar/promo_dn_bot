@@ -2,23 +2,19 @@
 
 namespace App\Http\Controllers;
 
-use App\CashbackHistory;
+use App\Event;
 use Illuminate\Http\Request;
 
-class CashbackHistoryController extends Controller
+class EventsController extends Controller
 {
     /**
      * Display a listing of the resource.
      *
      * @return \Illuminate\Http\Response
      */
-    public function index(Request $request)
+    public function index()
     {
         //
-        $cashbacks = CashbackHistory::orderBy('id', 'DESC')->paginate(15);
-
-        return view('admin.cashback_histories.index', compact('cashbacks'))
-            ->with('i', ($request->get('page', 1) - 1) * 15);
     }
 
     /**
@@ -45,24 +41,21 @@ class CashbackHistoryController extends Controller
     /**
      * Display the specified resource.
      *
-     * @param  \App\CashbackHistory  $cashbackHistory
+     * @param  \App\Event  $events
      * @return \Illuminate\Http\Response
      */
-    public function show($id)
+    public function show(Event $events)
     {
         //
-        $cash = CashbackHistory::find($id);
-
-        return view('admin.cashback_histories.show', compact('cash'));
     }
 
     /**
      * Show the form for editing the specified resource.
      *
-     * @param  \App\CashbackHistory  $cashbackHistory
+     * @param  \App\Event  $events
      * @return \Illuminate\Http\Response
      */
-    public function edit(CashbackHistory $cashbackHistory)
+    public function edit(Event $events)
     {
         //
     }
@@ -71,10 +64,10 @@ class CashbackHistoryController extends Controller
      * Update the specified resource in storage.
      *
      * @param  \Illuminate\Http\Request  $request
-     * @param  \App\CashbackHistory  $cashbackHistory
+     * @param  \App\Event  $events
      * @return \Illuminate\Http\Response
      */
-    public function update(Request $request, CashbackHistory $cashbackHistory)
+    public function update(Request $request, Event $events)
     {
         //
     }
@@ -82,10 +75,10 @@ class CashbackHistoryController extends Controller
     /**
      * Remove the specified resource from storage.
      *
-     * @param  \App\CashbackHistory  $cashbackHistory
+     * @param  \App\Event  $events
      * @return \Illuminate\Http\Response
      */
-    public function destroy(CashbackHistory $cashbackHistory)
+    public function destroy(Event $events)
     {
         //
     }

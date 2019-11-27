@@ -20,7 +20,7 @@ class CategoryController extends Controller
         $categories = Category::orderBy('id', 'DESC')->paginate(15);
 
         return view('admin.categories.index', compact('categories'))
-            ->with('i', ($request->input('page', 1) - 1) * 15);
+            ->with('i', ($request->get('page', 1) - 1) * 15);
     }
 
     /**
@@ -42,20 +42,18 @@ class CategoryController extends Controller
      */
     public function store(Request $request)
     {
-        Log::info(var_dump($request->all()));
-
         $request->validate([
             'title' => 'required',
             'description' => 'required',
             'image_url' => 'required',
         ]);
 
+        $title = Carbon::now();
 
-        Log::info(var_dump($request->get("title")));
-        $category = new Category([
-            'title' => $request->input('title') ?? '',
-            'description' => $request->input('description') ?? '',
-            'image_url' => $request->input('image_url') ?? '',
+        $category = Category::create([
+            'title' => $title,
+            'description' => $request->get('description') ?? '',
+            'image_url' => $request->get('image_url') ?? '',
             'created_at' => Carbon::now(),
             'updated_at' => Carbon::now(),
         ]);
@@ -106,9 +104,9 @@ class CategoryController extends Controller
         ]);
 
         $category = Category::find($id);
-        $category->title = $request->input('title') ?? '';
-        $category->description = $request->input('description') ?? '';
-        $category->image_url = $request->input('image_url') ?? '';
+        $category->title = $request->get('title') ?? '';
+        $category->description = $request->get('description') ?? '';
+        $category->image_url = $request->get('image_url') ?? '';
         $category->save();
 
         return back()->with('success', 'Категория успешно обновлена');

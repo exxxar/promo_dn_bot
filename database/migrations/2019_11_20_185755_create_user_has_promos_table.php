@@ -16,10 +16,14 @@ class CreateUserHasPromosTable extends Migration
         Schema::disableForeignKeyConstraints();
         Schema::create('user_has_promos', function (Blueprint $table) {
             $table->increments('id');
-            $table->unsignedInteger("user_id" );
-            $table->foreign('user_id')->references('id')->on('users');
-            $table->unsignedInteger("promotion_id" );
-            $table->foreign('promotion_id')->references('id')->on('promotions');
+            $table->unsignedInteger("user_id");
+
+            $table->unsignedInteger("promotion_id");
+
+            if (env("DB_CONNECTION") == 'mysql') {
+                $table->foreign('user_id')->references('id')->on('users');
+                $table->foreign('promotion_id')->references('id')->on('promotions');
+            }
             $table->timestamps();
         });
         Schema::enableForeignKeyConstraints();

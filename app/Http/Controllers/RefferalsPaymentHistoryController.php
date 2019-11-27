@@ -18,7 +18,7 @@ class RefferalsPaymentHistoryController extends Controller
         $payments = RefferalsPaymentHistory::orderBy('id', 'DESC')->paginate(15);
 
         return view('admin.refferals_payment_histories.index', compact('payments'))
-            ->with('i', ($request->input('page', 1) - 1) * 15);
+            ->with('i', ($request->get('page', 1) - 1) * 15);
     }
 
     /**
