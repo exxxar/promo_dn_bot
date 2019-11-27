@@ -54,9 +54,11 @@ class StartDataConversation extends Conversation
             $tmp_dev_id = "0" . $tmp_dev_id;
 
         $this->code = count($matches[1]) > 0 ? $matches[1][0] : env("CUSTOME_CODE");
-        $this->request_user_id = count($matches[2]) > 0 ? $matches[1][0] : $tmp_dev_id;
-        $this->promo_id = count($matches[3]) > 0 ? $matches[1][0] : env("CUSTOME_PROMO");
+        $this->request_user_id = count($matches[2]) > 0 ? $matches[2][0] : $tmp_dev_id;
+        $this->promo_id = count($matches[3]) > 0 ? $matches[3][0] : env("CUSTOME_PROMO");
 
+
+        $this->say("Все данные:".$matches[0]);
 
         $telegramUser = $this->bot->getUser();
         $id = $telegramUser->getId();
