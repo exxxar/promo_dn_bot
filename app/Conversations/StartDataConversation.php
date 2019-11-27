@@ -58,7 +58,7 @@ class StartDataConversation extends Conversation
         $this->promo_id = count($matches[3]) > 0 ? $matches[3][0] : env("CUSTOME_PROMO");
 
 
-        $this->say("Все данные:".$matches[0]);
+        $this->say("Все данные:".print_r($matches[0],true));
 
         $telegramUser = $this->bot->getUser();
         $id = $telegramUser->getId();

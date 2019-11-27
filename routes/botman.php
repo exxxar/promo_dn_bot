@@ -17,7 +17,9 @@ $botman = resolve('botman');
 
 
 
+$botman->hears('Попробовать снова', BotManController::class . '@startConversation');
 $botman->hears('/start', BotManController::class . '@startConversation');
+
 $botman->hears('/start ([0-9a-zA-Z=]+)', BotManController::class . '@startDataConversation');
 
 $botman->hears('/promotion ([0-9]+)', BotManController::class . '@promoConversation');
