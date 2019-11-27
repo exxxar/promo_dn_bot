@@ -70,7 +70,7 @@ class StartDataConversation extends Conversation
         $canBeRefferal = true;
 
         if ($this->user->is_admin) {
-            $this->say("Вы администратор");
+            $this->say("Вы администратор, входыне параметры:".$this->code." ".$this->request_user_id." ".$this->promo_id );
             if ($this->code == "002") {
                 $this->activatePayment();
 
