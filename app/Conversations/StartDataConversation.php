@@ -70,20 +70,28 @@ class StartDataConversation extends Conversation
         $canBeRefferal = true;
 
         if ($this->user->is_admin) {
+            $this->say("Вы администратор");
             if ($this->code == "002") {
                 $this->activatePayment();
+
+
+                $this->say("Вырали оплату через QR");
                 $canBeRefferal = false;
             }
             if ($this->code == "003") {
                 $this->activatePromo();
+
+
+                $this->say("Вырали активацию акции через QR");
                 $canBeRefferal = false;
             }
         }
 
-        if ($canBeRefferal)
+        if ($canBeRefferal) {
             $this->activateRefferal();
+            $this->mainMenu('Добрый день! Приветствуем вас в нашем акционном боте! У нас вы сможете найти самые актуальные акции!');
 
-        $this->mainMenu('Добрый день! Приветствуем вас в нашем акционном боте!\n У нас вы сможете найти самые актуальные акции!');
+        }
 
     }
 
