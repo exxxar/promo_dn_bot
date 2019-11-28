@@ -17,8 +17,8 @@ class CreatePromotionsTable extends Migration
         Schema::create('promotions', function (Blueprint $table) {
             $table->increments('id');
             $table->string('title')->default('')->nullable();
-            $table->string('description',1000)->default('')->nullable();
-            $table->string('promo_image_url',1000)->nullable();
+            $table->string('description', 1000)->default('')->nullable();
+            $table->string('promo_image_url', 1000)->nullable();
             $table->dateTime('start_at');
             $table->dateTime('end_at');
             $table->integer('activation_count')->default(0);
@@ -27,19 +27,17 @@ class CreatePromotionsTable extends Migration
             $table->string('location_coords')->default('')->nullable();
 
             $table->boolean('immediately_activate')->default(false);
-            $table->string('activation_text',1000)->default('');
+            $table->string('activation_text', 1000)->default('');
 
             $table->integer('refferal_bonus')->default(0)->nullable();
 
-
             $table->unsignedInteger('company_id')->nullable();
-
-           // $table->foreign('company_id')->references('id')->on('companies');
-
             $table->unsignedInteger('category_id')->nullable();
 
-            //$table->foreign('category_id')->references('id')->on('categories');
-
+            if (env("DB_CONNECTION") == 'mysql') {
+                $table->foreign('company_id')->references('id')->on('companies');
+                $table->foreign('category_id')->references('id')->on('categories');
+            }
             $table->timestamps();
         });
         Schema::enableForeignKeyConstraints();

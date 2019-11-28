@@ -13,6 +13,9 @@
                         <div class="pull-right">
                             <a class="btn btn-primary" href="{{ route('companies.index') }}"> Назад</a>
                             <a class="btn btn-primary" href="#">Пользователи компании</a>
+                            <a class="btn btn-link" href="{{ route('companies.edit',$company->id) }}">
+                                <i class="fas fa-edit"></i>
+                            </a>
                         </div>
 
                         @if (count($errors) > 0)
@@ -83,6 +86,19 @@
                         </td>
                     </tr>
 
+                    <tr>
+                        <td></td>
+                    <td>
+                        <a class="btn btn-primary" href="{{ route('companies.edit',$event->id) }}">
+                            Редактировать <i class="fas fa-edit"></i>
+                        </a>
+                        <form action="{{ route('companies.destroy', $company->id)}}" method="post">
+                            @csrf
+                            @method('DELETE')
+                            <button class="btn btn-link" type="submit">Удалить <i class="fas fa-times"></i></button>
+                        </form>
+                    </td>
+                    </tr>
 
                     </tbody>
                 </table>

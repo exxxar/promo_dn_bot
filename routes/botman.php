@@ -1,5 +1,6 @@
 <?php
 
+use App\Event;
 use App\Http\Controllers\BotManController;
 use App\RefferalsPaymentHistory;
 use App\User;
@@ -16,7 +17,6 @@ use SimpleSoftwareIO\QrCode\Facades\QrCode;
 $botman = resolve('botman');
 
 
-
 $botman->hears('Попробовать снова', BotManController::class . '@startConversation');
 $botman->hears('/start', BotManController::class . '@startConversation');
 
@@ -29,6 +29,7 @@ $botman->hears("\xE2\x9B\x84Мероприятия", function ($bot) {
     $keyboard = [
         'inline_keyboard' => [
             [
+                ['text' => 'Наши мероприятия', 'callback_data' => "/events 0"],
                 ['text' => 'Посмотреть призы!', 'url' => env("APP_PROMO_LINK")],
             ]
         ]
@@ -66,7 +67,7 @@ $botman->hears("\xF0\x9F\x93\xB2Мои друзья", function ($bot) {
 
     $code = base64_encode("001" . $tmp_id . "000000000");
 
-    $attachment = new Image("https://api.qrserver.com/v1/create-qr-code/?size=150x150&data=https://t.me/".env("APP_BOT_NAME")."?start=$code");
+    $attachment = new Image("https://api.qrserver.com/v1/create-qr-code/?size=150x150&data=https://t.me/" . env("APP_BOT_NAME") . "?start=$code");
 
     // Build message object
     $message = OutgoingMessage::create('_Ваш реферальный код_')
@@ -92,7 +93,7 @@ $botman->hears("\xF0\x9F\x92\xB3Мои баллы", function ($bot) {
 
 
         $tmp_message = "У вас *$summary* баллов, из них *$cashback* - бонус CashBack!\n_Для оплаты дайте отсканировать данный QR-код сотруднику!_\n";
-        $payments = RefferalsPaymentHistory::where("user_id",$user->id)
+        $payments = RefferalsPaymentHistory::where("user_id", $user->id)
             ->get();
 
         if (count($payments) > 0) {
@@ -113,7 +114,7 @@ $botman->hears("\xF0\x9F\x92\xB3Мои баллы", function ($bot) {
         $code = base64_encode("002" . $tmp_id . "000000000");
 
 
-        $attachment = new Image("https://api.qrserver.com/v1/create-qr-code/?size=150x150&data=https://t.me/".env("APP_BOT_NAME")."?start=$code");
+        $attachment = new Image("https://api.qrserver.com/v1/create-qr-code/?size=150x150&data=https://t.me/" . env("APP_BOT_NAME") . "?start=$code");
 
         // Build message object
         $message = OutgoingMessage::create('_Ваш код для оплаты_')
@@ -184,10 +185,6 @@ $botman->hears('/category ([0-9]+)', function ($bot, $category_id) {
     $promotions = \App\Promotion::with(["users"])->where("category_id", "=", $category_id)
         ->get();
 
-
-
-
-
     $tmp = [];
 
     foreach ($promotions as $promo) {
@@ -202,7 +199,7 @@ $botman->hears('/category ([0-9]+)', function ($bot, $category_id) {
 
         $time_2 = date_timestamp_get(now());
 
-        if ($on_promo == null&&$time_2>=$time_0&&$time_2<$time_1)
+        if ($on_promo == null && $time_2 >= $time_0 && $time_2 < $time_1)
             array_push($tmp, Button::create($promo->title)->value("/promotion " . $promo->id));
     }
 
@@ -247,7 +244,7 @@ $botman->hears('/company ([0-9]+)', function ($bot, $company_id) {
 
         $time_2 = date_timestamp_get(now());
 
-        if ($on_promo == null&&$time_2>=$time_0&&$time_2<$time_1)
+        if ($on_promo == null && $time_2 >= $time_0 && $time_2 < $time_1)
             array_push($tmp, Button::create($promo->title)->value("/promotion " . $promo->id));
     }
 
@@ -395,7 +392,7 @@ $botman->hears('/payments ([0-9]+)', function ($bot, $page) {
 
     foreach ($refs as $key => $ref) {
         $company_title = $ref->company->title ?? $ref->company->id;
-        $tmp .= "_".$ref->created_at."_ в " . $company_title . " потрачено *".$ref->value."* боунсов \n";
+        $tmp .= "_" . $ref->created_at . "_ в " . $company_title . " потрачено *" . $ref->value . "* боунсов \n";
 
     }
 
@@ -430,6 +427,59 @@ $botman->hears('/payments ([0-9]+)', function ($bot, $page) {
             "text" => strlen($tmp) > 0 ? $tmp : "Вы не потратили свои бонусы.",
             'reply_markup' => json_encode($keyboard),
             "parse_mode" => "Markdown"
+        ]);
+
+
+});
+
+$botman->hears('/events ([0-9]+)', function ($bot, $page) {
+
+
+    $events = Event::with(["recipient"])
+        ->skip($page * 5)
+        ->take(5)
+        ->orderBy('id', 'DESC')
+        ->get();
+
+    foreach ($events as $key => $event) {
+
+        $attachment = new Image($event->event_image_url);
+        $message = OutgoingMessage::create("*" . $event->title . "*\n" . $event->description)
+            ->withAttachment($attachment);
+
+        $bot->reply($message, ["parse_mode" => "Markdown"]);
+    }
+
+    $inline_keyboard = [];
+    if ($page == 0 && count($events) == 5)
+        array_push($inline_keyboard, ['text' => 'Далее', 'callback_data' => '/events ' . ($page + 1)]);
+
+    if ($page > 0) {
+        if (count($events) == 0) {
+            array_push($inline_keyboard, ['text' => 'Назад', 'callback_data' => '/events ' . ($page - 1)]);
+        }
+
+        if (count($events) == 5) {
+            array_push($inline_keyboard, ['text' => 'Назад', 'callback_data' => '/events ' . ($page - 1)]);
+            array_push($inline_keyboard, ['text' => 'Далее', 'callback_data' => '/events ' . ($page + 1)]);
+        }
+
+        if (count($events) > 0 && count($events) < 5) {
+            array_push($inline_keyboard, ['text' => 'Назад', 'callback_data' => '/events ' . ($page - 1)]);
+        }
+    }
+
+
+    $keyboard = [
+        'inline_keyboard' => [
+            $inline_keyboard
+        ]
+    ];
+
+    $bot->sendRequest("sendMessage",
+        [
+            "text" => "Наши мепроприятия",
+            'reply_markup' => json_encode($keyboard)
         ]);
 
 

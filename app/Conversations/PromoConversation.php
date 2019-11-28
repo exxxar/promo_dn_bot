@@ -95,7 +95,7 @@ class PromoConversation extends Conversation
 
     public function askPhone1()
     {
-        if ($this->user->phone == "") {
+        if ($this->user->phone == null) {
             $question = Question::create('Скажие мне свой телефонный номер')
                 ->fallback('Спасибо что пообщался со мной:)!')
                 ->addButtons([
@@ -136,6 +136,33 @@ class PromoConversation extends Conversation
 
     }
 
+    public function askPhone2()
+    {
+
+        $question = Question::create('Введите свой телефон по формату *+38(0XX)XXX-XX-XX*')
+            ->fallback('Спасибо что пообщался со мной:)!');
+
+        $this->ask($question, function (Answer $answer) {
+
+            $message = Question::create("Продолжим дальше?")
+                ->addButtons([
+                    Button::create("Далее")->value("next"),
+                    Button::create("Позже")->value("stop"),
+                ]);
+
+
+            $this->ask($message, function (Answer $answer) {
+                if ($answer->isInteractiveMessageReply()) {
+                    if ($answer->getValue() == "next") {
+                        $this->askSex();
+                    }
+                }
+            });
+        });
+
+
+    }
+
     public function askSex()
     {
         if ($this->user->sex == null) {
@@ -163,7 +190,7 @@ class PromoConversation extends Conversation
                     $this->ask($message, function (Answer $answer) {
                         if ($answer->isInteractiveMessageReply()) {
                             if ($answer->getValue() == "next") {
-                                $this->askAge();
+                                $this->askBirthday();
                             }
                         }
                     });
@@ -172,14 +199,14 @@ class PromoConversation extends Conversation
             });
         } else
 
-            $this->askAge();
+            $this->askBirthday();
 
 
     }
 
-    public function askAge()
+    public function askBirthday()
     {
-        if ($this->user->age == null) {
+        if ($this->user->birthday == null) {
             $question = Question::create('Последний вопрос - дата твоего рождения:')
                 ->fallback('Спасибо что пообщался со мной:)!');
 
@@ -210,7 +237,7 @@ class PromoConversation extends Conversation
 
     public function askCity()
     {
-        if ($this->user->address == '') {
+        if ($this->user->address == null) {
             $question = Question::create('Из какого ты города?')
                 ->fallback('Спасибо что пообщался со мной:)!');
 
@@ -273,30 +300,5 @@ class PromoConversation extends Conversation
 
     }
 
-    public function askPhone2()
-    {
 
-        $question = Question::create('Введите свой телефон по формату *+38(0XX)XXX-XX-XX*')
-            ->fallback('Спасибо что пообщался со мной:)!');
-
-        $this->ask($question, function (Answer $answer) {
-
-            $message = Question::create("Продолжим дальше?")
-                ->addButtons([
-                    Button::create("Далее")->value("next"),
-                    Button::create("Позже")->value("stop"),
-                ]);
-
-
-            $this->ask($message, function (Answer $answer) {
-                if ($answer->isInteractiveMessageReply()) {
-                    if ($answer->getValue() == "next") {
-                        $this->askSex();
-                    }
-                }
-            });
-        });
-
-
-    }
 }

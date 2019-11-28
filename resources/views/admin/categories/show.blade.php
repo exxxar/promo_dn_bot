@@ -46,6 +46,19 @@
                         </td>
                     </tr>
 
+                    <tr>
+                        <td></td>
+                    <td>
+                        <a class="btn btn-primary" href="{{ route('categories.edit',$category->id) }}">
+                            Редактировать <i class="fas fa-edit"></i>
+                        </a>
+                        <form action="{{ route('categories.destroy', $category->id)}}" method="post">
+                            @csrf
+                            @method('DELETE')
+                            <button class="btn btn-link" type="submit">Удалить <i class="fas fa-times"></i></button>
+                        </form>
+                    </td>
+                    </tr>
 
                     </tbody>
                 </table>

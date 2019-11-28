@@ -13,6 +13,10 @@
                         <div class="pull-right">
                             <a class="btn btn-primary" href="{{ route('companies.index') }}"> Назад</a>
                             <a class="btn btn-secondary" href="#"> Активации по акции</a>
+                            <a class="btn btn-link" href="{{ route('promotions.edit',$promotion->id) }}">
+                                <i class="fas fa-edit"></i>
+                            </a>
+
                         </div>
 
 
@@ -118,6 +122,21 @@
                             <td>Категория</td>
                             <td>
                                 <p>{{$promotion->category->title}}</p>
+                            </td>
+                        </tr>
+
+                        <tr>
+                            <td></td>
+                            <td>
+                                <a class="btn btn-primary" href="{{ route('promotions.edit',$promotion->id) }}">
+                                    Редактировать <i class="fas fa-edit"></i>
+                                </a>
+                                <form action="{{ route('promotions.destroy', $promotion->id)}}" method="post">
+                                    @csrf
+                                    @method('DELETE')
+                                    <button class="btn btn-link" type="submit">Удалить <i class="fas fa-times"></i>
+                                    </button>
+                                </form>
                             </td>
                         </tr>
 

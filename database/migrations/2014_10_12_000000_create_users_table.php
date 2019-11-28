@@ -26,10 +26,10 @@ class CreateUsersTable extends Migration
             $table->string('phone')->unique()->nullable();
 
             $table->string('avatar_url',1000)->default('')->nullable();
-            $table->string('address',500)->default('')->nullable();
-            $table->tinyInteger('sex')->default(1)->nullable();
-            $table->smallInteger('age')->default(18)->nullable();
-            $table->string('birthday')->default("")->nullable();
+            $table->string('address',500)->nullable();
+            $table->tinyInteger('sex')->nullable();
+            $table->smallInteger('age')->nullable();
+            $table->string('birthday')->nullable();
 
 
             $table->string('source')->default('');

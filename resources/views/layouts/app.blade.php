@@ -43,6 +43,9 @@
                             <a class="nav-link" href="{{ route('promotions.index') }}">Акции</a>
                         </li>
                         <li class="nav-item">
+                            <a class="nav-link" href="{{ route('events.index') }}">Мероприятия</a>
+                        </li>
+                        <li class="nav-item">
                             <a class="nav-link" href="{{ route('companies.index') }}">Компании</a>
                         </li>
                         <li class="nav-item">
@@ -115,7 +118,8 @@
         var botmanWidget = {
             title:'SkidkiDN - веб-версия',
             introMessage:'Спасибо что используете Веб-версию нашего бота. Полноценный набор функций доступен в боте telegram',
-            mainColor:'#ff9800'
+            mainColor:'#ff9800',
+            chatServer:'http://promodnbot.herokuapp.com/public/botman'
         };
 
     </script>

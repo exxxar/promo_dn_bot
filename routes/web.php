@@ -40,6 +40,9 @@ Route::prefix('admin')->group(function () {
     Route::post('/search', 'UsersController@search')
         ->name('users.search');
 
+    Route::post('/announce', 'UsersController@announce')
+        ->name('users.announce');
+
     Route::post("/users/cashback/add","UsersController@addCashBack")
         ->name("users.cashback.add");
 
@@ -53,6 +56,7 @@ Route::prefix('admin')->group(function () {
         'cashback' => 'CashbackHistoryController',
         'refferals' => 'RefferalsHistoryController',
         'payments' => 'RefferalsPaymentHistoryController',
+        'events' => 'EventsController',
     ]);
 
 });

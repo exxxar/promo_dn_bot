@@ -46,9 +46,6 @@ class PromotionController extends Controller
      */
     public function store(Request $request)
     {
-
-        Log::info("title=".$request->get('title'));
-        //
         $request->validate([
             'title'=> 'required',
             'description'=> 'required',

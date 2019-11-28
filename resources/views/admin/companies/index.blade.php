@@ -38,11 +38,6 @@
                             <th scope="col">#</th>
                             <th scope="col">Название</th>
                             <th scope="col">Описание</th>
-                            <th scope="col">Адрес</th>
-                            <th scope="col">Телефон</th>
-                            <th scope="col">Почта</th>
-                            <th scope="col">Ответственное лицо</th>
-                            <th scope="col">Логотип (ссылка)</th>
                             <th scope="col">Действие</th>
 
                         </tr>
@@ -59,13 +54,6 @@
                                     </a>
                                 </td>
                                 <td>{{$company->description}}</td>
-                                <td>{{$company->address}}</td>
-                                <td>{{$company->phone}}</td>
-                                <td>{{$company->email}}</td>
-                                <td>{{$company->bailee}}</td>
-                                <td><img class="img-thumbnail" style="width:150px;height:150px;"
-                                         src="{{$company->logo_url}}" alt=""></td>
-
                                 <td>
                                     <form action="{{ route('companies.destroy', $company->id)}}" method="post">
                                         @csrf
