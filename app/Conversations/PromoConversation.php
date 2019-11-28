@@ -152,7 +152,7 @@ class PromoConversation extends Conversation
                 $vowels = array("(", ")", "-", " ");
                 $tmp_phone = str_replace($vowels, "", $answer->getText());
                 if (!strpos($tmp_phone, "+38"))
-                    $tmp_phone .= "+38" . $tmp_phone;
+                    $tmp_phone = "+38" . $tmp_phone;
 
                 $this->user->phone = $tmp_phone;
                 $this->user->save();

@@ -13,6 +13,11 @@ use Illuminate\Support\Facades\Hash;
 
 class UsersController extends Controller
 {
+    public function __construct()
+    {
+        $this->middleware('auth');
+    }
+
     /**
      * Display a listing of the resource.
      *
@@ -211,7 +216,7 @@ class UsersController extends Controller
 
         // Build message object
         $message = OutgoingMessage::create($announce_title . "\n" . $announce_message)
-        ->withAttachment($attachment);
+            ->withAttachment($attachment);
 
         // Reply message object
 
@@ -220,10 +225,10 @@ class UsersController extends Controller
             $botman->sendRequest("sendMessage",
                 [
                     "text" => $announce_title,
-                    "chat_id" =>$user->telegram_chat_id ,
+                    "chat_id" => $user->telegram_chat_id,
                 ]);
         }
 
-        return back()->with("success","Сообщения успешно отправлены!");
+        return back()->with("success", "Сообщения успешно отправлены!");
     }
 }
