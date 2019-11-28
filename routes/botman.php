@@ -475,10 +475,12 @@ $botman->hears('/events ([0-9]+)', function ($bot, $page) {
         ]
     ];
 
-    $bot->sendRequest("sendMessage",
-        [
-            'reply_markup' => json_encode($keyboard)
-        ]);
+    if (count($inline_keyboard) > 0)
+        $bot->sendRequest("sendMessage",
+            [
+                "text" => "Выберите действие",
+                'reply_markup' => json_encode($keyboard)
+            ]);
 
 
 });
