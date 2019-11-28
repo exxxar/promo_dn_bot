@@ -32,21 +32,25 @@ class PromoConversation extends Conversation
             ->first();
 
 
-        $promo = Promotion::find($this->data);
-        $coords = explode(",", $promo->location_coords);
-        $location_attachment = new Location($coords[0], $coords[1], [
-            'custom_payload' => true,
-        ]);
-        $attachment = new Image($promo->promo_image_url);
+        try {
+            $promo = Promotion::find($this->data);
+            $coords = explode(",", $promo->location_coords);
+            $location_attachment = new Location($coords[0], $coords[1], [
+                'custom_payload' => true,
+            ]);
+            $attachment = new Image($promo->promo_image_url);
 
-        // Build message object
-        $message = OutgoingMessage::create($promo->title . "\n_" . $promo->description . "_\nАкция проходит тут:")
-            ->withAttachment($attachment)
-            ->withAttachment($location_attachment);
+            // Build message object
+            $message = OutgoingMessage::create($promo->title . "\n_" . $promo->description . "_\nАкция проходит тут:")
+                ->withAttachment($attachment)
+                ->withAttachment($location_attachment);
 
-        // Reply message object
-        $this->bot->reply($message, ["parse_mode" => "Markdown"]);
+            // Reply message object
+            $this->bot->reply($message, ["parse_mode" => "Markdown"]);
 
+        } catch (\Exception $e) {
+            $this->bot->reply($e, ["parse_mode" => "Markdown"]);
+        }
         $this->askForStartPromo();
 
     }
