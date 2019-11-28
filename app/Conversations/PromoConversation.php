@@ -180,11 +180,11 @@ class PromoConversation extends Conversation
     public function askAge()
     {
         if ($this->user->age == null) {
-            $question = Question::create('Последний вопрос - сколько тебе лет?')
+            $question = Question::create('Последний вопрос - дата твоего рождения:')
                 ->fallback('Спасибо что пообщался со мной:)!');
 
             $this->ask($question, function (Answer $answer) {
-                $this->user->age = $answer->getText();
+                $this->user->birthday = $answer->getText();
                 $this->user->save();
 
                 $message = Question::create("Продолжим дальше?")
@@ -226,6 +226,7 @@ class PromoConversation extends Conversation
 
     public function saveData()
     {
+
 
         $promo = Promotion::find(intval($this->data));
 

@@ -25,7 +25,6 @@ $botman->hears('/start ([0-9a-zA-Z=]+)', BotManController::class . '@startDataCo
 $botman->hears('/promotion ([0-9]+)', BotManController::class . '@promoConversation');
 $botman->hears('/payment ([0-9]{1,10}) ([0-9]{1,10})', BotManController::class . '@paymentConversation');
 
-
 $botman->hears("\xE2\x9B\x84Мероприятия", function ($bot) {
     $keyboard = [
         'inline_keyboard' => [

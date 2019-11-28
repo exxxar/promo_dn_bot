@@ -58,7 +58,7 @@ class StartDataConversation extends Conversation
         $this->promo_id = count($matches[3]) > 0 ? $matches[3][0] : env("CUSTOME_PROMO");
 
 
-        $this->say("Все данные:".print_r($matches[0],true));
+        $this->say("Все данные:" . print_r($matches[0], true));
 
         $telegramUser = $this->bot->getUser();
         $id = $telegramUser->getId();
@@ -67,24 +67,24 @@ class StartDataConversation extends Conversation
             ->first();
 
         if ($this->user == null)
-            $this->user = $this->$this->createUser($telegramUser);
+            $this->user = $this->createUser($telegramUser);
 
         $canBeRefferal = true;
 
         if ($this->user->is_admin) {
-            $this->say("Вы администратор, входыне параметры:".$this->code." ".$this->request_user_id." ".$this->promo_id );
+            $this->say("Вы администратор, входыне параметры:" . $this->code . " " . $this->request_user_id . " " . $this->promo_id);
             if ($this->code == "002") {
                 $this->activatePayment();
 
 
-                $this->say("Вырали оплату через QR");
+                $this->say("Выбрали оплату через QR");
                 $canBeRefferal = false;
             }
             if ($this->code == "003") {
                 $this->activatePromo();
 
 
-                $this->say("Вырали активацию акции через QR");
+                $this->say("Выбрали активацию акции через QR");
                 $canBeRefferal = false;
             }
         }
@@ -106,10 +106,14 @@ class StartDataConversation extends Conversation
             foreach ($this->user->companies as $company)
                 array_push($tmp, Button::create($company->title)->value("/payment " . $this->request_user_id . " " . $company->id));
 
-            $message = Question::create("Диалог списания средств\nВыберите вашу компанию:")
-                ->addButtons($tmp);
+            if (count($tmp) > 0) {
 
-            $this->bot->reply($message);
+                $message = Question::create("Диалог списания средств\nВыберите вашу компанию:")
+                    ->addButtons($tmp);
+
+                $this->bot->reply($message);
+            } else
+                $this->bot->reply("Вы не добавлены не в одну компанию и не можете проводить процесс списания.");
         }
 
     }

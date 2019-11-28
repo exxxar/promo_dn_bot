@@ -25,6 +25,7 @@ class User extends Authenticatable
         'avatar_url',
         'address',
         'sex',
+        'birthday',
         'age',
         'source',
         'telegram_chat_id',
