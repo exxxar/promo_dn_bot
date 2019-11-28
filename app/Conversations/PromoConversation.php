@@ -77,7 +77,7 @@ class PromoConversation extends Conversation
         ]);
         $attachment = new Image($promo->promo_image_url);
 
-        $message1 = OutgoingMessage::create("Описание акции:" . $promo->title . "\n" . $promo->description)
+        $message1 = OutgoingMessage::create("*" . $promo->title . "*\n_" . $promo->description . "_\n*Наш адрес*:" . $promo->location_address . "\n*Координаты акции*:")
             ->withAttachment($attachment);
 
         $message2 = OutgoingMessage::create("Акция проходит тут:")
@@ -86,6 +86,27 @@ class PromoConversation extends Conversation
         // Reply message object
         $this->bot->reply($message1, ["parse_mode" => "Markdown"]);
         $this->bot->reply($message2, ["parse_mode" => "Markdown"]);
+
+        $question = Question::create('Так что на счет участия?')
+            ->addButtons([
+                Button::create('Поехали')->value('yes'),
+                Button::create('Нет, в другой раз')->value('no'),
+            ]);
+
+        $this->ask($question, function (Answer $answer) {
+            // Detect if button was clicked:
+            if ($answer->isInteractiveMessageReply()) {
+                $selectedValue = $answer->getValue();
+
+                if ($selectedValue == "yes") {
+                    $this->askFirstname();
+                }
+
+                if ($selectedValue == "no") {
+                    $this->say("Хорошего дня!");
+                }
+            }
+        });
 
     }
 
