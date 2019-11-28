@@ -53,6 +53,7 @@ class PromotionController extends Controller
             'start_at'=> 'required',
             'end_at'=> 'required',
             'activation_count'=> 'required',
+            'activation_text'=> 'required',
             'location_address'=> 'required',
             'company_id'=> 'required|integer',
             'category_id'=> 'required|integer',
@@ -66,6 +67,7 @@ class PromotionController extends Controller
             'start_at'=> $request->get('start_at')??'',
             'end_at'=> $request->get('end_at')??'',
             'activation_count'=> $request->get('activation_count')??'',
+            'activation_text'=> $request->get('activation_text')??'',
             'location_address'=> $request->get('location_address')??'',
             'company_id'=> $request->get('company_id'),
             'category_id'=> $request->get('category_id'),
@@ -132,6 +134,7 @@ class PromotionController extends Controller
             'start_at'=> 'required',
             'end_at'=> 'required',
             'activation_count'=> 'required',
+            'activation_text'=> 'required',
             'location_address'=> 'required',
             'company_id'=> 'required|integer',
             'category_id'=> 'required|integer',
@@ -149,6 +152,7 @@ class PromotionController extends Controller
         $promotion->activation_count = $request->get("activation_count");
         $promotion->location_address = $request->get("location_address");
         $promotion->location_coords = $request->get("location_coords");
+        $promotion->activation_text = $request->get("activation_text");
         $promotion->company_id = $request->get("company_id");
         $promotion->category_id = $request->get("category_id");
         $promotion->refferal_bonus = $request->get("refferal_bonus");

@@ -120,8 +120,6 @@ class PromoConversation extends Conversation
                 $this->user->fio_from_request = $answer->getText();
                 $this->user->save();
 
-                $this->say('Отлично, приятно познакомится ' . $this->user->fio_from_request);
-
                 $message = Question::create("Продолжим дальше?")
                     ->addButtons([
                         Button::create("Далее")->value("next"),
@@ -147,37 +145,32 @@ class PromoConversation extends Conversation
     {
         if ($this->user->phone == null) {
             $question = Question::create('Скажие мне свой телефонный номер')
-                ->fallback('Спасибо что пообщался со мной:)!')
-                ->addButtons([
-                    Button::create("Отправить мой номер")->value("send"),
-                    Button::create("Ввести мой номер")->value("next"),
-                ]);
+                ->fallback('Спасибо что пообщался со мной:)!');
 
             $this->ask($question, function (Answer $answer) {
-                $this->user->phone = $answer->getText();
+
+                $vowels = array("(", ")", "-", " ");
+                $tmp_phone = str_replace($vowels, "", $answer->getText());
+                if (!strpos($tmp_phone, "+38"))
+                    $tmp_phone .= "+38" . $tmp_phone;
+
+                $this->user->phone = $tmp_phone;
                 $this->user->save();
 
-                if ($answer->isInteractiveMessageReply()) {
-                    if ($answer->getValue() == "send") {
-                        $this->user->phone = $this->sendRequest("sendMessage",
-                            [
-                                "text" => "Подтвердить отправку телефона",
-                                'reply_markup' => json_encode([
-                                    'inline_keyboard' => [
-                                        ['text' => 'Далее', 'request_contact' => "true"],
-                                    ]
-                                ]),
-                                "parse_mode" => "Markdown"
-                            ]);
-                        $this->user->save();
-                        $this->askSex();
-                    }
+                $message = Question::create("Продолжим дальше?")
+                    ->addButtons([
+                        Button::create("Далее")->value("next"),
+                        Button::create("Позже")->value("stop"),
+                    ]);
 
-                    if ($answer->getValue() == "next") {
-                        $this->askPhone2();
-                    }
 
-                }
+                $this->ask($message, function (Answer $answer) {
+                    if ($answer->isInteractiveMessageReply()) {
+                        if ($answer->getValue() == "next") {
+                            $this->askSex();
+                        }
+                    }
+                });
 
 
             });
@@ -230,7 +223,7 @@ class PromoConversation extends Conversation
     public function askBirthday()
     {
         if ($this->user->birthday == null) {
-            $question = Question::create('Последний вопрос - дата твоего рождения:')
+            $question = Question::create('Следующий вопрос - дата твоего рождения:')
                 ->fallback('Спасибо что пообщался со мной:)!');
 
             $this->ask($question, function (Answer $answer) {
@@ -320,33 +313,6 @@ class PromoConversation extends Conversation
             // Reply message object
             $this->bot->reply($message, ["parse_mode" => "Markdown"]);
         }
-
-    }
-
-    public function askPhone2()
-    {
-
-        $question = Question::create('Введите свой телефон по формату *+38(0XX)XXX-XX-XX*')
-            ->fallback('Спасибо что пообщался со мной:)!');
-
-        $this->ask($question, function (Answer $answer) {
-
-            $message = Question::create("Продолжим дальше?")
-                ->addButtons([
-                    Button::create("Далее")->value("next"),
-                    Button::create("Позже")->value("stop"),
-                ]);
-
-
-            $this->ask($message, function (Answer $answer) {
-                if ($answer->isInteractiveMessageReply()) {
-                    if ($answer->getValue() == "next") {
-                        $this->askSex();
-                    }
-                }
-            });
-        });
-
 
     }
 
