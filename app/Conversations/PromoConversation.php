@@ -40,8 +40,10 @@ class PromoConversation extends Conversation
             ]);
             $attachment = new Image($promo->promo_image_url);
 
-            $message1 = OutgoingMessage::create($promo->title . "\n_" . $promo->description)
+            $message1 = OutgoingMessage::create("Описание акции")
                 ->withAttachment($attachment);
+
+            $this->bot->reply("Test");
 
             $message2 = OutgoingMessage::create( "Акция проходит тут:")
                 ->withAttachment($location_attachment);
