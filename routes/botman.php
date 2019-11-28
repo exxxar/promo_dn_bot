@@ -477,7 +477,6 @@ $botman->hears('/events ([0-9]+)', function ($bot, $page) {
 
     $bot->sendRequest("sendMessage",
         [
-            "text" => "Наши мепроприятия",
             'reply_markup' => json_encode($keyboard)
         ]);
 
