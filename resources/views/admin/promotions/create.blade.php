@@ -86,9 +86,9 @@
                         </tr>
 
                         <tr>
-                            <td>Координаты расположения</td>
+                            <td>Координаты расположения, пример: 61.766130, -6.822510</td>
                             <td>
-                                <input type="text" name="location_coords" class="form-control">
+                                <input type="text" name="location_coords" class="form-control" required>
                             </td>
                         </tr>
 
@@ -102,7 +102,7 @@
                         <tr>
                             <td>Активировать сразу после выполнения условий</td>
                             <td>
-                                <input type="checkbox" name="immediately_activate" class="form-control">
+                                <input type="checkbox" name="immediately_activate" class="form-control" required>
                             </td>
                         </tr>
 

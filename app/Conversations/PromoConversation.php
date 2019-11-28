@@ -5,6 +5,7 @@ namespace App\Conversations;
 use App\Promotion;
 use App\UserHasPromo;
 use BotMan\BotMan\Messages\Attachments\Image;
+use BotMan\BotMan\Messages\Attachments\Location;
 use BotMan\BotMan\Messages\Conversations\Conversation;
 use BotMan\BotMan\Messages\Incoming\Answer;
 use BotMan\BotMan\Messages\Outgoing\Actions\Button;
@@ -29,6 +30,22 @@ class PromoConversation extends Conversation
 
         $this->user = \App\User::where("telegram_chat_id", $id)
             ->first();
+
+
+        $promo = Promotion::find($this->data);
+        $coords = explode(",", $promo->location_coords);
+        $location_attachment = new Location($coords[0], $coords[1], [
+            'custom_payload' => true,
+        ]);
+        $attachment = new Image($promo->promo_image_url);
+
+        // Build message object
+        $message = OutgoingMessage::create($promo->title . "\n_" . $promo->description . "_\nАкция проходит тут:")
+            ->withAttachment($attachment)
+            ->withAttachment($location_attachment);
+
+        // Reply message object
+        $this->bot->reply($message, ["parse_mode" => "Markdown"]);
 
         $this->askForStartPromo();
 
@@ -133,33 +150,6 @@ class PromoConversation extends Conversation
             });
         } else
             $this->askSex();
-
-    }
-
-    public function askPhone2()
-    {
-
-        $question = Question::create('Введите свой телефон по формату *+38(0XX)XXX-XX-XX*')
-            ->fallback('Спасибо что пообщался со мной:)!');
-
-        $this->ask($question, function (Answer $answer) {
-
-            $message = Question::create("Продолжим дальше?")
-                ->addButtons([
-                    Button::create("Далее")->value("next"),
-                    Button::create("Позже")->value("stop"),
-                ]);
-
-
-            $this->ask($message, function (Answer $answer) {
-                if ($answer->isInteractiveMessageReply()) {
-                    if ($answer->getValue() == "next") {
-                        $this->askSex();
-                    }
-                }
-            });
-        });
-
 
     }
 
@@ -297,6 +287,33 @@ class PromoConversation extends Conversation
             // Reply message object
             $this->bot->reply($message, ["parse_mode" => "Markdown"]);
         }
+
+    }
+
+    public function askPhone2()
+    {
+
+        $question = Question::create('Введите свой телефон по формату *+38(0XX)XXX-XX-XX*')
+            ->fallback('Спасибо что пообщался со мной:)!');
+
+        $this->ask($question, function (Answer $answer) {
+
+            $message = Question::create("Продолжим дальше?")
+                ->addButtons([
+                    Button::create("Далее")->value("next"),
+                    Button::create("Позже")->value("stop"),
+                ]);
+
+
+            $this->ask($message, function (Answer $answer) {
+                if ($answer->isInteractiveMessageReply()) {
+                    if ($answer->getValue() == "next") {
+                        $this->askSex();
+                    }
+                }
+            });
+        });
+
 
     }
 

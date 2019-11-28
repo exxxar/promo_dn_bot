@@ -30,8 +30,9 @@
                 </div>
 
 
-                <form method="post" action="{{ route('companies.store') }}">
+                <form method="post" action="{{ route('companies.update',$company->id) }}">
                     @csrf
+                    <input name="_method" type="hidden" value="PUT">
                     <input type="hidden" value="{{$company->phone}}" name="id">
                     <table class="table mt-2">
                         <thead class="thead-light ">

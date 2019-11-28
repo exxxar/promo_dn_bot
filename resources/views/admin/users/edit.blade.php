@@ -19,8 +19,9 @@
                     </div>
                 </div>
 
-                <form method="post" action="{{ route('users.store') }}">
+                <form method="post" action="{{ route('users.update',$user->id) }}">
                     @csrf
+                    <input name="_method" type="hidden" value="PUT">
                     <table class="table mt-2">
                         <thead class="thead-light ">
                         <th>Параметр</th>

@@ -31,9 +31,9 @@
                 </div>
 
 
-                <form method="post" action="{{ route('categories.store') }}">
+                <form method="post" action="{{ route('categories.update',$category->id) }}">
                     @csrf
-                    <input type="hidden" name="id" value="{{$category->id}}">
+                    <input name="_method" type="hidden" value="PUT">
                     <table class="table mt-2">
                         <thead class="thead-light ">
                         <th>Параметр</th>

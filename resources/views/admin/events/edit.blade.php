@@ -35,8 +35,9 @@
                 </div>
 
 
-                <form method="post" action="{{ route('events.store') }}">
+                <form method="post" action="{{ route('events.update',$event->id) }}">
                     @csrf
+                    <input name="_method" type="hidden" value="PUT">
                     <table class="table mt-2">
                         <thead class="thead-light ">
                         <th>Параметр</th>

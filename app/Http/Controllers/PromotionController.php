@@ -132,7 +132,7 @@ class PromotionController extends Controller
             'promo_image_url'=> 'max:1000',
             'start_at'=> 'required',
             'end_at'=> 'required',
-            'immediately_activate'=> 'boolean',
+            'immediately_activate'=> 'required',
             'activation_count'=> 'required',
             'location_address'=> 'required',
             'company_id'=> 'required|integer',
@@ -142,7 +142,7 @@ class PromotionController extends Controller
 
 
         $promotion = Promotion::find($id);
-        $promotion->title = $request->get("phone");
+        $promotion->title = $request->get("title");
         $promotion->description = $request->get("description");
         $promotion->promo_image_url = $request->get("promo_image_url");
         $promotion->start_at = $request->get("start_at");

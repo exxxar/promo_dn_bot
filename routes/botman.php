@@ -7,6 +7,7 @@ use App\User;
 use App\UserHasPromo;
 use BotMan\BotMan\Messages\Attachments\File;
 use BotMan\BotMan\Messages\Attachments\Image;
+use BotMan\BotMan\Messages\Attachments\Location;
 use BotMan\BotMan\Messages\Outgoing\Actions\Button;
 use BotMan\BotMan\Messages\Outgoing\OutgoingMessage;
 use BotMan\BotMan\Messages\Outgoing\Question;
@@ -15,7 +16,6 @@ use Illuminate\Support\Facades\Storage;
 use SimpleSoftwareIO\QrCode\Facades\QrCode;
 
 $botman = resolve('botman');
-
 
 $botman->hears('Попробовать снова', BotManController::class . '@startConversation');
 $botman->hears('/start', BotManController::class . '@startConversation');
@@ -29,8 +29,8 @@ $botman->hears("\xE2\x9B\x84Мероприятия", function ($bot) {
     $keyboard = [
         'inline_keyboard' => [
             [
-                ['text' => 'Наши мероприятия', 'callback_data' => "/events 0"],
-                ['text' => 'Посмотреть призы!', 'url' => env("APP_PROMO_LINK")],
+                ['text' => 'Мероприятия', 'callback_data' => "/events 0"],
+                ['text' => 'Призы!', 'url' => env("APP_PROMO_LINK")],
             ]
         ]
     ];
@@ -435,8 +435,7 @@ $botman->hears('/payments ([0-9]+)', function ($bot, $page) {
 $botman->hears('/events ([0-9]+)', function ($bot, $page) {
 
 
-    $events = Event::with(["recipient"])
-        ->skip($page * 5)
+    $events = Event::skip($page * 5)
         ->take(5)
         ->orderBy('id', 'DESC')
         ->get();
