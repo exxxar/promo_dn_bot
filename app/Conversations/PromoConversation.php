@@ -41,7 +41,7 @@ class PromoConversation extends Conversation
         $question = Question::create('Хочешь поучаствовать в акции?')
             ->fallback('Ничего страшного, в следующий раз получится!')
             ->addButtons([
-                Button::create('Детали акции')->value('/promo_info '.$this->data),
+                Button::create('Детали акции')->value('promo_info'),
                 Button::create('Да, хочу')->value('yes'),
                 Button::create('Нет, в другой раз')->value('no'),
             ]);
@@ -52,6 +52,10 @@ class PromoConversation extends Conversation
                 $selectedValue = $answer->getValue(); // will be either 'yes' or 'no'
                 $selectedText = $answer->getText(); // will be either 'Of course' or 'Hell no!'
 
+                if ($selectedValue == "promo_info") {
+                    $this->promoInfo();
+                }
+
                 if ($selectedValue == "yes") {
                     $this->askFirstname();
                 }
@@ -61,6 +65,28 @@ class PromoConversation extends Conversation
                 }
             }
         });
+    }
+
+    public function promoInfo()
+    {
+
+        $promo = Promotion::find($this->data);
+        $coords = explode(",", $promo->location_coords);
+        $location_attachment = new Location($coords[0], $coords[1], [
+            'custom_payload' => true,
+        ]);
+        $attachment = new Image($promo->promo_image_url);
+
+        $message1 = OutgoingMessage::create("Описание акции:" . $promo->title . "\n" . $promo->description)
+            ->withAttachment($attachment);
+
+        $message2 = OutgoingMessage::create("Акция проходит тут:")
+            ->withAttachment($location_attachment);
+
+        // Reply message object
+        $this->bot->reply($message1, ["parse_mode" => "Markdown"]);
+        $this->bot->reply($message2, ["parse_mode" => "Markdown"]);
+
     }
 
     public function askFirstname()

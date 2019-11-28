@@ -486,29 +486,3 @@ $botman->hears('/events ([0-9]+)', function ($bot, $page) {
 
 });
 
-$botman->hears('/promo_info ([0-9]+)',function ($bot,$promo_id){
-
-
-    try {
-        $promo = Promotion::find($promo_id);
-        $coords = explode(",", $promo->location_coords);
-        $location_attachment = new Location($coords[0], $coords[1], [
-            'custom_payload' => true,
-        ]);
-        $attachment = new Image($promo->promo_image_url);
-
-        $message1 = OutgoingMessage::create("Описание акции:" . $promo->title . "\n" . $promo->description)
-            ->withAttachment($attachment);
-
-        $message2 = OutgoingMessage::create("Акция проходит тут:")
-            ->withAttachment($location_attachment);
-
-        // Reply message object
-        $bot->reply($message1, ["parse_mode" => "Markdown"]);
-        $bot->reply($message2, ["parse_mode" => "Markdown"]);
-    }
-    catch (Exception $e){
-        $bot->reply($e);
-    }
-});
-
