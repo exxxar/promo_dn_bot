@@ -32,29 +32,6 @@ class PromoConversation extends Conversation
             ->first();
 
 
-        try {
-            $promo = Promotion::find($this->data);
-            $coords = explode(",", $promo->location_coords);
-            $location_attachment = new Location($coords[0], $coords[1], [
-                'custom_payload' => true,
-            ]);
-            $attachment = new Image($promo->promo_image_url);
-
-            $message1 = OutgoingMessage::create("Описание акции")
-                ->withAttachment($attachment);
-
-            $this->bot->reply("Test");
-
-            $message2 = OutgoingMessage::create( "Акция проходит тут:")
-                ->withAttachment($location_attachment);
-
-            // Reply message object
-            $this->bot->reply($message1, ["parse_mode" => "Markdown"]);
-            $this->bot->reply($message2, ["parse_mode" => "Markdown"]);
-
-        } catch (\Exception $e) {
-            $this->bot->reply($e, ["parse_mode" => "Markdown"]);
-        }
         $this->askForStartPromo();
 
     }
@@ -64,6 +41,7 @@ class PromoConversation extends Conversation
         $question = Question::create('Хочешь поучаствовать в акции?')
             ->fallback('Ничего страшного, в следующий раз получится!')
             ->addButtons([
+                Button::create('Детали акции')->value('/promo_info '.$this->data),
                 Button::create('Да, хочу')->value('yes'),
                 Button::create('Нет, в другой раз')->value('no'),
             ]);
