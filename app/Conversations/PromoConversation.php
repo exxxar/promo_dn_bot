@@ -40,13 +40,15 @@ class PromoConversation extends Conversation
             ]);
             $attachment = new Image($promo->promo_image_url);
 
-            // Build message object
-            $message = OutgoingMessage::create($promo->title . "\n_" . $promo->description . "_\nАкция проходит тут:")
-                ->withAttachment($attachment)
+            $message1 = OutgoingMessage::create($promo->title . "\n_" . $promo->description)
+                ->withAttachment($attachment);
+
+            $message2 = OutgoingMessage::create( "Акция проходит тут:")
                 ->withAttachment($location_attachment);
 
             // Reply message object
-            $this->bot->reply($message, ["parse_mode" => "Markdown"]);
+            $this->bot->reply($message1, ["parse_mode" => "Markdown"]);
+            $this->bot->reply($message2, ["parse_mode" => "Markdown"]);
 
         } catch (\Exception $e) {
             $this->bot->reply($e, ["parse_mode" => "Markdown"]);

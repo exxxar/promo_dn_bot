@@ -52,7 +52,6 @@ class PromotionController extends Controller
             'promo_image_url'=> 'max:1000',
             'start_at'=> 'required',
             'end_at'=> 'required',
-            'immediately_activate'=> 'required',
             'activation_count'=> 'required',
             'location_address'=> 'required',
             'company_id'=> 'required|integer',
@@ -132,7 +131,6 @@ class PromotionController extends Controller
             'promo_image_url'=> 'max:1000',
             'start_at'=> 'required',
             'end_at'=> 'required',
-            'immediately_activate'=> 'required',
             'activation_count'=> 'required',
             'location_address'=> 'required',
             'company_id'=> 'required|integer',
@@ -147,7 +145,7 @@ class PromotionController extends Controller
         $promotion->promo_image_url = $request->get("promo_image_url");
         $promotion->start_at = $request->get("start_at");
         $promotion->end_at = $request->get("end_at");
-        $promotion->immediately_activate = $request->get("immediately_activate");
+        $promotion->immediately_activate = $request->get("immediately_activate")??false;
         $promotion->activation_count = $request->get("activation_count");
         $promotion->location_address = $request->get("location_address");
         $promotion->location_coords = $request->get("location_coords");

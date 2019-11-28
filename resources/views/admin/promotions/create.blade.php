@@ -102,7 +102,7 @@
                         <tr>
                             <td>Активировать сразу после выполнения условий</td>
                             <td>
-                                <input type="checkbox" name="immediately_activate" class="form-control" required>
+                                <input type="checkbox" name="immediately_activate" class="form-control" >
                             </td>
                         </tr>
 

@@ -11,7 +11,7 @@
                             <h2>Просмотр информации по акции</h2>
                         </div>
                         <div class="pull-right">
-                            <a class="btn btn-primary" href="{{ route('companies.index') }}"> Назад</a>
+                            <a class="btn btn-primary" href="{{ route('promotions.index') }}"> Назад</a>
                             <a class="btn btn-secondary" href="#"> Активации по акции</a>
                             <a class="btn btn-link" href="{{ route('promotions.edit',$promotion->id) }}">
                                 <i class="fas fa-edit"></i>
