@@ -38,7 +38,7 @@ $botman->hears("\xE2\x9B\x84Мероприятия", function ($bot) {
     ];
 
     $bot->sendRequest("sendMessage",
-        ["text" => 'Мы готовим Вам на Новый год крутые подарки! Посмотри!', 'reply_markup' => json_encode($keyboard)
+        ["text" => 'Мы готовим для вас самые крутые мероприятия в городе! Посмотри!', 'reply_markup' => json_encode($keyboard)
         ]);
 });
 $botman->hears("\xF0\x9F\x93\xB2Мои друзья", function ($bot) {

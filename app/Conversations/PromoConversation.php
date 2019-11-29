@@ -3,6 +3,7 @@
 namespace App\Conversations;
 
 use App\Promotion;
+use App\User;
 use App\UserHasPromo;
 use BotMan\BotMan\Messages\Attachments\Image;
 use BotMan\BotMan\Messages\Attachments\Location;
@@ -155,17 +156,27 @@ class PromoConversation extends Conversation
 
                 Log::info($tmp_phone);
 
-                $tmp_phone = str_replace($vowels, "",$tmp_phone);
+                $tmp_phone = str_replace($vowels, "", $tmp_phone);
 
                 Log::info($tmp_phone);
 
                 if (!strpos($tmp_phone, "+38"))
                     $tmp_phone = "+38" . $tmp_phone;
 
-                $this->user->phone = $tmp_phone;
-                $this->user->save();
+                $tmp_user = User::where("phone", $tmp_phone)->first();
+                $tmp_error = "";
+                if ($tmp_user == null) {
 
-                $message = Question::create("Продолжим дальше?")
+                    $this->user->phone = $tmp_phone;
+                    $this->user->save();
+
+
+                }
+                else
+                    $tmp_error.="Пользователь с таким номером уже и так наш друг:)\n";
+
+
+                $message = Question::create("$tmp_error Продолжим дальше?")
                     ->addButtons([
                         Button::create("Далее")->value("next"),
                         Button::create("Позже")->value("stop"),
@@ -179,7 +190,6 @@ class PromoConversation extends Conversation
                         }
                     }
                 });
-
 
             });
         } else
