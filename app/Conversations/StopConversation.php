@@ -23,7 +23,6 @@ class StopConversation extends Conversation
      */
     public function run()
     {
-        $this->stopsConversation();
         $this->mainMenu("Хорошего дня!");
     }
 
