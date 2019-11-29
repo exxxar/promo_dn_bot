@@ -8,6 +8,9 @@ use App\User;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Log;
+use Telegram\Bot\FileUpload\InputFile;
+use Telegram\Bot\Laravel\Facades\Telegram;
+
 
 class HomeController extends Controller
 {
@@ -75,6 +78,7 @@ class HomeController extends Controller
     public function cashback(Request $request)
     {
 
+
         $vowels = array("(", ")", "-", " ");
         $tmp_phone = $request->get("user_phone");
         $check_info = $request->get("check_info");
@@ -88,7 +92,8 @@ class HomeController extends Controller
             $user = User::where("phone", $tmp_phone)->first();
 
         if ($user) {
-            $user->cashback_bonus_count += round(intval($money_in_check) * env("CAHSBAK_PROCENT") / 100);
+            $cashBack = round(intval($money_in_check) * env("CAHSBAK_PROCENT") / 100);
+            $user->cashback_bonus_count += $cashBack;
             $user->save();
 
             CashbackHistory::create([
@@ -99,6 +104,14 @@ class HomeController extends Controller
                 'user_phone' => $tmp_phone,
 
             ]);
+
+            Telegram::sendMessage([
+                'chat_id' => $user->telegram_chat_id,
+                'parse_mode' => 'Markdown',
+                'text' => "Сумма в чеке *$money_in_check* руб.\nВам начислен *CashBack* в размере *$cashBack* руб.",
+                'disable_notification' => 'false'
+            ]);
+
             return back()
                 ->with("success", "Кэшбэк успешно добавлен!");
         }
@@ -117,5 +130,37 @@ class HomeController extends Controller
 
     }
 
+    public function announce(Request $request)
+    {
 
+        $users = User::all();
+
+        $announce_title = $request->get("announce_title") ?? '';
+        $announce_url = $request->get("announce_url") ?? null;
+        $announce_message = $request->get("announce_message") ?? '';
+
+
+        foreach ($users as $user) {
+
+            Log::info("next step");
+            if (!is_numeric($user->telegram_chat_id))
+                continue;
+            Log::info($user->telegram_chat_id);
+
+            Telegram::sendMessage([
+                'chat_id' => $user->telegram_chat_id,
+                'parse_mode' => 'Markdown',
+                'text' => "*$announce_title*\n_ $announce_message _",
+                'disable_notification' => 'false'
+            ]);
+
+            if ($announce_url != null)
+                Telegram::sendPhoto([
+                    'chat_id' => $user->telegram_chat_id,
+                    'photo' => InputFile::create($announce_url)
+                ]);
+        }
+
+        return back()->with("success", "Сообщения успешно отправлены!");
+    }
 }

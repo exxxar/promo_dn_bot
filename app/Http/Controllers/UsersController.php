@@ -215,34 +215,5 @@ class UsersController extends Controller
 
     }
 
-    public function announce(Request $request)
-    {
 
-        $users = User::all();
-
-        $announce_title = $request->get("announce_title");
-        $announce_url = $request->get("announce_url");
-        $announce_message = $request->get("announce_message");
-
-        $botman = resolve('botman');
-
-        $attachment = new Image($announce_url);
-
-        // Build message object
-        $message = OutgoingMessage::create($announce_title . "\n" . $announce_message)
-            ->withAttachment($attachment);
-
-        // Reply message object
-
-
-        foreach ($users as $user) {
-            $botman->sendRequest("sendMessage",
-                [
-                    "text" => $announce_title,
-                    "chat_id" => $user->telegram_chat_id,
-                ]);
-        }
-
-        return back()->with("success", "Сообщения успешно отправлены!");
-    }
 }

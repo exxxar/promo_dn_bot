@@ -11,7 +11,8 @@ class CashbackHistory extends Model
         'activated',
         'employee_id',
         'check_info',
-        'user_phone'
+        'user_phone',
+        'created_at'
 
     ];
 

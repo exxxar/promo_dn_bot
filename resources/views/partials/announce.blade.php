@@ -23,7 +23,7 @@
 
     <div class="form-row">
         <div class="col form-group">
-            <button class="btn btn-primary" name="submit">Найти</button>
+            <button class="btn btn-primary" name="submit">Отправить всем пользователям</button>
         </div>
     </div>
 </form>

@@ -40,7 +40,7 @@ Route::prefix('admin')->group(function () {
     Route::post('/search', 'HomeController@search')
         ->name('users.search');
 
-    Route::post('/announce', 'UsersController@announce')
+    Route::post('/announce', 'HomeController@announce')
         ->name('users.announce');
 
     Route::post("/users/cashback/add","HomeController@cashback")

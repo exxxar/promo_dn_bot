@@ -95,8 +95,14 @@ $botman->hears("\xF0\x9F\x92\xB3Мои баллы", function ($bot) {
 
 
         $tmp_message = "У вас *$summary* баллов, из них *$cashback* - бонус CashBack!\n_Для оплаты дайте отсканировать данный QR-код сотруднику!_\n";
-        $payments = RefferalsPaymentHistory::where("user_id", $user->id)
-            ->get();
+
+
+        $message = Question::create($tmp_message)
+            ->addButtons([
+                Button::create("Моя статистика")->value("/statistic")
+            ]);
+
+        $bot->reply($message, ["parse_mode" => "Markdown"]);
 
         if ($user->phone != null) {
 
@@ -122,19 +128,6 @@ $botman->hears("\xF0\x9F\x92\xB3Мои баллы", function ($bot) {
 
 
         }
-
-
-        if (count($payments) > 0) {
-
-            $message = Question::create($tmp_message)
-                ->addButtons([
-                    Button::create("Посмотреть мои расходы")->value("/payments 0")
-                ]);
-
-            $bot->reply($message, ["parse_mode" => "Markdown"]);
-        } else
-            $bot->reply($tmp_message, ["parse_mode" => "Markdown"]);
-
 
         $tmp_id = "$id";
         while (strlen($tmp_id) < 10)
@@ -461,6 +454,65 @@ $botman->hears('/payments ([0-9]+)', function ($bot, $page) {
 
 });
 
+$botman->hears('/cashbacks ([0-9]+)', function ($bot, $page) {
+
+    $telegramUser = $bot->getUser();
+
+    $id = $telegramUser->getId();
+
+    $user = \App\User::where("telegram_chat_id", $id)->first();
+
+    $cashbacks = CashbackHistory::where("user_phone", $user->phone)
+        ->skip($page * 10)
+        ->take(10)
+        ->orderBy('id', 'DESC')
+        ->get();
+
+    $tmp = "";
+
+    foreach ($cashbacks as $key => $cash) {
+        $check_info = $cash->check_info;
+        $cb = round(intval($cash->money_in_check) * env("CAHSBAK_PROCENT") / 100);
+        $tmp .= "В _" . $cash->created_at . "_ чек №" . $check_info . " принес вам *" . $cb . "* руб. CashBack \n";
+
+    }
+
+    $inline_keyboard = [];
+    if ($page == 0 && count($cashbacks) == 10)
+        array_push($inline_keyboard, ['text' => 'Далее', 'callback_data' => '/cashbacks ' . ($page + 1)]);
+
+    if ($page > 0) {
+        if (count($cashbacks) == 0) {
+            array_push($inline_keyboard, ['text' => 'Назад', 'callback_data' => '/cashbacks ' . ($page - 1)]);
+        }
+
+        if (count($cashbacks) == 10) {
+            array_push($inline_keyboard, ['text' => 'Назад', 'callback_data' => '/cashbacks ' . ($page - 1)]);
+            array_push($inline_keyboard, ['text' => 'Далее', 'callback_data' => '/cashbacks ' . ($page + 1)]);
+        }
+
+        if (count($cashbacks) > 0 && count($cashbacks) < 10) {
+            array_push($inline_keyboard, ['text' => 'Назад', 'callback_data' => '/cashbacks ' . ($page - 1)]);
+        }
+    }
+
+
+    $keyboard = [
+        'inline_keyboard' => [
+            $inline_keyboard
+        ]
+    ];
+
+    $bot->sendRequest("sendMessage",
+        [
+            "text" => strlen($tmp) > 0 ? $tmp : "Вам не начислялся CashBack.",
+            'reply_markup' => json_encode($keyboard),
+            "parse_mode" => "Markdown"
+        ]);
+
+
+});
+
 $botman->hears('/events ([0-9]+)', function ($bot, $page) {
 
 
@@ -544,3 +596,16 @@ $botman->hears('/cashback_get', function ($bot) {
 
 
 });
+
+$botman->hears('/statistic', function ($bot) {
+    $message = Question::create("Вы можете отслеживать начисления CashBack бонусов и их списание")
+        ->addButtons([
+            Button::create("Начисления")->value("/cashbacks 0"),
+            Button::create("Списания")->value("/payments 0"),
+        ]);
+    $bot->reply($message, ["parse_mode" => "Markdown"]);
+});
+
+
+
+
