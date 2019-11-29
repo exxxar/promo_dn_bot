@@ -13,7 +13,6 @@ use BotMan\BotMan\Messages\Attachments\Location;
 use BotMan\BotMan\Messages\Outgoing\Actions\Button;
 use BotMan\BotMan\Messages\Outgoing\OutgoingMessage;
 use BotMan\BotMan\Messages\Outgoing\Question;
-use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Facades\Storage;
 use SimpleSoftwareIO\QrCode\Facades\QrCode;
@@ -101,18 +100,16 @@ $botman->hears("\xF0\x9F\x92\xB3Мои баллы", function ($bot) {
 
         if ($user->phone != null) {
 
-            $bot->reply("TEST:phone ".$user->phone );
-            $cashback_history = DB::table('cashback_histories')
-                ->whereColumn([
-                    ['user_phone', '=', $user->phone],
-                    ['activated', '=', '0']
-            ])->get();
+            $bot->reply("TEST:phone " . $user->phone);
+            $cashback_history = CashbackHistory::where("user_phone", $user->phone)
+                ->get();
 
-            $bot->reply("TEST:cashback history count ".count($cashback_history));
+            $bot->reply("TEST:cashback history count " . count($cashback_history));
             if (count($cashback_history) > 0) {
                 $tmp_money = 0;
                 foreach ($cashback_history as $ch)
-                    $tmp_money += round(intval($ch->money_in_check) * env("CAHSBAK_PROCENT") / 100);
+                    if ($ch->activated == 0)
+                        $tmp_money += round(intval($ch->money_in_check) * env("CAHSBAK_PROCENT") / 100);
 
 
                 $message = Question::create("У вас есть неучтенный $tmp_money руб. CashBack")
@@ -527,16 +524,19 @@ $botman->hears('/cashback_get', function ($bot) {
     if ($user->phone != null) {
 
         $cashback_history = CashbackHistory::where("user_phone", $user->phone)
-            ->where("activated", 0)
             ->get();
 
         if (count($cashback_history) > 0) {
             foreach ($cashback_history as $ch) {
+                if ($ch->activated == 1)
+                    continue;
+
                 $ch->activated = 1;
                 $ch->save();
 
                 $user->cashback_bonus_count += round(intval($ch->money_in_check) * env("CAHSBAK_PROCENT") / 100);
                 $user->save();
+
             }
             $bot->reply("CashBack успешно зачислен!", ["parse_mode" => "Markdown"]);
         }
