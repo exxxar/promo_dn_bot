@@ -81,7 +81,6 @@ $botman->hears("\xF0\x9F\x93\xB2Мои друзья", function ($bot) {
 
 
 });
-
 $botman->hears("\xF0\x9F\x92\xB3Мои баллы", function ($bot) {
     $telegramUser = $bot->getUser();
 
@@ -97,12 +96,10 @@ $botman->hears("\xF0\x9F\x92\xB3Мои баллы", function ($bot) {
         $tmp_message = "У вас *$summary* баллов, из них *$cashback* - бонус CashBack!\n_Для оплаты дайте отсканировать данный QR-код сотруднику!_\n";
 
 
-        $message = Question::create($tmp_message)
-            ->addButtons([
-                Button::create("Моя статистика")->value("/statistic")
-            ]);
+        $tmp_buttons = [];
 
-        $bot->reply($message, ["parse_mode" => "Markdown"]);
+        array_push($tmp_buttons, Button::create("Моя статистика")->value("/statistic"));
+
 
         if ($user->phone != null) {
 
@@ -116,18 +113,19 @@ $botman->hears("\xF0\x9F\x92\xB3Мои баллы", function ($bot) {
                         $tmp_money += round(intval($ch->money_in_check) * env("CAHSBAK_PROCENT") / 100);
 
 
-                if ($tmp_money > 0) {
-                    $message = Question::create("У вас есть неучтенный $tmp_money руб. CashBack")
-                        ->addButtons([
-                            Button::create("Зачислить мне $tmp_money руб. CashBack")->value("/cashback_get")
-                        ]);
+                if ($tmp_money > 0)
+                    array_push($tmp_buttons, Button::create("Зачислить мне $tmp_money руб. CashBack")->value("/cashback_get"));
 
-                    $bot->reply($message, ["parse_mode" => "Markdown"]);
-                }
+
             }
 
 
         }
+
+        $message = Question::create($tmp_message)
+            ->addButtons($tmp_buttons);
+
+        $bot->reply($message, ["parse_mode" => "Markdown"]);
 
         $tmp_id = "$id";
         while (strlen($tmp_id) < 10)
@@ -148,7 +146,6 @@ $botman->hears("\xF0\x9F\x92\xB3Мои баллы", function ($bot) {
     }
 
 });
-
 $botman->hears("\xF0\x9F\x94\xA5По категориям", function ($bot) {
     $categories = \App\Category::all();
 
@@ -197,11 +194,9 @@ $botman->hears("\xE2\x9A\xA1Все акции", function ($bot) {
 
 
 });
-
 $botman->hears('stop', function ($bot) {
     $bot->reply('Хорошо, продолжим позже!)');
 })->stopsConversation();
-
 $botman->hears('/category ([0-9]+)', function ($bot, $category_id) {
 
     $promotions = \App\Promotion::with(["users"])->where("category_id", "=", $category_id)
@@ -235,7 +230,6 @@ $botman->hears('/category ([0-9]+)', function ($bot, $category_id) {
     } else
         $bot->reply("Акций в категории не найдено или все акции собраны:(");
 });
-
 $botman->hears('/company ([0-9]+)', function ($bot, $company_id) {
 
     $company = \App\Company::find($company_id);
@@ -280,8 +274,6 @@ $botman->hears('/company ([0-9]+)', function ($bot, $company_id) {
     } else
         $bot->reply("Акций от компании не найдено или все акции данной компании собраны:(");
 });
-
-
 $botman->hears('/payment_accept ([0-9]{1,10}) ([0-9]{3,10}) ([0-9]+)', function ($bot, $value, $user_id, $company_id) {
 
     $telegramUser = $this->bot->getUser();
@@ -323,7 +315,6 @@ $botman->hears('/payment_accept ([0-9]{1,10}) ([0-9]{3,10}) ([0-9]+)', function 
             ]);
     }
 });
-
 $botman->hears('/payment_decline ([0-9]{1,10}) ([0-9]{3,10}) ([0-9]+)', function ($bot, $value, $user_id, $company_id) {
     $bot->reply('Оплата отклонена');
 
@@ -334,7 +325,6 @@ $botman->hears('/payment_decline ([0-9]{1,10}) ([0-9]{3,10}) ([0-9]+)', function
         ]);
 
 });
-
 $botman->hears('/friends ([0-9]+)', function ($bot, $page) {
 
     $telegramUser = $bot->getUser();
@@ -394,7 +384,6 @@ $botman->hears('/friends ([0-9]+)', function ($bot, $page) {
 
 
 });
-
 $botman->hears('/payments ([0-9]+)', function ($bot, $page) {
 
     $telegramUser = $bot->getUser();
@@ -453,7 +442,6 @@ $botman->hears('/payments ([0-9]+)', function ($bot, $page) {
 
 
 });
-
 $botman->hears('/cashbacks ([0-9]+)', function ($bot, $page) {
 
     $telegramUser = $bot->getUser();
@@ -512,7 +500,6 @@ $botman->hears('/cashbacks ([0-9]+)', function ($bot, $page) {
 
 
 });
-
 $botman->hears('/events ([0-9]+)', function ($bot, $page) {
 
 
@@ -565,7 +552,6 @@ $botman->hears('/events ([0-9]+)', function ($bot, $page) {
 
 
 });
-
 $botman->hears('/cashback_get', function ($bot) {
     $telegramUser = $bot->getUser();
 
@@ -596,7 +582,6 @@ $botman->hears('/cashback_get', function ($bot) {
 
 
 });
-
 $botman->hears('/statistic', function ($bot) {
     $message = Question::create("Вы можете отслеживать начисления CashBack бонусов и их списание")
         ->addButtons([
