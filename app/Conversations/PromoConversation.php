@@ -58,11 +58,11 @@ class PromoConversation extends Conversation
                 $selectedText = $answer->getText(); // will be either 'Of course' or 'Hell no!'
 
                 if ($selectedValue == "promo_info") {
-                    $this->conversationMenu("Начнем-с...");
                     $this->promoInfo();
                 }
 
                 if ($selectedValue == "yes") {
+                    $this->conversationMenu("Начнем-с...");
                     $this->askFirstname();
                 }
 
