@@ -13,11 +13,11 @@
                                 {{ session('status') }}
                             </div>
                         @endif
-                        @include("partials.announce")
+                      {{--  @include("partials.announce")
                         <hr>
                         @include("partials.cashback")
                         <hr>
-                        @include("partials.search")
+                        @include("partials.search")--}}
                         <hr>
                         @include("partials.generate")
                     </div>
