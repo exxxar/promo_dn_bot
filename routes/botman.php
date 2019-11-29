@@ -100,10 +100,12 @@ $botman->hears("\xF0\x9F\x92\xB3Мои баллы", function ($bot) {
 
         if ($user->phone != null) {
 
+            $bot->reply("TEST:phone ".$user->phone );
             $cashback_history = CashbackHistory::where("user_phone", $user->phone)
                 ->where("activated", 0)
                 ->get();
 
+            $bot->reply("TEST:cashback history count ".count($cashback_history));
             if (count($cashback_history) > 0) {
                 $tmp_money = 0;
                 foreach ($cashback_history as $ch)
