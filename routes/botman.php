@@ -26,7 +26,7 @@ $botman->hears('Продолжить позже', BotManController::class . '@st
 
 $botman->hears('/start ([0-9a-zA-Z=]+)', BotManController::class . '@startDataConversation');
 
-$botman->hears('/promotion ([0-9]+)', BotManController::class . '@promoConversation');
+$botman->hears('/promotion ([0-9]+)', BotManController::class . '@promoConversation')->stopsConversation();
 $botman->hears('/payment ([0-9]{1,10}) ([0-9]{1,10})', BotManController::class . '@paymentConversation');
 
 $botman->hears("\xE2\x9B\x84Мероприятия", function ($bot) {
