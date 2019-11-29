@@ -52,10 +52,8 @@ class PromoConversation extends Conversation
 
 
         $this->ask($question, function (Answer $answer) {
-            // Detect if button was clicked:
             if ($answer->isInteractiveMessageReply()) {
-                $selectedValue = $answer->getValue(); // will be either 'yes' or 'no'
-                $selectedText = $answer->getText(); // will be either 'Of course' or 'Hell no!'
+                $selectedValue = $answer->getValue();
 
                 if ($selectedValue == "promo_info") {
                     $this->promoInfo();
