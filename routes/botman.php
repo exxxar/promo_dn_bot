@@ -22,7 +22,7 @@ $botman = resolve('botman');
 $botman->hears('Попробовать снова', BotManController::class . '@startConversation');
 $botman->hears('/start', BotManController::class . '@startConversation');
 
-//$botman->hears('Продолжить позже', BotManController::class . '@stopConversation')->stopsConversation();
+$botman->hears('Продолжить позже', BotManController::class . '@stopConversation')->stopsConversation();
 
 $botman->hears('/start ([0-9a-zA-Z=]+)', BotManController::class . '@startDataConversation');
 

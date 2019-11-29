@@ -170,7 +170,7 @@ class PromoConversation extends Conversation
 
     public function askSex()
     {
-        if ($this->user->sex == null) {
+        if (!is_int($this->user->sex)) {
             $question = Question::create('А какого ты пола?')
                 ->fallback('Спасибо что пообщался со мной:)!')
                 ->addButtons([
@@ -229,7 +229,7 @@ class PromoConversation extends Conversation
     public function saveData()
     {
 
-        $this->mainMenu("Отлично! Вы неплохо справились!");
+        $this->mainMenu("Отлично! Вы справились!");
 
         $promo = Promotion::find(intval($this->data));
 

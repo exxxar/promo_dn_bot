@@ -6,6 +6,7 @@ use App\Conversations\PaymentConversation;
 use App\Conversations\PromoConversation;
 use App\Conversations\StartConversation;
 use App\Conversations\StartDataConversation;
+use App\Conversations\StopConversation;
 use BotMan\BotMan\BotMan;
 use Illuminate\Http\Request;
 
@@ -41,10 +42,10 @@ class BotManController extends Controller
         $bot->startConversation(new StartConversation($bot));
     }
 
-   /* public function stopConversation(BotMan $bot)
+    public function stopConversation(BotMan $bot)
     {
         $bot->startConversation(new StopConversation($bot));
-    }*/
+    }
 
     public function startDataConversation(BotMan $bot,$data)
     {
