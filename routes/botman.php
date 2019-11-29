@@ -13,6 +13,7 @@ use BotMan\BotMan\Messages\Attachments\Location;
 use BotMan\BotMan\Messages\Outgoing\Actions\Button;
 use BotMan\BotMan\Messages\Outgoing\OutgoingMessage;
 use BotMan\BotMan\Messages\Outgoing\Question;
+use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Facades\Storage;
 use SimpleSoftwareIO\QrCode\Facades\QrCode;
@@ -101,7 +102,8 @@ $botman->hears("\xF0\x9F\x92\xB3Мои баллы", function ($bot) {
         if ($user->phone != null) {
 
             $bot->reply("TEST:phone ".$user->phone );
-            $cashback_history = CashbackHistory::whereColumn([
+            $cashback_history = DB::table('cashback_histories')
+                ->whereColumn([
                     ['user_phone', '=', $user->phone],
                     ['activated', '=', '0']
             ])->get();
