@@ -16,6 +16,8 @@ use Illuminate\Support\Facades\Log;
 
 class PromoConversation extends Conversation
 {
+    use CustomConversation;
+
     protected $data;
     protected $bot;
 
@@ -48,6 +50,7 @@ class PromoConversation extends Conversation
                 Button::create('Нет, в другой раз')->value('no'),
             ]);
 
+
         $this->ask($question, function (Answer $answer) {
             // Detect if button was clicked:
             if ($answer->isInteractiveMessageReply()) {
@@ -55,6 +58,7 @@ class PromoConversation extends Conversation
                 $selectedText = $answer->getText(); // will be either 'Of course' or 'Hell no!'
 
                 if ($selectedValue == "promo_info") {
+                    $this->conversationMenu("Начнем-с...");
                     $this->promoInfo();
                 }
 
@@ -122,22 +126,7 @@ class PromoConversation extends Conversation
                 $this->user->fio_from_request = $answer->getText();
                 $this->user->save();
 
-                $message = Question::create("Продолжим дальше?")
-                    ->addButtons([
-                        Button::create("Далее")->value("next"),
-                        Button::create("Позже")->value("stop"),
-                    ]);
-
-
-                $this->ask($message, function (Answer $answer) {
-                    if ($answer->isInteractiveMessageReply()) {
-                        if ($answer->getValue() == "next") {
-                            $this->askPhone1();
-                        }
-                    }
-                });
-
-
+                $this->askPhone1();
             });
         } else
             $this->askPhone1();
@@ -171,26 +160,10 @@ class PromoConversation extends Conversation
                     $this->user->save();
 
 
-                }
-                else
-                    $tmp_error.="Пользователь с таким номером уже и так наш друг:)\n";
+                } else
+                    $tmp_error .= "Пользователь с таким номером уже и так наш друг:)\n";
 
-
-                $message = Question::create("$tmp_error Продолжим дальше?")
-                    ->addButtons([
-                        Button::create("Далее")->value("next"),
-                        Button::create("Позже")->value("stop"),
-                    ]);
-
-
-                $this->ask($message, function (Answer $answer) {
-                    if ($answer->isInteractiveMessageReply()) {
-                        if ($answer->getValue() == "next") {
-                            $this->askSex();
-                        }
-                    }
-                });
-
+                $this->askSex();
             });
         } else
             $this->askSex();
@@ -214,25 +187,10 @@ class PromoConversation extends Conversation
                     $this->user->sex = $answer->getValue() == "man" ? 0 : 1;
                     $this->user->save();
 
-                    $message = Question::create("Продолжим дальше?:")
-                        ->addButtons([
-                            Button::create("Далее")->value("next"),
-                            Button::create("Позже")->value("stop"),
-                        ]);
-
-
-                    $this->ask($message, function (Answer $answer) {
-                        if ($answer->isInteractiveMessageReply()) {
-                            if ($answer->getValue() == "next") {
-                                $this->askBirthday();
-                            }
-                        }
-                    });
-
+                    $this->askBirthday();
                 }
             });
         } else
-
             $this->askBirthday();
 
 
@@ -247,22 +205,7 @@ class PromoConversation extends Conversation
             $this->ask($question, function (Answer $answer) {
                 $this->user->birthday = $answer->getText();
                 $this->user->save();
-
-                $message = Question::create("Продолжим дальше?")
-                    ->addButtons([
-                        Button::create("Далее")->value("next"),
-                        Button::create("Позже")->value("stop"),
-                    ]);
-
-
-                $this->ask($message, function (Answer $answer) {
-                    if ($answer->isInteractiveMessageReply()) {
-                        if ($answer->getValue() == "next") {
-                            $this->askCity();
-                        }
-                    }
-                });
-
+                $this->askCity();
 
             });
         } else
@@ -288,6 +231,7 @@ class PromoConversation extends Conversation
     public function saveData()
     {
 
+        $this->mainMenu("Отлично! Вы неплохо справились!");
 
         $promo = Promotion::find(intval($this->data));
 

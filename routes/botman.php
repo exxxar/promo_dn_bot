@@ -22,6 +22,8 @@ $botman = resolve('botman');
 $botman->hears('Попробовать снова', BotManController::class . '@startConversation');
 $botman->hears('/start', BotManController::class . '@startConversation');
 
+$botman->hears('Продолжить позже', BotManController::class . '@stopConversation');
+
 $botman->hears('/start ([0-9a-zA-Z=]+)', BotManController::class . '@startDataConversation');
 
 $botman->hears('/promotion ([0-9]+)', BotManController::class . '@promoConversation');
@@ -194,9 +196,6 @@ $botman->hears("\xE2\x9A\xA1Все акции", function ($bot) {
 
 
 });
-$botman->hears('stop', function ($bot) {
-    $bot->reply('Хорошо, продолжим позже!)');
-})->stopsConversation();
 $botman->hears('/category ([0-9]+)', function ($bot, $category_id) {
 
     $promotions = \App\Promotion::with(["users"])->where("category_id", "=", $category_id)

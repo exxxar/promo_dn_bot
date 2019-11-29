@@ -26,6 +26,10 @@ trait CustomConversation
         ["Попробовать снова"],
     ];
 
+    protected $keyboard_conversation = [
+        ["Продолжить позже"],
+    ];
+
     public function createUser($telegram_user) {
 
         $id = $telegram_user->getId();
@@ -71,5 +75,17 @@ trait CustomConversation
             ])
         ]);
     }
+
+    public function conversationMenu($message){
+        $this->bot->sendRequest("sendMessage", [
+            "text" => $message,
+            'reply_markup' => json_encode([
+                'keyboard' => $this->keyboard_conversation,
+                'one_time_keyboard' => true,
+                'resize_keyboard' => true
+            ])
+        ]);
+    }
+
 
 }
