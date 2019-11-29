@@ -11,6 +11,7 @@ use BotMan\BotMan\Messages\Incoming\Answer;
 use BotMan\BotMan\Messages\Outgoing\Actions\Button;
 use BotMan\BotMan\Messages\Outgoing\OutgoingMessage;
 use BotMan\BotMan\Messages\Outgoing\Question;
+use Illuminate\Support\Facades\Log;
 
 class PromoConversation extends Conversation
 {
@@ -150,7 +151,14 @@ class PromoConversation extends Conversation
             $this->ask($question, function (Answer $answer) {
 
                 $vowels = array("(", ")", "-", " ");
-                $tmp_phone = str_replace($vowels, "", $answer->getText());
+                $tmp_phone = $answer->getText();
+
+                Log::info($tmp_phone);
+
+                $tmp_phone = str_replace($vowels, "",$tmp_phone);
+
+                Log::info($tmp_phone);
+
                 if (!strpos($tmp_phone, "+38"))
                     $tmp_phone = "+38" . $tmp_phone;
 

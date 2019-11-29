@@ -94,9 +94,9 @@
                                 <select name="company_id" class="form-control" required>
                                     @foreach($companies as $compay)
                                         @if($event->company_id==$compay->id)
-                                            <option value="{{$event->id}}" selected>{{$event->title}}</option>
+                                            <option value="{{$compay->id}}" selected>{{$compay->title}}</option>
                                         @else
-                                            <option value="{{$event->id}}">{{$event->title}}</option>
+                                            <option value="{{$compay->id}}">{{$compay->title}}</option>
                                         @endif
                                     @endforeach
                                 </select>

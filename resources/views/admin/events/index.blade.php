@@ -38,9 +38,6 @@
                             <th scope="col">#</th>
                             <th scope="col">Заголовок</th>
                             <th scope="col">Описание</th>
-                            <th scope="col">Изображение</th>
-                            <th scope="col">Начало</th>
-                            <th scope="col">Окончание</th>
                             <th scope="col">Действие</th>
 
                         </tr>
@@ -57,11 +54,7 @@
 
                                 </td>
                                 <td>{{$event->description}}</td>
-                                <td><img class="img-thumbnail" style="width:150px;height:150px;"
-                                         src="{{$event->event_image_url}}" alt=""></td>
 
-                                <td>{{$event->start_at}}</td>
-                                <td>{{$event->end_at}}</td>
 
                                 <td>
                                     <form action="{{ route('events.destroy', $event->id)}}" method="post">
