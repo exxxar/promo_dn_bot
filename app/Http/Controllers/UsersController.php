@@ -100,10 +100,24 @@ class UsersController extends Controller
     public function show($id)
     {
         //
+
         $user = User::with(["promos", "companies"])->find($id);
 
         return view('admin.users.show', compact('user'));
     }
+
+    public function showByPhone($phone)
+    {
+        //
+
+        $user = User::with(["promos", "companies"])->where("phone",$phone)->first();
+
+        if ($user)
+            return view('admin.users.show', compact('user'));
+        return back()
+            ->with("success","Пользователь не найден!");
+    }
+
 
     /**
      * Show the form for editing the specified resource.

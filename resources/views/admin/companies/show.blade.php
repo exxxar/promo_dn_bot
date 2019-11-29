@@ -89,7 +89,7 @@
                     <tr>
                         <td></td>
                     <td>
-                        <a class="btn btn-primary" href="{{ route('companies.edit',$event->id) }}">
+                        <a class="btn btn-primary" href="{{ route('companies.edit',$company->id) }}">
                             Редактировать <i class="fas fa-edit"></i>
                         </a>
                         <form action="{{ route('companies.destroy', $company->id)}}" method="post">

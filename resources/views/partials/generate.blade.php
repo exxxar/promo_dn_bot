@@ -8,9 +8,9 @@
             <select name="user_id" class="form-control" id="user_id">
                 <option value="0">Нет пользователя</option>
                 @foreach($users as $user)
-                    @if(strlen(trim($user->phone))>0)
+                  {{--  @if(strlen(trim($user->phone))>0)--}}
                         <option value="{{$user->id}}">{{$user->phone}}</option>
-                    @endif
+                    {{--@endif--}}
                 @endforeach
             </select>
         </div>

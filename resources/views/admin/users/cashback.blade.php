@@ -41,7 +41,7 @@
                             <td>Номер чека</td>
                             <td>
                                 <input type="text" class="form-control" min="0" name="check_info"
-                                       placeholder="Введите полную целую сумму из чека" required>
+                                       placeholder="Введите номер чека" required>
                             </td>
                         </tr>
 
@@ -49,7 +49,7 @@
                             <td>Номер телефона</td>
                             <td>
                                 <input type="text" class="form-control phone" min="0" name="user_phone"
-                                       placeholder="Введите полную целую сумму из чека" required>
+                                       placeholder="Номер телефона" value="{{$user->phone}}" required>
                             </td>
                         </tr>
 

@@ -18,6 +18,6 @@ class CashbackHistory extends Model
 
     public function employee()
     {
-        return $this->hasOne('App\User','employee_id','id');
+        return $this->hasOne('App\User','id','employee_id');
     }
 }

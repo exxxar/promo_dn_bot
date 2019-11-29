@@ -8,16 +8,30 @@
                     <div class="card-header">Панель управления</div>
 
                     <div class="card-body">
-                        @if (session('status'))
-                            <div class="alert alert-success" role="alert">
-                                {{ session('status') }}
+
+                        @if ($errors->any())
+                            <div class="alert alert-danger">
+                                <button type="button" class="close" data-dismiss="alert">×</button>
+                                <ul>
+                                    @foreach ($errors->all() as $error)
+                                        <li>{{ $error }}</li>
+                                    @endforeach
+                                </ul>
+                            </div><br/>
+                        @endif
+
+                        @if ($message = Session::get('success'))
+                            <div class="alert alert-success alert-block">
+                                <button type="button" class="close" data-dismiss="alert">×</button>
+                                {{ $message }}
                             </div>
                         @endif
-                      {{--  @include("partials.announce")
-                        <hr>
+
+                        {{--@include("partials.announce")
+                        <hr>--}}
                         @include("partials.cashback")
                         <hr>
-                        @include("partials.search")--}}
+                        @include("partials.search")
                         <hr>
                         @include("partials.generate")
                     </div>

@@ -1,5 +1,6 @@
 <?php
 
+use App\CashbackHistory;
 use App\Event;
 use App\Http\Controllers\BotManController;
 use App\Promotion;
@@ -97,7 +98,32 @@ $botman->hears("\xF0\x9F\x92\xB3Мои баллы", function ($bot) {
         $payments = RefferalsPaymentHistory::where("user_id", $user->id)
             ->get();
 
+        if ($user->phone != null) {
+
+            $cashback_history = CashbackHistory::where("user_phone", $user->phone)
+                ->where("activated", 0)
+                ->get();
+
+            if (count($cashback_history) > 0) {
+                $tmp_money = 0;
+                foreach ($cashback_history as $ch)
+                    $tmp_money += round(intval($ch->money_in_check) * env("CAHSBAK_PROCENT") / 100);
+
+
+                $message = Question::create("У вас есть неучтенный $tmp_money руб. CashBack")
+                    ->addButtons([
+                        Button::create("Зачислить мне $tmp_money руб. CashBack")->value("/cashback_get")
+                    ]);
+
+                $bot->reply($message, ["parse_mode" => "Markdown"]);
+            }
+
+
+        }
+
+
         if (count($payments) > 0) {
+
             $message = Question::create($tmp_message)
                 ->addButtons([
                     Button::create("Посмотреть мои расходы")->value("/payments 0")
@@ -486,3 +512,30 @@ $botman->hears('/events ([0-9]+)', function ($bot, $page) {
 
 });
 
+$botman->hears('/cashback_get', function ($bot) {
+    $telegramUser = $bot->getUser();
+
+    $id = $telegramUser->getId();
+
+    $user = \App\User::where("telegram_chat_id", $id)->first();
+
+    if ($user->phone != null) {
+
+        $cashback_history = CashbackHistory::where("user_phone", $user->phone)
+            ->where("activated", 0)
+            ->get();
+
+        if (count($cashback_history) > 0) {
+            foreach ($cashback_history as $ch) {
+                $ch->activated = 1;
+                $ch->save();
+
+                $user->cashback_bonus_count += round(intval($ch->money_in_check) * env("CAHSBAK_PROCENT") / 100);
+                $user->save();
+            }
+            $bot->reply("CashBack успешно зачислен!", ["parse_mode" => "Markdown"]);
+        }
+    }
+
+
+});

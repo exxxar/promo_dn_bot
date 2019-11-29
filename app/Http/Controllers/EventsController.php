@@ -125,7 +125,7 @@ class EventsController extends Controller
 
 
         $promotion = Event::find($id);
-        $promotion->title = $request->get("phone");
+        $promotion->title = $request->get("title");
         $promotion->description = $request->get("description");
         $promotion->event_image_url = $request->get("event_image_url");
         $promotion->start_at = $request->get("start_at");

@@ -37,14 +37,19 @@ Route::prefix('admin')->group(function () {
         ->name('home.qr');
 
 
-    Route::post('/search', 'UsersController@search')
+    Route::post('/search', 'HomeController@search')
         ->name('users.search');
 
     Route::post('/announce', 'UsersController@announce')
         ->name('users.announce');
 
-    Route::post("/users/cashback/add","UsersController@addCashBack")
+    Route::post("/users/cashback/add","HomeController@cashback")
         ->name("users.cashback.add");
+
+
+    Route::get("/users/show/byPhone/{phone}","UsersController@showByPhone")
+        ->name("users.show.phone");
+
 
     Route::get("/users/cashback/{id}","UsersController@cashBackPage")->name("users.cashback.index");
 
