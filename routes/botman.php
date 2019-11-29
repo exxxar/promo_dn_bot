@@ -100,11 +100,9 @@ $botman->hears("\xF0\x9F\x92\xB3Мои баллы", function ($bot) {
 
         if ($user->phone != null) {
 
-            $bot->reply("TEST:phone " . $user->phone);
             $cashback_history = CashbackHistory::where("user_phone", $user->phone)
                 ->get();
 
-            $bot->reply("TEST:cashback history count " . count($cashback_history));
             if (count($cashback_history) > 0) {
                 $tmp_money = 0;
                 foreach ($cashback_history as $ch)
@@ -112,12 +110,14 @@ $botman->hears("\xF0\x9F\x92\xB3Мои баллы", function ($bot) {
                         $tmp_money += round(intval($ch->money_in_check) * env("CAHSBAK_PROCENT") / 100);
 
 
-                $message = Question::create("У вас есть неучтенный $tmp_money руб. CashBack")
-                    ->addButtons([
-                        Button::create("Зачислить мне $tmp_money руб. CashBack")->value("/cashback_get")
-                    ]);
+                if ($tmp_money > 0) {
+                    $message = Question::create("У вас есть неучтенный $tmp_money руб. CashBack")
+                        ->addButtons([
+                            Button::create("Зачислить мне $tmp_money руб. CashBack")->value("/cashback_get")
+                        ]);
 
-                $bot->reply($message, ["parse_mode" => "Markdown"]);
+                    $bot->reply($message, ["parse_mode" => "Markdown"]);
+                }
             }
 
 
