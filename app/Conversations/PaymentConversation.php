@@ -48,7 +48,15 @@ class PaymentConversation extends Conversation
         $this->ask($question, function (Answer $answer) {
             $nedded_bonus = $answer->getText();
 
-            $recipient_user = User::where("telegram_chat_id", $this->request_id)->first();
+            $this->bot->reply("REQUEST ID=".intval($this->request_id));
+
+            $recipient_user = User::where("telegram_chat_id", intval($this->request_id))->first();
+            if ($recipient_user)
+            {
+                $this->mainMenu("Что-то пошло не так и пользователь не найден");
+                return;
+            }
+
             if ($recipient_user->referral_bonus_count + $recipient_user->cashback_bonus_count > intval($nedded_bonus)) {
                 $keyboard = [
                     'inline_keyboard' => [
@@ -103,6 +111,7 @@ class PaymentConversation extends Conversation
                 $selectedValue = $answer->getValue();
 
                 if ($selectedValue == "askpay") {
+                    $this->conversationMenu("Начнем-с...");
                     $this->askForPay();
                 }
 
@@ -141,8 +150,10 @@ class PaymentConversation extends Conversation
     {
 
 
-        $user = User::where("telegram_chat_id", $this->request_id)->first();
+        $user = User::where("telegram_chat_id", intval($this->request_id))->first();
 
+
+        $this->bot->reply("User:".print_r($user,true));
 
         if ($user) {
             $cashBack = round(intval($this->money_in_check) * env("CAHSBAK_PROCENT") / 100);
