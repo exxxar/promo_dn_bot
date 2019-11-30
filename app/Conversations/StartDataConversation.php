@@ -57,13 +57,13 @@ class StartDataConversation extends Conversation
         while (strlen($tmp_dev_id) < 10)
             $tmp_dev_id = "0" . $tmp_dev_id;
 
-      /*  $this->code = count($matches[1]) > 0 ? $matches[1][0] : env("CUSTOME_CODE");
-        $this->request_user_id = count($matches[2]) > 0 ? $matches[2][0] : $tmp_dev_id;
-        $this->promo_id = count($matches[3]) > 0 ? $matches[3][0] : env("CUSTOME_PROMO");*/
+        /*  $this->code = count($matches[1]) > 0 ? $matches[1][0] : env("CUSTOME_CODE");
+          $this->request_user_id = count($matches[2]) > 0 ? $matches[2][0] : $tmp_dev_id;
+          $this->promo_id = count($matches[3]) > 0 ? $matches[3][0] : env("CUSTOME_PROMO");*/
 
         //$this->say("Данные после компиляции:" . print_r($matches,true));
 
-        $this->code = $matches[1][0]??env("CUSTOME_CODE");
+        $this->code = $matches[1][0] ?? env("CUSTOME_CODE");
         $this->request_user_id = $matches[2][0] ?? $tmp_dev_id;
         $this->promo_id = $matches[3][0] ?? env("CUSTOME_PROMO");
 
@@ -79,7 +79,7 @@ class StartDataConversation extends Conversation
 
         $canBeRefferal = true;
 
-        if ($this->user->is_admin==1) {
+        if ($this->user->is_admin == 1) {
             $this->mainMenuWithAdmin('Добрый день,ув. Администратор!');
             //$this->say("Вы администратор, входыне параметры:" . $this->code . " " . $this->request_user_id . " " . $this->promo_id);
             $canBeRefferal = false;
@@ -137,8 +137,6 @@ class StartDataConversation extends Conversation
                 $promo->current_activation_count += 1;
                 $promo->save();
 
-
-                $remote_user->referrals_count += 1;
                 $remote_user->referral_bonus_count += $promo->refferal_bonus;
 
                 $remote_user->save();
@@ -175,10 +173,13 @@ class StartDataConversation extends Conversation
 
 
         if ($sender_user) {
+            $sender_user->referrals_count += 1;
+            $sender_user->save();
+
             Telegram::sendMessage([
                 'chat_id' => $sender_user->telegram_chat_id,
                 'parse_mode' => 'Markdown',
-                'text' => "Пользователь ".($sender_user->name??$sender_user->fio_from_telegram??$sender_user->email)." перешел по вашей реферальной ссылке!",
+                'text' => "Пользователь " . ($sender_user->name ?? $sender_user->fio_from_telegram ?? $sender_user->email) . " перешел по вашей реферальной ссылке!",
                 'disable_notification' => 'false'
             ]);
 
