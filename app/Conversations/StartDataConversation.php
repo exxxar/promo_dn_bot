@@ -48,6 +48,9 @@ class StartDataConversation extends Conversation
     {
         $pattern = "/([0-9]{3})([0-9]{10})([0-9]{10})/";
         $string = base64_decode($this->data);
+
+        $this->say("Все данные:" . $string);
+
         preg_match_all($pattern, $string, $matches);
 
         $tmp_dev_id = (string)env("DEVELOPER_ID");
@@ -59,7 +62,7 @@ class StartDataConversation extends Conversation
         $this->promo_id = count($matches[3]) > 0 ? $matches[3][0] : env("CUSTOME_PROMO");
 
 
-        $this->say("Все данные:" . print_r($matches[0], true));
+
 
         $telegramUser = $this->bot->getUser();
         $id = $telegramUser->getId();
