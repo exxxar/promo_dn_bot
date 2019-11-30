@@ -40,7 +40,7 @@
                             <tr>
                                 <td>{{$key + 1}}</td>
                                 <td><a href="{{ route('users.show',$user->id) }}">
-                                        {{$user->fio_from_telegram}}</a>
+                                        {{$user->fio_from_telegram??$user->email}}</a>
                                     <a class="btn btn-link" href="{{ route('users.edit',$user->id) }}">
                                         <i class="fas fa-edit"></i>
                                     </a>

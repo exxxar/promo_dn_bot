@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\CashbackHistory;
+use App\Company;
 use App\User;
 use BotMan\BotMan\Messages\Attachments\Image;
 use BotMan\BotMan\Messages\Outgoing\OutgoingMessage;
@@ -110,12 +111,12 @@ class UsersController extends Controller
     {
         //
 
-        $user = User::with(["promos", "companies"])->where("phone",$phone)->first();
+        $user = User::with(["promos", "companies"])->where("phone", $phone)->first();
 
         if ($user)
             return view('admin.users.show', compact('user'));
         return back()
-            ->with("success","Пользователь не найден!");
+            ->with("success", "Пользователь не найден!");
     }
 
 
@@ -129,7 +130,8 @@ class UsersController extends Controller
     {
 
         $user = User::find($id);
-        return view('admin.users.edit', compact('user'));
+        $companies = Company::all();
+        return view('admin.users.edit', compact('user', 'companies'));
     }
 
     /**
@@ -148,6 +150,14 @@ class UsersController extends Controller
 
         $user = User::find($id);
         $user->is_admin = $request->get("is_admin");
+
+        $items = $request->get('company_ids');
+
+        foreach ($items as $item) {
+            $user->companies()->attach($item);
+            $user->save();
+        }
+
         $user->save();
 
         return redirect()
@@ -174,7 +184,8 @@ class UsersController extends Controller
     public function cashBackPage($id)
     {
 
-        $user = User::find($id);
+        $user = User::with(["companies"])->where("id", $id)->first();
+
         return view('admin.users.cashback', compact('user'));
     }
 

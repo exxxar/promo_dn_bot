@@ -22,8 +22,11 @@ class CreateCashbackHistoriesTable extends Migration
             $table->integer('activated')->default(false);
             $table->unsignedInteger('employee_id');
 
+            $table->unsignedInteger('company_id');
+
             if (env("DB_CONNECTION")=='mysql')
                 $table->foreign('employee_id')->references('id')->on('users');
+                $table->foreign('company_id')->references('id')->on('companies');
 
             $table->timestamps();
         });

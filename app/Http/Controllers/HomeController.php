@@ -34,6 +34,8 @@ class HomeController extends Controller
         $users = User::all();
         $promotions = Promotion::all();
 
+        $current_user = User::with(["companies"])->find(Auth::user()->id);
+
         if ($request->isMethod("POST")) {
 
             $tmp_user = "" . $request->get("user_id");
@@ -52,7 +54,7 @@ class HomeController extends Controller
             return view('home', compact('users', 'promotions', 'qrimage'));
         }
 
-        return view('home', compact('users', 'promotions'));
+        return view('home', compact('users', 'promotions','current_user'));
     }
 
 
@@ -83,6 +85,7 @@ class HomeController extends Controller
         $tmp_phone = $request->get("user_phone");
         $check_info = $request->get("check_info");
         $money_in_check = $request->get("money_in_check");
+        $company_id = $request->get("company_id");
 
         $tmp_phone = str_replace($vowels, "", $tmp_phone);
 
@@ -100,6 +103,7 @@ class HomeController extends Controller
                 'money_in_check' => $money_in_check,
                 'activated' => 1,
                 'employee_id' => Auth::user()->id,
+                'company_id' => $company_id,
                 'check_info' => $check_info,
                 'user_phone' => $tmp_phone,
 
@@ -120,6 +124,7 @@ class HomeController extends Controller
             'money_in_check' => $money_in_check,
             'activated' => 0,
             'employee_id' => Auth::user()->id,
+            'company_id' => $company_id,
             'check_info' => $check_info,
             'user_phone' => $tmp_phone,
 

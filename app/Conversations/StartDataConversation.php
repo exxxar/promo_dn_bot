@@ -111,7 +111,7 @@ class StartDataConversation extends Conversation
 
             if (count($tmp) > 0) {
 
-                $message = Question::create("Диалог списания средств\nВыберите вашу компанию:")
+                $message = Question::create("Диалог управления средствами\nВыберите вашу компанию:")
                     ->addButtons($tmp);
 
                 $this->bot->reply($message);

@@ -464,7 +464,7 @@ $botman->hears('/cashbacks ([0-9]+)', function ($bot, $page) {
     foreach ($cashbacks as $key => $cash) {
         $check_info = $cash->check_info;
         $cb = round(intval($cash->money_in_check) * env("CAHSBAK_PROCENT") / 100);
-        $tmp .= "В _" . $cash->created_at . "_ чек №" . $check_info . " принес вам *" . $cb . "* руб. CashBack \n";
+        $tmp .= "Завдение *".$cash->company->title."* _" . $cash->created_at . "_ чек №" . $check_info . " принес вам *" . $cb . "* руб. CashBack \n";
 
     }
 
@@ -597,13 +597,7 @@ $botman->hears('/statistic', function ($bot) {
         ]);
     $bot->reply($message, ["parse_mode" => "Markdown"]);
 });
-$botman->hears("\xF0\x9F\x9A\xA7Управление", function ($bot) {
-    $message = Question::create("Администратору доступны следующие функции")
-        ->addButtons([
-            Button::create("Начисление CashBack")->value("/cashbacks 0"),
-         ]);
-    $bot->reply($message, ["parse_mode" => "Markdown"]);
-});
+
 
 
 

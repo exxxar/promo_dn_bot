@@ -16,8 +16,21 @@
             <label for="user_phone">Телефон:+38(071)123-45-67 </label>
             <input class="form-control phone"  id="user_phone" name="user_phone"  required>
         </div>
+
+
     </div>
 
+    <div class="form-row">
+        <div class="col form-group">
+            <label for="user_phone">Выбор компании</label>
+            <select name="company_id" class="form-control">
+                @foreach($current_user->companies as $company)
+                    <option value="{{$company->id}}">{{$company->title}}</option>
+                @endforeach
+            </select>
+        </div>
+
+    </div>
     <div class="form-row">
         <div class="col form-group">
             <button class="btn btn-primary" name="submit">Добавить</button>

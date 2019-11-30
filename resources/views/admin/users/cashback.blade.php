@@ -54,6 +54,17 @@
                         </tr>
 
                         <tr>
+                            <td>Выбор компании</td>
+                            <td>
+                                <select name="company_id" class="form-control">
+                                    @foreach($user->companies as $company)
+                                        <option value="{{$company->id}}">{{$company->title}}</option>
+                                    @endforeach
+                                </select>
+
+                            </td>
+                        </tr>
+                        <tr>
                             <td></td>
                             <td>
                                 <button class="btn btn-primary">Добавить</button>

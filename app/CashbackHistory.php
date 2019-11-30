@@ -10,6 +10,7 @@ class CashbackHistory extends Model
         'money_in_check',
         'activated',
         'employee_id',
+        'company_id',
         'check_info',
         'user_phone',
         'created_at'
@@ -20,5 +21,10 @@ class CashbackHistory extends Model
     public function employee()
     {
         return $this->hasOne('App\User','id','employee_id');
+    }
+
+    public function company()
+    {
+        return $this->hasOne('App\Company','id','company_id');
     }
 }
