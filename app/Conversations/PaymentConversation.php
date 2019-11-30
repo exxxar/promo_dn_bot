@@ -40,62 +40,6 @@ class PaymentConversation extends Conversation
 
     }
 
-    public function askForPay()
-    {
-        $question = Question::create('Введите желаемую для списания сумму')
-            ->fallback('Ничего страшного, в следующий раз получится!');
-
-        $this->ask($question, function (Answer $answer) {
-            $nedded_bonus = $answer->getText();
-
-            $this->bot->reply("REQUEST ID=" . intval($this->request_id));
-
-            $recipient_user = User::where("telegram_chat_id", intval($this->request_id))->first();
-            if (!$recipient_user) {
-                $this->mainMenu("Что-то пошло не так и пользователь не найден");
-                return;
-            }
-
-            if ($recipient_user->referral_bonus_count + $recipient_user->cashback_bonus_count > intval($nedded_bonus)) {
-                $keyboard = [
-                    'inline_keyboard' => [
-                        [
-                            ['text' => 'Списать ' . $nedded_bonus . " бонусов", 'callback_data' => "/payment_accept $nedded_bonus " . $this->user->id . " " . $this->company_id],
-                            ['text' => 'Отклонить', 'callback_data' => "/payment_decline $nedded_bonus " . $this->user->id . " " . $this->company_id]
-                        ]
-                    ]
-                ];
-
-                /*$this->bot->sendRequest("sendMessage", [
-                    "text" => 'У вас новый запрос на списание бонусов!',
-                    "chat_id" => $recipient_user->telegram_chat_id,
-                    'reply_markup' => json_encode([
-                        'keyboard' => json_encode($keyboard),
-                        'one_time_keyboard' => true,
-                        'resize_keyboard' => true
-                    ])
-                ]);*/
-
-
-                Telegram::sendMessage([
-                    'chat_id' => $recipient_user->telegram_chat_id,
-                    'parse_mode' => 'HTML',
-                    'text' => 'У вас новый запрос на списание бонусов!',
-                    'reply_markup' => json_encode([
-                        'keyboard' => $keyboard,
-                        'one_time_keyboard' => true,
-                        'resize_keyboard' => true
-                    ])
-                ]);
-
-
-            }
-
-            $this->bot->reply("У пользователя недостаточно боунсных баллов!");
-
-        });
-    }
-
     public function askForAction()
     {
         $question = Question::create('Выбери действие')
@@ -118,6 +62,65 @@ class PaymentConversation extends Conversation
                     $this->conversationMenu("Начнем-с...");
                     $this->askForCashback();
                 }
+            }
+        });
+    }
+
+    public function askForPay()
+    {
+        $question = Question::create('Введите желаемую для списания сумму')
+            ->fallback('Ничего страшного, в следующий раз получится!');
+
+        $this->ask($question, function (Answer $answer) {
+            $nedded_bonus = $answer->getText();
+
+            $this->bot->reply("REQUEST ID=" . intval($this->request_id));
+
+            $recipient_user = User::where("telegram_chat_id", intval($this->request_id))->first();
+            if (!$recipient_user) {
+                $this->mainMenu("Что-то пошло не так и пользователь не найден");
+                return;
+            }
+
+            try {
+                if ($recipient_user->referral_bonus_count + $recipient_user->cashback_bonus_count > intval($nedded_bonus)) {
+                    $keyboard = [
+                        'inline_keyboard' => [
+                            [
+                                ['text' => 'Списать ' . $nedded_bonus . " бонусов", 'callback_data' => "/payment_accept $nedded_bonus " . $this->user->id . " " . $this->company_id],
+                                ['text' => 'Отклонить', 'callback_data' => "/payment_decline $nedded_bonus " . $this->user->id . " " . $this->company_id]
+                            ]
+                        ]
+                    ];
+
+                    /*$this->bot->sendRequest("sendMessage", [
+                        "text" => 'У вас новый запрос на списание бонусов!',
+                        "chat_id" => $recipient_user->telegram_chat_id,
+                        'reply_markup' => json_encode([
+                            'keyboard' => json_encode($keyboard),
+                            'one_time_keyboard' => true,
+                            'resize_keyboard' => true
+                        ])
+                    ]);*/
+
+
+                    Telegram::sendMessage([
+                        'chat_id' => $recipient_user->telegram_chat_id,
+                        'parse_mode' => 'HTML',
+                        'text' => 'У вас новый запрос на списание бонусов!',
+                        'reply_markup' => json_encode([
+                            'keyboard' => $keyboard,
+                            'one_time_keyboard' => true,
+                            'resize_keyboard' => true
+                        ])
+                    ]);
+
+
+                }
+
+                $this->bot->reply("У пользователя недостаточно боунсных баллов!");
+            } catch (\Exception $e) {
+                $this->bot->reply($e->getMessage());
             }
         });
     }
@@ -161,20 +164,13 @@ class PaymentConversation extends Conversation
         $user->cashback_bonus_count += $cashBack;
         $user->save();
 
-        try {
-            CashbackHistory::create([
-                'money_in_check' => $this->money_in_check,
-                'activated' => 1,
-                'employee_id' => Auth::user()->id,
-                'company_id' => $this->company_id,
-                'check_info' => $this->check_info,
-            ]);
-        } catch (\Exception $e) {
-            $this->bot->reply($e->getMessage());
-
-        }
-
-        $this->bot->reply("Мы прошли эту точку");
+        CashbackHistory::create([
+            'money_in_check' => $this->money_in_check,
+            'activated' => 1,
+            'employee_id' => $this->user->id,
+            'company_id' => $this->company_id,
+            'check_info' => $this->check_info,
+        ]);
 
         Telegram::sendMessage([
             'chat_id' => $user->telegram_chat_id,
