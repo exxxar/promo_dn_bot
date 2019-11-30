@@ -141,7 +141,7 @@ class PaymentConversation extends Conversation
     {
 
 
-        $user = User::where("id", $this->request_id)->first();
+        $user = User::where("telegram_chat_id", $this->request_id)->first();
 
 
         if ($user) {
