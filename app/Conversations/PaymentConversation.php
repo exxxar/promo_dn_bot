@@ -48,11 +48,10 @@ class PaymentConversation extends Conversation
         $this->ask($question, function (Answer $answer) {
             $nedded_bonus = $answer->getText();
 
-            $this->bot->reply("REQUEST ID=".intval($this->request_id));
+            $this->bot->reply("REQUEST ID=" . intval($this->request_id));
 
             $recipient_user = User::where("telegram_chat_id", intval($this->request_id))->first();
-            if ($recipient_user)
-            {
+            if (!$recipient_user) {
                 $this->mainMenu("Что-то пошло не так и пользователь не найден");
                 return;
             }
@@ -152,31 +151,39 @@ class PaymentConversation extends Conversation
 
         $user = User::where("telegram_chat_id", intval($this->request_id))->first();
 
+        if (!$user) {
+            $this->mainMenu("Что-то пошло не так и пользователь не найден");
+            return;
+        }
 
-        if ($user) {
-            $cashBack = round(intval($this->money_in_check) * env("CAHSBAK_PROCENT") / 100);
-            $user->cashback_bonus_count += $cashBack;
-            $user->save();
 
+        $cashBack = round(intval($this->money_in_check) * env("CAHSBAK_PROCENT") / 100);
+        $user->cashback_bonus_count += $cashBack;
+        $user->save();
+
+        try {
             CashbackHistory::create([
                 'money_in_check' => $this->money_in_check,
                 'activated' => 1,
                 'employee_id' => Auth::user()->id,
                 'company_id' => $this->company_id,
                 'check_info' => $this->check_info,
-             ]);
-
-            $this->bot->reply("Мы прошли эту точку");
-
-            Telegram::sendMessage([
-                'chat_id' => $user->telegram_chat_id,
-                'parse_mode' => 'Markdown',
-                'text' => "Сумма в чеке *$this->money_in_check* руб.\nВам начислен *CashBack* в размере *$cashBack* руб.",
-                'disable_notification' => 'false'
             ]);
-            $this->mainMenu("Отлично! Вы справились!");
+        } catch (\Exception $e) {
+            $this->bot->reply($e->getMessage());
 
-        } else
-            $this->mainMenu("Что-то пошло не так и пользователь не найден!");
+        }
+
+        $this->bot->reply("Мы прошли эту точку");
+
+        Telegram::sendMessage([
+            'chat_id' => $user->telegram_chat_id,
+            'parse_mode' => 'Markdown',
+            'text' => "Сумма в чеке *$this->money_in_check* руб.\nВам начислен *CashBack* в размере *$cashBack* руб.",
+            'disable_notification' => 'false'
+        ]);
+        $this->mainMenu("Отлично! Вы справились!");
+
+
     }
 }
