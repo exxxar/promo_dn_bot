@@ -19,6 +19,9 @@ class CreatePromotionsTable extends Migration
             $table->string('title')->default('')->nullable();
             $table->string('description', 1000)->default('')->nullable();
             $table->string('promo_image_url', 1000)->nullable();
+
+            $table->string('handler')->nullable();
+
             $table->dateTime('start_at');
             $table->dateTime('end_at');
             $table->integer('activation_count')->default(0);

@@ -13,6 +13,7 @@ use BotMan\BotMan\Messages\Outgoing\Question;
 use BotMan\BotMan\Messages\Outgoing\Actions\Button;
 use BotMan\BotMan\Messages\Conversations\Conversation;
 use Illuminate\Support\Facades\Log;
+use Telegram\Bot\Laravel\Facades\Telegram;
 
 class StartDataConversation extends Conversation
 {
@@ -71,28 +72,23 @@ class StartDataConversation extends Conversation
 
         $canBeRefferal = true;
 
-        if ($this->user->is_admin) {
+        if ($this->user->is_admin==1) {
             $this->say("Вы администратор, входыне параметры:" . $this->code . " " . $this->request_user_id . " " . $this->promo_id);
-            if ($this->code == "002") {
+            $canBeRefferal = false;
+
+            if ($this->code == "002")
                 $this->activatePayment();
 
-
-                $this->say("Выбрали оплату через QR");
-                $canBeRefferal = false;
-            }
-            if ($this->code == "003") {
+            if ($this->code == "003")
                 $this->activatePromo();
 
+            $this->mainMenuWithAdmin('Добрый день,ув. Администратор!');
 
-                $this->say("Выбрали активацию акции через QR");
-                $canBeRefferal = false;
-            }
         }
 
         if ($canBeRefferal) {
             $this->activateRefferal();
             $this->mainMenu('Добрый день! Приветствуем вас в нашем акционном боте! У нас вы сможете найти самые актуальные акции!');
-
         }
 
     }
@@ -143,7 +139,7 @@ class StartDataConversation extends Conversation
 
                 $this->bot->sendRequest("sendMessage", [
                     "chat_id" => $remote_user->telegram_chat_id,
-                    "text" => $promo->activation_tex
+                    "text" => $promo->activation_text
                 ]);
             }
 
@@ -172,6 +168,13 @@ class StartDataConversation extends Conversation
             ->first();
 
         if ($sender_user != null) {
+            Telegram::sendMessage([
+                'chat_id' => $sender_user->telegram_chat_id,
+                'parse_mode' => 'Markdown',
+                'text' => "Пользователь ".($sender_user->name??$sender_user->fio_from_telegram??$sender_user->email)." перешел по вашей реферальной ссылке!",
+                'disable_notification' => 'false'
+            ]);
+
             RefferalsHistory::create([
                 'user_sender_id' => $sender_user->id,
                 'user_recipient_id' => $this->user->id,

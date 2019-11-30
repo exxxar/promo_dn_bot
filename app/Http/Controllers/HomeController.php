@@ -142,23 +142,26 @@ class HomeController extends Controller
 
         foreach ($users as $user) {
 
-            Log::info("next step");
-            if (!is_numeric($user->telegram_chat_id))
+            if (!is_numeric($user->telegram_chat_id)&&strlen("$user->telegram_chat_id")>=10)
                 continue;
-            Log::info($user->telegram_chat_id);
 
-            Telegram::sendMessage([
-                'chat_id' => $user->telegram_chat_id,
-                'parse_mode' => 'Markdown',
-                'text' => "*$announce_title*\n_ $announce_message _",
-                'disable_notification' => 'false'
-            ]);
 
-            if ($announce_url != null)
-                Telegram::sendPhoto([
+            try {
+                Telegram::sendMessage([
                     'chat_id' => $user->telegram_chat_id,
-                    'photo' => InputFile::create($announce_url)
+                    'parse_mode' => 'Markdown',
+                    'text' => "*$announce_title*\n_ $announce_message _",
+                    'disable_notification' => 'false'
                 ]);
+
+                if ($announce_url != null)
+                    Telegram::sendPhoto([
+                        'chat_id' => $user->telegram_chat_id,
+                        'photo' => InputFile::create($announce_url)
+                    ]);
+            } catch (\Exception $e) {
+
+            }
         }
 
         return back()->with("success", "Сообщения успешно отправлены!");

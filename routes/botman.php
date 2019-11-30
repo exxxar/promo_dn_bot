@@ -511,14 +511,18 @@ $botman->hears('/events ([0-9]+)', function ($bot, $page) {
         ->orderBy('id', 'DESC')
         ->get();
 
-    foreach ($events as $key => $event) {
+    if (count($events) > 0) {
+        foreach ($events as $key => $event) {
 
-        $attachment = new Image($event->event_image_url);
-        $message = OutgoingMessage::create("*" . $event->title . "*\n" . $event->description)
-            ->withAttachment($attachment);
+            $attachment = new Image($event->event_image_url);
+            $message = OutgoingMessage::create("*" . $event->title . "*\n" . $event->description)
+                ->withAttachment($attachment);
 
-        $bot->reply($message, ["parse_mode" => "Markdown"]);
+            $bot->reply($message, ["parse_mode" => "Markdown"]);
+        }
     }
+    else
+        $bot->reply("Мероприятия появтяся в скором времени!", ["parse_mode" => "Markdown"]);
 
     $inline_keyboard = [];
     if ($page == 0 && count($events) == 5)
