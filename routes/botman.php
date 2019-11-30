@@ -421,7 +421,7 @@ $botman->hears('/cashbacks ([0-9]+)', function ($bot, $page) {
         $bot->reply($message, ["parse_mode" => "Markdown"]);
         return;
     }
-    $cashbacks = CashbackHistory::where("user_phone", $user->phone)
+    $cashbacks = CashbackHistory::where("user_id", $user->id)
         ->skip($page * 10)
         ->take(10)
         ->orderBy('id', 'DESC')

@@ -3,12 +3,14 @@
 namespace App\Conversations;
 
 use App\CashbackHistory;
+use App\Company;
 use App\RefferalsPaymentHistory;
 use App\User;
 use BotMan\BotMan\Messages\Conversations\Conversation;
 use BotMan\BotMan\Messages\Incoming\Answer;
 use BotMan\BotMan\Messages\Outgoing\Actions\Button;
 use BotMan\BotMan\Messages\Outgoing\Question;
+use Carbon\Carbon;
 use Illuminate\Support\Facades\Auth;
 use Telegram\Bot\Laravel\Facades\Telegram;
 
@@ -98,13 +100,14 @@ class PaymentConversation extends Conversation
                 } else
                     $recipient_user->referral_bonus_count -= intval($nedded_bonus);
 
+                $recipient_user->updated_at = Carbon::now();
                 $recipient_user->save();
 
-
+                $company_name = Company::find($this->company_id)->title;
                 Telegram::sendMessage([
                     'chat_id' => $recipient_user->telegram_chat_id,
                     'parse_mode' => 'HTML',
-                    'text' => "У вас списали $nedded_bonus бонусов",
+                    'text' => " _ $recipient_user->updated_at _ *$company_name* в произвели списание $nedded_bonus бонусов",
                 ]);
 
 
@@ -159,6 +162,8 @@ class PaymentConversation extends Conversation
             'employee_id' => $this->user->id,
             'company_id' => $this->company_id,
             'check_info' => $this->check_info,
+            'user_phone' => $this->phone??null,
+            'user_id' => $user->id,
         ]);
 
         Telegram::sendMessage([
@@ -167,7 +172,7 @@ class PaymentConversation extends Conversation
             'text' => "Сумма в чеке *$this->money_in_check* руб.\nВам начислен *CashBack* в размере *$cashBack* руб.",
             'disable_notification' => 'false'
         ]);
-        $this->mainMenu("Отлично! Вы справились!");
+        $this->mainMenu("Отлично! CashBack начислен пользователю " . ($user->phone ?? $user->fio_from_telegram ?? $user->name ?? $user->email));
 
 
     }
