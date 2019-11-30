@@ -23,7 +23,7 @@
     <div class="form-row">
         <div class="col form-group">
             <label for="user_phone">Выбор компании</label>
-            <select name="company_id" class="form-control">
+            <select name="company_id" class="form-control" required>
                 @foreach($current_user->companies as $company)
                     <option value="{{$company->id}}">{{$company->title}}</option>
                 @endforeach

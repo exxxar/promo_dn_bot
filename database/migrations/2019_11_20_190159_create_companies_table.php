@@ -18,7 +18,7 @@ class CreateCompaniesTable extends Migration
             $table->increments('id');
             $table->string('title')->default('');
             $table->string('address',500)->default('');
-            $table->string('description',500)->default('');
+            $table->string('description',5000)->default('');
             $table->string('phone')->default('');
             $table->string('email')->default('');
             $table->string('bailee')->default('');//имя ответственного лица от предприятия

@@ -42,7 +42,7 @@
                             <td>Компании пользователя (только для администраторов)</td>
                             <td>
                                 <select name="company_ids[]" class="form-control" multiple>
-                                    @foreach($user->companies as $company)
+                                    @foreach($companies as $company)
                                         <option value="{{$company->id}}">{{$company->title}}</option>
                                         @endforeach
                                 </select>

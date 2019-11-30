@@ -36,7 +36,7 @@ class PaymentConversation extends Conversation
             ->first();
 
         if ($this->user->is_admin == 1)
-            $this->askForPay();
+            $this->askForAction();
 
     }
 
@@ -59,7 +59,7 @@ class PaymentConversation extends Conversation
                     ]
                 ];
 
-                $this->bot->sendRequest("sendMessage", [
+                /*$this->bot->sendRequest("sendMessage", [
                     "text" => 'У вас новый запрос на списание бонусов!',
                     "chat_id" => $recipient_user->telegram_chat_id,
                     'reply_markup' => json_encode([
@@ -67,7 +67,20 @@ class PaymentConversation extends Conversation
                         'one_time_keyboard' => true,
                         'resize_keyboard' => true
                     ])
+                ]);*/
+
+
+                Telegram::sendMessage([
+                    'chat_id' => $recipient_user->telegram_chat_id,
+                    'parse_mode' => 'HTML',
+                    'text' => 'У вас новый запрос на списание бонусов!',
+                    'reply_markup' => json_encode([
+                        'keyboard' => $keyboard,
+                        'one_time_keyboard' => true,
+                        'resize_keyboard' => true
+                    ])
                 ]);
+
 
             }
 
