@@ -69,7 +69,7 @@ $botman->hears("\xF0\x9F\x93\xB2Мои друзья", function ($bot) {
     while (strlen($tmp_id) < 10)
         $tmp_id = "0" . $tmp_id;
 
-    $code = base64_encode("001" . $tmp_id . "000000000");
+    $code = base64_encode("001" . $tmp_id . "0000000000");
 
     $attachment = new Image("https://api.qrserver.com/v1/create-qr-code/?size=150x150&data=https://t.me/" . env("APP_BOT_NAME") . "?start=$code");
 
@@ -133,7 +133,7 @@ $botman->hears("\xF0\x9F\x92\xB3Мои баллы", function ($bot) {
         while (strlen($tmp_id) < 10)
             $tmp_id = "0" . $tmp_id;
 
-        $code = base64_encode("002" . $tmp_id . "000000000");
+        $code = base64_encode("002" . $tmp_id . "0000000000");
 
 
         $attachment = new Image("https://api.qrserver.com/v1/create-qr-code/?size=150x150&data=https://t.me/" . env("APP_BOT_NAME") . "?start=$code");
@@ -597,7 +597,13 @@ $botman->hears('/statistic', function ($bot) {
         ]);
     $bot->reply($message, ["parse_mode" => "Markdown"]);
 });
-
+$botman->hears("\xF0\x9F\x9A\xA7Управление", function ($bot) {
+    $message = Question::create("Администратору доступны следующие функции")
+        ->addButtons([
+            Button::create("Начисление CashBack")->value("/cashbacks 0"),
+         ]);
+    $bot->reply($message, ["parse_mode" => "Markdown"]);
+});
 
 
 
