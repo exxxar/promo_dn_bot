@@ -2,6 +2,7 @@
 
 namespace App\Conversations;
 
+use App\User;
 use BotMan\BotMan\Messages\Conversations\Conversation;
 use BotMan\BotMan\Messages\Incoming\Answer;
 use BotMan\BotMan\Messages\Outgoing\Actions\Button;
@@ -68,7 +69,7 @@ class FillInfoConversation extends Conversation
                     $tmp_phone = "+38" . $tmp_phone;
 
                 $tmp_user = User::where("phone", $tmp_phone)->first();
-                $tmp_error = "";
+
                 if ($tmp_user == null) {
 
                     $this->user->phone = $tmp_phone;
@@ -76,11 +77,12 @@ class FillInfoConversation extends Conversation
 
 
                 } else
-                    $tmp_error .= "Пользователь с таким номером уже и так наш друг:)\n";
+                    $this->mainMenu("Пользователь с таким номером уже и так наш друг:)\n");
 
                 $this->askSex();
             });
-        } else
+        }
+        else
             $this->askSex();
 
     }
