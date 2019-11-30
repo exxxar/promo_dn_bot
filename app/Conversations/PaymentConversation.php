@@ -35,8 +35,10 @@ class PaymentConversation extends Conversation
         $this->user = \App\User::where("telegram_chat_id", $id)
             ->first();
 
-        if ($this->user->is_admin == 1)
+        if ($this->user->is_admin == 1) {
+            $this->conversationMenu("Начнем-с...");
             $this->askForAction();
+        }
 
     }
 
@@ -54,12 +56,10 @@ class PaymentConversation extends Conversation
                 $selectedValue = $answer->getValue();
 
                 if ($selectedValue == "askpay") {
-                    $this->conversationMenu("Начнем-с...");
                     $this->askForPay();
                 }
 
                 if ($selectedValue == "getcashabck") {
-                    $this->conversationMenu("Начнем-с...");
                     $this->askForCashback();
                 }
             }
@@ -109,7 +109,7 @@ class PaymentConversation extends Conversation
                         'parse_mode' => 'HTML',
                         'text' => 'У вас новый запрос на списание бонусов!',
                         'reply_markup' => json_encode([
-                            'keyboard' => $keyboard,
+                            'keyboard' => json_encode($keyboard),
                             'one_time_keyboard' => true,
                             'resize_keyboard' => true
                         ])

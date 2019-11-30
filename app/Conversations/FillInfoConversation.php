@@ -11,13 +11,11 @@ class FillInfoConversation extends Conversation
 {
     use CustomConversation;
 
-    protected $data;
     protected $bot;
 
-    public function __construct($bot, $data)
+    public function __construct($bot)
     {
         $this->bot = $bot;
-        $this->data = $data;
     }
 
     public function run()
