@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Conversations\FillInfoConversation;
 use App\Conversations\PaymentConversation;
 use App\Conversations\PromoConversation;
 use App\Conversations\StartConversation;
@@ -52,6 +53,9 @@ class BotManController extends Controller
         $bot->startConversation(new StartDataConversation($bot,$data));
     }
 
+    public function fillInfoConversation($bot){
+        $bot->startConversation(new FillInfoConversation($bot));
+    }
     public function paymentConversation(BotMan $bot,$request_id,$company_id)
     {
         $bot->startConversation(new PaymentConversation($bot,$request_id,$company_id));

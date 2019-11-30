@@ -27,6 +27,7 @@ $botman->hears('Продолжить позже', BotManController::class . '@st
 $botman->hears('/start ([0-9a-zA-Z=]+)', BotManController::class . '@startDataConversation');
 
 $botman->hears('/promotion ([0-9]+)', BotManController::class . '@promoConversation');
+$botman->hears('/fillinfo ', BotManController::class . '@fillInfoConversation');
 $botman->hears('/payment ([0-9]{1,10}) ([0-9]{1,10})', BotManController::class . '@paymentConversation');
 
 $botman->hears("\xE2\x9B\x84Мероприятия", function ($bot) {
@@ -395,6 +396,15 @@ $botman->hears('/payments ([0-9]+)', function ($bot, $page) {
 
     $user = \App\User::where("telegram_chat_id", $id)->first();
 
+    if ($user->phone==null){
+        $message = Question::create("У вас не заполнена личная информация и вы не можете просматривать историю оплаты.")
+            ->addButtons([
+                Button::create("Заполнить")->value("/fillinfo"),
+            ]);
+        $bot->reply($message, ["parse_mode" => "Markdown"]);
+        return;
+    }
+
     $refs = \App\RefferalsPaymentHistory::with(["company"])
         ->where("user_id", $user->id)
         ->skip($page * 10)
@@ -453,6 +463,14 @@ $botman->hears('/cashbacks ([0-9]+)', function ($bot, $page) {
 
     $user = \App\User::where("telegram_chat_id", $id)->first();
 
+    if ($user->phone==null){
+        $message = Question::create("У вас не заполнена личная информация и вы не можете просматривать историю начисления CashBack.")
+            ->addButtons([
+                Button::create("Заполнить")->value("/fillinfo"),
+            ]);
+        $bot->reply($message, ["parse_mode" => "Markdown"]);
+        return;
+    }
     $cashbacks = CashbackHistory::where("user_phone", $user->phone)
         ->skip($page * 10)
         ->take(10)
