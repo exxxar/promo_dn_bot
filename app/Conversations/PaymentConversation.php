@@ -3,6 +3,7 @@
 namespace App\Conversations;
 
 use App\CashbackHistory;
+use App\RefferalsPaymentHistory;
 use App\User;
 use BotMan\BotMan\Messages\Conversations\Conversation;
 use BotMan\BotMan\Messages\Incoming\Answer;
@@ -84,41 +85,35 @@ class PaymentConversation extends Conversation
 
             try {
                 if ($recipient_user->referral_bonus_count + $recipient_user->cashback_bonus_count > intval($nedded_bonus)) {
-                    $keyboard = [
-                        'inline_keyboard' => [
-                            [
-                                ['text' => 'Списать ' . $nedded_bonus . " бонусов", 'callback_data' => "/payment_accept $nedded_bonus " . $this->user->id . " " . $this->company_id],
-                                ['text' => 'Отклонить', 'callback_data' => "/payment_decline $nedded_bonus " . $this->user->id . " " . $this->company_id]
-                            ]
-                        ]
-                    ];
 
-                    /*$this->bot->sendRequest("sendMessage", [
-                        "text" => 'У вас новый запрос на списание бонусов!',
-                        "chat_id" => $recipient_user->telegram_chat_id,
-                        'reply_markup' => json_encode([
-                            'keyboard' => json_encode($keyboard),
-                            'one_time_keyboard' => true,
-                            'resize_keyboard' => true
-                        ])
-                    ]);*/
+                        RefferalsPaymentHistory::create([
+                            'user_id' => $recipient_user->id,
+                            'company_id' => $this->company_id,
+                            'employee_id' => $this->user->id,
+                            'value' => intval($nedded_bonus),
+                        ]);
+
+                        if ($recipient_user->referral_bonus_count <= intval($nedded_bonus)) {
+                            $module = intval($nedded_bonus) - $recipient_user->referral_bonus_count;
+                            $recipient_user->referral_bonus_count = 0;
+                            $recipient_user->cashback_bonus_count -= $module;
+                        } else
+                            $recipient_user->referral_bonus_count -= intval($nedded_bonus);
+
+                    $recipient_user->save();
+
 
 
                     Telegram::sendMessage([
                         'chat_id' => $recipient_user->telegram_chat_id,
                         'parse_mode' => 'HTML',
-                        'text' => 'У вас новый запрос на списание бонусов!',
-                        'reply_markup' => json_encode([
-                            'keyboard' => json_encode($keyboard),
-                            'one_time_keyboard' => true,
-                            'resize_keyboard' => true
-                        ])
+                        'text' => "У вас списали $nedded_bonus бонусов",
                     ]);
 
 
                 }
 
-                $this->bot->reply("У пользователя недостаточно боунсных баллов!");
+                $this->mainMenu("У пользователя недостаточно боунсных баллов!");
             } catch (\Exception $e) {
                 $this->bot->reply($e->getMessage());
             }

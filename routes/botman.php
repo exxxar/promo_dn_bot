@@ -278,57 +278,7 @@ $botman->hears('/company ([0-9]+)', function ($bot, $company_id) {
     } else
         $bot->reply("Акций от компании не найдено или все акции данной компании собраны:(");
 });
-$botman->hears('/payment_accept ([0-9]{1,10}) ([0-9]{3,10}) ([0-9]+)', function ($bot, $value, $user_id, $company_id) {
 
-    $telegramUser = $this->bot->getUser();
-    $id = $telegramUser->getId();
-
-    $user = User::where("telegram_chat_id", $id)
-        ->first();
-
-    if ($user->referral_bonus_count + $user->cashback_bonus_count > intval($value)) {
-
-
-        RefferalsPaymentHistory::create([
-            'user_id' => $user->id,
-            'company_id' => $company_id,
-            'employee_id' => (User::where("telegram_chat_id", $user_id)->first())->id,
-            'value' => intval($value),
-        ]);
-
-        if ($user->referral_bonus_count <= intval($value)) {
-            $module = intval($value) - $user->referral_bonus_count;
-            $user->referral_bonus_count = 0;
-            $user->cashback_bonus_count -= $module;
-        } else
-            $user->referral_bonus_count -= intval($value);
-
-        $user->save();
-
-        $this->bot->sendRequest("sendMessage",
-            [
-                "text" => 'Пользователь подтвердил оплату',
-                "chat_id" => $user_id,
-            ]);
-
-    } else {
-        $this->bot->sendRequest("sendMessage",
-            [
-                "text" => 'У пользователя недостаточно бонусных баллов!',
-                "chat_id" => $user_id,
-            ]);
-    }
-});
-$botman->hears('/payment_decline ([0-9]{1,10}) ([0-9]{3,10}) ([0-9]+)', function ($bot, $value, $user_id, $company_id) {
-    $bot->reply('Оплата отклонена');
-
-    $this->bot->sendRequest("sendMessage",
-        [
-            "text" => 'Пользователь отклонил оплату',
-            "chat_id" => $user_id,
-        ]);
-
-});
 $botman->hears('/friends ([0-9]+)', function ($bot, $page) {
 
     $telegramUser = $bot->getUser();
