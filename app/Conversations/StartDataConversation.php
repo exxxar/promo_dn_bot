@@ -171,8 +171,9 @@ class StartDataConversation extends Conversation
         $sender_user = User::where("telegram_chat_id", intval($this->request_user_id))
             ->first();
 
+        $on_refferal = RefferalsHistory::where("user_recipient_id",$this->user->id)->first();
 
-        if ($sender_user) {
+        if ($sender_user&&!$on_refferal) {
             $sender_user->referrals_count += 1;
             $sender_user->save();
 
