@@ -153,8 +153,6 @@ class PaymentConversation extends Conversation
         $user = User::where("telegram_chat_id", intval($this->request_id))->first();
 
 
-        $this->bot->reply("User:".print_r($user,true));
-
         if ($user) {
             $cashBack = round(intval($this->money_in_check) * env("CAHSBAK_PROCENT") / 100);
             $user->cashback_bonus_count += $cashBack;
@@ -166,9 +164,9 @@ class PaymentConversation extends Conversation
                 'employee_id' => Auth::user()->id,
                 'company_id' => $this->company_id,
                 'check_info' => $this->check_info,
-                'user_phone' => $user->phone ?? null,
+             ]);
 
-            ]);
+            $this->bot->reply("Мы прошли эту точку");
 
             Telegram::sendMessage([
                 'chat_id' => $user->telegram_chat_id,
