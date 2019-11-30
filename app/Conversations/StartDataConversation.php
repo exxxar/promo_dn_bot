@@ -61,6 +61,8 @@ class StartDataConversation extends Conversation
         $this->request_user_id = count($matches[2]) > 0 ? $matches[2][0] : $tmp_dev_id;
         $this->promo_id = count($matches[3]) > 0 ? $matches[3][0] : env("CUSTOME_PROMO");*/
 
+        $this->say("Данные после компиляции:" . print_r($matches,true));
+
         $this->code = $matches[1][0]??env("CUSTOME_CODE");
         $this->request_user_id = $matches[2][0] ?? $tmp_dev_id;
         $this->promo_id = $matches[3][0] ?? env("CUSTOME_PROMO");
