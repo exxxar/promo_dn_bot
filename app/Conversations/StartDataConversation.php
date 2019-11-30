@@ -49,7 +49,7 @@ class StartDataConversation extends Conversation
         $pattern = "/([0-9]{3})([0-9]{10})([0-9]{10})/";
         $string = base64_decode($this->data);
 
-        $this->say("Все данные:" . $string);
+        //$this->say("Все данные:" . $string);
 
         preg_match_all($pattern, $string, $matches);
 
@@ -61,7 +61,7 @@ class StartDataConversation extends Conversation
         $this->request_user_id = count($matches[2]) > 0 ? $matches[2][0] : $tmp_dev_id;
         $this->promo_id = count($matches[3]) > 0 ? $matches[3][0] : env("CUSTOME_PROMO");*/
 
-        $this->say("Данные после компиляции:" . print_r($matches,true));
+        //$this->say("Данные после компиляции:" . print_r($matches,true));
 
         $this->code = $matches[1][0]??env("CUSTOME_CODE");
         $this->request_user_id = $matches[2][0] ?? $tmp_dev_id;
@@ -80,7 +80,8 @@ class StartDataConversation extends Conversation
         $canBeRefferal = true;
 
         if ($this->user->is_admin==1) {
-            $this->say("Вы администратор, входыне параметры:" . $this->code . " " . $this->request_user_id . " " . $this->promo_id);
+            $this->mainMenuWithAdmin('Добрый день,ув. Администратор!');
+            //$this->say("Вы администратор, входыне параметры:" . $this->code . " " . $this->request_user_id . " " . $this->promo_id);
             $canBeRefferal = false;
 
             if ($this->code == "002")
@@ -88,8 +89,6 @@ class StartDataConversation extends Conversation
 
             if ($this->code == "003")
                 $this->activatePromo();
-
-            $this->mainMenuWithAdmin('Добрый день,ув. Администратор!');
 
         }
 
@@ -171,10 +170,11 @@ class StartDataConversation extends Conversation
 
     protected function activateRefferal()
     {
-        $sender_user = User::where("telegram_chat_id", $this->request_user_id)
+        $sender_user = User::where("telegram_chat_id", intval($this->request_user_id))
             ->first();
 
-        if ($sender_user != null) {
+
+        if ($sender_user) {
             Telegram::sendMessage([
                 'chat_id' => $sender_user->telegram_chat_id,
                 'parse_mode' => 'Markdown',
