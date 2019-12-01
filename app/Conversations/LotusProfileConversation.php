@@ -38,7 +38,11 @@ class LotusProfileConversation extends Conversation
             ->first();
 
 
-        $this->askForStartPromo();
+        try {
+            $this->askForStartPromo();
+        }catch (\Exception $e) {
+            $this->bot->reply($e);
+        }
 
     }
 
