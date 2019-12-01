@@ -126,9 +126,9 @@ class StartDataConversation extends Conversation
             if ($this->user->is_admin == 1) {
                 $promo = Promotion::find(intval($this->data));
 
-                $remote_user = User::where("", intval($this->request_user_id))->first();
+                $remote_user = User::with(["promos"])->where("telegram_chat_id", intval($this->request_user_id))->first();
 
-                $on_promo = UserHasPromo::where("telegram_chat_id", "=", $remote_user->id)
+                $on_promo = $remote_user->promos
                     ->where("promotion_id", "=", $promo->id)
                     ->first();
 
