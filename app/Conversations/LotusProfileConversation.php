@@ -251,7 +251,7 @@ class LotusProfileConversation extends Conversation
 
     //объем груди
     public function askBreastVolume(){
-        if ($this->breast_volume==null&&$this->user->sex==1) {
+        if ($this->breast_volume==null&&$this->sex==1) {
             $question = Question::create('Ваш объем груди:')
                 ->fallback('Спасибо что пообщался со мной:)!');
 
@@ -266,7 +266,7 @@ class LotusProfileConversation extends Conversation
 
     //объем талии
     public function askWaist(){
-        if ($this->waist==null&&$this->user->sex==1) {
+        if ($this->waist==null&&$this->sex==1) {
             $question = Question::create('Ваш объем талии:')
                 ->fallback('Спасибо что пообщался со мной:)!');
 
@@ -281,7 +281,7 @@ class LotusProfileConversation extends Conversation
 
     //объем бёдер
     public function askHips(){
-        if ($this->hips==null&&$this->user->sex==1) {
+        if ($this->hips==null&&$this->sex==1) {
             $question = Question::create('Ваш объем бёдер:')
                 ->fallback('Спасибо что пообщался со мной:)!');
 
