@@ -229,6 +229,19 @@ class PromoConversation extends Conversation
     public function saveData()
     {
 
+
+        $pattern = "/^\+380\d{3}\d{3}\d{2}\d{2}$/";
+        $string = $this->user->phone;
+
+        if (!preg_match($pattern, $string)) {
+
+            $this->user->phone = null;
+            $this->user->save();
+
+            $this->mainMenu("Вы указали неправильный номер телефона, попробуйте еще раз пройти опрос!");
+            return;
+        }
+
         $this->mainMenu("Отлично! Вы справились!");
 
         $promo = Promotion::find(intval($this->data));
