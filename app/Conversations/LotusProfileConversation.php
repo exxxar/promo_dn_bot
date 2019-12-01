@@ -31,6 +31,17 @@ class LotusProfileConversation extends Conversation
 
     public function run()
     {
+        $this->model_name = null;
+        $this->height = null;
+        $this->weight=null;
+        $this->breast_volume=null;
+        $this->waist=null;
+        $this->hips=null;
+        $this->model_school_education=null;
+        $this->about=null;
+        $this->hobby=null;
+        $this->wish_learn=null;
+
         $telegramUser = $this->bot->getUser();
         $id = $telegramUser->getId();
 
@@ -129,7 +140,7 @@ class LotusProfileConversation extends Conversation
 
     public function askFirstname()
     {
-        if ($this->user->fio_from_request == "") {
+        if ( $this->model_name == null) {
             $question = Question::create('Как тебя зовут?')
                 ->fallback('Спасибо что пообщался со мной:)!');
 
@@ -252,11 +263,11 @@ class LotusProfileConversation extends Conversation
 
             $this->ask($question, function (Answer $answer) {
                 $this->breast_volume = $answer->getText();
-                $this->askWeight();
+                $this->askWaist();
 
             });
         } else
-            $this->askWeight();
+            $this->askWaist();
     }
 
     //объем талии
