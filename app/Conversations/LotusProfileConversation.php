@@ -40,6 +40,7 @@ class LotusProfileConversation extends Conversation
         $this->model_school_education=null;
         $this->about=null;
         $this->hobby=null;
+        $this->education=null;
         $this->wish_learn=null;
 
         $telegramUser = $this->bot->getUser();
@@ -350,7 +351,7 @@ class LotusProfileConversation extends Conversation
     //ваше образование
     public function askEducation(){
         if ($this->education==null) {
-            $question = Question::create('Ваше хобби?')
+            $question = Question::create('Ваше образование?')
                 ->fallback('Спасибо что пообщался со мной:)!');
 
             $this->ask($question, function (Answer $answer) {
