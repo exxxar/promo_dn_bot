@@ -192,6 +192,7 @@ class LotusProfileConversation extends Conversation
                     } else {
                         $this->bot->reply("Пользователь с таким номером уже и так наш друг:)\n");
                         $this->askPhone();
+                        return;
                     }
 
                 }
@@ -206,23 +207,24 @@ class LotusProfileConversation extends Conversation
 
     public function askSex()
     {
-        if ($this->sex == null) {
-            $question = Question::create('Ваш пол?')
-                ->fallback('Спасибо что пообщался со мной:)!')
-                ->addButtons([
-                    Button::create("\xF0\x9F\x91\xA6Парень")->value('man'),
-                    Button::create("\xF0\x9F\x91\xA7Девушка")->value('woman'),
-                ]);
-
-            $this->ask($question, function (Answer $answer) {
-                // Detect if button was clicked:
-                if ($answer->isInteractiveMessageReply()) {
-                    $this->sex = $answer->getValue() == "man" ? 0 : 1;
-                    $this->askAge();
-                }
-            });
-        } else
+        if ($this->sex != null) {
             $this->askAge();
+            return;
+        }
+        $question = Question::create('Ваш пол?')
+            ->fallback('Спасибо что пообщался со мной:)!')
+            ->addButtons([
+                Button::create("\xF0\x9F\x91\xA6Парень")->value('man'),
+                Button::create("\xF0\x9F\x91\xA7Девушка")->value('woman'),
+            ]);
+
+        $this->ask($question, function (Answer $answer) {
+            // Detect if button was clicked:
+            if ($answer->isInteractiveMessageReply()) {
+                $this->sex = $answer->getValue() == "man" ? 0 : 1;
+                $this->askAge();
+            }
+        });
 
 
     }
@@ -231,39 +233,44 @@ class LotusProfileConversation extends Conversation
 
     public function askAge()
     {
-        if ($this->user->age == null) {
-            $question = Question::create('Сколько тебе лет?')
-                ->fallback('Спасибо что пообщался со мной:)!');
-
-            $this->ask($question, function (Answer $answer) {
-                $this->user->age = intval($answer->getText()) ?? 18;
-                $this->user->save();
-
-                $this->askHeight();
-
-            });
-        } else
+        if ($this->user->age != null) {
             $this->askHeight();
+            return;
+        }
+        $question = Question::create('Сколько тебе лет?')
+            ->fallback('Спасибо что пообщался со мной:)!');
+
+        $this->ask($question, function (Answer $answer) {
+            $this->user->age = intval($answer->getText()) ?? 18;
+            $this->user->save();
+
+            $this->askHeight();
+
+        });
+
+
     }
 
     //вес
 
     public function askHeight()
     {
-
-        if ($this->height == null) {
-            $question = Question::create('Ваш рост:')
-                ->fallback('Спасибо что пообщался со мной:)!');
-
-            $this->ask($question, function (Answer $answer) {
-                $this->height = $answer->getText();
-
-
-                $this->askWeight();
-
-            });
-        } else
+        if ($this->height != null) {
             $this->askWeight();
+            return;
+        }
+
+        $question = Question::create('Ваш рост:')
+            ->fallback('Спасибо что пообщался со мной:)!');
+
+        $this->ask($question, function (Answer $answer) {
+            $this->height = $answer->getText();
+
+
+            $this->askWeight();
+
+        });
+
     }
 
     //объем груди
@@ -271,168 +278,193 @@ class LotusProfileConversation extends Conversation
     public function askWeight()
     {
         if ($this->weight == null) {
-            $question = Question::create('Ваш вес:')
-                ->fallback('Спасибо что пообщался со мной:)!');
-
-            $this->ask($question, function (Answer $answer) {
-                $this->weight = $answer->getText();
-
-
-                $this->askBreastVolume();
-
-            });
-        } else
             $this->askBreastVolume();
+            return;
+        }
+        $question = Question::create('Ваш вес:')
+            ->fallback('Спасибо что пообщался со мной:)!');
+
+        $this->ask($question, function (Answer $answer) {
+            $this->weight = $answer->getText();
+
+
+            $this->askBreastVolume();
+
+        });
+
+
     }
 
     //объем талии
 
     public function askBreastVolume()
     {
-        if ($this->breast_volume == null && $this->sex == 1) {
-            $question = Question::create('Ваш объем груди:')
-                ->fallback('Спасибо что пообщался со мной:)!');
-
-            $this->ask($question, function (Answer $answer) {
-                $this->breast_volume = $answer->getText();
-                $this->askWaist();
-
-            });
-        } else
+        if ($this->breast_volume != null || $this->sex == 0) {
             $this->askWaist();
+            return;
+        }
+        $question = Question::create('Ваш объем груди:')
+            ->fallback('Спасибо что пообщался со мной:)!');
+
+        $this->ask($question, function (Answer $answer) {
+            $this->breast_volume = $answer->getText();
+            $this->askWaist();
+
+        });
+
     }
 
     //объем бёдер
 
     public function askWaist()
     {
-        if ($this->waist == null && $this->sex == 1) {
-            $question = Question::create('Ваш объем талии:')
-                ->fallback('Спасибо что пообщался со мной:)!');
-
-            $this->ask($question, function (Answer $answer) {
-                $this->waist = $answer->getText();
-                $this->askHips();
-
-            });
-        } else
+        if ($this->waist != null || $this->sex == 0) {
             $this->askHips();
+            return;
+        }
+        $question = Question::create('Ваш объем талии:')
+            ->fallback('Спасибо что пообщался со мной:)!');
+
+        $this->ask($question, function (Answer $answer) {
+            $this->waist = $answer->getText();
+            $this->askHips();
+
+        });
+
+
     }
 
     //обучались в модельной школе?
 
     public function askHips()
     {
-        if ($this->hips == null && $this->sex == 1) {
-            $question = Question::create('Ваш объем бёдер:')
-                ->fallback('Спасибо что пообщался со мной:)!');
-
-            $this->ask($question, function (Answer $answer) {
-                $this->hips = $answer->getText();
-                $this->askModelSchool();
-
-            });
-        } else
+        if ($this->hips != null && $this->sex == 0) {
             $this->askModelSchool();
+            return;
+        }
+        $question = Question::create('Ваш объем бёдер:')
+            ->fallback('Спасибо что пообщался со мной:)!');
+
+        $this->ask($question, function (Answer $answer) {
+            $this->hips = $answer->getText();
+            $this->askModelSchool();
+
+        });
+
+
     }
 
     //откуда узнали о нашем модельном агенстве
 
     public function askModelSchool()
     {
-        if ($this->model_school_education == null) {
-            $question = Question::create('Обучались в модельной школе?')
-                ->fallback('Спасибо что пообщался со мной:)!')
-                ->addButtons([
-                    Button::create("\xE2\x9E\x95Да")->value('yes'),
-                    Button::create("\xE2\x9D\x8CНет")->value('no'),
-                ]);
-
-            $this->ask($question, function (Answer $answer) {
-                // Detect if button was clicked:
-                if ($answer->isInteractiveMessageReply()) {
-
-                    $this->model_school_education = $answer->getValue() == "yes" ? 1 : 0;
-
-                    $this->askAboutUs();
-                }
-            });
-        } else
+        if ($this->model_school_education != null) {
             $this->askAboutUs();
+            return;
+        }
+        $question = Question::create('Обучались в модельной школе?')
+            ->fallback('Спасибо что пообщался со мной:)!')
+            ->addButtons([
+                Button::create("\xE2\x9E\x95Да")->value('yes'),
+                Button::create("\xE2\x9D\x8CНет")->value('no'),
+            ]);
+
+        $this->ask($question, function (Answer $answer) {
+            // Detect if button was clicked:
+            if ($answer->isInteractiveMessageReply()) {
+
+                $this->model_school_education = $answer->getValue() == "yes" ? 1 : 0;
+
+                $this->askAboutUs();
+            }
+        });
+
+
     }
 
     //ваше хобби
 
     public function askAboutUs()
     {
-        if ($this->about == null) {
-            $question = Question::create('Откуда узнали о нашем модельном агенстве?')
-                ->fallback('Спасибо что пообщался со мной:)!');
-
-            $this->ask($question, function (Answer $answer) {
-                $this->about = $answer->getText();
-                $this->askHobby();
-
-            });
-        } else
+        if ($this->about != null) {
             $this->askHobby();
+            return;
+        }
+        $question = Question::create('Откуда узнали о нашем модельном агенстве?')
+            ->fallback('Спасибо что пообщался со мной:)!');
+
+        $this->ask($question, function (Answer $answer) {
+            $this->about = $answer->getText();
+            $this->askHobby();
+
+        });
+
+
     }
 
     //ваше образование
 
     public function askHobby()
     {
-        if ($this->hobby == null) {
-            $question = Question::create('Ваше хобби?')
-                ->fallback('Спасибо что пообщался со мной:)!');
-
-            $this->ask($question, function (Answer $answer) {
-                $this->hobby = $answer->getText();
-                $this->askEducation();
-
-            });
-        } else
+        if ($this->hobby != null) {
             $this->askEducation();
+            return;
+        }
+        $question = Question::create('Ваше хобби?')
+            ->fallback('Спасибо что пообщался со мной:)!');
+
+        $this->ask($question, function (Answer $answer) {
+            $this->hobby = $answer->getText();
+            $this->askEducation();
+
+        });
+
+
     }
 
     //желание обучаться
 
     public function askEducation()
     {
-        if ($this->education == null) {
-            $question = Question::create('Ваше образование?')
-                ->fallback('Спасибо что пообщался со мной:)!');
-
-            $this->ask($question, function (Answer $answer) {
-                $this->education = $answer->getText();
-                $this->askWishLearn();
-
-            });
-        } else
+        if ($this->education != null) {
             $this->askWishLearn();
+            return;
+        }
+        $question = Question::create('Ваше образование?')
+            ->fallback('Спасибо что пообщался со мной:)!');
+
+        $this->ask($question, function (Answer $answer) {
+            $this->education = $answer->getText();
+            $this->askWishLearn();
+
+        });
+
     }
 
     public function askWishLearn()
     {
-        if ($this->wish_learn == null) {
-            $question = Question::create('Хотели бы обучаться у нас?')
-                ->fallback('Спасибо что пообщался со мной:)!')
-                ->addButtons([
-                    Button::create("\xE2\x9E\x95Да")->value('yes'),
-                    Button::create("\xE2\x9D\x8CНет")->value('no'),
-                ]);
-
-            $this->ask($question, function (Answer $answer) {
-                // Detect if button was clicked:
-                if ($answer->isInteractiveMessageReply()) {
-
-                    $this->wish_learn = $answer->getValue() == "yes" ? 1 : 0;
-
-                    $this->saveData();
-                }
-            });
-        } else
+        if ($this->wish_learn != null) {
             $this->saveData();
+            return;
+        }
+        $question = Question::create('Хотели бы обучаться у нас?')
+            ->fallback('Спасибо что пообщался со мной:)!')
+            ->addButtons([
+                Button::create("\xE2\x9E\x95Да")->value('yes'),
+                Button::create("\xE2\x9D\x8CНет")->value('no'),
+            ]);
+
+        $this->ask($question, function (Answer $answer) {
+            // Detect if button was clicked:
+            if ($answer->isInteractiveMessageReply()) {
+
+                $this->wish_learn = $answer->getValue() == "yes" ? 1 : 0;
+
+                $this->saveData();
+            }
+        });
+
+
     }
 
     public function saveData()
