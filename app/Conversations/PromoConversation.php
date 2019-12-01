@@ -148,17 +148,17 @@ class PromoConversation extends Conversation
                 if (!strpos($tmp_phone, "+38"))
                     $tmp_phone = "+38" . $tmp_phone;
 
-                $tmp_user = User::where("phone", $tmp_phone)->first();
 
                 $pattern = "/^\+380\d{3}\d{2}\d{2}\d{2}$/";
-                $string = $tmp_user;
 
-                if (preg_match($pattern, $string)==0) {
+                if (preg_match($pattern, $tmp_phone) == 0) {
 
                     $this->bot->reply("Номер введен не верно...\n");
                     $this->askPhone();
                     return;
                 } else {
+
+                    $tmp_user = User::where("phone", $tmp_phone)->first();
 
                     if ($tmp_user == null) {
 
@@ -166,8 +166,10 @@ class PromoConversation extends Conversation
                         $this->user->save();
 
 
-                    } else
+                    } else {
                         $this->bot->reply("Пользователь с таким номером уже и так наш друг:)\n");
+                        $this->askPhone();
+                    }
 
                 }
 
