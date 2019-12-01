@@ -105,6 +105,7 @@ class LotusProfileConversation extends Conversation
                 $selectedValue = $answer->getValue();
 
                 if ($selectedValue == "yes") {
+                    $this->conversationMenu("Начнем-с...");
                     $this->askFirstname();
                 }
 
