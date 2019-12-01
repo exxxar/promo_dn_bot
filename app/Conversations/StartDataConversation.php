@@ -166,6 +166,8 @@ class StartDataConversation extends Conversation
 
                         $this->bot->reply('Приз по акции успешно активирован');
                     }
+                    else
+                        $this->bot->reply('Приз по акции уже был активирован ранее');
                 }
 
 
