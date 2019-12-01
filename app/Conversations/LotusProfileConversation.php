@@ -174,10 +174,10 @@ class LotusProfileConversation extends Conversation
 
                 $tmp_user = User::where("phone", $tmp_phone)->first();
 
-                $pattern = "/^\+380\d{3}\d{3}\d{2}\d{2}$/";
+                $pattern = "/^\+380\d{3}\d{2}\d{2}\d{2}$/";
                 $string = $tmp_user;
 
-                if (!preg_match($pattern, $string)) {
+                if (preg_match($pattern, $string)==0) {
 
                     $this->bot->reply("Номер введен не верно...\n");
                     $this->askPhone();
