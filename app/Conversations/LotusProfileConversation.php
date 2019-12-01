@@ -35,6 +35,7 @@ class LotusProfileConversation extends Conversation
         $this->height = null;
         $this->weight=null;
         $this->breast_volume=null;
+        $this->sex=null;
         $this->waist=null;
         $this->hips=null;
         $this->model_school_education=null;
@@ -192,7 +193,7 @@ class LotusProfileConversation extends Conversation
 
     public function askSex()
     {
-        if (!is_int($this->user->sex)) {
+        if ($this->sex==null) {
             $question = Question::create('Ваш пол?')
                 ->fallback('Спасибо что пообщался со мной:)!')
                 ->addButtons([
@@ -203,10 +204,7 @@ class LotusProfileConversation extends Conversation
             $this->ask($question, function (Answer $answer) {
                 // Detect if button was clicked:
                 if ($answer->isInteractiveMessageReply()) {
-
-                    $this->user->sex = $answer->getValue() == "man" ? 0 : 1;
-                    $this->user->save();
-
+                    $this->sex = $answer->getValue() == "man" ? 0 : 1;
                     $this->askAge();
                 }
             });
@@ -419,7 +417,7 @@ class LotusProfileConversation extends Conversation
                 ."*Ф.И.О.*:".($this->model_name??'Не указано')."\n"
                 ."*Возраст:*".($this->user->age??'Не указано')."\n"
                 ."*Телефон:*".($this->user->phone??'Не указано')."\n"
-                ."*Пол:*".($this->user->sex==0?"Парень":"Девушка")."\n"
+                ."*Пол:*".($this->sex==0?"Парень":"Девушка")."\n"
                 ."*Рост:*".($this->height??'Не указано')."\n"
                 ."*Вес:*".($this->weight??'Не указано')."\n"
                 ."*Объем груди:*".($this->breast_volume??'Не указано')."\n"
