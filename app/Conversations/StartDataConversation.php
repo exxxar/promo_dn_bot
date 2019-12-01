@@ -148,19 +148,22 @@ class StartDataConversation extends Conversation
                     ]);
                 }
 
+
                 $ref = RefferalsHistory::where("user_recipient_id", $remote_user->id)->first();
-                if ($ref->activated == 0) {
-                    $ref->activated = 1;
-                    $ref->save();
+                if ($ref) {
+                    if ($ref->activated == 0) {
+                        $ref->activated = 1;
+                        $ref->save();
 
-                    $sender_user = User::where("id", $ref->user_sender_id)->first();
-                    $sender_user->referral_bonus_count += env("REFERRAL_BONUS");
-                    $sender_user->save();
+                        $sender_user = User::where("id", $ref->user_sender_id)->first();
+                        $sender_user->referral_bonus_count += env("REFERRAL_BONUS");
+                        $sender_user->save();
 
-                    $this->bot->sendRequest("sendMessage", [
-                        "chat_id" => $sender_user->telegram_chat_id,
-                        "text" => "Вам начислено " . env("REFERRAL_BONUS") . " бонусов."
-                    ]);
+                        $this->bot->sendRequest("sendMessage", [
+                            "chat_id" => $sender_user->telegram_chat_id,
+                            "text" => "Вам начислено " . env("REFERRAL_BONUS") . " бонусов."
+                        ]);
+                    }
                 }
 
                 $this->bot->reply('Приз по акции успешно активирован');
