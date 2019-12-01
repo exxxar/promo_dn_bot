@@ -80,11 +80,6 @@ class LotusProfileConversation extends Conversation
                     $this->conversationMenu("Начнем-с...");
                     $this->askFirstname();
 
-                    try {
-                        $this->askForStartPromo();
-                    }catch (\Exception $e) {
-                        $this->bot->reply($e);
-                    }
                 }
 
                 if ($selectedValue == "no") {
