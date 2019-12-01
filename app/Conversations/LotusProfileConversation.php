@@ -354,12 +354,12 @@ class LotusProfileConversation extends Conversation
                 ->fallback('Спасибо что пообщался со мной:)!');
 
             $this->ask($question, function (Answer $answer) {
-                $this->hobby = $answer->getText();
-                $this->askEducation();
+                $this->education = $answer->getText();
+                $this->askWishLearn();
 
             });
         } else
-            $this->askEducation();
+            $this->askWishLearn();
     }
 
     //желание обучаться
