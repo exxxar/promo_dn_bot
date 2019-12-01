@@ -75,7 +75,7 @@
                         <tr>
                             <td>Колличество активаций</td>
                             <td>
-                                <input type="number" min="0" name="activation_count" class="form-control" required>
+                                <input type="number" min="0" max="1000000" name="activation_count" class="form-control" required>
                             </td>
                         </tr>
                         <tr>
@@ -102,7 +102,7 @@
                         <tr>
                             <td>Активировать сразу после выполнения условий</td>
                             <td>
-                                <input type="checkbox" name="immediately_activate" class="form-control" >
+                                <input type="checkbox" name="immediately_activate" class="form-control">
                             </td>
                         </tr>
 
@@ -138,9 +138,7 @@
                         <tr>
                             <td>Обработчик (не заполнять)</td>
                             <td>
-                                <input type="text" name="handler"
-                                       value="{{$promotion->handler}}"
-                                       class="form-control" >
+                                <input type="text" name="handler" value="" class="form-control">
 
                             </td>
                         </tr>

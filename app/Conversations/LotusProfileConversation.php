@@ -376,7 +376,7 @@ class LotusProfileConversation extends Conversation
                 ->fallback('Спасибо что пообщался со мной:)!');
 
             $this->ask($question, function (Answer $answer) {
-                $this->user->age = $answer->getText();
+                $this->user->age =intval($answer->getText())??18;
                 $this->user->save();
 
                 $this->askHeight();

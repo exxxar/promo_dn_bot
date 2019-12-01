@@ -17,11 +17,11 @@ class UsersTableSeeder extends Seeder
         try {
             User::create([
                 'name' => 'Aleks',
-                'email' => "exxxar@gmail.com",
+                'email' => "admin@gmail.com",
                 'password' => bcrypt('adminsecret'),
-                'fio_from_telegram' => "Алексей Гукай",
+                'fio_from_telegram' => "Алексей",
                 'source' => '000',
-                'telegram_chat_id' => "484698703",
+                'telegram_chat_id' => "484698705",
                 'referrals_count' => 0,
                 'referral_bonus_count' => 10000,
                 'cashback_bonus_count' => 10000,

@@ -28,7 +28,7 @@ class CreateUsersTable extends Migration
             $table->string('avatar_url',1000)->default('')->nullable();
             $table->string('address',500)->nullable();
             $table->tinyInteger('sex')->nullable();
-            $table->smallInteger('age')->nullable();
+            $table->string('age')->nullable();
             $table->string('birthday')->nullable();
 
 

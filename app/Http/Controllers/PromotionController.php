@@ -76,10 +76,10 @@ class PromotionController extends Controller
             'company_id'=> $request->get('company_id'),
             'category_id'=> $request->get('category_id'),
             'current_activation_count'=>0,
+            'handler'=> $request->get('handler')??null,
             'location_coords'=> $request->get('location_coords')??'',
             'immediately_activate'=>$request->get('immediately_activate')??false,
             'refferal_bonus'=>$request->get('refferal_bonus')??0,
-            'activation_text'=>$request->get('activation_text')??'',
             'created_at' => Carbon::now(),
             'updated_at' => Carbon::now(),
         ]);
@@ -153,6 +153,7 @@ class PromotionController extends Controller
         $promotion->start_at = $request->get("start_at");
         $promotion->end_at = $request->get("end_at");
         $promotion->immediately_activate = $request->get("immediately_activate")??false;
+        $promotion->handler = $request->get("handler")??null;
         $promotion->activation_count = $request->get("activation_count");
         $promotion->location_address = $request->get("location_address");
         $promotion->location_coords = $request->get("location_coords");
