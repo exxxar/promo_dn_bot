@@ -33,16 +33,16 @@ class LotusProfileConversation extends Conversation
     {
         $this->model_name = null;
         $this->height = null;
-        $this->weight=null;
-        $this->breast_volume=null;
-        $this->sex=null;
-        $this->waist=null;
-        $this->hips=null;
-        $this->model_school_education=null;
-        $this->about=null;
-        $this->hobby=null;
-        $this->education=null;
-        $this->wish_learn=null;
+        $this->weight = null;
+        $this->breast_volume = null;
+        $this->sex = null;
+        $this->waist = null;
+        $this->hips = null;
+        $this->model_school_education = null;
+        $this->about = null;
+        $this->hobby = null;
+        $this->education = null;
+        $this->wish_learn = null;
 
         $telegramUser = $this->bot->getUser();
         $id = $telegramUser->getId();
@@ -53,7 +53,7 @@ class LotusProfileConversation extends Conversation
 
         try {
             $this->askForStartPromo();
-        }catch (\Exception $e) {
+        } catch (\Exception $e) {
             $this->bot->reply($e);
         }
 
@@ -137,7 +137,7 @@ class LotusProfileConversation extends Conversation
 
     public function askFirstname()
     {
-        if ( $this->model_name == null) {
+        if ($this->model_name == null) {
             $question = Question::create('Как тебя зовут?')
                 ->fallback('Спасибо что пообщался со мной:)!');
 
@@ -174,14 +174,26 @@ class LotusProfileConversation extends Conversation
 
                 $tmp_user = User::where("phone", $tmp_phone)->first();
 
-                if ($tmp_user == null) {
+                $pattern = "/^\+380\d{3}\d{3}\d{2}\d{2}$/";
+                $string = $tmp_user;
 
-                    $this->user->phone = $tmp_phone;
-                    $this->user->save();
+                if (!preg_match($pattern, $string)) {
+
+                    $this->bot->reply("Номер введен не верно...\n");
+                    $this->askPhone();
+                    return;
+                } else {
+
+                    if ($tmp_user == null) {
+
+                        $this->user->phone = $tmp_phone;
+                        $this->user->save();
 
 
-                } else
-                   $this->bot->reply("Пользователь с таким номером уже и так наш друг:)\n");
+                    } else
+                        $this->bot->reply("Пользователь с таким номером уже и так наш друг:)\n");
+
+                }
 
                 $this->askSex();
             });
@@ -193,7 +205,7 @@ class LotusProfileConversation extends Conversation
 
     public function askSex()
     {
-        if ($this->sex==null) {
+        if ($this->sex == null) {
             $question = Question::create('Ваш пол?')
                 ->fallback('Спасибо что пообщался со мной:)!')
                 ->addButtons([
@@ -215,9 +227,30 @@ class LotusProfileConversation extends Conversation
     }
 
     //рост
-    public function askHeight(){
 
-        if ($this->height==null) {
+    public function askAge()
+    {
+        if ($this->user->age == null) {
+            $question = Question::create('Сколько тебе лет?')
+                ->fallback('Спасибо что пообщался со мной:)!');
+
+            $this->ask($question, function (Answer $answer) {
+                $this->user->age = intval($answer->getText()) ?? 18;
+                $this->user->save();
+
+                $this->askHeight();
+
+            });
+        } else
+            $this->askHeight();
+    }
+
+    //вес
+
+    public function askHeight()
+    {
+
+        if ($this->height == null) {
             $question = Question::create('Ваш рост:')
                 ->fallback('Спасибо что пообщался со мной:)!');
 
@@ -225,16 +258,18 @@ class LotusProfileConversation extends Conversation
                 $this->height = $answer->getText();
 
 
-               $this->askWeight();
+                $this->askWeight();
 
             });
         } else
             $this->askWeight();
     }
 
-    //вес
-    public function askWeight(){
-        if ($this->weight==null) {
+    //объем груди
+
+    public function askWeight()
+    {
+        if ($this->weight == null) {
             $question = Question::create('Ваш вес:')
                 ->fallback('Спасибо что пообщался со мной:)!');
 
@@ -249,9 +284,11 @@ class LotusProfileConversation extends Conversation
             $this->askBreastVolume();
     }
 
-    //объем груди
-    public function askBreastVolume(){
-        if ($this->breast_volume==null&&$this->sex==1) {
+    //объем талии
+
+    public function askBreastVolume()
+    {
+        if ($this->breast_volume == null && $this->sex == 1) {
             $question = Question::create('Ваш объем груди:')
                 ->fallback('Спасибо что пообщался со мной:)!');
 
@@ -264,9 +301,11 @@ class LotusProfileConversation extends Conversation
             $this->askWaist();
     }
 
-    //объем талии
-    public function askWaist(){
-        if ($this->waist==null&&$this->sex==1) {
+    //объем бёдер
+
+    public function askWaist()
+    {
+        if ($this->waist == null && $this->sex == 1) {
             $question = Question::create('Ваш объем талии:')
                 ->fallback('Спасибо что пообщался со мной:)!');
 
@@ -279,9 +318,11 @@ class LotusProfileConversation extends Conversation
             $this->askHips();
     }
 
-    //объем бёдер
-    public function askHips(){
-        if ($this->hips==null&&$this->sex==1) {
+    //обучались в модельной школе?
+
+    public function askHips()
+    {
+        if ($this->hips == null && $this->sex == 1) {
             $question = Question::create('Ваш объем бёдер:')
                 ->fallback('Спасибо что пообщался со мной:)!');
 
@@ -294,9 +335,11 @@ class LotusProfileConversation extends Conversation
             $this->askModelSchool();
     }
 
-    //обучались в модельной школе?
-    public function askModelSchool(){
-        if ($this->model_school_education==null) {
+    //откуда узнали о нашем модельном агенстве
+
+    public function askModelSchool()
+    {
+        if ($this->model_school_education == null) {
             $question = Question::create('Обучались в модельной школе?')
                 ->fallback('Спасибо что пообщался со мной:)!')
                 ->addButtons([
@@ -317,9 +360,11 @@ class LotusProfileConversation extends Conversation
             $this->askAboutUs();
     }
 
-    //откуда узнали о нашем модельном агенстве
-    public function askAboutUs(){
-        if ($this->about==null) {
+    //ваше хобби
+
+    public function askAboutUs()
+    {
+        if ($this->about == null) {
             $question = Question::create('Откуда узнали о нашем модельном агенстве?')
                 ->fallback('Спасибо что пообщался со мной:)!');
 
@@ -331,9 +376,12 @@ class LotusProfileConversation extends Conversation
         } else
             $this->askHobby();
     }
-    //ваше хобби
-    public function askHobby(){
-        if ($this->hobby==null) {
+
+    //ваше образование
+
+    public function askHobby()
+    {
+        if ($this->hobby == null) {
             $question = Question::create('Ваше хобби?')
                 ->fallback('Спасибо что пообщался со мной:)!');
 
@@ -346,9 +394,11 @@ class LotusProfileConversation extends Conversation
             $this->askEducation();
     }
 
-    //ваше образование
-    public function askEducation(){
-        if ($this->education==null) {
+    //желание обучаться
+
+    public function askEducation()
+    {
+        if ($this->education == null) {
             $question = Question::create('Ваше образование?')
                 ->fallback('Спасибо что пообщался со мной:)!');
 
@@ -361,9 +411,9 @@ class LotusProfileConversation extends Conversation
             $this->askWishLearn();
     }
 
-    //желание обучаться
-    public function askWishLearn(){
-        if ($this->wish_learn==null) {
+    public function askWishLearn()
+    {
+        if ($this->wish_learn == null) {
             $question = Question::create('Хотели бы обучаться у нас?')
                 ->fallback('Спасибо что пообщался со мной:)!')
                 ->addButtons([
@@ -384,62 +434,29 @@ class LotusProfileConversation extends Conversation
             $this->saveData();
     }
 
-
-
-    public function askAge()
-    {
-        if ($this->user->age == null) {
-            $question = Question::create('Сколько тебе лет?')
-                ->fallback('Спасибо что пообщался со мной:)!');
-
-            $this->ask($question, function (Answer $answer) {
-                $this->user->age =intval($answer->getText())??18;
-                $this->user->save();
-
-                $this->askHeight();
-
-            });
-        } else
-            $this->askHeight();
-    }
-
-
-
     public function saveData()
     {
 
 
-        $pattern = "/^\+380\d{3}\d{3}\d{2}\d{2}$/";
-        $string =$this->user->phone;
-
-        if (!preg_match($pattern, $string))
-        {
-
-            $this->user->phone = null;
-            $this->user->save();
-
-            $this->mainMenu("Вы указали неправильный номер телефона, попробуйте еще раз пройти опрос!");
-            return;
-        }
         $this->mainMenu("Отлично! Вы справились!");
 
         Telegram::sendMessage([
-            'chat_id' =>  "-1001176319167",
+            'chat_id' => "-1001176319167",
             'parse_mode' => 'Markdown',
             'text' => "Новая анкета:\n"
-                ."*Ф.И.О.*:".($this->model_name??'Не указано')."\n"
-                ."*Возраст:*".($this->user->age??'Не указано')."\n"
-                ."*Телефон:*".($this->user->phone??'Не указано')."\n"
-                ."*Пол:*".($this->sex==0?"Парень":"Девушка")."\n"
-                ."*Рост:*".($this->height??'Не указано')."\n"
-                ."*Вес:*".($this->weight??'Не указано')."\n"
-                ."*Объем груди:*".($this->breast_volume??'Не указано')."\n"
-                ."*Объем талии:*".($this->waist??'Не указано')."\n"
-                ."*Объем бёдер:*".($this->hips??'Не указано')."\n"
-                ."*Обучался ранее:*".($this->model_school_education==1?"Да":"Нет")."\n"
-                ."*Желает обучаться:*".($this->wish_learn==1?"Да":"Нет")."\n"
-                ."*Откуда узнал:*".($this->about??'Не указано')."\n"
-                ."*Образование:*".($this->education??'Не указано')."\n"
+                . "*Ф.И.О.*:" . ($this->model_name ?? 'Не указано') . "\n"
+                . "*Возраст:*" . ($this->user->age ?? 'Не указано') . "\n"
+                . "*Телефон:*" . ($this->user->phone ?? 'Не указано') . "\n"
+                . "*Пол:*" . ($this->sex == 0 ? "Парень" : "Девушка") . "\n"
+                . "*Рост:*" . ($this->height ?? 'Не указано') . "\n"
+                . "*Вес:*" . ($this->weight ?? 'Не указано') . "\n"
+                . "*Объем груди:*" . ($this->breast_volume ?? 'Не указано') . "\n"
+                . "*Объем талии:*" . ($this->waist ?? 'Не указано') . "\n"
+                . "*Объем бёдер:*" . ($this->hips ?? 'Не указано') . "\n"
+                . "*Обучался ранее:*" . ($this->model_school_education == 1 ? "Да" : "Нет") . "\n"
+                . "*Желает обучаться:*" . ($this->wish_learn == 1 ? "Да" : "Нет") . "\n"
+                . "*Откуда узнал:*" . ($this->about ?? 'Не указано') . "\n"
+                . "*Образование:*" . ($this->education ?? 'Не указано') . "\n"
             ,
             'disable_notification' => 'true'
         ]);

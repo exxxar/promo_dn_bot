@@ -152,14 +152,26 @@ class PromoConversation extends Conversation
 
                 $tmp_user = User::where("phone", $tmp_phone)->first();
 
-                if ($tmp_user == null) {
+                $pattern = "/^\+380\d{3}\d{3}\d{2}\d{2}$/";
+                $string = $tmp_user;
 
-                    $this->user->phone = $tmp_phone;
-                    $this->user->save();
+                if (!preg_match($pattern, $string)) {
+
+                    $this->bot->reply("Номер введен не верно...\n");
+                    $this->askPhone();
+                    return;
+                } else {
+
+                    if ($tmp_user == null) {
+
+                        $this->user->phone = $tmp_phone;
+                        $this->user->save();
 
 
-                } else
-                    $this->bot->reply("Пользователь с таким номером уже и так наш друг:)\n");
+                    } else
+                        $this->bot->reply("Пользователь с таким номером уже и так наш друг:)\n");
+
+                }
 
                 $this->askSex();
             });
@@ -229,18 +241,6 @@ class PromoConversation extends Conversation
     public function saveData()
     {
 
-
-        $pattern = "/^\+380\d{3}\d{3}\d{2}\d{2}$/";
-        $string = $this->user->phone;
-
-        if (!preg_match($pattern, $string)) {
-
-            $this->user->phone = null;
-            $this->user->save();
-
-            $this->mainMenu("Вы указали неправильный номер телефона, попробуйте еще раз пройти опрос!");
-            return;
-        }
 
         $this->mainMenu("Отлично! Вы справились!");
 
