@@ -126,6 +126,13 @@
                         </tr>
 
                         <tr>
+                            <td>Обработчик</td>
+                            <td>
+                                <p>{{$promotion->handler}}</p>
+                            </td>
+                        </tr>
+
+                        <tr>
                             <td></td>
                             <td>
                                 <a class="btn btn-primary" href="{{ route('promotions.edit',$promotion->id) }}">

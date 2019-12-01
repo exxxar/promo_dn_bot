@@ -151,7 +151,7 @@ class PromoConversation extends Conversation
                     $tmp_phone = "+38" . $tmp_phone;
 
                 $tmp_user = User::where("phone", $tmp_phone)->first();
-                $tmp_error = "";
+
                 if ($tmp_user == null) {
 
                     $this->user->phone = $tmp_phone;
@@ -159,7 +159,7 @@ class PromoConversation extends Conversation
 
 
                 } else
-                    $tmp_error .= "Пользователь с таким номером уже и так наш друг:)\n";
+                    $this->bot->reply("Пользователь с таким номером уже и так наш друг:)\n");
 
                 $this->askSex();
             });

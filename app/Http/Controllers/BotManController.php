@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Conversations\FillInfoConversation;
+use App\Conversations\LotusProfileConversation;
 use App\Conversations\PaymentConversation;
 use App\Conversations\PromoConversation;
 use App\Conversations\StartConversation;
@@ -10,6 +11,7 @@ use App\Conversations\StartDataConversation;
 use App\Conversations\StopConversation;
 use BotMan\BotMan\BotMan;
 use Illuminate\Http\Request;
+use Telegram\Bot\Laravel\Facades\Telegram;
 
 
 class BotManController extends Controller
@@ -24,6 +26,12 @@ class BotManController extends Controller
         $botman->listen();
     }
 
+    public function testGetUpdates()
+    {
+        $activity = Telegram::getUpdates();
+        dd($activity);
+    }
+
     /**
      * @return \Illuminate\Contracts\View\Factory|\Illuminate\View\View
      */
@@ -32,10 +40,14 @@ class BotManController extends Controller
         return view('tinker');
     }
 
-
-    public function promoConversation(BotMan $bot,$data)
+    public function lotusprofileConversation(BotMan $bot, $data)
     {
-        $bot->startConversation(new PromoConversation($bot,$data));
+        $bot->startConversation(new LotusProfileConversation($bot, $data));
+    }
+
+    public function promoConversation(BotMan $bot, $data)
+    {
+        $bot->startConversation(new PromoConversation($bot, $data));
     }
 
     public function startConversation(BotMan $bot)
@@ -48,16 +60,18 @@ class BotManController extends Controller
         $bot->startConversation(new StopConversation($bot));
     }
 
-    public function startDataConversation(BotMan $bot,$data)
+    public function startDataConversation(BotMan $bot, $data)
     {
-        $bot->startConversation(new StartDataConversation($bot,$data));
+        $bot->startConversation(new StartDataConversation($bot, $data));
     }
 
-    public function fillInfoConversation($bot){
+    public function fillInfoConversation($bot)
+    {
         $bot->startConversation(new FillInfoConversation($bot));
     }
-    public function paymentConversation(BotMan $bot,$request_id,$company_id)
+
+    public function paymentConversation(BotMan $bot, $request_id, $company_id)
     {
-        $bot->startConversation(new PaymentConversation($bot,$request_id,$company_id));
+        $bot->startConversation(new PaymentConversation($bot, $request_id, $company_id));
     }
 }

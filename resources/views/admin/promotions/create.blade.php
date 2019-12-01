@@ -136,6 +136,16 @@
                         </tr>
 
                         <tr>
+                            <td>Обработчик (не заполнять)</td>
+                            <td>
+                                <input type="text" name="handler"
+                                       value="{{$promotion->handler}}"
+                                       class="form-control" >
+
+                            </td>
+                        </tr>
+
+                        <tr>
                             <td></td>
                             <td>
                                 <button class="btn btn-primary">Добавить</button>

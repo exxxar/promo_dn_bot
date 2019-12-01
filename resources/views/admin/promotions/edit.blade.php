@@ -160,6 +160,16 @@
                         </tr>
 
                         <tr>
+                            <td>Обработчик</td>
+                            <td>
+                                <input type="text" name="handler"
+                                       value="{{$promotion->handler}}"
+                                       class="form-control" >
+
+                            </td>
+                        </tr>
+
+                        <tr>
                             <td></td>
                             <td>
                                 <button class="btn btn-primary">Изменить</button>

@@ -14,6 +14,8 @@
 use Illuminate\Support\Facades\Storage;
 use SimpleSoftwareIO\QrCode\Facades\QrCode;
 
+Route::get('/test_get_updates','BotManController@testGetUpdates');
+
 Route::get('/', function () {
     return view('welcome');
 });

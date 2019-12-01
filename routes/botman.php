@@ -27,6 +27,8 @@ $botman->hears('Продолжить позже', BotManController::class . '@st
 $botman->hears('/start ([0-9a-zA-Z=]+)', BotManController::class . '@startDataConversation');
 
 $botman->hears('/promotion ([0-9]+)', BotManController::class . '@promoConversation');
+$botman->hears('/lotusprofile ([0-9]+)', BotManController::class . '@lotusprofileConversation');
+
 $botman->hears('/fillinfo', BotManController::class . '@fillInfoConversation');
 $botman->hears('/payment ([0-9]{1,10}) ([0-9]{1,10})', BotManController::class . '@paymentConversation');
 
@@ -220,8 +222,12 @@ $botman->hears('/category ([0-9]+)', function ($bot, $category_id) {
 
         $time_2 = date_timestamp_get(now());
 
-        if ($on_promo == null && $time_2 >= $time_0 && $time_2 < $time_1)
-            array_push($tmp, Button::create($promo->title)->value("/promotion " . $promo->id));
+        if ($on_promo == null && $time_2 >= $time_0 && $time_2 < $time_1) {
+            if ($promo->handler == null)
+                array_push($tmp, Button::create($promo->title)->value("/promotion " . $promo->id));
+            else
+                array_push($tmp, Button::create($promo->title)->value($promo->handler . " " . $promo->id));
+        }
     }
 
 
@@ -264,8 +270,12 @@ $botman->hears('/company ([0-9]+)', function ($bot, $company_id) {
 
         $time_2 = date_timestamp_get(now());
 
-        if ($on_promo == null && $time_2 >= $time_0 && $time_2 < $time_1)
-            array_push($tmp, Button::create($promo->title)->value("/promotion " . $promo->id));
+        if ($on_promo == null && $time_2 >= $time_0 && $time_2 < $time_1) {
+            if ($promo->handler == null)
+                array_push($tmp, Button::create($promo->title)->value("/promotion " . $promo->id));
+            else
+                array_push($tmp, Button::create($promo->title)->value($promo->handler . " " . $promo->id));
+        }
     }
 
 
@@ -346,7 +356,7 @@ $botman->hears('/payments ([0-9]+)', function ($bot, $page) {
 
     $user = \App\User::where("telegram_chat_id", $id)->first();
 
-    if ($user->phone==null){
+    if ($user->phone == null) {
         $message = Question::create("У вас не заполнена личная информация и вы не можете просматривать историю оплаты.")
             ->addButtons([
                 Button::create("Заполнить")->value("/fillinfo"),
@@ -413,7 +423,7 @@ $botman->hears('/cashbacks ([0-9]+)', function ($bot, $page) {
 
     $user = \App\User::where("telegram_chat_id", $id)->first();
 
-    if ($user->phone==null){
+    if ($user->phone == null) {
         $message = Question::create("У вас не заполнена личная информация и вы не можете просматривать историю начисления CashBack.")
             ->addButtons([
                 Button::create("Заполнить")->value("/fillinfo"),
@@ -432,7 +442,7 @@ $botman->hears('/cashbacks ([0-9]+)', function ($bot, $page) {
     foreach ($cashbacks as $key => $cash) {
         $check_info = $cash->check_info;
         $cb = round(intval($cash->money_in_check) * env("CAHSBAK_PROCENT") / 100);
-        $tmp .= "Завдение *".$cash->company->title."* _" . $cash->created_at . "_ чек №" . $check_info . " принес вам *" . $cb . "* руб. CashBack \n";
+        $tmp .= "Завдение *" . $cash->company->title . "* _" . $cash->created_at . "_ чек №" . $check_info . " принес вам *" . $cb . "* руб. CashBack \n";
 
     }
 
@@ -488,8 +498,7 @@ $botman->hears('/events ([0-9]+)', function ($bot, $page) {
 
             $bot->reply($message, ["parse_mode" => "Markdown"]);
         }
-    }
-    else
+    } else
         $bot->reply("Мероприятия появтяся в скором времени!", ["parse_mode" => "Markdown"]);
 
     $inline_keyboard = [];
