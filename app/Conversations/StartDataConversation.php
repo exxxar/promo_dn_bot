@@ -132,6 +132,12 @@ class StartDataConversation extends Conversation
                     ->where("promotion_id", "=", $promo->id)
                     ->first();
 
+                if ($on_promo)
+                {
+                    $this->bot->reply('Приз по акции уже был активирован ранее');
+                    return;
+                }
+
                 if ($on_promo == null && $promo->current_activation_count < $promo->activation_count) {
                     $remote_user->promos()->attach($promo->id);
 
@@ -166,8 +172,8 @@ class StartDataConversation extends Conversation
 
                         $this->bot->reply('Приз по акции успешно активирован');
                     }
-                    else
-                        $this->bot->reply('Приз по акции уже был активирован ранее');
+
+
                 }
 
 
