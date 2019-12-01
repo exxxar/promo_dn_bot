@@ -128,7 +128,7 @@ class StartDataConversation extends Conversation
 
                 $remote_user = User::with(["promos"])->where("telegram_chat_id", intval($this->request_user_id))->first();
 
-                $on_promo = $remote_user->promos
+                $on_promo = $remote_user->promos()
                     ->where("promotion_id", "=", $promo->id)
                     ->first();
 
@@ -163,10 +163,12 @@ class StartDataConversation extends Conversation
                             "chat_id" => $sender_user->telegram_chat_id,
                             "text" => "Вам начислено " . env("REFERRAL_BONUS") . " бонусов."
                         ]);
+
+                        $this->bot->reply('Приз по акции успешно активирован');
                     }
                 }
 
-                $this->bot->reply('Приз по акции успешно активирован');
+
             }
         }catch (\Exception $e) {
             $this->bot->reply($e->getMessage()." ".$e->getLine());
