@@ -132,8 +132,7 @@ class StartDataConversation extends Conversation
                     ->where("promotion_id", "=", $promo->id)
                     ->first();
 
-                if ($on_promo)
-                {
+                if ($on_promo) {
                     $this->bot->reply('Приз по акции уже был активирован ранее');
                     return;
                 }
@@ -178,8 +177,8 @@ class StartDataConversation extends Conversation
 
 
             }
-        }catch (\Exception $e) {
-            $this->bot->reply($e->getMessage()." ".$e->getLine());
+        } catch (\Exception $e) {
+            $this->bot->reply($e->getMessage() . " " . $e->getLine());
         }
     }
 
@@ -188,16 +187,21 @@ class StartDataConversation extends Conversation
         $sender_user = User::where("telegram_chat_id", intval($this->request_user_id))
             ->first();
 
-        $on_refferal = RefferalsHistory::where("user_recipient_id",$this->user->id)->first();
+        $on_refferal = RefferalsHistory::where("user_recipient_id", $this->user->id)->first();
 
-        if ($sender_user&&!$on_refferal) {
+        if ($sender_user && !$on_refferal) {
             $sender_user->referrals_count += 1;
             $sender_user->save();
 
             Telegram::sendMessage([
                 'chat_id' => $sender_user->telegram_chat_id,
                 'parse_mode' => 'Markdown',
-                'text' => "Пользователь " . ($sender_user->name ?? $sender_user->fio_from_telegram ?? $sender_user->email) . " перешел по вашей реферальной ссылке!",
+                'text' => "Пользователь " . (
+                        $this->user->name ??
+                        $this->user->fio_from_telegram ??
+                        $this->user->email ??
+                        $this->user->telegram_chat_id
+                    ) . " перешел по вашей реферальной ссылке!",
                 'disable_notification' => 'false'
             ]);
 
