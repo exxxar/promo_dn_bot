@@ -580,13 +580,14 @@ $botman->on('answerInlineQuery', function($payload, $bot) {
     ]);
 });
 
-$botman->on('inline.query', function($payload, $bot) {
+$botman->on('inline_query', function($payload, $bot) {
     $bot->reply("test2");
     Telegram::sendMessage([
         'chat_id' =>"-1001367653360",
         'parse_mode' => 'Markdown',
         'text' => "Пользователь 2 " ,
         'disable_notification' => 'false'
+    ]);
 });
 
 
