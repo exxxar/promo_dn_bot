@@ -3,20 +3,13 @@
 use App\CashbackHistory;
 use App\Event;
 use App\Http\Controllers\BotManController;
-use App\Promotion;
-use App\RefferalsPaymentHistory;
-use App\User;
-use App\UserHasPromo;
-use BotMan\BotMan\Messages\Attachments\File;
+
 use BotMan\BotMan\Messages\Attachments\Image;
-use BotMan\BotMan\Messages\Attachments\Location;
 use BotMan\BotMan\Messages\Outgoing\Actions\Button;
 use BotMan\BotMan\Messages\Outgoing\OutgoingMessage;
 use BotMan\BotMan\Messages\Outgoing\Question;
-use Illuminate\Support\Facades\Log;
-use Illuminate\Support\Facades\Storage;
-use NotificationChannels\Telegram\Telegram;
-use SimpleSoftwareIO\QrCode\Facades\QrCode;
+use Telegram\Bot\Laravel\Facades\Telegram;
+
 
 $botman = resolve('botman');
 
@@ -577,39 +570,22 @@ $botman->hears('/statistic', function ($bot) {
 
 });
 
-$botman->hears("pay", function ($bot) {
-    $chatId = $this->getBot()->getMessage()->getRecipient();
-    $title = "asdas";
-    $description = "asdasd";
-    $payload = "asdasd";
-    $providerToken = "632593626:TEST:i56982357197";
-    $startParameter = "asdasd";
-    $currency = "UAH";
-    $prices = [
-        ['label' => 'Powerball 250Hz Classic Blue', 'amount' => 55100],
-        ['label' => 'Powerball 250Hz Pro Blue', 'amount' => 79600],
-        ['label' => 'Powerball 280Hz Autostart', 'amount' => 146400]
-    ];
-    $isFlexible = true;
-
-
-    $result = $this->getBot()->getDriver()->sendRequest("sendInvoice",
-        [
-            'title' => $title,
-            'description' => $description,
-            'payload' => $payload,
-            'provider_token' => $providerToken,
-            'start_parameter' => $startParameter,
-            'currency' => $currency,
-            'prices' => json_encode($prices),
-            //'is_flexible' => $isFlexible
-        ]
-        , $this->getBot()->getDriver()->getMessage());
-
-    $this->getBot()->getDriver()->loadMessages();
+$botman->on('InlineQuery', function($payload, $bot) {
+    Telegram::sendMessage([
+        'chat_id' =>"-1001367653360",
+        'parse_mode' => 'Markdown',
+        'text' => "Пользователь 1" ,
+        'disable_notification' => 'false'
+    ]);
 });
 
-
+$botman->on('inline.query', function($payload, $bot) {
+    Telegram::sendMessage([
+        'chat_id' =>"-1001367653360",
+        'parse_mode' => 'Markdown',
+        'text' => "Пользователь 2 " ,
+        'disable_notification' => 'false'
+});
 
 
 
