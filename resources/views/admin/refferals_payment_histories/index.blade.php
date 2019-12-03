@@ -39,11 +39,17 @@
                         @foreach($payments as $key => $payment)
                             <tr>
                                 <td>{{$key + 1}}</td>
-                                <td><a href="{{ route('users.show',$payment->user->id) }}">
+                                <td>
+                                    @isset($payment->user)
+                                    <a href="{{ route('users.show',$payment->user->id) }}">
                                         {{$payment->user->phone}}</a>
+                                        @endisset
                                 </td>
-                                <td><a href="{{ route('users.show',$payment->employee->id) }}">
+                                <td>
+                                    @isset($payment->employee)
+                                    <a href="{{ route('users.show',$payment->employee->id) }}">
                                         {{$payment->employee->id}}</a>
+                                    @endisset
                                 </td>
 
                                 <td>{{$payment->value}} баллов.</td>

@@ -127,12 +127,12 @@ class PromoConversation extends Conversation
             $this->user->fio_from_request = $answer->getText();
             $this->user->save();
 
-            $this->askPhone1();
+            $this->askPhone();
         });
 
     }
 
-    public function askPhone1()
+    public function askPhone()
     {
         if ($this->user->phone != null) {
             $this->askSex();

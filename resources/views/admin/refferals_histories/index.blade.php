@@ -38,11 +38,18 @@
                         @foreach($refferals as $key => $refferal)
                             <tr>
                                 <td>{{$key + 1}}</td>
-                                <td><a href="{{ route('users.show',$refferal->sender()->id) }}">
-                                        {{$refferal->sender()->phone}}</a>
+                                <td>
+                                    @isset($refferal->sender)
+                                        <a href="{{ route('users.show',$refferal->sender->id) }}">
+                                            {{$refferal->sender->phone}}</a>
+                                    @endisset
                                 </td>
-                                <td><a href="{{ route('users.show',$refferal->recipient()->id) }}">
-                                        {{$refferal->recipient()->phone}}</a>
+
+                                <td>
+                                    @isset($refferal->recipient)
+                                        <a href="{{ route('users.show',$refferal->recipient->id) }}">
+                                            {{$refferal->recipient->phone}}</a>
+                                    @endisset
                                 </td>
                                 <td>
                                     {{$refferal->activated?"Активирован":"Не активирован"}}
