@@ -153,10 +153,11 @@ class UsersController extends Controller
 
         $items = $request->get('company_ids');
 
-        foreach ($items as $item) {
-            $user->companies()->attach($item);
-            $user->save();
-        }
+        if ($items)
+            foreach ($items as $item) {
+                $user->companies()->attach($item);
+                $user->save();
+            }
 
         $user->save();
 
