@@ -570,7 +570,7 @@ $botman->hears('/statistic', function ($bot) {
 
 });
 
-$botman->on('InlineQuery', function($payload, $bot) {
+$botman->on('answerInlineQuery', function($payload, $bot) {
     $bot->reply("test");
     Telegram::sendMessage([
         'chat_id' =>"-1001367653360",
