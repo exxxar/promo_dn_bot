@@ -99,6 +99,7 @@ class HomeController extends Controller
             $user->cashback_bonus_count += $cashBack;
             $user->save();
 
+
             CashbackHistory::create([
                 'money_in_check' => $money_in_check,
                 'activated' => 1,
@@ -106,6 +107,7 @@ class HomeController extends Controller
                 'company_id' => $company_id,
                 'check_info' => $check_info,
                 'user_phone' => $tmp_phone,
+                'user_id' => $user->id,
 
             ]);
 

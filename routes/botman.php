@@ -15,6 +15,7 @@ use BotMan\BotMan\Messages\Outgoing\OutgoingMessage;
 use BotMan\BotMan\Messages\Outgoing\Question;
 use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Facades\Storage;
+use NotificationChannels\Telegram\Telegram;
 use SimpleSoftwareIO\QrCode\Facades\QrCode;
 
 $botman = resolve('botman');
@@ -573,7 +574,42 @@ $botman->hears('/statistic', function ($bot) {
             Button::create("Списания")->value("/payments 0"),
         ]);
     $bot->reply($message, ["parse_mode" => "Markdown"]);
+
 });
+
+$botman->hears("pay", function ($bot) {
+    $chatId = $this->getBot()->getMessage()->getRecipient();
+    $title = "asdas";
+    $description = "asdasd";
+    $payload = "asdasd";
+    $providerToken = "632593626:TEST:i56982357197";
+    $startParameter = "asdasd";
+    $currency = "UAH";
+    $prices = [
+        ['label' => 'Powerball 250Hz Classic Blue', 'amount' => 55100],
+        ['label' => 'Powerball 250Hz Pro Blue', 'amount' => 79600],
+        ['label' => 'Powerball 280Hz Autostart', 'amount' => 146400]
+    ];
+    $isFlexible = true;
+
+
+    $result = $this->getBot()->getDriver()->sendRequest("sendInvoice",
+        [
+            'title' => $title,
+            'description' => $description,
+            'payload' => $payload,
+            'provider_token' => $providerToken,
+            'start_parameter' => $startParameter,
+            'currency' => $currency,
+            'prices' => json_encode($prices),
+            //'is_flexible' => $isFlexible
+        ]
+        , $this->getBot()->getDriver()->getMessage());
+
+    $this->getBot()->getDriver()->loadMessages();
+});
+
+
 
 
 
