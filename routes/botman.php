@@ -620,7 +620,7 @@ $botman->fallback(function ($bot) {
                         ]
                     ],
                     'thumb_url' => $promo->promo_image_url,
-                    'url' => $promo->promo_image_url,
+                    'url' =>"https://vk.com/lotus",
                     'description' => $promo->description,
                     'hide_url' => true
 
