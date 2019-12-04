@@ -5,6 +5,7 @@ use App\Drivers\TelegramInlineQueryDriver;
 use App\Event;
 use App\Http\Controllers\BotManController;
 
+use App\User;
 use BotMan\BotMan\Facades\BotMan;
 use BotMan\BotMan\Messages\Attachments\Image;
 use BotMan\BotMan\Messages\Outgoing\Actions\Button;
@@ -44,16 +45,27 @@ $botman->hears("\xE2\x9B\x84Мероприятия", function ($bot) {
         ]);
 });
 
-$botman->hears("/refferal_link", function ($bot) {
+$botman->hears("/ref", function ($bot) {
     $telegramUser = $bot->getUser();
     $id = $telegramUser->getId();
+
+    $user = User::where("telegram_chat_id", $id)->first();
+
+    if ($user->phone == null) {
+        $message = Question::create("У вас не заполнена личная информация! Заполняй и делись ссылкой:)")
+            ->addButtons([
+                Button::create("Заполнить")->value("/fillinfo"),
+            ]);
+        $bot->reply($message, ["parse_mode" => "Markdown"]);
+        return;
+    }
 
     $tmp_id = "$id";
     while (strlen($tmp_id) < 10)
         $tmp_id = "0" . $tmp_id;
 
     $code = base64_encode("001" . $tmp_id . "0000000000");
-    $url_link = "<a href='https://t.me/" . env("APP_BOT_NAME") . "?start=$code'>Делись ссылкой и получай больше реферальных баллов!</a>";
+    $url_link = "<a href='https://t.me/" . env("APP_BOT_NAME") . "?start=$code'>Пересылай сообщение друзьям и получай больше баллов!</a>";
 
     $bot->reply($url_link, ["parse_mode" => "HTML"]);
 });
@@ -579,7 +591,7 @@ $botman->hears('/cashback_get', function ($bot) {
 $botman->hears('/statistic', function ($bot) {
     $message = Question::create("Вы можете отслеживать начисления CashBack бонусов и их списание")
         ->addButtons([
-            Button::create("Больше баллов")->value("/refferal_link"),
+            Button::create("Больше баллов")->value("/ref"),
             Button::create("Начисления")->value("/cashbacks 0"),
             Button::create("Списания")->value("/payments 0"),
         ]);

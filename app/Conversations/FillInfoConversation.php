@@ -7,6 +7,7 @@ use BotMan\BotMan\Messages\Conversations\Conversation;
 use BotMan\BotMan\Messages\Incoming\Answer;
 use BotMan\BotMan\Messages\Outgoing\Actions\Button;
 use BotMan\BotMan\Messages\Outgoing\Question;
+use Illuminate\Support\Facades\Log;
 
 class FillInfoConversation extends Conversation
 {
@@ -24,13 +25,11 @@ class FillInfoConversation extends Conversation
         $telegramUser = $this->bot->getUser();
         $id = $telegramUser->getId();
 
-        $this->user = \App\User::where("telegram_chat_id", $id)
+        $this->user = User::where("telegram_chat_id", $id)
             ->first();
-
 
         $this->conversationMenu("Начнем-с...");
         $this->askFirstname();
-
     }
 
 
@@ -47,11 +46,11 @@ class FillInfoConversation extends Conversation
             $this->user->fio_from_request = $answer->getText();
             $this->user->save();
 
-            $this->askPhone1();
+            $this->askPhone();
         });
     }
 
-    public function askPhone1()
+    public function askPhone()
     {
         if ($this->user->phone != null) {
             $this->askSex();
@@ -65,9 +64,6 @@ class FillInfoConversation extends Conversation
 
             $vowels = array("(", ")", "-", " ");
             $tmp_phone = $answer->getText();
-
-            Log::info($tmp_phone);
-
             $tmp_phone = str_replace($vowels, "", $tmp_phone);
 
             if (!strpos($tmp_phone, "+38"))

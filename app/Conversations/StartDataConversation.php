@@ -7,6 +7,9 @@ use App\Promotion;
 use App\RefferalsHistory;
 use App\User;
 use App\UserHasPromo;
+use BotMan\BotMan\Messages\Attachments\Image;
+use BotMan\BotMan\Messages\Attachments\Location;
+use BotMan\BotMan\Messages\Outgoing\OutgoingMessage;
 use Illuminate\Foundation\Inspiring;
 use BotMan\BotMan\Messages\Incoming\Answer;
 use BotMan\BotMan\Messages\Outgoing\Question;
@@ -95,6 +98,8 @@ class StartDataConversation extends Conversation
         if ($canBeRefferal) {
             $this->activateRefferal();
             $this->mainMenu('Добрый день! Приветствуем вас в нашем акционном боте! У нас вы сможете найти самые актуальные акции!');
+
+
         }
 
     }
@@ -211,6 +216,33 @@ class StartDataConversation extends Conversation
                 'activated' => 0,
             ]);
 
+        }
+
+        if (intval($this->promo_id)!=0){
+            $promo = Promotion::find(intval($this->promo_id));
+            $coords = explode(",", $promo->location_coords);
+            $location_attachment = new Location($coords[0], $coords[1], [
+                'custom_payload' => true,
+            ]);
+            $attachment = new Image($promo->promo_image_url);
+
+            $message1 = OutgoingMessage::create("*" . $promo->title . "*\n_" . $promo->description . "_\n*Наш адрес*:" . $promo->location_address . "\n*Координаты акции*:")
+                ->withAttachment($attachment);
+
+            $message2 = OutgoingMessage::create("Акция проходит тут:")
+                ->withAttachment($location_attachment);
+
+            // Reply message object
+            $this->bot->reply($message1, ["parse_mode" => "Markdown"]);
+            $this->bot->reply($message2, ["parse_mode" => "Markdown"]);
+
+            $question = Question::create('Так что на счет участия?')
+                ->addButtons([
+                    Button::create('Поехали')->value("/promotion ".$promo->id),
+                    Button::create('Нет, в другой раз')->value('stop'),
+                ]);
+
+            $this->bot->reply($question);
         }
     }
 }
