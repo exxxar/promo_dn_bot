@@ -344,13 +344,14 @@ $botman->hears('/friends ([0-9]+)', function ($bot, $page) {
             }
         }
 
-        foreach ($refs as $key => $ref) {
-            $userName = $ref->recipient->fio_from_telegram ??
-                $ref->recipient->fio_from_request ??
-                $ref->recipient->telegram_chat_id;
-            $tmp .= ($key + 1) . ". " . $userName . ($ref->activated == 0 ? "\xE2\x9D\x8E" : "\xE2\x9C\x85") . "\n";
+        if ($refs != null)
+            foreach ($refs as $key => $ref) {
+                $userName = $ref->recipient->fio_from_telegram ??
+                    $ref->recipient->fio_from_request ??
+                    $ref->recipient->telegram_chat_id;
+                $tmp .= ($key + 1) . ". " . $userName . ($ref->activated == 0 ? "\xE2\x9D\x8E" : "\xE2\x9C\x85") . "\n";
 
-        }
+            }
 
         $inline_keyboard = [];
         if ($page == 0 && count($refs) == 10)
@@ -384,7 +385,7 @@ $botman->hears('/friends ([0-9]+)', function ($bot, $page) {
                 'reply_markup' => json_encode($keyboard)
             ]);
     } catch (Exception $e) {
-        $bot->reply($e->getMessage()." ".$e->getLine());
+        $bot->reply($e->getMessage() . " " . $e->getLine());
     }
 
 
