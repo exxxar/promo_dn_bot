@@ -260,7 +260,6 @@ class LotusProfileConversation extends Conversation
 
     }
 
-    //вес
 
     public function askHeight()
     {
@@ -282,11 +281,10 @@ class LotusProfileConversation extends Conversation
 
     }
 
-    //объем груди
 
     public function askWeight()
     {
-        if ($this->weight != null || $this->sex == 0) {
+        if ($this->weight != null) {
             $this->askBreastVolume();
             return;
         }
@@ -347,7 +345,7 @@ class LotusProfileConversation extends Conversation
 
     public function askHips()
     {
-        if ($this->hips != null) {
+        if ($this->hips != null || $this->sex == 0) {
             $this->askModelSchool();
             return;
         }
