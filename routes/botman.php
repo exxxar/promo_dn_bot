@@ -326,6 +326,7 @@ $botman->hears('/friends ([0-9]+)', function ($bot, $page) {
         ->orderBy('id', 'DESC')
         ->get();
 
+
     $sender = \App\RefferalsHistory::with(["sender"])
         ->where("user_recipient_id", $user->id)
         ->first();
@@ -333,10 +334,14 @@ $botman->hears('/friends ([0-9]+)', function ($bot, $page) {
     $tmp = "";
 
     if ($sender != null) {
+      $bot->reply("test ".print_r($sender,true));
         if ($sender->sender != null) {
+            $bot->reply("test username ".print_r($sender,true));
             $userSenderName = $sender->sender->fio_from_telegram ??
                 $sender->sender->fio_from_request ??
                 $sender->sender->telegram_chat_id;
+
+            $bot->reply("test username 2 ".print_r($userSenderName,true));
 
             $tmp = "\xF0\x9F\x91\x91 $userSenderName - пригласил вас.\n";
         }
