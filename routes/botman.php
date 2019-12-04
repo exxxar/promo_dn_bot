@@ -313,83 +313,80 @@ $botman->hears('/company ([0-9]+)', function ($bot, $company_id) {
 });
 $botman->hears('/friends ([0-9]+)', function ($bot, $page) {
 
-    try {
-        $telegramUser = $bot->getUser();
 
-        $id = $telegramUser->getId();
+    $telegramUser = $bot->getUser();
 
-        $user = \App\User::where("telegram_chat_id", $id)->first();
+    $id = $telegramUser->getId();
 
-        $refs = \App\RefferalsHistory::with(["recipient"])
-            ->where("user_sender_id", $user->id)
-            ->skip($page * 10)
-            ->take(10)
-            ->orderBy('id', 'DESC')
-            ->get();
+    $user = \App\User::where("telegram_chat_id", $id)->first();
+
+    $refs = \App\RefferalsHistory::with(["recipient"])
+        ->where("user_sender_id", $user->id)
+        ->skip($page * 10)
+        ->take(10)
+        ->orderBy('id', 'DESC')
+        ->get();
 
 
-        $sender = \App\RefferalsHistory::with(["sender"])
-            ->where("user_recipient_id", $user->id)
-            ->first();
+    $sender = \App\RefferalsHistory::with(["sender"])
+        ->where("user_recipient_id", $user->id)
+        ->first();
 
-        $tmp = "";
+    $tmp = "";
 
-        if ($sender != null) {
-            if ($sender->sender != null) {
-                $userSenderName = $sender->sender->fio_from_telegram ??
-                    $sender->sender->fio_from_request ??
-                    $sender->sender->telegram_chat_id ??
-                    'Неизвестный пользователь';
+    if ($sender != null) {
+        if ($sender->sender != null) {
+            $userSenderName = $sender->sender->fio_from_telegram ??
+                $sender->sender->fio_from_request ??
+                $sender->sender->telegram_chat_id ??
+                'Неизвестный пользователь';
 
-                $tmp = "\xF0\x9F\x91\x91 $userSenderName - пригласил вас.\n";
-            }
+            $tmp = "\xF0\x9F\x91\x91 $userSenderName - пригласил вас.\n";
         }
+    }
 
-        if ($refs != null)
-            foreach ($refs as $key => $ref) {
-
+    if ($refs != null)
+        foreach ($refs as $key => $ref) {
+            if ($ref->recipient != null) {
                 $userName = $ref->recipient->fio_from_telegram ??
                     $ref->recipient->fio_from_request ??
                     $ref->recipient->telegram_chat_id ??
                     'Неизвестный пользователь';
                 $tmp .= ($key + 1) . ". " . $userName . ($ref->activated == 0 ? "\xE2\x9D\x8E" : "\xE2\x9C\x85") . "\n";
-
-            }
-
-        $inline_keyboard = [];
-        if ($page == 0 && count($refs) == 10)
-            array_push($inline_keyboard, ['text' => 'Далее', 'callback_data' => '/friends ' . ($page + 1)]);
-
-        if ($page > 0) {
-            if (count($refs) == 0) {
-                array_push($inline_keyboard, ['text' => 'Назад', 'callback_data' => '/friends ' . ($page - 1)]);
-            }
-
-            if (count($refs) == 10) {
-                array_push($inline_keyboard, ['text' => 'Назад', 'callback_data' => '/friends ' . ($page - 1)]);
-                array_push($inline_keyboard, ['text' => 'Далее', 'callback_data' => '/friends ' . ($page + 1)]);
-            }
-
-            if (count($refs) > 0 && count($refs) < 10) {
-                array_push($inline_keyboard, ['text' => 'Назад', 'callback_data' => '/friends ' . ($page - 1)]);
             }
         }
 
+    $inline_keyboard = [];
+    if ($page == 0 && count($refs) == 10)
+        array_push($inline_keyboard, ['text' => 'Далее', 'callback_data' => '/friends ' . ($page + 1)]);
 
-        $keyboard = [
-            'inline_keyboard' => [
-                $inline_keyboard
-            ]
-        ];
+    if ($page > 0) {
+        if (count($refs) == 0) {
+            array_push($inline_keyboard, ['text' => 'Назад', 'callback_data' => '/friends ' . ($page - 1)]);
+        }
 
-        $bot->sendRequest("sendMessage",
-            [
-                "text" => strlen($tmp) > 0 ? $tmp : "У вас нет друзей:(",
-                'reply_markup' => json_encode($keyboard)
-            ]);
-    } catch (Exception $e) {
-        $bot->reply($e->getMessage() . " " . $e->getLine());
+        if (count($refs) == 10) {
+            array_push($inline_keyboard, ['text' => 'Назад', 'callback_data' => '/friends ' . ($page - 1)]);
+            array_push($inline_keyboard, ['text' => 'Далее', 'callback_data' => '/friends ' . ($page + 1)]);
+        }
+
+        if (count($refs) > 0 && count($refs) < 10) {
+            array_push($inline_keyboard, ['text' => 'Назад', 'callback_data' => '/friends ' . ($page - 1)]);
+        }
     }
+
+
+    $keyboard = [
+        'inline_keyboard' => [
+            $inline_keyboard
+        ]
+    ];
+
+    $bot->sendRequest("sendMessage",
+        [
+            "text" => strlen($tmp) > 0 ? $tmp : "У вас нет друзей:(",
+            'reply_markup' => json_encode($keyboard)
+        ]);
 
 
 });
@@ -644,29 +641,38 @@ $botman->fallback(function ($bot) {
             $telegramUser = $bot->getUser();
             $id = $telegramUser->getId();
 
-            $on_promo = $promo->users()->where('telegram_chat_id', "$id")->first();
-
             $time_0 = (date_timestamp_get(new DateTime($promo->start_at)));
             $time_1 = (date_timestamp_get(new DateTime($promo->end_at)));
 
             $time_2 = date_timestamp_get(now());
 
             $button_list = [];
-            if ($on_promo == null && $time_2 >= $time_0 && $time_2 < $time_1) {
+            if ($time_2 >= $time_0 && $time_2 < $time_1) {
+
+                $tmp_id = "$id";
+                while (strlen($tmp_id) < 10)
+                    $tmp_id = "0" . $tmp_id;
+
+                $tmp_promo_id = (string)intval($promo);
+                while (strlen($tmp_promo_id) < 10)
+                    $tmp_promo_id = "0" . $tmp_promo_id;
+
+                $code = base64_encode("001" . $tmp_id . $tmp_promo_id);
+                $url_link = "https://t.me/" . env("APP_BOT_NAME") . "?start=$code";
                 $tm_button = [
                     'type' => 'article',
                     'id' => uniqid(),
                     'title' => $promo->title,
                     'input_message_content' => [
-                        'message_text' => $promo->description . "\n" . $promo->promo_image_url,
+                        'message_text' => $promo->description . "\n<a href='$promo->promo_image_url'>Увеличить</a>",
                     ],
                     'reply_markup' => [
                         'inline_keyboard' => [
                             [
-                                ['text' => "Ссылка на акцию", "url" => "https://t.me/skidki_dn_bot"],
+                                ['text' => "Ссылка на акцию", "url" => "$url_link"],
                             ],
                             [
-                                ['text' => "Отправить другу", "switch_inline_query" => "invite"],
+                                ['text' => "Отправить другу", "switch_inline_query" => ""],
                             ]
                         ]
                     ],
