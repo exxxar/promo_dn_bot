@@ -73,7 +73,7 @@ class StartDataConversation extends Conversation
 
         $telegramUser = $this->bot->getUser();
         $id = $telegramUser->getId();
-        $this->user = User::with(["companies"])
+        $this->user = User::with(["companies","promos"])
             ->where("telegram_chat_id", $id)
             ->first();
 
@@ -233,6 +233,16 @@ class StartDataConversation extends Conversation
     {
 
         $promo = Promotion::find(intval($this->promo_id));
+
+        $on_promo = $this->user->promos()
+            ->where("promotion_id", "=", $promo->id)
+            ->first();
+
+        if ($on_promo) {
+            $this->bot->reply('Акция уже была пройдена ранее!');
+            return;
+        }
+
         $coords = explode(",", $promo->location_coords);
         $location_attachment = new Location($coords[0], $coords[1], [
             'custom_payload' => true,
@@ -249,9 +259,13 @@ class StartDataConversation extends Conversation
         $this->bot->reply($message1, ["parse_mode" => "Markdown"]);
         $this->bot->reply($message2, ["parse_mode" => "Markdown"]);
 
+        $handler = "/promotion ".$promo->id;
+        if ($promo->handler != null)
+            $handler = $promo->handler . " " . $promo->id;
+
         $question = Question::create('Так что на счет участия?')
             ->addButtons([
-                Button::create('Поехали')->value("/promotion " . $promo->id),
+                Button::create('Поехали')->value($handler . $promo->id),
                 Button::create('Нет, в другой раз')->value('stop'),
             ]);
 

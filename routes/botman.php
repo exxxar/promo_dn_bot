@@ -629,15 +629,14 @@ $botman->fallback(function ($bot) {
     $queryObject = json_decode($bot->getDriver()->getEvent());
 
     if ($queryObject) {
-        Log::info("Query " . $queryObject->query);
-        Log::info("id " . $queryObject->id);
+
+        $id = $queryObject->from->id;
 
         $promotions = \App\Promotion::all();
         $button_list = [];
         foreach ($promotions as $promo) {
 
-            $telegramUser = $bot->getUser();
-            $id = $telegramUser->getId();
+
 
             $time_0 = (date_timestamp_get(new DateTime($promo->start_at)));
             $time_1 = (date_timestamp_get(new DateTime($promo->end_at)));
@@ -651,18 +650,20 @@ $botman->fallback(function ($bot) {
                 while (strlen($tmp_id) < 10)
                     $tmp_id = "0" . $tmp_id;
 
-                $tmp_promo_id = (string)intval($promo);
+                $tmp_promo_id = (string)$promo->id;
                 while (strlen($tmp_promo_id) < 10)
                     $tmp_promo_id = "0" . $tmp_promo_id;
 
                 $code = base64_encode("001" . $tmp_id . $tmp_promo_id);
                 $url_link = "https://t.me/" . env("APP_BOT_NAME") . "?start=$code";
+                Log::info($url_link);
+                Log::info("001" . $tmp_id . $tmp_promo_id);
                 $tmp_button = [
                     'type' => 'article',
                     'id' => uniqid(),
                     'title' => $promo->title,
                     'input_message_content' => [
-                        'message_text' => $promo->description . "\n<a href='".$promo->promo_image_url."'>Увеличить</a>",
+                        'message_text' => $promo->description . "\n".$promo->promo_image_url,
                     ],
                     'reply_markup' => [
                         'inline_keyboard' => [
@@ -683,10 +684,7 @@ $botman->fallback(function ($bot) {
 
                 array_push($button_list, $tmp_button);
 
-                /*   if ($promo->handler == null)
-                       array_push($tmp, Button::create($promo->title)->value("/promotion " . $promo->id));
-                   else
-                       array_push($tmp, Button::create($promo->title)->value($promo->handler . " " . $promo->id));*/
+
             }
         }
         return $bot->sendRequest("answerInlineQuery",

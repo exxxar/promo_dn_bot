@@ -47,9 +47,18 @@ class LotusProfileConversation extends Conversation
         $telegramUser = $this->bot->getUser();
         $id = $telegramUser->getId();
 
-        $this->user = \App\User::where("telegram_chat_id", $id)
+        $this->user = \App\User::with(["promos"])->where("telegram_chat_id", $id)
             ->first();
 
+
+        $on_promo = $this->user->promos()
+            ->where("promotion_id", "=", intval($this->data))
+            ->first();
+
+        if ($on_promo) {
+            $this->bot->reply('Акция уже была пройдена ранее!');
+            return;
+        }
 
         try {
             $this->askForStartPromo();

@@ -32,9 +32,17 @@ class PromoConversation extends Conversation
         $telegramUser = $this->bot->getUser();
         $id = $telegramUser->getId();
 
-        $this->user = \App\User::where("telegram_chat_id", $id)
+        $this->user = \App\User::with(["promos"])->where("telegram_chat_id", $id)
             ->first();
 
+        $on_promo = $this->user->promos()
+            ->where("promotion_id", "=", intval($this->data))
+            ->first();
+
+        if ($on_promo) {
+            $this->bot->reply('Акция уже была пройдена ранее!');
+            return;
+        }
 
         $this->askForStartPromo();
 
@@ -117,7 +125,7 @@ class PromoConversation extends Conversation
     public function askFirstname()
     {
         if ($this->user->fio_from_request != "") {
-            $this->askPhone1();
+            $this->askPhone();
             return;
         }
         $question = Question::create('Как тебя зовут?')
