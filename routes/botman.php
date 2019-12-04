@@ -607,7 +607,7 @@ $botman->fallback(function ($bot) {
                     'id' => uniqid(),
                     'title' => $promo->title,
                     'input_message_content' => [
-                        'message_text' => $promo->description,
+                        'message_text' => $promo->description."\n".$promo->promo_image_url,
                     ],
                     'reply_markup' => [
                         'inline_keyboard' => [
