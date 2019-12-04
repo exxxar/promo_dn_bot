@@ -628,77 +628,41 @@ $botman->fallback(function ($bot) {
         Log::info("Query " . $queryObject->query);
         Log::info("id " . $queryObject->id);
 
-        if ($queryObject->query == "s")
-            return $bot->sendRequest("answerInlineQuery",
-                [
-                    'cache_time' => 0,
-                    "inline_query_id" => json_decode($bot->getEvent())->id,
-                    "results" => json_encode([])
-                    //'reply_markup' => json_encode($keyboard)
-                ]);
-
-        if ($queryObject->query == "d")
-           return $bot->sendRequest("answerInlineQuery",
-                [
-                    'cache_time' => 0,
-                    "inline_query_id" => json_decode($bot->getEvent())->id,
-                    "results" => json_encode([
-                            [
-                                'type' => 'article',
-                                'id' => uniqid(),
-                                'title' => 'Tsds',
-                                'input_message_content' => [
-                                    'message_text' => 'My message text 111',
-                                ],
-                                'reply_markup'=>[
-                                    'inline_keyboard'=>[
-                                        [
-                                            ['text'=>"Гоу хоум","url"=>"https://t.me/skidki_dn_bot"],
-                                            ['text'=>"Гоу хоум","switch_inline_query"=>"@skidki_dn_bot"],
-                                        ]
-                                    ]
-                                ]
-                            ],
-
-                            [
-                                'type' => 'article',
-                                'id' => uniqid(),
-                                'title' => 'XX',
-                                'input_message_content' => [
-                                    'message_text' => 'My message text 333'
-                                ]
-                            ]
-                        ]
-                    )
-                    //'reply_markup' => json_encode($keyboard)
-                ]);
-
-        if ($queryObject->query == "v")
-            return $bot->sendRequest("answerInlineQuery",
-                [
-                    'cache_time' => 0,
-                    "inline_query_id" => json_decode($bot->getEvent())->id,
-                    "results" => json_encode([
-                            [
-                                'type' => 'article',
-                                'id' => uniqid(),
-                                'title' => 'test',
-                                'input_message_content' => [
-                                    'message_text' => 'My message text 111'
-                                ]
-                            ],
-
-                        ]
-                    )
-                    //'reply_markup' => json_encode($keyboard)
-                ]);
-
-        $bot->sendRequest("answerInlineQuery",
+        return $bot->sendRequest("answerInlineQuery",
             [
                 'cache_time' => 0,
                 "inline_query_id" => json_decode($bot->getEvent())->id,
                 "results" => json_encode([
+                        [
+                            'type' => 'article',
+                            'id' => uniqid(),
+                            'title' => 'Скидки! Получи 20% на пивное меню.',
+                            'input_message_content' => [
+                                'message_text' => 'My message text 111',
+                            ],
+                            'reply_markup'=>[
+                                'inline_keyboard'=>[
+                                    [
+                                        ['text'=>"Поделиться ссылкой","url"=>"https://t.me/skidki_dn_bot"],
+                                    ],
+                                    [
+                                        ['text'=>"Пригласить пользвоателя","switch_inline_query"=>"invite"],
+                                    ]
+                                ]
+                            ],
+                            'thumb_url'=>"https://sun9-26.userapi.com/c857220/v857220055/58b91/h_QTsrOYTGg.jpg",
+                            'description'=>"Скидки на пиво!",
 
+                        ],
+
+                        [
+                            'type' => 'article',
+                            'id' => uniqid(),
+                            'title' => 'XX',
+                            'input_message_content' => [
+                                'message_text' => 'My message text 333'
+                            ]
+                        ]
                     ]
                 )
                 //'reply_markup' => json_encode($keyboard)
