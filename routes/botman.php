@@ -54,6 +54,8 @@ $botman->hears("/refferal_link", function ($bot) {
 
     $code = base64_encode("001" . $tmp_id . "0000000000");
     $url_link = "https://t.me/" . env("APP_BOT_NAME") . "?start=$code";
+
+    $bot->reply("Делись ссылкой и получай больше реферальных баллов!");
     $bot->reply($url_link);
 });
 
@@ -114,7 +116,7 @@ $botman->hears("\xF0\x9F\x92\xB3Мои баллы", function ($bot) {
 
         $tmp_buttons = [];
 
-        array_push($tmp_buttons, Button::create("Моя статистика")->value("/statistic"));
+        array_push($tmp_buttons, Button::create("Мой бюджет")->value("/statistic"));
 
 
         if ($user->phone != null) {
@@ -578,7 +580,7 @@ $botman->hears('/cashback_get', function ($bot) {
 $botman->hears('/statistic', function ($bot) {
     $message = Question::create("Вы можете отслеживать начисления CashBack бонусов и их списание")
         ->addButtons([
-            Button::create("Получить реферальную ссылку")->value("/refferal_link"),
+            Button::create("Больше баллов")->value("/refferal_link"),
             Button::create("Начисления")->value("/cashbacks 0"),
             Button::create("Списания")->value("/payments 0"),
         ]);
