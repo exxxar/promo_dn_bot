@@ -53,10 +53,9 @@ $botman->hears("/refferal_link", function ($bot) {
         $tmp_id = "0" . $tmp_id;
 
     $code = base64_encode("001" . $tmp_id . "0000000000");
-    $url_link = "https://t.me/" . env("APP_BOT_NAME") . "?start=$code";
+    $url_link = "<a href='https://t.me/" . env("APP_BOT_NAME") . "?start=$code'>Делись ссылкой и получай больше реферальных баллов!</a>";
 
-    $bot->reply("Делись ссылкой и получай больше реферальных баллов!");
-    $bot->reply($url_link);
+    $bot->reply($url_link, ["parse_mode" => "HTML"]);
 });
 
 $botman->hears("\xF0\x9F\x93\xB2Мои друзья", function ($bot) {
