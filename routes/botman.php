@@ -653,7 +653,8 @@ $botman->fallback(function ($bot) {
                                 'reply_markup'=>[
                                     'inline_keyboard'=>[
                                         [
-                                            ['text'=>"Гоу хоум","url"=>"https://t.me?skidki_dn_bot"]
+                                            ['text'=>"Гоу хоум","url"=>"https://t.me/skidki_dn_bot"],
+                                            ['text'=>"Гоу хоум","switch_inline_query"=>"@skidki_dn_bot"],
                                         ]
                                     ]
                                 ]
