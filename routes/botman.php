@@ -633,9 +633,7 @@ $botman->fallback(function ($bot) {
         Log::info("id " . $queryObject->id);
 
         $promotions = \App\Promotion::all();
-
-        $tmp = [];
-
+        $button_list = [];
         foreach ($promotions as $promo) {
 
             $telegramUser = $bot->getUser();
@@ -646,7 +644,7 @@ $botman->fallback(function ($bot) {
 
             $time_2 = date_timestamp_get(now());
 
-            $button_list = [];
+
             if ($time_2 >= $time_0 && $time_2 < $time_1) {
 
                 $tmp_id = "$id";
@@ -659,12 +657,12 @@ $botman->fallback(function ($bot) {
 
                 $code = base64_encode("001" . $tmp_id . $tmp_promo_id);
                 $url_link = "https://t.me/" . env("APP_BOT_NAME") . "?start=$code";
-                $tm_button = [
+                $tmp_button = [
                     'type' => 'article',
                     'id' => uniqid(),
                     'title' => $promo->title,
                     'input_message_content' => [
-                        'message_text' => $promo->description . "\n<a href='$promo->promo_image_url'>Увеличить</a>",
+                        'message_text' => $promo->description . "\n<a href='".$promo->promo_image_url."'>Увеличить</a>",
                     ],
                     'reply_markup' => [
                         'inline_keyboard' => [
@@ -683,7 +681,7 @@ $botman->fallback(function ($bot) {
 
                 ];
 
-                array_push($button_list, $tm_button);
+                array_push($button_list, $tmp_button);
 
                 /*   if ($promo->handler == null)
                        array_push($tmp, Button::create($promo->title)->value("/promotion " . $promo->id));
