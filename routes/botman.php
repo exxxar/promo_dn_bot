@@ -43,6 +43,10 @@ $botman->hears("\xE2\x9B\x84Мероприятия", function ($bot) {
         ["text" => 'Мы готовим для вас самые крутые мероприятия в городе! Посмотри!', 'reply_markup' => json_encode($keyboard)
         ]);
 });
+$botman->hears("\xE2\x9A\xA1Тест ссылки на себя", function ($bot) {
+    $bot->reply("https://t.me/skidki_dn_bot?start=test");
+    $bot->say("https://t.me/skidki_dn_bot?start=test");
+});
 $botman->hears("\xF0\x9F\x93\xB2Мои друзья", function ($bot) {
     $telegramUser = $bot->getUser();
 
@@ -607,7 +611,7 @@ $botman->fallback(function ($bot) {
                     'id' => uniqid(),
                     'title' => $promo->title,
                     'input_message_content' => [
-                        'message_text' => $promo->description."\n".$promo->promo_image_url,
+                        'message_text' => $promo->description . "\n" . $promo->promo_image_url,
                     ],
                     'reply_markup' => [
                         'inline_keyboard' => [
@@ -620,7 +624,7 @@ $botman->fallback(function ($bot) {
                         ]
                     ],
                     'thumb_url' => $promo->promo_image_url,
-                    'url' =>"https://vk.com/lotus",
+                    'url' => "https://vk.com/lotus",
                     'description' => $promo->description,
                     'hide_url' => true
 

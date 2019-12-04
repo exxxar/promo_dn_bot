@@ -19,7 +19,8 @@ trait CustomConversation
         ["\xE2\x9B\x84Мероприятия"],
         ["\xF0\x9F\x93\xB2Мои друзья", "\xF0\x9F\x92\xB3Мои баллы"],
         ["\xF0\x9F\x94\xA5По категориям", "\xF0\x9F\x94\xA5По компаниям"],
-        ["\xE2\x9A\xA1Все акции"]
+        ["\xE2\x9A\xA1Все акции"],
+        ["\xE2\x9A\xA1Тест ссылки на себя"],
     ];
 
     protected $keyboard_admin = [
