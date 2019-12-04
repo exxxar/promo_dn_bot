@@ -85,13 +85,16 @@ class StartDataConversation extends Conversation
         if ($this->user->is_admin == 1) {
             $this->mainMenuWithAdmin('Добрый день,ув. Администратор!');
             //$this->say("Вы администратор, входыне параметры:" . $this->code . " " . $this->request_user_id . " " . $this->promo_id);
-            $canBeRefferal = false;
 
-            if ($this->code == "002")
+            if ($this->code == "002") {
                 $this->activatePayment();
+                $canBeRefferal = false;
+            }
 
-            if ($this->code == "003")
+            if ($this->code == "003") {
                 $this->activatePromo();
+                $canBeRefferal = false;
+            }
 
         }
 
@@ -99,8 +102,11 @@ class StartDataConversation extends Conversation
             $this->activateRefferal();
             $this->mainMenu('Добрый день! Приветствуем вас в нашем акционном боте! У нас вы сможете найти самые актуальные акции!');
 
-
+            if (intval($this->promo_id) != 0) {
+                $this->openPromo();
+            }
         }
+
 
     }
 
@@ -218,32 +224,37 @@ class StartDataConversation extends Conversation
 
         }
 
-        if (intval($this->promo_id)!=0){
-            $promo = Promotion::find(intval($this->promo_id));
-            $coords = explode(",", $promo->location_coords);
-            $location_attachment = new Location($coords[0], $coords[1], [
-                'custom_payload' => true,
+
+    }
+
+    protected function openPromo()
+    {
+
+        $promo = Promotion::find(intval($this->promo_id));
+        $coords = explode(",", $promo->location_coords);
+        $location_attachment = new Location($coords[0], $coords[1], [
+            'custom_payload' => true,
+        ]);
+        $attachment = new Image($promo->promo_image_url);
+
+        $message1 = OutgoingMessage::create("*" . $promo->title . "*\n_" . $promo->description . "_\n*Наш адрес*:" . $promo->location_address . "\n*Координаты акции*:")
+            ->withAttachment($attachment);
+
+        $message2 = OutgoingMessage::create("Акция проходит тут:")
+            ->withAttachment($location_attachment);
+
+        // Reply message object
+        $this->bot->reply($message1, ["parse_mode" => "Markdown"]);
+        $this->bot->reply($message2, ["parse_mode" => "Markdown"]);
+
+        $question = Question::create('Так что на счет участия?')
+            ->addButtons([
+                Button::create('Поехали')->value("/promotion " . $promo->id),
+                Button::create('Нет, в другой раз')->value('stop'),
             ]);
-            $attachment = new Image($promo->promo_image_url);
 
-            $message1 = OutgoingMessage::create("*" . $promo->title . "*\n_" . $promo->description . "_\n*Наш адрес*:" . $promo->location_address . "\n*Координаты акции*:")
-                ->withAttachment($attachment);
+        $this->bot->reply($question);
 
-            $message2 = OutgoingMessage::create("Акция проходит тут:")
-                ->withAttachment($location_attachment);
-
-            // Reply message object
-            $this->bot->reply($message1, ["parse_mode" => "Markdown"]);
-            $this->bot->reply($message2, ["parse_mode" => "Markdown"]);
-
-            $question = Question::create('Так что на счет участия?')
-                ->addButtons([
-                    Button::create('Поехали')->value("/promotion ".$promo->id),
-                    Button::create('Нет, в другой раз')->value('stop'),
-                ]);
-
-            $this->bot->reply($question);
-        }
     }
 }
 
