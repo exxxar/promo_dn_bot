@@ -54,7 +54,7 @@ $botman->hears("/refferal_link", function ($bot) {
 
     $code = base64_encode("001" . $tmp_id . "0000000000");
     $url_link = "https://t.me/" . env("APP_BOT_NAME") . "?start=$code";
-    $bot->reply($url_link, ["parse_mode" => "Markdown"]);
+    $bot->reply($url_link);
 });
 
 $botman->hears("\xF0\x9F\x93\xB2Мои друзья", function ($bot) {
