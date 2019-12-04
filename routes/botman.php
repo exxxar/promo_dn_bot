@@ -638,7 +638,7 @@ $botman->fallback(function ($bot) {
                             'id' => uniqid(),
                             'title' => 'Скидки! Получи 20% на пивное меню.',
                             'input_message_content' => [
-                                'message_text' => "My message text 111 https://sun9-26.userapi.com/c857220/v857220055/58b91/h_QTsrOYTGg.jpg",
+                                'message_text' => "My message text 111 ",
                             ],
                             'reply_markup'=>[
                                 'inline_keyboard'=>[
@@ -651,7 +651,9 @@ $botman->fallback(function ($bot) {
                                 ]
                             ],
                             'thumb_url'=>"https://sun9-26.userapi.com/c857220/v857220055/58b91/h_QTsrOYTGg.jpg",
+                            'url'=>'https://sun9-26.userapi.com/c857220/v857220055/58b91/h_QTsrOYTGg.jpg',
                             'description'=>"Скидки на пиво!",
+                            'hide_url'=>true
 
                         ],
 
@@ -660,8 +662,9 @@ $botman->fallback(function ($bot) {
                             'id' => uniqid(),
                             'title' => 'XX',
                             'input_message_content' => [
-                                'message_text' => 'My message text 333'
-                            ]
+                                'message_text' => 'My message text 333 https://sun9-26.userapi.com/c857220/v857220055/58b91/h_QTsrOYTGg.jpg'
+                            ],
+                            'hide_url'=>true
                         ],
                         [
                             'type' => 'article',
