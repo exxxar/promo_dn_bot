@@ -1,13 +1,16 @@
 <?php
 
 use App\CashbackHistory;
+use App\Drivers\TelegramInlineQueryDriver;
 use App\Event;
 use App\Http\Controllers\BotManController;
 
+use BotMan\BotMan\Facades\BotMan;
 use BotMan\BotMan\Messages\Attachments\Image;
 use BotMan\BotMan\Messages\Outgoing\Actions\Button;
 use BotMan\BotMan\Messages\Outgoing\OutgoingMessage;
 use BotMan\BotMan\Messages\Outgoing\Question;
+use Illuminate\Support\Facades\Log;
 use Telegram\Bot\Laravel\Facades\Telegram;
 
 
@@ -570,26 +573,119 @@ $botman->hears('/statistic', function ($bot) {
 
 });
 
-$botman->on('answerInlineQuery', function($payload, $bot) {
-    $bot->reply("test");
-    Telegram::sendMessage([
-        'chat_id' =>"-1001367653360",
-        'parse_mode' => 'Markdown',
-        'text' => "Пользователь 1" ,
-        'disable_notification' => 'false'
-    ]);
+
+/*$botman->hears('start ([0-9]+)', function (\BotMan\BotMan\BotMan $bot, $movie) {
+
+    Log::info("MI TYT");
+    $bot->loadDriver(TelegramInlineQueryDriver::DRIVER_NAME);
+    Log::info("TestttttRRR " . print_r(json_decode($bot->getDriver()->getEvent())->id, true));
+    // Log::info("TestttttRRR " . print_r(json_decode($bot->getEvent()), true));
+    /*
+        $bot->sendRequest("answerInlineQuery",
+            [
+                "inline_query_id" => json_decode($bot->getEvent())->id,
+                "results" => json_encode([
+                        [
+                            'type' => 'article',
+                            'id' => uniqid(),
+                            'title' => 'My result title 1',
+                            'input_message_content' => [
+                                'message_text' => 'My message text 111'
+                            ]
+                        ],
+                        [
+                            'type' => 'article',
+                            'id' => uniqid(),
+                            'title' => 'My result title 2',
+                            'input_message_content' => [
+                                'message_text' => 'My message text 222'
+                            ]
+                        ],
+                        [
+                            'type' => 'article',
+                            'id' => uniqid(),
+                            'title' => 'My result title 3',
+                            'input_message_content' => [
+                                'message_text' => 'My message text 333'
+                            ]
+                        ]
+                    ]
+                )
+                //'reply_markup' => json_encode($keyboard)
+            ]);
+
+});*/
+
+$botman->fallback(function ($bot) {
+    Log::info("fallback");
+
+    $bot->loadDriver(TelegramInlineQueryDriver::DRIVER_NAME);
+
+
+    $queryObject = json_decode($bot->getDriver()->getEvent());
+
+    if ($queryObject) {
+        Log::info("Query " . $queryObject->query);
+        Log::info("id " . $queryObject->id);
+
+        if ($queryObject->query == "d")
+           return $bot->sendRequest("answerInlineQuery",
+                [
+                    'cache_time' => 0,
+                    "inline_query_id" => json_decode($bot->getEvent())->id,
+                    "results" => json_encode([
+                            [
+                                'type' => 'article',
+                                'id' => uniqid(),
+                                'title' => 'Tsds',
+                                'input_message_content' => [
+                                    'message_text' => 'My message text 111'
+                                ]
+                            ],
+
+                            [
+                                'type' => 'article',
+                                'id' => uniqid(),
+                                'title' => 'XX',
+                                'input_message_content' => [
+                                    'message_text' => 'My message text 333'
+                                ]
+                            ]
+                        ]
+                    )
+                    //'reply_markup' => json_encode($keyboard)
+                ]);
+
+        if ($queryObject->query == "v")
+            return $bot->sendRequest("answerInlineQuery",
+                [
+                    'cache_time' => 0,
+                    "inline_query_id" => json_decode($bot->getEvent())->id,
+                    "results" => json_encode([
+                            [
+                                'type' => 'article',
+                                'id' => uniqid(),
+                                'title' => 'test',
+                                'input_message_content' => [
+                                    'message_text' => 'My message text 111'
+                                ]
+                            ],
+
+                        ]
+                    )
+                    //'reply_markup' => json_encode($keyboard)
+                ]);
+
+        $bot->sendRequest("answerInlineQuery",
+            [
+                'cache_time' => 0,
+                "inline_query_id" => json_decode($bot->getEvent())->id,
+                "results" => json_encode([
+
+                    ]
+                )
+                //'reply_markup' => json_encode($keyboard)
+            ]);
+    }
 });
-
-$botman->on('inline_query', function($payload, $bot) {
-    $bot->reply("test2");
-    Telegram::sendMessage([
-        'chat_id' =>"-1001367653360",
-        'parse_mode' => 'Markdown',
-        'text' => "Пользователь 2 " ,
-        'disable_notification' => 'false'
-    ]);
-});
-
-
-
 

@@ -6,6 +6,8 @@ use Illuminate\Database\Migrations\Migration;
 
 class CreateUserInfosTable extends Migration
 {
+
+
     /**
      * Run the migrations.
      *

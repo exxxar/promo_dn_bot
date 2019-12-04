@@ -15,16 +15,24 @@ use BotMan\BotMan\Interfaces\WebAccess;
 use BotMan\BotMan\Messages\Incoming\Answer;
 use BotMan\BotMan\Messages\Incoming\IncomingMessage;
 use BotMan\BotMan\Messages\Outgoing\OutgoingMessage;
+use BotMan\BotMan\Messages\Outgoing\Question;
 use BotMan\BotMan\Users\User;
+use Illuminate\Support\Facades\Log;
 use Symfony\Component\HttpFoundation\ParameterBag;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 
 
 use Illuminate\Support\Collection;
+use Telegram\Bot\Laravel\Facades\Telegram;
 
 class TelegramInlineQueryDriver extends HttpDriver
 {
+
+    protected $payload;
+    /** @var Collection */
+    protected $event;
+    const DRIVER_NAME = 'TelegramInlineQuery';
 
     /**
      * Determine if the request is for this driver.
@@ -33,11 +41,13 @@ class TelegramInlineQueryDriver extends HttpDriver
      */
     public function matchesRequest()
     {
-        // TODO: Implement matchesRequest() method.
-
-        return !is_null($this->payload->get('inline_query')) && !is_null($this->payload->get('update_id'));
+        return !is_null($this->payload->get('inline_query'));
     }
 
+    public function getName()
+    {
+        return self::DRIVER_NAME;
+    }
     /**
      * Retrieve the chat message(s).
      *
@@ -45,9 +55,7 @@ class TelegramInlineQueryDriver extends HttpDriver
      */
     public function getMessages()
     {
-        // TODO: Implement getMessages() method.
-
-        return [new IncomingMessage($this->event->get('query'), $this->event->get('from')['id'], $this->event->get('id'), $this->event)];
+        return [new IncomingMessage( $this->event->get('query'), $this->event->get('from')['id'], $this->event->get('id'), $this->event)];
     }
 
     /**
@@ -55,8 +63,7 @@ class TelegramInlineQueryDriver extends HttpDriver
      */
     public function isConfigured()
     {
-        // TODO: Implement isConfigured() method.
-        return !is_null($this->config->get('telegram_token'));
+        return !is_null(env("TELEGRAM_TOKEN"));
     }
 
     /**
@@ -76,7 +83,6 @@ class TelegramInlineQueryDriver extends HttpDriver
      */
     public function getConversationAnswer(IncomingMessage $message)
     {
-        // TODO: Implement getConversationAnswer() method.
         return Answer::create($message->getMessage());
     }
 
@@ -88,9 +94,7 @@ class TelegramInlineQueryDriver extends HttpDriver
      */
     public function buildServicePayload($message, $matchingMessage, $additionalParameters = [])
     {
-        // TODO: Implement buildServicePayload() method.
-        //
-        //
+
         if (! $message instanceof WebAccess && ! $message instanceof OutgoingMessage) {
             $this->errorMessage = 'Unsupported message type.';
             $this->replyStatusCode = 500;
@@ -108,8 +112,6 @@ class TelegramInlineQueryDriver extends HttpDriver
      */
     public function sendPayload($payload)
     {
-        // TODO: Implement sendPayload() method.
-
         $response = $this->http->post($this->endpoint . 'send', [], $payload, [
             "Authorization: Bearer {$this->config->get('token')}",
             'Content-Type: application/json',
@@ -121,16 +123,18 @@ class TelegramInlineQueryDriver extends HttpDriver
 
     }
 
+    public function getEvent(){
+        return $this->event;
+    }
     /**
      * @param Request $request
      * @return void
      */
     public function buildPayload(Request $request)
     {
-        // TODO: Implement buildPayload() method.
         $this->payload = new ParameterBag((array)json_decode($request->getContent(), true));
-
         $this->event = Collection::make($this->payload->get('inline_query'));
+
     }
 
     /**
@@ -143,6 +147,44 @@ class TelegramInlineQueryDriver extends HttpDriver
      */
     public function sendRequest($endpoint, array $parameters, IncomingMessage $matchingMessage)
     {
-        // TODO: Implement sendRequest() method.
+       $this->http->post('https://api.telegram.org/bot' . env("TELEGRAM_TOKEN") . '/'.$endpoint, [], $parameters);
+    }
+
+    public function reply($messages, $matchingMessage, $additionalParameters = [])
+    {
+        $parameters = array_merge([
+            'cache_time' => 0,
+            'inline_query_id' =>json_decode($this->event)->id,
+        ], $additionalParameters);
+        $results = [];
+        if (!is_array($messages)) {
+            $messages = [$messages];
+        }
+        foreach ($messages as $message) {
+            $result = [
+                'type' => 'article',
+                'id' => uniqid()
+            ];
+            /*
+             * Questions are not possible in combination with
+             * Telegram inline queries.
+             */
+            if ($message instanceof Question) {
+                return false;
+            } elseif ($message instanceof IncomingMessage) {
+                $result['title'] = $message->getMessage();
+                $result['input_message_content'] = [
+                    'message_text' => $message->getMessage()
+                ];
+                if (!is_null($message->getImage())) {
+                    $result['thumb_url'] = $message->getImage();
+                }
+            } elseif (is_array($message)) {
+                $result = $message;
+            }
+            $results[] = $result;
+        }
+        $parameters['results'] = json_encode($results);
+        return $this->http->post('https://api.telegram.org/bot' . env("TELEGRAM_TOKEN") . '/answerInlineQuery', [], $parameters);
     }
 }

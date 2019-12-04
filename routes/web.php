@@ -16,9 +16,10 @@ use SimpleSoftwareIO\QrCode\Facades\QrCode;
 
 Route::get('/test_get_updates','BotManController@testGetUpdates');
 
-Route::get('/', function () {
+Route::get('/', function (Request $request) {
     return view('welcome');
 });
+
 
 Route::match(['get', 'post'], '/botman', 'BotManController@handle');
 Route::get('/botman/tinker', 'BotManController@tinker');
