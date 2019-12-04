@@ -43,10 +43,20 @@ $botman->hears("\xE2\x9B\x84Мероприятия", function ($bot) {
         ["text" => 'Мы готовим для вас самые крутые мероприятия в городе! Посмотри!', 'reply_markup' => json_encode($keyboard)
         ]);
 });
-$botman->hears("\xE2\x9A\xA1Тест ссылки на себя", function ($bot) {
-    $bot->reply("https://t.me/skidki_dn_bot?start=test");
-    $bot->say("https://t.me/skidki_dn_bot?start=test");
+
+$botman->hears("/refferal_link", function ($bot) {
+    $telegramUser = $bot->getUser();
+    $id = $telegramUser->getId();
+
+    $tmp_id = "$id";
+    while (strlen($tmp_id) < 10)
+        $tmp_id = "0" . $tmp_id;
+
+    $code = base64_encode("001" . $tmp_id . "0000000000");
+    $url_link = "https://t.me/" . env("APP_BOT_NAME") . "?start=$code";
+    $bot->reply($url_link, ["parse_mode" => "Markdown"]);
 });
+
 $botman->hears("\xF0\x9F\x93\xB2Мои друзья", function ($bot) {
     $telegramUser = $bot->getUser();
 
@@ -568,6 +578,7 @@ $botman->hears('/cashback_get', function ($bot) {
 $botman->hears('/statistic', function ($bot) {
     $message = Question::create("Вы можете отслеживать начисления CashBack бонусов и их списание")
         ->addButtons([
+            Button::create("Получить реферальную ссылку")->value("/refferal_link"),
             Button::create("Начисления")->value("/cashbacks 0"),
             Button::create("Списания")->value("/payments 0"),
         ]);
