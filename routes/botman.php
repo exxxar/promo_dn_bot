@@ -313,79 +313,79 @@ $botman->hears('/company ([0-9]+)', function ($bot, $company_id) {
 });
 $botman->hears('/friends ([0-9]+)', function ($bot, $page) {
 
-    $telegramUser = $bot->getUser();
+    try {
+        $telegramUser = $bot->getUser();
 
-    $id = $telegramUser->getId();
+        $id = $telegramUser->getId();
 
-    $user = \App\User::where("telegram_chat_id", $id)->first();
+        $user = \App\User::where("telegram_chat_id", $id)->first();
 
-    $refs = \App\RefferalsHistory::with(["recipient"])
-        ->where("user_sender_id", $user->id)
-        ->skip($page * 10)
-        ->take(10)
-        ->orderBy('id', 'DESC')
-        ->get();
+        $refs = \App\RefferalsHistory::with(["recipient"])
+            ->where("user_sender_id", $user->id)
+            ->skip($page * 10)
+            ->take(10)
+            ->orderBy('id', 'DESC')
+            ->get();
 
 
-    $sender = \App\RefferalsHistory::with(["sender"])
-        ->where("user_recipient_id", $user->id)
-        ->first();
+        $sender = \App\RefferalsHistory::with(["sender"])
+            ->where("user_recipient_id", $user->id)
+            ->first();
 
-    $tmp = "";
+        $tmp = "";
 
-    if ($sender != null) {
-      $bot->reply("test ".print_r($sender,true));
-        if ($sender->sender != null) {
-            $bot->reply("test username ".print_r($sender,true));
-            $userSenderName = $sender->sender->fio_from_telegram ??
-                $sender->sender->fio_from_request ??
-                $sender->sender->telegram_chat_id;
+        if ($sender != null) {
+            if ($sender->sender != null) {
+                $userSenderName = $sender->sender->fio_from_telegram ??
+                    $sender->sender->fio_from_request ??
+                    $sender->sender->telegram_chat_id;
 
-            $bot->reply("test username 2 ".print_r($userSenderName,true));
-
-            $tmp = "\xF0\x9F\x91\x91 $userSenderName - пригласил вас.\n";
-        }
-    }
-
-    foreach ($refs as $key => $ref) {
-        $userName = $ref->recipient->fio_from_telegram ??
-            $ref->recipient->fio_from_request ??
-            $ref->recipient->telegram_chat_id;
-        $tmp .= ($key + 1) . ". " . $userName . ($ref->activated == 0 ? "\xE2\x9D\x8E" : "\xE2\x9C\x85") . "\n";
-
-    }
-
-    $inline_keyboard = [];
-    if ($page == 0 && count($refs) == 10)
-        array_push($inline_keyboard, ['text' => 'Далее', 'callback_data' => '/friends ' . ($page + 1)]);
-
-    if ($page > 0) {
-        if (count($refs) == 0) {
-            array_push($inline_keyboard, ['text' => 'Назад', 'callback_data' => '/friends ' . ($page - 1)]);
+                $tmp = "\xF0\x9F\x91\x91 $userSenderName - пригласил вас.\n";
+            }
         }
 
-        if (count($refs) == 10) {
-            array_push($inline_keyboard, ['text' => 'Назад', 'callback_data' => '/friends ' . ($page - 1)]);
+        foreach ($refs as $key => $ref) {
+            $userName = $ref->recipient->fio_from_telegram ??
+                $ref->recipient->fio_from_request ??
+                $ref->recipient->telegram_chat_id;
+            $tmp .= ($key + 1) . ". " . $userName . ($ref->activated == 0 ? "\xE2\x9D\x8E" : "\xE2\x9C\x85") . "\n";
+
+        }
+
+        $inline_keyboard = [];
+        if ($page == 0 && count($refs) == 10)
             array_push($inline_keyboard, ['text' => 'Далее', 'callback_data' => '/friends ' . ($page + 1)]);
+
+        if ($page > 0) {
+            if (count($refs) == 0) {
+                array_push($inline_keyboard, ['text' => 'Назад', 'callback_data' => '/friends ' . ($page - 1)]);
+            }
+
+            if (count($refs) == 10) {
+                array_push($inline_keyboard, ['text' => 'Назад', 'callback_data' => '/friends ' . ($page - 1)]);
+                array_push($inline_keyboard, ['text' => 'Далее', 'callback_data' => '/friends ' . ($page + 1)]);
+            }
+
+            if (count($refs) > 0 && count($refs) < 10) {
+                array_push($inline_keyboard, ['text' => 'Назад', 'callback_data' => '/friends ' . ($page - 1)]);
+            }
         }
 
-        if (count($refs) > 0 && count($refs) < 10) {
-            array_push($inline_keyboard, ['text' => 'Назад', 'callback_data' => '/friends ' . ($page - 1)]);
-        }
+
+        $keyboard = [
+            'inline_keyboard' => [
+                $inline_keyboard
+            ]
+        ];
+
+        $bot->sendRequest("sendMessage",
+            [
+                "text" => strlen($tmp) > 0 ? $tmp : "У вас нет друзей:(",
+                'reply_markup' => json_encode($keyboard)
+            ]);
+    } catch (Exception $e) {
+        $bot->reply($e->getMessage()." ".$e->getLine());
     }
-
-
-    $keyboard = [
-        'inline_keyboard' => [
-            $inline_keyboard
-        ]
-    ];
-
-    $bot->sendRequest("sendMessage",
-        [
-            "text" => strlen($tmp) > 0 ? $tmp : "У вас нет друзей:(",
-            'reply_markup' => json_encode($keyboard)
-        ]);
 
 
 });
