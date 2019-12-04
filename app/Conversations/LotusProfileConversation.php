@@ -286,7 +286,7 @@ class LotusProfileConversation extends Conversation
 
     public function askWeight()
     {
-        if ($this->weight != null|| $this->sex == 0) {
+        if ($this->weight != null || $this->sex == 0) {
             $this->askBreastVolume();
             return;
         }
@@ -479,76 +479,73 @@ class LotusProfileConversation extends Conversation
     public function saveData()
     {
 
-        try {
 
-            $this->mainMenu("Отлично! Вы справились!");
+        $this->mainMenu("Отлично! Вы справились!");
 
-            Telegram::sendMessage([
-                'chat_id' => "-1001176319167",
-                'parse_mode' => 'Markdown',
-                'text' => "Новая анкета:\n"
-                    . "*Ф.И.О.*:" . ($this->model_name ?? 'Не указано') . "\n"
-                    . "*Возраст:*" . ($this->user->age ?? 'Не указано') . "\n"
-                    . "*Телефон:*" . ($this->user->phone ?? 'Не указано') . "\n"
-                    . "*Пол:*" . ($this->sex == 0 ? "Парень" : "Девушка") . "\n"
-                    . "*Рост:*" . ($this->height ?? 'Не указано') . "\n"
-                    . "*Вес:*" . ($this->weight ?? 'Не указано') . "\n"
-                    . "*Объем груди:*" . ($this->breast_volume ?? 'Не указано') . "\n"
-                    . "*Объем талии:*" . ($this->waist ?? 'Не указано') . "\n"
-                    . "*Объем бёдер:*" . ($this->hips ?? 'Не указано') . "\n"
-                    . "*Обучался ранее:*" . ($this->model_school_education == 1 ? "Да" : "Нет") . "\n"
-                    . "*Желает обучаться:*" . ($this->wish_learn == 1 ? "Да" : "Нет") . "\n"
-                    . "*Откуда узнал:*" . ($this->about ?? 'Не указано') . "\n"
-                    . "*Образование:*" . ($this->education ?? 'Не указано') . "\n"
-                ,
-                'disable_notification' => 'true'
-            ]);
+        Telegram::sendMessage([
+            'chat_id' => "-1001176319167",
+            'parse_mode' => 'Markdown',
+            'text' => "Новая анкета:\n"
+                . "*Ф.И.О.*:" . ($this->model_name ?? 'Не указано') . "\n"
+                . "*Возраст:*" . ($this->user->age ?? 'Не указано') . "\n"
+                . "*Телефон:*" . ($this->user->phone ?? 'Не указано') . "\n"
+                . "*Пол:*" . ($this->sex == 0 ? "Парень" : "Девушка") . "\n"
+                . "*Рост:*" . ($this->height ?? 'Не указано') . "\n"
+                . "*Вес:*" . ($this->weight ?? 'Не указано') . "\n"
+                . "*Объем груди:*" . ($this->breast_volume ?? 'Не указано') . "\n"
+                . "*Объем талии:*" . ($this->waist ?? 'Не указано') . "\n"
+                . "*Объем бёдер:*" . ($this->hips ?? 'Не указано') . "\n"
+                . "*Обучался ранее:*" . ($this->model_school_education == 1 ? "Да" : "Нет") . "\n"
+                . "*Желает обучаться:*" . ($this->wish_learn == 1 ? "Да" : "Нет") . "\n"
+                . "*Откуда узнал:*" . ($this->about ?? 'Не указано') . "\n"
+                . "*Образование:*" . ($this->education ?? 'Не указано') . "\n"
+            ,
+            'disable_notification' => 'true'
+        ]);
 
-            $promo = Promotion::find(intval($this->data));
+        $promo = Promotion::find(intval($this->data));
 
-            if ($promo->current_activation_count < $promo->activation_count) {
+        if ($promo->current_activation_count < $promo->activation_count) {
 
-                if ($promo->immediately_activate == 1) {
-                    $this->user->referral_bonus_count += $promo->refferal_bonus;
-                    $this->bot->reply($promo->activation_text);
+            if ($promo->immediately_activate == 1) {
+                $this->user->referral_bonus_count += $promo->refferal_bonus;
+                $this->bot->reply($promo->activation_text);
 
-                    $this->user->promos()->attach($promo->id);
+                $this->user->promos()->attach($promo->id);
 
-                    $promo->current_activation_count += 1;
-                    $promo->save();
+                $promo->current_activation_count += 1;
+                $promo->save();
 
-                }
             }
-
-
-            $this->user->save();
-
-
-            if ($promo->immediately_activate == 0) {
-                $this->bot->reply("Спасибо! Получите свои бонусы у нашего сотрудника по этому QR-коду.");
-
-                $tmp_id = $this->user->telegram_chat_id;
-                while (strlen($tmp_id) < 10)
-                    $tmp_id = "0" . $tmp_id;
-
-                $tmp_promo_id = $this->data;
-                while (strlen($tmp_promo_id) < 10)
-                    $tmp_promo_id = "0" . $tmp_promo_id;
-
-                $code = base64_encode("003" . $tmp_id . $tmp_promo_id);
-
-                $attachment = new Image("https://api.qrserver.com/v1/create-qr-code/?size=150x150&data=https://t.me/" . env("APP_BOT_NAME") . "?start=$code");
-
-                // Build message object
-                $message = OutgoingMessage::create('_Код для получения бонуса по акции_')
-                    ->withAttachment($attachment);
-
-                // Reply message object
-                $this->bot->reply($message, ["parse_mode" => "Markdown"]);
-            }
-        }catch (\Exception $e){
-            $this->bot->reply($e->getMessage()." ".$e->getLine());
         }
+
+
+        $this->user->save();
+
+
+        if ($promo->immediately_activate == 0) {
+            $this->bot->reply("Спасибо! Получите свои бонусы у нашего сотрудника по этому QR-коду.");
+
+            $tmp_id = $this->user->telegram_chat_id;
+            while (strlen($tmp_id) < 10)
+                $tmp_id = "0" . $tmp_id;
+
+            $tmp_promo_id = $this->data;
+            while (strlen($tmp_promo_id) < 10)
+                $tmp_promo_id = "0" . $tmp_promo_id;
+
+            $code = base64_encode("003" . $tmp_id . $tmp_promo_id);
+
+            $attachment = new Image("https://api.qrserver.com/v1/create-qr-code/?size=150x150&data=https://t.me/" . env("APP_BOT_NAME") . "?start=$code");
+
+            // Build message object
+            $message = OutgoingMessage::create('_Код для получения бонуса по акции_')
+                ->withAttachment($attachment);
+
+            // Reply message object
+            $this->bot->reply($message, ["parse_mode" => "Markdown"]);
+        }
+
 
     }
 

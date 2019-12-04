@@ -265,7 +265,7 @@ class StartDataConversation extends Conversation
 
         $question = Question::create('Так что на счет участия?')
             ->addButtons([
-                Button::create('Поехали')->value($handler . $promo->id),
+                Button::create('Поехали')->value($handler),
                 Button::create('Нет, в другой раз')->value('stop'),
             ]);
 
