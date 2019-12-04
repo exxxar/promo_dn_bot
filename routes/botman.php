@@ -332,12 +332,14 @@ $botman->hears('/friends ([0-9]+)', function ($bot, $page) {
 
     $tmp = "";
 
-    if ($sender) {
-        $userSenderName = $sender->sender->fio_from_telegram ??
-            $sender->sender->fio_from_request ??
-            $sender->sender->telegram_chat_id;
+    if ($sender != null) {
+        if ($sender->sender != null) {
+            $userSenderName = $sender->sender->fio_from_telegram ??
+                $sender->sender->fio_from_request ??
+                $sender->sender->telegram_chat_id;
 
-        $tmp = "\xF0\x9F\x91\x91 $userSenderName - пригласил вас.\n";
+            $tmp = "\xF0\x9F\x91\x91 $userSenderName - пригласил вас.\n";
+        }
     }
 
     foreach ($refs as $key => $ref) {
