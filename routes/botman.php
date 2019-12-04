@@ -628,11 +628,22 @@ $botman->fallback(function ($bot) {
         Log::info("Query " . $queryObject->query);
         Log::info("id " . $queryObject->id);
 
+        if ($queryObject->query == "s")
+            return $bot->sendRequest("answerInlineQuery",
+                [
+                    'cache_time' => 0,
+                    "inline_query_id" => json_decode($bot->getEvent())->id,
+                    "switch_pm_text"=>"Воспользуйся акцией",
+                    "results" => json_encode([])
+                    //'reply_markup' => json_encode($keyboard)
+                ]);
+
         if ($queryObject->query == "d")
            return $bot->sendRequest("answerInlineQuery",
                 [
                     'cache_time' => 0,
                     "inline_query_id" => json_decode($bot->getEvent())->id,
+                    "switch_pm_text"=>"Воспользуйся акцией",
                     "results" => json_encode([
                             [
                                 'type' => 'article',
