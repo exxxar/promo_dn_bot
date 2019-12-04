@@ -633,7 +633,6 @@ $botman->fallback(function ($bot) {
                 [
                     'cache_time' => 0,
                     "inline_query_id" => json_decode($bot->getEvent())->id,
-                    "switch_pm_text"=>"Воспользуйся акцией",
                     "results" => json_encode([])
                     //'reply_markup' => json_encode($keyboard)
                 ]);
@@ -643,14 +642,18 @@ $botman->fallback(function ($bot) {
                 [
                     'cache_time' => 0,
                     "inline_query_id" => json_decode($bot->getEvent())->id,
-                    "switch_pm_text"=>"Воспользуйся акцией",
                     "results" => json_encode([
                             [
                                 'type' => 'article',
                                 'id' => uniqid(),
                                 'title' => 'Tsds',
                                 'input_message_content' => [
-                                    'message_text' => 'My message text 111'
+                                    'message_text' => 'My message text 111',
+                                ],
+                                'reply_markup'=>[
+                                    'inline_keyboard'=>[
+                                        ['text'=>"Гоу хоум","url"=>"https://t.me?skidki_dn_bot"]
+                                    ]
                                 ]
                             ],
 
