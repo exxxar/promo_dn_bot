@@ -199,7 +199,6 @@ $botman->hears("\xE2\x9A\xA1Все акции", function ($bot) {
 $botman->hears('stop', function ($bot) {
     $bot->reply('Хорошо, продолжим позже!)');
 })->stopsConversation();
-
 $botman->hears('/category ([0-9]+)', function ($bot, $category_id) {
 
     $promotions = \App\Promotion::with(["users"])->where("category_id", "=", $category_id)
@@ -285,7 +284,6 @@ $botman->hears('/company ([0-9]+)', function ($bot, $company_id) {
     } else
         $bot->reply("Акций от компании не найдено или все акции данной компании собраны:(");
 });
-
 $botman->hears('/friends ([0-9]+)', function ($bot, $page) {
 
     $telegramUser = $bot->getUser();
@@ -574,48 +572,6 @@ $botman->hears('/statistic', function ($bot) {
 });
 
 
-/*$botman->hears('start ([0-9]+)', function (\BotMan\BotMan\BotMan $bot, $movie) {
-
-    Log::info("MI TYT");
-    $bot->loadDriver(TelegramInlineQueryDriver::DRIVER_NAME);
-    Log::info("TestttttRRR " . print_r(json_decode($bot->getDriver()->getEvent())->id, true));
-    // Log::info("TestttttRRR " . print_r(json_decode($bot->getEvent()), true));
-    /*
-        $bot->sendRequest("answerInlineQuery",
-            [
-                "inline_query_id" => json_decode($bot->getEvent())->id,
-                "results" => json_encode([
-                        [
-                            'type' => 'article',
-                            'id' => uniqid(),
-                            'title' => 'My result title 1',
-                            'input_message_content' => [
-                                'message_text' => 'My message text 111'
-                            ]
-                        ],
-                        [
-                            'type' => 'article',
-                            'id' => uniqid(),
-                            'title' => 'My result title 2',
-                            'input_message_content' => [
-                                'message_text' => 'My message text 222'
-                            ]
-                        ],
-                        [
-                            'type' => 'article',
-                            'id' => uniqid(),
-                            'title' => 'My result title 3',
-                            'input_message_content' => [
-                                'message_text' => 'My message text 333'
-                            ]
-                        ]
-                    ]
-                )
-                //'reply_markup' => json_encode($keyboard)
-            ]);
-
-});*/
-
 $botman->fallback(function ($bot) {
     Log::info("fallback");
 
@@ -628,95 +584,61 @@ $botman->fallback(function ($bot) {
         Log::info("Query " . $queryObject->query);
         Log::info("id " . $queryObject->id);
 
+        $promotions = \App\Promotion::all();
+
+        $tmp = [];
+
+        foreach ($promotions as $promo) {
+
+            $telegramUser = $bot->getUser();
+            $id = $telegramUser->getId();
+
+            $on_promo = $promo->users()->where('telegram_chat_id', "$id")->first();
+
+            $time_0 = (date_timestamp_get(new DateTime($promo->start_at)));
+            $time_1 = (date_timestamp_get(new DateTime($promo->end_at)));
+
+            $time_2 = date_timestamp_get(now());
+
+            $button_list = [];
+            if ($on_promo == null && $time_2 >= $time_0 && $time_2 < $time_1) {
+                $tm_button = [
+                    'type' => 'article',
+                    'id' => uniqid(),
+                    'title' => $promo->title,
+                    'input_message_content' => [
+                        'message_text' => $promo->description,
+                    ],
+                    'reply_markup' => [
+                        'inline_keyboard' => [
+                            [
+                                ['text' => "Ссылка на акцию", "url" => "https://t.me/skidki_dn_bot"],
+                            ],
+                            [
+                                ['text' => "Отправить другу", "switch_inline_query" => "invite"],
+                            ]
+                        ]
+                    ],
+                    'thumb_url' => $promo->promo_image_url,
+                    'url' => $promo->promo_image_url,
+                    'description' => $promo->description,
+                    'hide_url' => true
+
+                ];
+
+                array_push($button_list, $tm_button);
+
+                /*   if ($promo->handler == null)
+                       array_push($tmp, Button::create($promo->title)->value("/promotion " . $promo->id));
+                   else
+                       array_push($tmp, Button::create($promo->title)->value($promo->handler . " " . $promo->id));*/
+            }
+        }
         return $bot->sendRequest("answerInlineQuery",
             [
                 'cache_time' => 0,
                 "inline_query_id" => json_decode($bot->getEvent())->id,
-                "results" => json_encode([
-                        [
-                            'type' => 'article',
-                            'id' => uniqid(),
-                            'title' => 'Скидки! Получи 20% на пивное меню.',
-                            'input_message_content' => [
-                                'message_text' => "My message text 111 ",
-                            ],
-                            'reply_markup'=>[
-                                'inline_keyboard'=>[
-                                    [
-                                        ['text'=>"Поделиться ссылкой","url"=>"https://t.me/skidki_dn_bot"],
-                                    ],
-                                    [
-                                        ['text'=>"Пригласить пользвоателя","switch_inline_query"=>"invite"],
-                                    ]
-                                ]
-                            ],
-                            'thumb_url'=>"https://sun9-26.userapi.com/c857220/v857220055/58b91/h_QTsrOYTGg.jpg",
-                            'url'=>'https://sun9-26.userapi.com/c857220/v857220055/58b91/h_QTsrOYTGg.jpg',
-                            'description'=>"Скидки на пиво!",
-                            'hide_url'=>true
-
-                        ],
-
-                        [
-                            'type' => 'article',
-                            'id' => uniqid(),
-                            'title' => 'XX',
-                            'input_message_content' => [
-                                'message_text' => 'My message text 333 https://sun9-26.userapi.com/c857220/v857220055/58b91/h_QTsrOYTGg.jpg'
-                            ],
-                            'hide_url'=>true
-                        ],
-                        [
-                            'type' => 'article',
-                            'id' => uniqid(),
-                            'title' => 'XX1',
-                            'input_message_content' => [
-                                'message_text' => 'My message text 333'
-                            ]
-                        ],
-                        [
-                            'type' => 'article',
-                            'id' => uniqid(),
-                            'title' => 'XX2',
-                            'input_message_content' => [
-                                'message_text' => 'My message text 333'
-                            ]
-                        ],
-                        [
-                            'type' => 'article',
-                            'id' => uniqid(),
-                            'title' => 'XX3',
-                            'input_message_content' => [
-                                'message_text' => 'My message text 333'
-                            ]
-                        ],
-                        [
-                            'type' => 'article',
-                            'id' => uniqid(),
-                            'title' => 'XX4',
-                            'input_message_content' => [
-                                'message_text' => 'My message text 333'
-                            ]
-                        ],
-                        [
-                            'type' => 'article',
-                            'id' => uniqid(),
-                            'title' => 'XX5',
-                            'input_message_content' => [
-                                'message_text' => 'My message text 333'
-                            ]
-                        ],
-                        [
-                            'type' => 'article',
-                            'id' => uniqid(),
-                            'title' => 'XX6',
-                            'input_message_content' => [
-                                'message_text' => 'My message text 333'
-                            ]
-                        ]
-                    ]
-                )
-                //'reply_markup' => json_encode($keyboard)
+                "results" => json_encode($button_list)
             ]);
     }
 });

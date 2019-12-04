@@ -66,7 +66,7 @@ trait CustomConversation
             "text" => $message,
             'reply_markup' => json_encode([
                 'keyboard' => $keyboard,
-                'one_time_keyboard' => true,
+                'one_time_keyboard' => false,
                 'resize_keyboard' => true
             ])
         ]);
