@@ -338,7 +338,8 @@ $botman->hears('/friends ([0-9]+)', function ($bot, $page) {
             if ($sender->sender != null) {
                 $userSenderName = $sender->sender->fio_from_telegram ??
                     $sender->sender->fio_from_request ??
-                    $sender->sender->telegram_chat_id;
+                    $sender->sender->telegram_chat_id ??
+                    'Неизвестный пользователь';
 
                 $tmp = "\xF0\x9F\x91\x91 $userSenderName - пригласил вас.\n";
             }
@@ -346,9 +347,11 @@ $botman->hears('/friends ([0-9]+)', function ($bot, $page) {
 
         if ($refs != null)
             foreach ($refs as $key => $ref) {
+
                 $userName = $ref->recipient->fio_from_telegram ??
                     $ref->recipient->fio_from_request ??
-                    $ref->recipient->telegram_chat_id;
+                    $ref->recipient->telegram_chat_id ??
+                    'Неизвестный пользователь';
                 $tmp .= ($key + 1) . ". " . $userName . ($ref->activated == 0 ? "\xE2\x9D\x8E" : "\xE2\x9C\x85") . "\n";
 
             }
