@@ -33,8 +33,21 @@ class TelegramAuthController extends Controller
     public function handleTelegramCallback()
     {
         if ($this->telegram->validate()) {
+
+
             $user = User::where("telegram_chat_id",$this->telegram->user()->id)->first();
-            Auth::login($user, true);
+
+            dd($user);
+            die();
+
+            if ($user->is_admin==1){
+                Auth::guard('admin')->login($user);
+            }
+            else
+            {
+                Auth::login($user, true);
+            }
+            return redirect('/public/admin/users');
         }
 
         return redirect('/');
