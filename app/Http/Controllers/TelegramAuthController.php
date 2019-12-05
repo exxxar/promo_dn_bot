@@ -34,22 +34,34 @@ class TelegramAuthController extends Controller
     {
         if ($this->telegram->validate()) {
 
+            $telegramUser = $this->telegram->user();
+            $id = $telegramUser["id"];
+            $username = $telegramUser["username"];
+            $firstName = $telegramUser["first_name"];
+            $lastName = $telegramUser["last_name"];
 
-            $user = User::where("telegram_chat_id",$this->telegram->user()->id)->first();
+            $user = User::where("telegram_chat_id",$telegramUser["id"])->first();
 
-            dd($user);
-            die();
+            if (isset($user))
+                Auth::loginUsingId($user->id);
+            else {
+                $u = \App\User::create([
+                    'name' => $username??"$id",
+                    'email' => "$id@t.me",
+                    'password' => bcrypt($id),
+                    'fio_from_telegram' => "$firstName $lastName",
+                    'source' => "000",
+                    'telegram_chat_id' => $id,
+                    'referrals_count' => 0,
+                    'referral_bonus_count' => 10,
+                    'cashback_bonus_count' => 0,
+                    'is_admin' => false,
+                ]);
 
-            if ($user->is_admin==1){
-                Auth::guard('admin')->login($user);
+                Auth::login($u);
             }
-            else
-            {
-                Auth::login($user, true);
-            }
-            return redirect('/public/admin/users');
         }
 
-        return redirect('/');
+        return redirect('/admin');
     }
 }
