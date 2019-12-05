@@ -596,6 +596,7 @@ $botman->hears('/cashback_get', function ($bot) {
                     continue;
 
                 $ch->activated = 1;
+                $ch->user_id = $user->id;
                 $ch->save();
 
                 $user->cashback_bonus_count += round(intval($ch->money_in_check) * env("CAHSBAK_PROCENT") / 100);
