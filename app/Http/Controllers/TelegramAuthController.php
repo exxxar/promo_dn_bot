@@ -2,8 +2,10 @@
 
 namespace App\Http\Controllers;
 
+use App\User;
 use Azate\LaravelTelegramLoginAuth\TelegramLoginAuth;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Log;
 
 class TelegramAuthController extends Controller
@@ -31,10 +33,8 @@ class TelegramAuthController extends Controller
     public function handleTelegramCallback()
     {
         if ($this->telegram->validate()) {
-            $user = $this->telegram->user();
-
-            Log::info(print_r($user,true));
-            //
+            $user = User::where("telegram_chat_id",$this->telegram->user()->id)->first();
+            Auth::login($user, true);
         }
 
         return redirect('/');
