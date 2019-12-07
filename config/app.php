@@ -148,6 +148,8 @@ return [
         Illuminate\View\ViewServiceProvider::class,
         SimpleSoftwareIO\QrCode\QrCodeServiceProvider::class,
         Telegram\Bot\Laravel\TelegramServiceProvider::class,
+        BenSampo\Enum\EnumServiceProvider::class,
+
         /*
          * Package Service Providers...
          */

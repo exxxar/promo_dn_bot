@@ -64,6 +64,9 @@
                             <a class="nav-link" href="{{ route('payments.index') }}">История оплаты баллами</a>
                         </li>
 
+                        <li class="nav-item">
+                            <a class="nav-link" href="{{ route('achievements.index') }}">Достижения</a>
+                        </li>
 
                     </ul>
 
@@ -119,7 +122,7 @@
             title:'SkidkiDN - веб-версия',
             introMessage:'Спасибо что используете Веб-версию нашего бота. Полноценный набор функций доступен в боте telegram',
             mainColor:'#ff9800',
-            chatServer:'http://promodnbot.herokuapp.com/public/botman'
+            chatServer:'https://promodnbot.herokuapp.com/public/botman'
         };
 
     </script>

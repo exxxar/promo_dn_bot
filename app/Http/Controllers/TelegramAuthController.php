@@ -40,7 +40,7 @@ class TelegramAuthController extends Controller
             $firstName = $telegramUser["first_name"];
             $lastName = $telegramUser["last_name"];
 
-            $user = User::where("telegram_chat_id",$telegramUser["id"])->first();
+            $user = User::where("telegram_chat_id",$id)->first();
 
             if (isset($user))
                 Auth::loginUsingId($user->id);

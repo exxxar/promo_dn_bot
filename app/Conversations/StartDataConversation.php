@@ -73,7 +73,7 @@ class StartDataConversation extends Conversation
 
         $telegramUser = $this->bot->getUser();
         $id = $telegramUser->getId();
-        $this->user = User::with(["companies","promos"])
+        $this->user = User::with(["companies", "promos"])
             ->where("telegram_chat_id", $id)
             ->first();
 
@@ -195,7 +195,7 @@ class StartDataConversation extends Conversation
         $sender_user = User::where("telegram_chat_id", intval($this->request_user_id))
             ->first();
 
-        if ($this->user->id==$sender_user->id){
+        if ($this->user->id == $sender_user->id) {
             $this->bot->reply("Вы перешли по собственной ссылке", ["parse_mode" => "Markdown"]);
             return;
         }
@@ -205,6 +205,9 @@ class StartDataConversation extends Conversation
         if ($sender_user && !$on_refferal) {
             $sender_user->referrals_count += 1;
             $sender_user->save();
+
+            $this->user->parent_id = $sender_user->id;
+            $this->user->save();
 
             Telegram::sendMessage([
                 'chat_id' => $sender_user->telegram_chat_id,
@@ -259,7 +262,7 @@ class StartDataConversation extends Conversation
         $this->bot->reply($message1, ["parse_mode" => "Markdown"]);
         $this->bot->reply($message2, ["parse_mode" => "Markdown"]);
 
-        $handler = "/promotion ".$promo->id;
+        $handler = "/promotion " . $promo->id;
         if ($promo->handler != null)
             $handler = $promo->handler . " " . $promo->id;
 

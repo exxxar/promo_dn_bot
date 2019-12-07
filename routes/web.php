@@ -14,7 +14,20 @@
 use Illuminate\Support\Facades\Storage;
 use SimpleSoftwareIO\QrCode\Facades\QrCode;
 
+Route::get('/test_user',function (){
+   $users = \App\User::with(["parent","childs"])->get();
+   foreach($users as $user)
+       foreach ($user->childs as $key=>$u) {
+           echo ($key + 1) . ")" .$user->name." child=". $u->name . "<br>";
+            foreach ($u->childs as $u1)
+                echo $u1->name;
+       }
+
+});
+Route::get('/ach','AchievementsController@index');
 Route::get('/test_get_updates','BotManController@testGetUpdates');
+
+
 
 Route::get('/', function (Request $request) {
     return view('welcome');
@@ -65,6 +78,7 @@ Route::prefix('admin')->group(function () {
         'refferals' => 'RefferalsHistoryController',
         'payments' => 'RefferalsPaymentHistoryController',
         'events' => 'EventsController',
+        'achievements' => 'AchievementsController',
     ]);
 
 });

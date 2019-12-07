@@ -102,7 +102,7 @@ class UsersController extends Controller
     {
         //
 
-        $user = User::with(["promos", "companies"])->find($id);
+        $user = User::with(["promos", "companies","parent","childs"])->find($id);
 
         return view('admin.users.show', compact('user'));
     }

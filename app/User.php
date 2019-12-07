@@ -33,6 +33,7 @@ class User extends Authenticatable
         'referral_bonus_count',
         'cashback_bonus_count',
         'is_admin',
+        'parent_id',
     ];
 
     /**
@@ -65,6 +66,27 @@ class User extends Authenticatable
     public function companies()
     {
         return $this->belongsToMany('App\Company', 'user_in_companies', 'user_id', 'company_id')
+            ->withTimestamps();
+    }
+
+    public function stats()
+    {
+        return $this->hasMany('App\Stat', 'id', 'user_id');
+    }
+
+    public function parent()
+    {
+        return $this->hasOne('App\User','parent_id','id');
+    }
+
+    public function childs()
+    {
+        return $this->hasMany('App\User','parent_id','id');
+    }
+
+    public function achievements()
+    {
+        return $this->belongsToMany('App\Achievement', 'user_achievement', 'user_id', 'achievement_id')
             ->withTimestamps();
     }
 }

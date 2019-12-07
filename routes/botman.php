@@ -34,9 +34,13 @@ $botman->hears("\xE2\x9B\x84Мероприятия", function ($bot) {
     $keyboard = [
         'inline_keyboard' => [
             [
-                ['text' => 'Мероприятия', 'callback_data' => "/events 0"],
-                ['text' => 'Призы!', 'url' => env("APP_PROMO_LINK")],
-            ]
+                ['text' => "\xF0\x9F\x8E\xAAМероприятия", 'callback_data' => "/events 0"],
+                ['text' => "\xF0\x9F\x8E\x81Призы!", 'url' => env("APP_PROMO_LINK")],
+            ],
+            [
+                ['text' => "\xE2\xAD\x90Достижения", 'callback_data' => "/achievements_panel"],
+            ],
+
         ]
     ];
 
@@ -613,6 +617,7 @@ $botman->hears('/statistic', function ($bot) {
     $message = Question::create("Вы можете отслеживать начисления CashBack бонусов и их списание")
         ->addButtons([
             Button::create("Больше баллов")->value("/ref"),
+           // Button::create("Кабинет промоутера")->value("/cabinet"),
             Button::create("Начисления")->value("/cashbacks 0"),
             Button::create("Списания")->value("/payments 0"),
         ]);
@@ -620,6 +625,181 @@ $botman->hears('/statistic', function ($bot) {
 
 });
 
+$botman->hears('/achievements_panel', function ($bot) {
+    $message = Question::create("Получайте достижения и обменивайте их на крутейшие призы!")
+        ->addButtons([
+            Button::create("Все достижения")->value("/achievements_all 0"),
+            Button::create("Мои \xE2\x9C\x85 достижения")->value("/achievements_my_activated 0"),
+            Button::create("Мои \xE2\x9D\x8E достижения")->value("/achievements_my_not_active 0"),
+        ]);
+    $bot->reply($message, ["parse_mode" => "Markdown"]);
+
+});
+$botman->hears('/achievements_all ([0-9]+)', function ($bot, $page) {
+
+
+    $events = Event::skip($page * 5)
+        ->take(5)
+        ->orderBy('id', 'DESC')
+        ->get();
+
+    if (count($events) > 0) {
+        foreach ($events as $key => $event) {
+
+            $attachment = new Image($event->event_image_url);
+            $message = OutgoingMessage::create("*" . $event->title . "*\n" . $event->description)
+                ->withAttachment($attachment);
+
+            $bot->reply($message, ["parse_mode" => "Markdown"]);
+        }
+    } else
+        $bot->reply("Мероприятия появтяся в скором времени!", ["parse_mode" => "Markdown"]);
+
+    $inline_keyboard = [];
+    if ($page == 0 && count($events) == 5)
+        array_push($inline_keyboard, ['text' => 'Далее', 'callback_data' => '/events ' . ($page + 1)]);
+
+    if ($page > 0) {
+        if (count($events) == 0) {
+            array_push($inline_keyboard, ['text' => 'Назад', 'callback_data' => '/events ' . ($page - 1)]);
+        }
+
+        if (count($events) == 5) {
+            array_push($inline_keyboard, ['text' => 'Назад', 'callback_data' => '/events ' . ($page - 1)]);
+            array_push($inline_keyboard, ['text' => 'Далее', 'callback_data' => '/events ' . ($page + 1)]);
+        }
+
+        if (count($events) > 0 && count($events) < 5) {
+            array_push($inline_keyboard, ['text' => 'Назад', 'callback_data' => '/events ' . ($page - 1)]);
+        }
+    }
+
+
+    $keyboard = [
+        'inline_keyboard' => [
+            $inline_keyboard
+        ]
+    ];
+
+    if (count($inline_keyboard) > 0)
+        $bot->sendRequest("sendMessage",
+            [
+                "text" => "Выберите действие",
+                'reply_markup' => json_encode($keyboard)
+            ]);
+
+
+});
+$botman->hears('/achievements_my_activated ([0-9]+)', function ($bot, $page) {
+
+
+    $events = Event::skip($page * 5)
+        ->take(5)
+        ->orderBy('id', 'DESC')
+        ->get();
+
+    if (count($events) > 0) {
+        foreach ($events as $key => $event) {
+
+            $attachment = new Image($event->event_image_url);
+            $message = OutgoingMessage::create("*" . $event->title . "*\n" . $event->description)
+                ->withAttachment($attachment);
+
+            $bot->reply($message, ["parse_mode" => "Markdown"]);
+        }
+    } else
+        $bot->reply("Мероприятия появтяся в скором времени!", ["parse_mode" => "Markdown"]);
+
+    $inline_keyboard = [];
+    if ($page == 0 && count($events) == 5)
+        array_push($inline_keyboard, ['text' => 'Далее', 'callback_data' => '/events ' . ($page + 1)]);
+
+    if ($page > 0) {
+        if (count($events) == 0) {
+            array_push($inline_keyboard, ['text' => 'Назад', 'callback_data' => '/events ' . ($page - 1)]);
+        }
+
+        if (count($events) == 5) {
+            array_push($inline_keyboard, ['text' => 'Назад', 'callback_data' => '/events ' . ($page - 1)]);
+            array_push($inline_keyboard, ['text' => 'Далее', 'callback_data' => '/events ' . ($page + 1)]);
+        }
+
+        if (count($events) > 0 && count($events) < 5) {
+            array_push($inline_keyboard, ['text' => 'Назад', 'callback_data' => '/events ' . ($page - 1)]);
+        }
+    }
+
+
+    $keyboard = [
+        'inline_keyboard' => [
+            $inline_keyboard
+        ]
+    ];
+
+    if (count($inline_keyboard) > 0)
+        $bot->sendRequest("sendMessage",
+            [
+                "text" => "Выберите действие",
+                'reply_markup' => json_encode($keyboard)
+            ]);
+
+
+});
+$botman->hears('/achievements_my_not_active ([0-9]+)', function ($bot, $page) {
+
+
+    $events = Event::skip($page * 5)
+        ->take(5)
+        ->orderBy('id', 'DESC')
+        ->get();
+
+    if (count($events) > 0) {
+        foreach ($events as $key => $event) {
+
+            $attachment = new Image($event->event_image_url);
+            $message = OutgoingMessage::create("*" . $event->title . "*\n" . $event->description)
+                ->withAttachment($attachment);
+
+            $bot->reply($message, ["parse_mode" => "Markdown"]);
+        }
+    } else
+        $bot->reply("Мероприятия появтяся в скором времени!", ["parse_mode" => "Markdown"]);
+
+    $inline_keyboard = [];
+    if ($page == 0 && count($events) == 5)
+        array_push($inline_keyboard, ['text' => 'Далее', 'callback_data' => '/events ' . ($page + 1)]);
+
+    if ($page > 0) {
+        if (count($events) == 0) {
+            array_push($inline_keyboard, ['text' => 'Назад', 'callback_data' => '/events ' . ($page - 1)]);
+        }
+
+        if (count($events) == 5) {
+            array_push($inline_keyboard, ['text' => 'Назад', 'callback_data' => '/events ' . ($page - 1)]);
+            array_push($inline_keyboard, ['text' => 'Далее', 'callback_data' => '/events ' . ($page + 1)]);
+        }
+
+        if (count($events) > 0 && count($events) < 5) {
+            array_push($inline_keyboard, ['text' => 'Назад', 'callback_data' => '/events ' . ($page - 1)]);
+        }
+    }
+
+
+    $keyboard = [
+        'inline_keyboard' => [
+            $inline_keyboard
+        ]
+    ];
+
+    if (count($inline_keyboard) > 0)
+        $bot->sendRequest("sendMessage",
+            [
+                "text" => "Выберите действие",
+                'reply_markup' => json_encode($keyboard)
+            ]);
+
+
+});
 
 $botman->fallback(function ($bot) {
     Log::info("fallback");

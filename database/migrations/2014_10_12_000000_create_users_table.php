@@ -43,6 +43,8 @@ class CreateUsersTable extends Migration
 
             $table->boolean('is_admin')->default(false);
 
+            $table->unsignedInteger("parent_id")->nullable();
+
             $table->rememberToken();
             $table->timestamps();
         });

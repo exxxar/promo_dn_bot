@@ -147,6 +147,14 @@
                         @endforeach
                     </ul>
                 @endif
+
+                <h3>Сеть друзей</h3>
+                <ul>
+                    @foreach ($user->childs as $key=>$u)
+                        <li>{{$key+1}} {{$user->name}} [Пригласивший] {{$u->name}} [Реферал]</li>
+                    @endforeach
+                </ul>
+
             </div>
         </div>
     </div>

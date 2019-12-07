@@ -2,6 +2,8 @@
 
 namespace App\Providers;
 
+use App\Events\AchievementEvent;
+use App\Listeners\AchievementProcessor;
 use Illuminate\Support\Facades\Event;
 use Illuminate\Auth\Events\Registered;
 use Illuminate\Auth\Listeners\SendEmailVerificationNotification;
@@ -18,6 +20,9 @@ class EventServiceProvider extends ServiceProvider
         Registered::class => [
             SendEmailVerificationNotification::class,
         ],
+        AchievementEvent::class => [
+            AchievementProcessor::class
+        ],
     ];
 
     /**
@@ -30,5 +35,17 @@ class EventServiceProvider extends ServiceProvider
         parent::boot();
 
         //
+    }
+
+    public function shouldDiscoverEvents()
+    {
+        return true;
+    }
+
+    protected function discoverEventsWithin()
+    {
+        return [
+            $this->app->path('Listeners'),
+        ];
     }
 }
