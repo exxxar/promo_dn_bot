@@ -6,6 +6,7 @@ use App\Achievement;
 use App\Events\AchievementEvent;
 use App\Stat;
 use App\User;
+use App\UserHasAchievement;
 use Illuminate\Queue\InteractsWithQueue;
 use Illuminate\Contracts\Queue\ShouldQueue;
 use Illuminate\Support\Facades\Log;
@@ -47,12 +48,13 @@ class AchievementProcessor
             ]);
         }
 
-        $achList = Achievement::where("trigger_type", $event->trigger_type)
+        $achList = Achievement::where("trigger_type", "=",$event->trigger_type,"and")
             ->where("trigger_value", "<=", $stats->stat_value)
             ->get();
 
+        Log::info(print_r($achList,true));
 
-        $user = User::find($event->user->id);
+        $user = User::with(["achievements"])->find($event->user->id);
 
         $userAchList = $user
             ->achievements()
@@ -69,20 +71,22 @@ class AchievementProcessor
                 ->first();
 
             if ($find == null) {
-                if (!$ach->is_active)
-                    continue;
+                Log::info("Test");
+             /*   $activated = (UserHasAchievement::where("achievement_id",$ach->id)->first())->activated;
+                if ($activated)
+                    continue;*/
 
                 $user->achievements()->attach($ach->id);
                 //todo: отправляем в телеграм пользователю оповещение о том, что получена ачивка
 
-                $announce_title = $ach->title;
-                $announce_message = $ach->description;
-                $announce_url = $ach->ach_image_url;
+                $announce_title = $ach->title??'';
+                $announce_message = $ach->description??'';
+                $announce_url = $ach->ach_image_url??'';
 
                 Telegram::sendMessage([
                     'chat_id' => $user->telegram_chat_id,
                     'parse_mode' => 'Markdown',
-                    'text' => "*Вы получили достижение*:\n*$announce_title*\n_ $announce_message _\n $announce_url",
+                    'text' => "Вы получили достижение:*".$announce_title."*\n_".$announce_message."_",
                     'disable_notification' => 'false'
                 ]);
 

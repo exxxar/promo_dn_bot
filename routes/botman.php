@@ -634,8 +634,7 @@ $botman->hears('/achievements_panel', function ($bot) {
     $message = Question::create("Получайте достижения и обменивайте их на крутейшие призы!")
         ->addButtons([
             Button::create("\xF0\x9F\x8D\x80Все достижения")->value("/achievements_all 0"),
-            Button::create("Мои \xE2\x9C\x85 достижения")->value("/achievements_my_activated 0"),
-            Button::create("Мои \xE2\x9D\x8E достижения")->value("/achievements_my_not_active 0"),
+            Button::create("Мои достижения")->value("/achievements_my 0"),
         ]);
     $bot->reply($message, ["parse_mode" => "Markdown"]);
 
@@ -709,7 +708,7 @@ $botman->hears('/achievements_all ([0-9]+)', function ($bot, $page) {
 
 
 });
-$botman->hears('/achievements_my_activated ([0-9]+)', function ($bot, $page) {
+$botman->hears('/achievements_my ([0-9]+)', function ($bot, $page) {
 
     $telegramUser = $bot->getUser();
 
@@ -718,8 +717,7 @@ $botman->hears('/achievements_my_activated ([0-9]+)', function ($bot, $page) {
     $user = \App\User::where("telegram_chat_id", $id)->first();
 
     $userAchs = \App\UserHasAchievement::with(["achievement"])
-        ->where("user_id", "=", $user->id, 'and')
-        ->where("activated", "=", 1)
+        ->where("user_id", "=", $user->id)
         ->skip($page * 5)
         ->take(5)
         ->orderBy('id', 'DESC')
@@ -731,7 +729,7 @@ $botman->hears('/achievements_my_activated ([0-9]+)', function ($bot, $page) {
             $attachment = new Image($ach->achievement->ach_image_url);
             $message = OutgoingMessage::create(
                 "*" .
-                $ach->achievement->title . "*\n" .
+                $ach->achievement->title .($userAchs->activated==0?"\xE2\x9C\x85":"\xE2\x9D\x8E"). "*\n" .
                 $ach->achievement->description
             )
                 ->withAttachment($attachment);
@@ -757,20 +755,20 @@ $botman->hears('/achievements_my_activated ([0-9]+)', function ($bot, $page) {
 
     $inline_keyboard = [];
     if ($page == 0 && count($userAchs) == 5)
-        array_push($inline_keyboard, ['text' => 'Далее', 'callback_data' => '/achievements_my_activated ' . ($page + 1)]);
+        array_push($inline_keyboard, ['text' => 'Далее', 'callback_data' => '/achievements_my ' . ($page + 1)]);
 
     if ($page > 0) {
         if (count($userAchs) == 0) {
-            array_push($inline_keyboard, ['text' => 'Назад', 'callback_data' => '/achievements_my_activated ' . ($page - 1)]);
+            array_push($inline_keyboard, ['text' => 'Назад', 'callback_data' => '/achievements_my ' . ($page - 1)]);
         }
 
         if (count($userAchs) == 5) {
-            array_push($inline_keyboard, ['text' => 'Назад', 'callback_data' => '/achievements_my_activated ' . ($page - 1)]);
-            array_push($inline_keyboard, ['text' => 'Далее', 'callback_data' => '/achievements_my_activated ' . ($page + 1)]);
+            array_push($inline_keyboard, ['text' => 'Назад', 'callback_data' => '/achievements_my ' . ($page - 1)]);
+            array_push($inline_keyboard, ['text' => 'Далее', 'callback_data' => '/achievements_my ' . ($page + 1)]);
         }
 
         if (count($userAchs) > 0 && count($userAchs) < 5) {
-            array_push($inline_keyboard, ['text' => 'Назад', 'callback_data' => '/achievements_my_activated ' . ($page - 1)]);
+            array_push($inline_keyboard, ['text' => 'Назад', 'callback_data' => '/achievements_my ' . ($page - 1)]);
         }
     }
 
@@ -790,86 +788,7 @@ $botman->hears('/achievements_my_activated ([0-9]+)', function ($bot, $page) {
 
 
 });
-$botman->hears('/achievements_my_not_active ([0-9]+)', function ($bot, $page) {
 
-    $telegramUser = $bot->getUser();
-
-    $id = $telegramUser->getId();
-
-    $user = \App\User::where("telegram_chat_id", $id)->first();
-
-    $userAchs = \App\UserHasAchievement::with(["achievement"])
-        ->where("user_id", "=", $user->id, 'and')
-        ->where("activated", "=", 0)
-        ->skip($page * 5)
-        ->take(5)
-        ->orderBy('id', 'DESC')
-        ->get();
-
-    if (count($userAchs) > 0) {
-        foreach ($userAchs as $key => $ach) {
-
-            $attachment = new Image($ach->achievement->ach_image_url);
-            $message = OutgoingMessage::create(
-                "*" .
-                $ach->achievement->title . "*\n" .
-                $ach->achievement->description
-            )
-                ->withAttachment($attachment);
-
-            $bot->reply($message, ["parse_mode" => "Markdown"]);
-
-            $keyboard = [
-                'inline_keyboard' => [
-                    [
-                        ['text' => "Награда", 'callback_data' => "/achievements_reward " . $ach->achievement->id],
-                        ['text' => "Как получить", 'callback_data' => "/achievements_description " . $ach->achievement->id],
-                    ],
-
-                ]
-            ];
-
-            $bot->sendRequest("sendMessage",
-                ["text" => 'Детали достижения', 'reply_markup' => json_encode($keyboard)
-                ]);
-        }
-    } else
-        $bot->reply("У вас еще нет достижений!", ["parse_mode" => "Markdown"]);
-
-    $inline_keyboard = [];
-    if ($page == 0 && count($userAchs) == 5)
-        array_push($inline_keyboard, ['text' => 'Далее', 'callback_data' => '/achievements_my_not_active ' . ($page + 1)]);
-
-    if ($page > 0) {
-        if (count($userAchs) == 0) {
-            array_push($inline_keyboard, ['text' => 'Назад', 'callback_data' => '/achievements_my_not_active ' . ($page - 1)]);
-        }
-
-        if (count($userAchs) == 5) {
-            array_push($inline_keyboard, ['text' => 'Назад', 'callback_data' => '/achievements_my_not_active ' . ($page - 1)]);
-            array_push($inline_keyboard, ['text' => 'Далее', 'callback_data' => '/achievements_my_not_active ' . ($page + 1)]);
-        }
-
-        if (count($userAchs) > 0 && count($userAchs) < 5) {
-            array_push($inline_keyboard, ['text' => 'Назад', 'callback_data' => '/achievements_my_not_active ' . ($page - 1)]);
-        }
-    }
-
-
-    $keyboard = [
-        'inline_keyboard' => [
-            $inline_keyboard
-        ]
-    ];
-
-    if (count($inline_keyboard) > 0)
-        $bot->sendRequest("sendMessage",
-            [
-                "text" => "Выберите действие",
-                'reply_markup' => json_encode($keyboard)
-            ]);
-
-});
 $botman->hears('/achievements_reward ([0-9]+)', function ($bot, $achievementId) {
 
     $telegramUser = $bot->getUser();

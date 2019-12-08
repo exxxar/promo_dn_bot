@@ -26,6 +26,8 @@ Route::get('/test_user',function (){
        }*/
     //event(new NetworkLevelRecounterEvent(10));
     //event(new NetworkCashBackEvent(6,100));
+$user = \App\User::find(10);
+    event(new \App\Events\AchievementEvent(3,150,$user));
 
 });
 Route::get('/cabinet','HomeController@cabinet');
