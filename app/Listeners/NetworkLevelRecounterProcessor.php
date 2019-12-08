@@ -16,9 +16,20 @@ class NetworkLevelRecounterProcessor
      *
      * @return void
      */
-    public function __construct(NetworkLevelRecounterEvent $event)
+    public function __construct()
     {
-        $userList = User::where("activated", "1")->all();
+
+    }
+
+    /**
+     * Handle the event.
+     *
+     * @param  object $event
+     * @return void
+     */
+    public function handle(NetworkLevelRecounterEvent $event)
+    {
+        $userList = User::where("activated", "1")->get();
 
         foreach ($userList as $u) {
             $time_1 = date_timestamp_get(new DateTime($u->updated));
@@ -32,7 +43,7 @@ class NetworkLevelRecounterProcessor
         }
 
         $user = User::with(["childs"])
-            ->wehre("id", $event->userId)
+            ->where("id", $event->userId)
             ->first();
 
         $sLevel1 = $sLevel2 = $sLevel3 = 0;
@@ -70,16 +81,5 @@ class NetworkLevelRecounterProcessor
         $user->network_friends_count = $networkFriendsSummary;
         $user->updated_at = Carbon::now();
         $user->save();
-    }
-
-    /**
-     * Handle the event.
-     *
-     * @param  object $event
-     * @return void
-     */
-    public function handle($event)
-    {
-        //
     }
 }

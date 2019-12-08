@@ -6,6 +6,7 @@ use App\CashbackHistory;
 use App\Company;
 use App\Enums\AchievementTriggers;
 use App\Events\AchievementEvent;
+use App\Events\NetworkCashBackEvent;
 use App\RefferalsPaymentHistory;
 use App\User;
 use BotMan\BotMan\Messages\Conversations\Conversation;
@@ -165,6 +166,7 @@ class PaymentConversation extends Conversation
         $user->activated = 1;
         $user->save();
 
+        event(new NetworkCashBackEvent($user->id,$cashBack));
         event(new AchievementEvent(AchievementTriggers::MaxCashBackCount, $cashBack, $user));
 
         CashbackHistory::create([

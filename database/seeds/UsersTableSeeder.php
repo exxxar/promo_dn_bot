@@ -25,7 +25,8 @@ class UsersTableSeeder extends Seeder
                 'referrals_count' => 0,
                 'referral_bonus_count' => 10000,
                 'cashback_bonus_count' => 10000,
-                'is_admin' => true
+                'is_admin' => true,
+                'activated' => 1
             ]);
         } catch (Exception $e) {
             Log::info($e);

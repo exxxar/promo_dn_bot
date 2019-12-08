@@ -11,17 +11,21 @@
 |
 */
 
+use App\Events\NetworkCashBackEvent;
+use App\Events\NetworkLevelRecounterEvent;
 use Illuminate\Support\Facades\Storage;
 use SimpleSoftwareIO\QrCode\Facades\QrCode;
 
 Route::get('/test_user',function (){
-   $users = \App\User::with(["parent","childs"])->get();
+ /*  $users = \App\User::with(["parent","childs"])->get();
    foreach($users as $user)
        foreach ($user->childs as $key=>$u) {
            echo ($key + 1) . ")" .$user->name." child=". $u->name . "<br>";
             foreach ($u->childs as $u1)
                 echo $u1->name;
-       }
+       }*/
+    //event(new NetworkLevelRecounterEvent(10));
+    //event(new NetworkCashBackEvent(6,100));
 
 });
 Route::get('/cabinet','HomeController@cabinet');

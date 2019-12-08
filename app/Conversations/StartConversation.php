@@ -40,7 +40,6 @@ class StartConversation extends Conversation
     public function startWithEmptyData()
     {
 
-
         $telegramUser = $this->bot->getUser();
 
         $id = $telegramUser->getId();

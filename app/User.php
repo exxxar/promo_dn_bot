@@ -85,7 +85,7 @@ class User extends Authenticatable
 
     public function parent()
     {
-        return $this->hasOne('App\User', 'parent_id', 'id');
+        return $this->hasOne('App\User', 'id','parent_id');
     }
 
     public function childs()
@@ -95,7 +95,7 @@ class User extends Authenticatable
 
     public function achievements()
     {
-        return $this->belongsToMany('App\Achievement', 'user_achievement', 'user_id', 'achievement_id')
+        return $this->belongsToMany('App\Achievement', 'user_has_achievements', 'user_id', 'achievement_id')
             ->withTimestamps();
     }
 }

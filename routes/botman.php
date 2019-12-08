@@ -85,9 +85,9 @@ $botman->hears("\xF0\x9F\x93\xB2Мои друзья", function ($bot) {
 
     $network = $user->network_friends_count;
 
-    $network_tmp = $user->current_network_level>0?"У вас в сети $network друзей!\n":"";
+    $network_tmp = $user->current_network_level>0?"У вас в сети *$network* друзей!\n":"";
 
-    $tmp_message = "Вы пригласили *$ref* друзей!\n $network_tmp _Делитесь Вашим QR-кодом и накапливайте баллы!_\n";
+    $tmp_message = "Вы пригласили *$ref* друзей!\n".$network_tmp."_Делитесь Вашим QR-кодом и накапливайте баллы!_\n";
 
     if ($ref > 0) {
         $message = Question::create($tmp_message)
@@ -129,9 +129,9 @@ $botman->hears("\xF0\x9F\x92\xB3Мои баллы", function ($bot) {
         $summary = $user->referral_bonus_count + $user->cashback_bonus_count+$user->network_cashback_bonus_count;
         $cashback = $user->cashback_bonus_count;
 
-        $tmp_network = $user->network_friends_count>=150?"\nСетевой бонус *".$user->network_cashback_bonus_count."*\n":'';
+        $tmp_network = $user->network_friends_count>=150?"Сетевой бонус *".$user->network_cashback_bonus_count."*\n":'';
 
-        $tmp_message = "У вас *$summary* баллов, из них *$cashback* - бонус CashBack!\n $tmp_network _Для оплаты дайте отсканировать данный QR-код сотруднику!_\n";
+        $tmp_message = "У вас *$summary* баллов, из них *$cashback* - бонус CashBack!\n".$tmp_network."_Для оплаты дайте отсканировать данный QR-код сотруднику!_\n";
 
 
         $tmp_buttons = [];

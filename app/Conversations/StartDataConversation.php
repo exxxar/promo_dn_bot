@@ -46,6 +46,7 @@ class StartDataConversation extends Conversation
         try {
             $this->startWithData();
         } catch (\Exception $e) {
+            Log::info($e->getMessage());
             $this->fallbackMenu("Добрый день!Приветствуем вас в нашем акционном боте! Сейчас у нас технические работы.");
         }
     }
@@ -111,18 +112,6 @@ class StartDataConversation extends Conversation
             $this->activateRefferal();
             $this->mainMenu('Добрый день! Приветствуем вас в нашем акционном боте! У нас вы сможете найти самые актуальные акции!');
 
-            switch ($this->code){
-                case "004": event(new AchievementEvent(AchievementTriggers::VKLinksActivationCount,1,$this->user)); break;
-                case "005": event(new AchievementEvent(AchievementTriggers::FBLinksActivationCount,1,$this->user)); break;
-                case "001":
-                case "007":
-                case "008":
-                case "009":
-                case "010":
-                case "011":
-                case "006": event(new AchievementEvent(AchievementTriggers::QRActivationCount,1,$this->user)); break;
-            }
-
             if (intval($this->promo_id) != 0) {
                 $this->openPromo();
             }
@@ -161,7 +150,7 @@ class StartDataConversation extends Conversation
                 $remote_user = User::with(["promos"])->where("telegram_chat_id", intval($this->request_user_id))->first();
 
                 $on_promo = $remote_user->promos()
-                    ->where("id", "=", $promo->id)//promotion_id
+                    ->where("promotion_id", "=", $promo->id)//promotion_id
                     ->first();
 
                 if ($on_promo) {
@@ -260,7 +249,21 @@ class StartDataConversation extends Conversation
             $this->user->parent_id = $sender_user->id;
             $this->user->save();
 
-            event(new AchievementEvent(AchievementTriggers::ReferralCount,1,$sender_user));
+            switch ($this->code){
+                case "004": event(new AchievementEvent(AchievementTriggers::VKLinksActivationCount,1,$this->user)); break;
+                case "005": event(new AchievementEvent(AchievementTriggers::FBLinksActivationCount,1,$this->user)); break;
+                case "007":
+                case "008":
+                case "009":
+                case "010":
+                case "011":
+                case "006": event(new AchievementEvent(AchievementTriggers::QRActivationCount,1,$this->user)); break;
+                default:
+                    event(new AchievementEvent(AchievementTriggers::ReferralCount,1,$sender_user));
+                    break;
+            }
+
+
 
             Telegram::sendMessage([
                 'chat_id' => $sender_user->telegram_chat_id,
