@@ -902,12 +902,16 @@ $botman->hears('/achievements_description ([0-9]+)', function ($bot, $achievemen
         return;
     }
 
+
+    $currentVal = $stat == null ? 0 : $stat->stat_value;
+
+
     $attachment = new Image($achievement->ach_image_url);
     $message = OutgoingMessage::create(
         "*" .
         $achievement->title . "*\n_" .
         $achievement->description . "_\n" .
-        "Прогресс:*" . $stat->stat_value . "* из *" . $achievement->trigger_value . "*"
+        "Прогресс:*" . $currentVal . "* из *" . $achievement->trigger_value . "*"
     )
         ->withAttachment($attachment);
 
