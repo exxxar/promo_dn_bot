@@ -8,6 +8,7 @@ use App\User;
 use BotMan\BotMan\Messages\Attachments\Image;
 use BotMan\BotMan\Messages\Outgoing\OutgoingMessage;
 use BotMan\Drivers\Telegram\TelegramDriver;
+use Carbon\Carbon;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Hash;
@@ -202,6 +203,8 @@ class UsersController extends Controller
 
             $bonus = $money_in_check * env("CAHSBAK_PROCENT") / 100;
             $user->cashback_bonus_count += $bonus;
+
+            $user->updated_at = Carbon::now();
 
             $user->save();
 

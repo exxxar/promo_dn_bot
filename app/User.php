@@ -34,6 +34,15 @@ class User extends Authenticatable
         'cashback_bonus_count',
         'is_admin',
         'parent_id',
+        'updated_at',
+        'created_at',
+
+
+        'network_cashback_bonus_count',
+        'network_friends_count',
+
+        'current_network_level',
+        'activated',
     ];
 
     /**
@@ -76,12 +85,12 @@ class User extends Authenticatable
 
     public function parent()
     {
-        return $this->hasOne('App\User','parent_id','id');
+        return $this->hasOne('App\User', 'parent_id', 'id');
     }
 
     public function childs()
     {
-        return $this->hasMany('App\User','parent_id','id');
+        return $this->hasMany('App\User', 'parent_id', 'id');
     }
 
     public function achievements()

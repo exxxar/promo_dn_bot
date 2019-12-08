@@ -4,6 +4,8 @@ namespace App\Conversations;
 
 use App\CashbackHistory;
 use App\Company;
+use App\Enums\AchievementTriggers;
+use App\Events\AchievementEvent;
 use App\RefferalsPaymentHistory;
 use App\User;
 use BotMan\BotMan\Messages\Conversations\Conversation;
@@ -37,6 +39,9 @@ class PaymentConversation extends Conversation
 
         $this->user = \App\User::where("telegram_chat_id", $id)
             ->first();
+
+        $this->user->updated_at = Carbon::now();
+        $this->user->save();
 
         if ($this->user->is_admin == 1) {
             $this->conversationMenu("Начнем-с...");
@@ -100,8 +105,11 @@ class PaymentConversation extends Conversation
                 } else
                     $recipient_user->referral_bonus_count -= intval($nedded_bonus);
 
+                $recipient_user->activated = 1;
                 $recipient_user->updated_at = Carbon::now();
                 $recipient_user->save();
+
+                event(new AchievementEvent(AchievementTriggers::MaxCashBackRemoveBonus, $nedded_bonus, $recipient_user));
 
                 $company_name = Company::find($this->company_id)->title;
                 Telegram::sendMessage([
@@ -154,7 +162,10 @@ class PaymentConversation extends Conversation
 
         $cashBack = round(intval($this->money_in_check) * env("CAHSBAK_PROCENT") / 100);
         $user->cashback_bonus_count += $cashBack;
+        $user->activated = 1;
         $user->save();
+
+        event(new AchievementEvent(AchievementTriggers::MaxCashBackCount, $cashBack, $user));
 
         CashbackHistory::create([
             'money_in_check' => $this->money_in_check,
@@ -162,7 +173,7 @@ class PaymentConversation extends Conversation
             'employee_id' => $this->user->id,
             'company_id' => $this->company_id,
             'check_info' => $this->check_info,
-            'user_phone' => $this->phone??null,
+            'user_phone' => $this->phone ?? null,
             'user_id' => $user->id,
         ]);
 

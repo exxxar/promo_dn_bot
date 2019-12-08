@@ -41,7 +41,13 @@ class CreateUsersTable extends Migration
             $table->integer('referral_bonus_count')->default(0);
             $table->integer('cashback_bonus_count')->default(0);
 
+            $table->double('network_cashback_bonus_count')->default(0);
+
+            $table->integer('current_network_level')->default(0);
+            $table->integer('network_friends_count')->default(0);
+
             $table->boolean('is_admin')->default(false);
+            $table->boolean('activated')->default(false);
 
             $table->unsignedInteger("parent_id")->nullable();
 

@@ -18,4 +18,7 @@ final class AchievementTriggers extends Enum
     const FBLinksActivationCount = 4;
     const InstaLinksActivationCount = 5;
     const QRActivationCount = 6;
+    const MaxReferralBonusCount = 7;
+    const AchievementActivatedCount = 8;
+    const MaxCashBackRemoveBonus = 9;
 }

@@ -17,14 +17,14 @@ class AchievementsController extends Controller
 /*    public function index(){
 
 
-        $title=urlencode('Заголовок вашей вкладки или веб-страницы');
-        $url=urlencode('https://t.me/skidki_dn_bot?start=MDAxMDQ4NDY5ODcwMzAwMDAwMDAwMDA=');
-        $summary=urlencode('Текстовое описание, которое вкратце рассказывает, зачем пользователям переходить по этой ссылке.');
-        $image=urlencode('http://www.vash-web-site.ru/images/share-icon.jpg');
+    $title=urlencode('Заголовок вашей вкладки или веб-страницы');
+    $url=urlencode('https://t.me/skidki_dn_bot?start=MDAxMDQ4NDY5ODcwMzAwMDAwMDAwMDA=');
+    $summary=urlencode('Текстовое описание, которое вкратце рассказывает, зачем пользователям переходить по этой ссылке.');
+    $image=urlencode('http://www.vash-web-site.ru/images/share-icon.jpg');
 
 
-        return view("achievements",compact('url','title','summary','image'));
-    }*/
+    return view("achievements",compact('url','title','summary','image'));
+}*/
 
     public function index(Request $request)
     {

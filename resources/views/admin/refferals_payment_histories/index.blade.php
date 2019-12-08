@@ -42,13 +42,16 @@
                                 <td>
                                     @isset($payment->user)
                                     <a href="{{ route('users.show',$payment->user->id) }}">
-                                        {{$payment->user->phone}}</a>
+                                        {{$payment->user->phone??$payment->user->name??$payment->user->telegram_chat_id}}
+                                    </a>
                                         @endisset
                                 </td>
                                 <td>
+
                                     @isset($payment->employee)
                                     <a href="{{ route('users.show',$payment->employee->id) }}">
-                                        {{$payment->employee->id}}</a>
+                                        {{$payment->employee->phone??$payment->employee->name??$payment->employee->telegram_chat_id}}
+                                    </a>
                                     @endisset
                                 </td>
 

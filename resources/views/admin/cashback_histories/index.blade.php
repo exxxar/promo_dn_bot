@@ -46,9 +46,10 @@
                                     {{$cashback->activated?"Активирован":"Не активирован"}}
                                 </td>
                                 <td>
+
                                     @isset($cashback->employee)
                                         <a href="{{ route('users.show',$cashback->employee->id) }}">
-                                            {{$cashback->employee->phone}}</a>
+                                            {{$cashback->employee->phone??$cashback->employee->name??$cashback->employee->telegram_chat_id}}</a>
                                     @endisset
                                 </td>
                                 <td>

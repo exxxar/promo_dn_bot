@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use App\CashbackHistory;
 use App\Promotion;
 use App\User;
+use Carbon\Carbon;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Log;
@@ -51,10 +52,10 @@ class HomeController extends Controller
 
             $qrimage = "https://api.qrserver.com/v1/create-qr-code/?size=150x150&data=https://t.me/" . env("APP_BOT_NAME") . "?start=$code";
 
-            return view('home', compact('users', 'promotions', 'qrimage'));
+            return view('home', compact('users', 'promotions', 'qrimage', 'current_user'));
         }
 
-        return view('home', compact('users', 'promotions','current_user'));
+        return view('home', compact('users', 'promotions', 'current_user'));
     }
 
 
@@ -97,6 +98,7 @@ class HomeController extends Controller
         if ($user) {
             $cashBack = round(intval($money_in_check) * env("CAHSBAK_PROCENT") / 100);
             $user->cashback_bonus_count += $cashBack;
+            $user->updated_at = Carbon::now();
             $user->save();
 
 
@@ -145,32 +147,57 @@ class HomeController extends Controller
         $announce_title = $request->get("announce_title") ?? '';
         $announce_url = $request->get("announce_url") ?? null;
         $announce_message = $request->get("announce_message") ?? '';
+        $send_to_type = $request->get("send_to_type") ?? 0;
+
+        if (trim($announce_title)==''||trim($announce_message)=='')
+            return back()
+                ->with("success", "Заголовок или сообщение не заполнены!");
 
 
         foreach ($users as $user) {
 
-            if (!is_numeric($user->telegram_chat_id)&&strlen("$user->telegram_chat_id")>=10)
+            if (!is_numeric($user->telegram_chat_id) && strlen("$user->telegram_chat_id") >= 10)
                 continue;
 
+            $doSend = ($send_to_type == 0) ||
+                ($send_to_type == 1 && $user->activated == 1) ||
+                ($send_to_type == 2 && $user->activated == 0);
 
             try {
-                Telegram::sendMessage([
-                    'chat_id' => $user->telegram_chat_id,
-                    'parse_mode' => 'Markdown',
-                    'text' => "*$announce_title*\n_ $announce_message _",
-                    'disable_notification' => 'false'
-                ]);
 
-                if ($announce_url != null)
-                    Telegram::sendPhoto([
+                if ($doSend) {
+
+                    Telegram::sendMessage([
                         'chat_id' => $user->telegram_chat_id,
-                        'photo' => InputFile::create($announce_url)
+                        'parse_mode' => 'Markdown',
+                        'text' => "*$announce_title*\n_ $announce_message _",
+                        'disable_notification' => 'false'
                     ]);
+
+                    if ($announce_url != null)
+                        Telegram::sendPhoto([
+                            'chat_id' => $user->telegram_chat_id,
+                            'photo' => InputFile::create($announce_url)
+                        ]);
+                }
             } catch (\Exception $e) {
 
             }
         }
 
         return back()->with("success", "Сообщения успешно отправлены!");
+    }
+
+    public function cabinet()
+    {
+
+
+        $title = urlencode('Заголовок вашей вкладки или веб-страницы');
+        $url = urlencode('https://t.me/skidki_dn_bot?start=MDAxMDQ4NDY5ODcwMzAwMDAwMDAwMDA=');
+        $summary = urlencode('Текстовое описание, которое вкратце рассказывает, зачем пользователям переходить по этой ссылке.');
+        $image = urlencode('http://www.vash-web-site.ru/images/share-icon.jpg');
+
+
+        return view("cabinet", compact('url', 'title', 'summary', 'image'));
     }
 }

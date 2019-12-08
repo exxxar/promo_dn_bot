@@ -32,16 +32,9 @@
     </main>
 
 
-    <script src="{{asset('/js/app.js')}}"></script>
-
-    <script src="{{asset('/js/jquery.mask.min.js')}}"></script>
 
 
-    <script>
-        $(document).ready(function () {
 
-        });
-    </script>
 </div>
 </body>
 </html>

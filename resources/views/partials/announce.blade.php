@@ -23,6 +23,17 @@
 
     <div class="form-row">
         <div class="col form-group">
+            <label for="send_to_type">Кому отправить</label>
+            <select class="form-control" id="send_to_type" name="send_to_type">
+                <option value="0">Всем</option>
+                <option value="1">Активным</option>
+                <option value="2">Не активным</option>
+            </select>
+        </div>
+    </div>
+
+    <div class="form-row">
+        <div class="col form-group">
             <button class="btn btn-primary" name="submit">Отправить всем пользователям</button>
         </div>
     </div>

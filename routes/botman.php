@@ -83,7 +83,11 @@ $botman->hears("\xF0\x9F\x93\xB2Мои друзья", function ($bot) {
 
     $ref = $user->referrals_count;
 
-    $tmp_message = "Вы пригласили *$ref* друзей!\n_Делитесь Вашим QR-кодом и накапливайте баллы!_\n";
+    $network = $user->network_friends_count;
+
+    $network_tmp = $user->current_network_level>0?"У вас в сети $network друзей!\n":"";
+
+    $tmp_message = "Вы пригласили *$ref* друзей!\n $network_tmp _Делитесь Вашим QR-кодом и накапливайте баллы!_\n";
 
     if ($ref > 0) {
         $message = Question::create($tmp_message)
@@ -122,11 +126,12 @@ $botman->hears("\xF0\x9F\x92\xB3Мои баллы", function ($bot) {
     $user = \App\User::where("telegram_chat_id", $id)->first();
 
     if ($user != null) {
-        $summary = $user->referral_bonus_count + $user->cashback_bonus_count;
+        $summary = $user->referral_bonus_count + $user->cashback_bonus_count+$user->network_cashback_bonus_count;
         $cashback = $user->cashback_bonus_count;
 
+        $tmp_network = $user->network_friends_count>=150?"\nСетевой бонус *".$user->network_cashback_bonus_count."*\n":'';
 
-        $tmp_message = "У вас *$summary* баллов, из них *$cashback* - бонус CashBack!\n_Для оплаты дайте отсканировать данный QR-код сотруднику!_\n";
+        $tmp_message = "У вас *$summary* баллов, из них *$cashback* - бонус CashBack!\n $tmp_network _Для оплаты дайте отсканировать данный QR-код сотруднику!_\n";
 
 
         $tmp_buttons = [];
@@ -867,6 +872,10 @@ $botman->hears('/achievements_my_not_active ([0-9]+)', function ($bot, $page) {
 });
 $botman->hears('/achievements_reward ([0-9]+)', function ($bot, $achievementId) {
 
+    $telegramUser = $bot->getUser();
+    $id = $telegramUser->getId();
+    $user = \App\User::where("telegram_chat_id", $id)->first();
+
     $achievement = \App\Achievement::find($achievementId);
 
     if ($achievement == null) {
@@ -882,6 +891,36 @@ $botman->hears('/achievements_reward ([0-9]+)', function ($bot, $achievementId) 
         ->withAttachment($attachment);
 
     $bot->reply($message, ["parse_mode" => "Markdown"]);
+
+
+    $stat = \App\Stat::where("user_id", "=", $user->id, 'and')
+        ->where("stat_type", "=", $achievement->trigger_type->value)
+        ->first();
+
+    $currentVal = $stat == null ? 0 : $stat->stat_value;
+
+    if($currentVal>=$achievement->trigger_value){
+        $tmp_id = "$id";
+        while (strlen($tmp_id) < 10)
+            $tmp_id = "0" . $tmp_id;
+
+        $tmp_achievement_id = (string)$achievement->id;
+        while (strlen($tmp_achievement_id) < 10)
+            $tmp_achievement_id = "0" . $tmp_achievement_id;
+
+        $code = base64_encode("012" . $tmp_id . $tmp_achievement_id);
+
+        $attachment = new Image("https://api.qrserver.com/v1/create-qr-code/?size=150x150&data=https://t.me/" . env("APP_BOT_NAME") . "?start=$code");
+
+        // Build message object
+        $message = OutgoingMessage::create('_Код для активации достижения_')
+            ->withAttachment($attachment);
+
+
+        // Reply message object
+        $bot->reply($message, ["parse_mode" => "Markdown"]);
+    }
+
 
 
 });
@@ -905,13 +944,16 @@ $botman->hears('/achievements_description ([0-9]+)', function ($bot, $achievemen
 
     $currentVal = $stat == null ? 0 : $stat->stat_value;
 
+    $progress = $currentVal>=$achievement->trigger_value?
+        "\n*Успешно выполнено!*":
+        "Прогресс:*" . $currentVal . "* из *" . $achievement->trigger_value . "*";
 
     $attachment = new Image($achievement->ach_image_url);
     $message = OutgoingMessage::create(
         "*" .
         $achievement->title . "*\n_" .
         $achievement->description . "_\n" .
-        "Прогресс:*" . $currentVal . "* из *" . $achievement->trigger_value . "*"
+        $progress
     )
         ->withAttachment($attachment);
 
@@ -919,7 +961,6 @@ $botman->hears('/achievements_description ([0-9]+)', function ($bot, $achievemen
 
 
 });
-
 
 $botman->fallback(function ($bot) {
     Log::info("fallback");

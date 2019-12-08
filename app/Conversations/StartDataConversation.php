@@ -2,14 +2,20 @@
 
 namespace App\Conversations;
 
+use App\Achievement;
 use App\CashbackHistory;
+use App\Enums\AchievementTriggers;
+use App\Events\AchievementEvent;
+use App\Events\NetworkLevelRecounterEvent;
 use App\Promotion;
 use App\RefferalsHistory;
 use App\User;
+use App\UserHasAchievement;
 use App\UserHasPromo;
 use BotMan\BotMan\Messages\Attachments\Image;
 use BotMan\BotMan\Messages\Attachments\Location;
 use BotMan\BotMan\Messages\Outgoing\OutgoingMessage;
+use Carbon\Carbon;
 use Illuminate\Foundation\Inspiring;
 use BotMan\BotMan\Messages\Incoming\Answer;
 use BotMan\BotMan\Messages\Outgoing\Question;
@@ -68,7 +74,7 @@ class StartDataConversation extends Conversation
 
         $this->code = $matches[1][0] ?? env("CUSTOME_CODE");
         $this->request_user_id = $matches[2][0] ?? $tmp_dev_id;
-        $this->promo_id = $matches[3][0] ?? env("CUSTOME_PROMO");
+        $this->promo_id = $this->ach_id = $matches[3][0] ?? env("CUSTOME_PROMO");
 
 
         $telegramUser = $this->bot->getUser();
@@ -93,11 +99,29 @@ class StartDataConversation extends Conversation
                 $canBeRefferal = false;
             }
 
+
+            if ($this->code == "012") {
+                $this->activateAchievement();
+                $canBeRefferal = false;
+            }
+
         }
 
         if ($canBeRefferal) {
             $this->activateRefferal();
             $this->mainMenu('Добрый день! Приветствуем вас в нашем акционном боте! У нас вы сможете найти самые актуальные акции!');
+
+            switch ($this->code){
+                case "004": event(new AchievementEvent(AchievementTriggers::VKLinksActivationCount,1,$this->user)); break;
+                case "005": event(new AchievementEvent(AchievementTriggers::FBLinksActivationCount,1,$this->user)); break;
+                case "001":
+                case "007":
+                case "008":
+                case "009":
+                case "010":
+                case "011":
+                case "006": event(new AchievementEvent(AchievementTriggers::QRActivationCount,1,$this->user)); break;
+            }
 
             if (intval($this->promo_id) != 0) {
                 $this->openPromo();
@@ -137,7 +161,7 @@ class StartDataConversation extends Conversation
                 $remote_user = User::with(["promos"])->where("telegram_chat_id", intval($this->request_user_id))->first();
 
                 $on_promo = $remote_user->promos()
-                    ->where("promotion_id", "=", $promo->id)
+                    ->where("id", "=", $promo->id)//promotion_id
                     ->first();
 
                 if ($on_promo) {
@@ -153,14 +177,34 @@ class StartDataConversation extends Conversation
 
                     $remote_user->referral_bonus_count += $promo->refferal_bonus;
 
+                    $remote_user->updated_at = Carbon::now();
                     $remote_user->save();
+
 
                     $this->bot->sendRequest("sendMessage", [
                         "chat_id" => $remote_user->telegram_chat_id,
                         "text" => $promo->activation_text
                     ]);
+
+                    $this->bot->reply('Приз по акции успешно активирован');
+
+
+                    event(new AchievementEvent(AchievementTriggers::MaxReferralBonusCount,1,$remote_user));
+                    event(new AchievementEvent(AchievementTriggers::PromosActivationSequence,1,$remote_user));
                 }
 
+
+                if ($promo->current_activation_count == $promo->activation_count) {
+                    $this->bot->reply('Больше нет призов по акции, нет возможности выдать приз пользователю!');
+                    $this->bot->sendRequest("sendMessage", [
+                        "chat_id" => $remote_user->telegram_chat_id,
+                        "text" => "Больше нет призов по акции, вы не успели("
+                    ]);
+                }
+
+                $remote_user->activated = 1;
+                $remote_user->updated_at = Carbon::now();
+                $remote_user->save();
 
                 $ref = RefferalsHistory::where("user_recipient_id", $remote_user->id)->first();
                 if ($ref) {
@@ -168,16 +212,23 @@ class StartDataConversation extends Conversation
                         $ref->activated = 1;
                         $ref->save();
 
+
+
                         $sender_user = User::where("id", $ref->user_sender_id)->first();
                         $sender_user->referral_bonus_count += env("REFERRAL_BONUS");
                         $sender_user->save();
+
+                        event(new NetworkLevelRecounterEvent($sender_user->id));
+                        event(new AchievementEvent(AchievementTriggers::ReferralCount,1,$sender_user));
+                        event(new AchievementEvent(AchievementTriggers::MaxReferralBonusCount,1,$sender_user));
+
 
                         $this->bot->sendRequest("sendMessage", [
                             "chat_id" => $sender_user->telegram_chat_id,
                             "text" => "Вам начислено " . env("REFERRAL_BONUS") . " бонусов."
                         ]);
 
-                        $this->bot->reply('Приз по акции успешно активирован');
+
                     }
 
 
@@ -209,6 +260,8 @@ class StartDataConversation extends Conversation
             $this->user->parent_id = $sender_user->id;
             $this->user->save();
 
+            event(new AchievementEvent(AchievementTriggers::ReferralCount,1,$sender_user));
+
             Telegram::sendMessage([
                 'chat_id' => $sender_user->telegram_chat_id,
                 'parse_mode' => 'Markdown',
@@ -230,6 +283,51 @@ class StartDataConversation extends Conversation
         }
 
 
+    }
+
+    protected function activateAchievement()
+    {
+        try {
+            if ($this->user->is_admin == 1) {
+                $achievement = Achievement::find(intval($this->ach_id));
+
+                $remote_user = User::with(["achievements"])
+                    ->where("telegram_chat_id", intval($this->request_user_id))->first();
+
+                $on_ach = UserHasAchievement::with(["achievement"])
+                ->where("user_id","=",$remote_user->id,'and')
+                    ->where("achievement_id","=",$achievement->id)
+                    ->first();
+
+                if ($on_ach==null) {
+                    $this->bot->reply('Достижение не найдено');
+                    return;
+                }
+
+                if ($on_ach->activated==1) {
+                    $this->bot->reply('Приз за достижение уже был активирован ранее');
+                    return;
+                }
+
+                if ($on_ach->activated == 0) {
+                    $on_ach->activated=1;
+                    $on_ach->save();
+
+                    $remote_user->updated_at = Carbon::now();
+                    $remote_user->activated = 1;
+                    $remote_user->save();
+
+                    event(new AchievementEvent(AchievementTriggers::AchievementActivatedCount,1,$remote_user));
+
+                    $this->bot->sendRequest("sendMessage", [
+                        "chat_id" => $remote_user->telegram_chat_id,
+                        "text" => "Достижение ".$on_ach->achievement->title." успешно активировано!"
+                    ]);
+                }
+            }
+        } catch (\Exception $e) {
+            $this->bot->reply($e->getMessage() . " " . $e->getLine());
+        }
     }
 
     protected function openPromo()

@@ -13,6 +13,7 @@ use BotMan\BotMan\Messages\Incoming\Answer;
 use BotMan\BotMan\Messages\Outgoing\Actions\Button;
 use BotMan\BotMan\Messages\Outgoing\OutgoingMessage;
 use BotMan\BotMan\Messages\Outgoing\Question;
+use Carbon\Carbon;
 use Illuminate\Support\Facades\Log;
 use Telegram\Bot\Laravel\Facades\Telegram;
 
@@ -506,7 +507,10 @@ class LotusProfileConversation extends Conversation
         if ($promo->current_activation_count < $promo->activation_count) {
 
             if ($promo->immediately_activate == 1) {
+
                 $this->user->referral_bonus_count += $promo->refferal_bonus;
+                $this->user->updated_at = Carbon::now();
+
                 $this->bot->reply($promo->activation_text);
 
                 $this->user->promos()->attach($promo->id);

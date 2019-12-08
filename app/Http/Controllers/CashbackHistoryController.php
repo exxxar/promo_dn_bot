@@ -20,7 +20,9 @@ class CashbackHistoryController extends Controller
     public function index(Request $request)
     {
         //
-        $cashbacks = CashbackHistory::orderBy('id', 'DESC')->paginate(15);
+        $cashbacks = CashbackHistory::with(["employee"])
+            ->orderBy('id', 'DESC')
+            ->paginate(15);
 
         return view('admin.cashback_histories.index', compact('cashbacks'))
             ->with('i', ($request->get('page', 1) - 1) * 15);

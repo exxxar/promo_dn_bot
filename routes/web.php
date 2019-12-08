@@ -24,7 +24,7 @@ Route::get('/test_user',function (){
        }
 
 });
-Route::get('/ach','AchievementsController@index');
+Route::get('/cabinet','HomeController@cabinet');
 Route::get('/test_get_updates','BotManController@testGetUpdates');
 
 
