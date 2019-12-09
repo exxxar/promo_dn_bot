@@ -709,7 +709,7 @@ $botman->hears('/achievements_all ([0-9]+)', function ($bot, $page) {
 
 });
 $botman->hears('/achievements_my ([0-9]+)', function ($bot, $page) {
-
+try {
     $telegramUser = $bot->getUser();
 
     $id = $telegramUser->getId();
@@ -729,7 +729,7 @@ $botman->hears('/achievements_my ([0-9]+)', function ($bot, $page) {
             $attachment = new Image($ach->achievement->ach_image_url);
             $message = OutgoingMessage::create(
                 "*" .
-                $ach->achievement->title .($userAchs->activated==0?"\xE2\x9C\x85":"\xE2\x9D\x8E"). "*\n" .
+                $ach->achievement->title . ($userAchs->activated == 0 ? "\xE2\x9C\x85" : "\xE2\x9D\x8E") . "*\n" .
                 $ach->achievement->description
             )
                 ->withAttachment($attachment);
@@ -786,7 +786,9 @@ $botman->hears('/achievements_my ([0-9]+)', function ($bot, $page) {
                 'reply_markup' => json_encode($keyboard)
             ]);
 
-
+}catch (Exception $e){
+    $bot->reply($e->getMessage()." ".$e->getLine());
+}
 });
 
 $botman->hears('/achievements_reward ([0-9]+)', function ($bot, $achievementId) {
