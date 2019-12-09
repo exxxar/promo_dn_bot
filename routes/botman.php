@@ -85,9 +85,9 @@ $botman->hears("\xF0\x9F\x93\xB2Мои друзья", function ($bot) {
 
     $network = $user->network_friends_count;
 
-    $network_tmp = $user->current_network_level>0?"У вас в сети *$network* друзей!\n":"";
+    $network_tmp = $user->current_network_level > 0 ? "У вас в сети *$network* друзей!\n" : "";
 
-    $tmp_message = "Вы пригласили *$ref* друзей!\n".$network_tmp."_Делитесь Вашим QR-кодом и накапливайте баллы!_\n";
+    $tmp_message = "Вы пригласили *$ref* друзей!\n" . $network_tmp . "_Делитесь Вашим QR-кодом и накапливайте баллы!_\n";
 
     if ($ref > 0) {
         $message = Question::create($tmp_message)
@@ -126,12 +126,12 @@ $botman->hears("\xF0\x9F\x92\xB3Мои баллы", function ($bot) {
     $user = \App\User::where("telegram_chat_id", $id)->first();
 
     if ($user != null) {
-        $summary = $user->referral_bonus_count + $user->cashback_bonus_count+$user->network_cashback_bonus_count;
+        $summary = $user->referral_bonus_count + $user->cashback_bonus_count + $user->network_cashback_bonus_count;
         $cashback = $user->cashback_bonus_count;
 
-        $tmp_network = $user->network_friends_count>=150?"Сетевой бонус *".$user->network_cashback_bonus_count."*\n":'';
+        $tmp_network = $user->network_friends_count >= 150 ? "Сетевой бонус *" . $user->network_cashback_bonus_count . "*\n" : '';
 
-        $tmp_message = "У вас *$summary* баллов, из них *$cashback* - бонус CashBack!\n".$tmp_network."_Для оплаты дайте отсканировать данный QR-код сотруднику!_\n";
+        $tmp_message = "У вас *$summary* баллов, из них *$cashback* - бонус CashBack!\n" . $tmp_network . "_Для оплаты дайте отсканировать данный QR-код сотруднику!_\n";
 
 
         $tmp_buttons = [];
@@ -709,86 +709,89 @@ $botman->hears('/achievements_all ([0-9]+)', function ($bot, $page) {
 
 });
 $botman->hears('/achievements_my ([0-9]+)', function ($bot, $page) {
-try {
-    $telegramUser = $bot->getUser();
+    try {
+        $telegramUser = $bot->getUser();
 
-    $id = $telegramUser->getId();
+        $id = $telegramUser->getId();
 
-    $user = \App\User::where("telegram_chat_id", $id)->first();
+        $user = \App\User::where("telegram_chat_id", $id)->first();
 
-    $userAchs = \App\UserHasAchievement::with(["achievement"])
-        ->where("user_id", "=", $user->id)
-        ->skip($page * 5)
-        ->take(5)
-        ->orderBy('id', 'DESC')
-        ->get();
+        $userAchs = \App\UserHasAchievement::with(["achievement"])
+            ->where("user_id", "=", $user->id)
+            ->skip($page * 5)
+            ->take(5)
+            ->orderBy('id', 'DESC')
+            ->get();
 
-    if (count($userAchs) > 0) {
-        foreach ($userAchs as $key => $ach) {
+        if (count($userAchs) > 0) {
+            foreach ($userAchs as $key => $ach) {
 
-            $attachment = new Image($ach->achievement->ach_image_url);
-            $message = OutgoingMessage::create(
-                "*" .
-                $ach->achievement->title . ($userAchs->activated == 0 ? "\xE2\x9C\x85" : "\xE2\x9D\x8E") . "*\n" .
-                $ach->achievement->description
-            )
-                ->withAttachment($attachment);
+                if ($ach == null)
+                    continue;
 
-            $bot->reply($message, ["parse_mode" => "Markdown"]);
+                $attachment = new Image($ach->achievement->ach_image_url);
+                $message = OutgoingMessage::create(
+                    "*" .
+                    $ach->achievement->title . ($userAchs->activated == 0 ? "\xE2\x9C\x85" : "\xE2\x9D\x8E") . "*\n" .
+                    $ach->achievement->description
+                )
+                    ->withAttachment($attachment);
 
-            $keyboard = [
-                'inline_keyboard' => [
-                    [
-                        ['text' => "Награда", 'callback_data' => "/achievements_reward " . $ach->achievement->id],
-                        ['text' => "Как получить", 'callback_data' => "/achievements_description " . $ach->achievement->id],
-                    ],
+                $bot->reply($message, ["parse_mode" => "Markdown"]);
 
-                ]
-            ];
+                $keyboard = [
+                    'inline_keyboard' => [
+                        [
+                            ['text' => "Награда", 'callback_data' => "/achievements_reward " . $ach->achievement->id],
+                            ['text' => "Как получить", 'callback_data' => "/achievements_description " . $ach->achievement->id],
+                        ],
 
-            $bot->sendRequest("sendMessage",
-                ["text" => 'Детали достижения', 'reply_markup' => json_encode($keyboard)
-                ]);
-        }
-    } else
-        $bot->reply("У вас еще активированных нет достижений!", ["parse_mode" => "Markdown"]);
+                    ]
+                ];
 
-    $inline_keyboard = [];
-    if ($page == 0 && count($userAchs) == 5)
-        array_push($inline_keyboard, ['text' => 'Далее', 'callback_data' => '/achievements_my ' . ($page + 1)]);
+                $bot->sendRequest("sendMessage",
+                    ["text" => 'Детали достижения', 'reply_markup' => json_encode($keyboard)
+                    ]);
+            }
+        } else
+            $bot->reply("У вас еще активированных нет достижений!", ["parse_mode" => "Markdown"]);
 
-    if ($page > 0) {
-        if (count($userAchs) == 0) {
-            array_push($inline_keyboard, ['text' => 'Назад', 'callback_data' => '/achievements_my ' . ($page - 1)]);
-        }
-
-        if (count($userAchs) == 5) {
-            array_push($inline_keyboard, ['text' => 'Назад', 'callback_data' => '/achievements_my ' . ($page - 1)]);
+        $inline_keyboard = [];
+        if ($page == 0 && count($userAchs) == 5)
             array_push($inline_keyboard, ['text' => 'Далее', 'callback_data' => '/achievements_my ' . ($page + 1)]);
+
+        if ($page > 0) {
+            if (count($userAchs) == 0) {
+                array_push($inline_keyboard, ['text' => 'Назад', 'callback_data' => '/achievements_my ' . ($page - 1)]);
+            }
+
+            if (count($userAchs) == 5) {
+                array_push($inline_keyboard, ['text' => 'Назад', 'callback_data' => '/achievements_my ' . ($page - 1)]);
+                array_push($inline_keyboard, ['text' => 'Далее', 'callback_data' => '/achievements_my ' . ($page + 1)]);
+            }
+
+            if (count($userAchs) > 0 && count($userAchs) < 5) {
+                array_push($inline_keyboard, ['text' => 'Назад', 'callback_data' => '/achievements_my ' . ($page - 1)]);
+            }
         }
 
-        if (count($userAchs) > 0 && count($userAchs) < 5) {
-            array_push($inline_keyboard, ['text' => 'Назад', 'callback_data' => '/achievements_my ' . ($page - 1)]);
-        }
+
+        $keyboard = [
+            'inline_keyboard' => [
+                $inline_keyboard
+            ]
+        ];
+
+        if (count($inline_keyboard) > 0)
+            $bot->sendRequest("sendMessage",
+                [
+                    "text" => "Выберите действие",
+                    'reply_markup' => json_encode($keyboard)
+                ]);
+
+    } catch (Exception $e) {
+        $bot->reply($e->getMessage() . " " . $e->getLine());
     }
-
-
-    $keyboard = [
-        'inline_keyboard' => [
-            $inline_keyboard
-        ]
-    ];
-
-    if (count($inline_keyboard) > 0)
-        $bot->sendRequest("sendMessage",
-            [
-                "text" => "Выберите действие",
-                'reply_markup' => json_encode($keyboard)
-            ]);
-
-}catch (Exception $e){
-    $bot->reply($e->getMessage()." ".$e->getLine());
-}
 });
 
 $botman->hears('/achievements_reward ([0-9]+)', function ($bot, $achievementId) {
@@ -820,7 +823,7 @@ $botman->hears('/achievements_reward ([0-9]+)', function ($bot, $achievementId) 
 
     $currentVal = $stat == null ? 0 : $stat->stat_value;
 
-    if($currentVal>=$achievement->trigger_value){
+    if ($currentVal >= $achievement->trigger_value) {
         $tmp_id = "$id";
         while (strlen($tmp_id) < 10)
             $tmp_id = "0" . $tmp_id;
@@ -841,7 +844,6 @@ $botman->hears('/achievements_reward ([0-9]+)', function ($bot, $achievementId) 
         // Reply message object
         $bot->reply($message, ["parse_mode" => "Markdown"]);
     }
-
 
 
 });
@@ -865,8 +867,8 @@ $botman->hears('/achievements_description ([0-9]+)', function ($bot, $achievemen
 
     $currentVal = $stat == null ? 0 : $stat->stat_value;
 
-    $progress = $currentVal>=$achievement->trigger_value?
-        "\n*Успешно выполнено!*":
+    $progress = $currentVal >= $achievement->trigger_value ?
+        "\n*Успешно выполнено!*" :
         "Прогресс:*" . $currentVal . "* из *" . $achievement->trigger_value . "*";
 
     $attachment = new Image($achievement->ach_image_url);
