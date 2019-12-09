@@ -720,14 +720,14 @@ $botman->hears('/achievements_my ([0-9]+)', function ($bot, $page) {
         if (count($user->achievements) > 0) {
             foreach ($user->achievements as $key => $ach) {
 
-                $activated = \App\UserHasAchievement::where("user_id","=",$user->id,"and")
+             /*   $activated = \App\UserHasAchievement::where("user_id","=",$user->id,"and")
                     ->where("achievement_id","=",$ach->id)
-                    ->first();
+                    ->first();*/
 
                 $attachment = new Image($ach->ach_image_url);
                 $message = OutgoingMessage::create(
                     "*" .
-                    $ach->title . ($activated->activated == 0 ? "\xE2\x9C\x85" : "\xE2\x9D\x8E") . "*\n" .
+                    $ach->title . ($ach->activated == 0 ? "\xE2\x9D\x8E" :  "\xE2\x9C\x85") . "*\n" .
                     $ach->description
                 )
                     ->withAttachment($attachment);
