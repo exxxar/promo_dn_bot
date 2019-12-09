@@ -10,6 +10,6 @@ class UserHasAchievement extends Model
 
     public function achievement()
     {
-        return $this->hasOne('App\Achievement','user_id','id');
+        return $this->hasOne('App\Achievement','id','user_id');
     }
 }
