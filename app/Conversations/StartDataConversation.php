@@ -11,7 +11,6 @@ use App\Promotion;
 use App\RefferalsHistory;
 use App\User;
 use App\UserHasAchievement;
-use App\UserHasPromo;
 use BotMan\BotMan\Messages\Attachments\Image;
 use BotMan\BotMan\Messages\Attachments\Location;
 use BotMan\BotMan\Messages\Outgoing\OutgoingMessage;

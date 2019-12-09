@@ -716,20 +716,18 @@ $botman->hears('/achievements_my ([0-9]+)', function ($bot, $page) {
 
         $user = \App\User::with(["achievements"])->where("telegram_chat_id", $id)->first();
 
-        $userAchs = \App\UserHasAchievement::with(["achievement"])
-            ->where("user_id", "=", $user->id)
-            ->skip($page * 5)
-            ->take(5)
-            ->orderBy('id', 'DESC')
-            ->get();
 
         if (count($user->achievements) > 0) {
             foreach ($user->achievements as $key => $ach) {
 
+                $activated = \App\UserHasAchievement::where("user_id","=",$user->id,"and")
+                    ->where("achievement_id","=",$ach->id)
+                    ->first();
+
                 $attachment = new Image($ach->ach_image_url);
                 $message = OutgoingMessage::create(
                     "*" .
-                    $ach->title . ($ach->activated == 0 ? "\xE2\x9C\x85" : "\xE2\x9D\x8E") . "*\n" .
+                    $ach->title . ($activated->activated == 0 ? "\xE2\x9C\x85" : "\xE2\x9D\x8E") . "*\n" .
                     $ach->description
                 )
                     ->withAttachment($attachment);
@@ -754,20 +752,20 @@ $botman->hears('/achievements_my ([0-9]+)', function ($bot, $page) {
             $bot->reply("У вас еще активированных нет достижений!", ["parse_mode" => "Markdown"]);
 
         $inline_keyboard = [];
-        if ($page == 0 && count($userAchs) == 5)
+        if ($page == 0 && count($user->achievements) == 5)
             array_push($inline_keyboard, ['text' => 'Далее', 'callback_data' => '/achievements_my ' . ($page + 1)]);
 
         if ($page > 0) {
-            if (count($userAchs) == 0) {
+            if (count($user->achievements) == 0) {
                 array_push($inline_keyboard, ['text' => 'Назад', 'callback_data' => '/achievements_my ' . ($page - 1)]);
             }
 
-            if (count($userAchs) == 5) {
+            if (count($user->achievements) == 5) {
                 array_push($inline_keyboard, ['text' => 'Назад', 'callback_data' => '/achievements_my ' . ($page - 1)]);
                 array_push($inline_keyboard, ['text' => 'Далее', 'callback_data' => '/achievements_my ' . ($page + 1)]);
             }
 
-            if (count($userAchs) > 0 && count($userAchs) < 5) {
+            if (count($user->achievements) > 0 && count($user->achievements) < 5) {
                 array_push($inline_keyboard, ['text' => 'Назад', 'callback_data' => '/achievements_my ' . ($page - 1)]);
             }
         }
