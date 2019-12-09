@@ -714,7 +714,7 @@ $botman->hears('/achievements_my ([0-9]+)', function ($bot, $page) {
 
         $id = $telegramUser->getId();
 
-        $user = \App\User::where("telegram_chat_id", $id)->first();
+        $user = \App\User::with(["achievements"])->where("telegram_chat_id", $id)->first();
 
         $userAchs = \App\UserHasAchievement::with(["achievement"])
             ->where("user_id", "=", $user->id)
@@ -723,17 +723,14 @@ $botman->hears('/achievements_my ([0-9]+)', function ($bot, $page) {
             ->orderBy('id', 'DESC')
             ->get();
 
-        if (count($userAchs) > 0) {
-            foreach ($userAchs as $key => $ach) {
+        if (count($user->achievements) > 0) {
+            foreach ($user->achievements as $key => $ach) {
 
-                if ($ach == null)
-                    continue;
-
-                $attachment = new Image($ach->achievement->ach_image_url);
+                $attachment = new Image($ach->ach_image_url);
                 $message = OutgoingMessage::create(
                     "*" .
-                    $ach->achievement->title . ($userAchs->activated == 0 ? "\xE2\x9C\x85" : "\xE2\x9D\x8E") . "*\n" .
-                    $ach->achievement->description
+                    $ach->title . ($ach->activated == 0 ? "\xE2\x9C\x85" : "\xE2\x9D\x8E") . "*\n" .
+                    $ach->description
                 )
                     ->withAttachment($attachment);
 
@@ -742,8 +739,8 @@ $botman->hears('/achievements_my ([0-9]+)', function ($bot, $page) {
                 $keyboard = [
                     'inline_keyboard' => [
                         [
-                            ['text' => "Награда", 'callback_data' => "/achievements_reward " . $ach->achievement->id],
-                            ['text' => "Как получить", 'callback_data' => "/achievements_description " . $ach->achievement->id],
+                            ['text' => "Награда", 'callback_data' => "/achievements_reward " . $ach->id],
+                            ['text' => "Как получить", 'callback_data' => "/achievements_description " . $ach->id],
                         ],
 
                     ]
