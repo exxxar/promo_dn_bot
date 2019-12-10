@@ -704,36 +704,6 @@ $botman->hears('/statistic', function ($bot) {
 
 });
 
-$botman->hears('/activity_information', function ($bot) {
-
-    $types = [
-        "Количество активация приза по акции",
-        "Количество рефералов",
-        "Максимальное количество накопленного CashBack",
-        "Количество переходов из ВК",
-        "Количество переходов из Facebook",
-        "Количество переходов из Instagram",
-        "Количество переходов из других источников",
-        "Масимальный реферальный бонус",
-        "Количество активированных достижений",
-        "Максимальное количество списанного CashBack",
-    ];
-
-    $telegramUser = $bot->getUser();
-    $id = $telegramUser->getId();
-    $user = \App\User::where("telegram_chat_id", $id)->first();
-
-    $stats = \App\Stat::where("user_id", $user->id)
-        ->get();
-
-    $message = "";
-
-    foreach ($stats as $stat)
-        $message .= $types[$stat->stat_type->value] . "=*" . $stat->stat_value . "*\n";
-
-    $bot->reply($message, ["parse_mode" => "Markdown"]);
-
-});
 
 $botman->hears('/achievements_panel', function ($bot) {
     $message = Question::create("Получайте достижения и обменивайте их на крутейшие призы!")
@@ -755,7 +725,7 @@ $botman->hears('/achievements_all ([0-9]+)', function ($bot, $page) {
     if (count($attachments) > 0) {
         $ach_btn_tmp = [];
         foreach ($attachments as $key => $achievement)
-            array_push($ach_btn_tmp, Button::create(($achievement->activated == 0 ? "\xE2\x9D\x8E" : "\xE2\x9C\x85") . $achievement->title)
+            array_push($ach_btn_tmp, Button::create(($achievement->activated == 0 ? "\xE2\x9D\x8E" : "\xE2\x9C\x85") . ($achievement->title ?? "Без названия [#" . $achievement->id . "]"))
                 ->value("/achievements_description " . $achievement->id)
             );
 
@@ -860,60 +830,7 @@ $botman->hears('/achievements_my ([0-9]+)', function ($bot, $page) {
         $bot->reply($e->getMessage() . " " . $e->getLine());
     }
 });
-/*
-$botman->hears('/achievements_reward ([0-9]+)', function ($bot, $achievementId) {
 
-    $telegramUser = $bot->getUser();
-    $id = $telegramUser->getId();
-    $user = \App\User::where("telegram_chat_id", $id)->first();
-
-    $achievement = \App\Achievement::find($achievementId);
-
-    if ($achievement == null) {
-        $bot->reply("Достижение не найдено!", ["parse_mode" => "Markdown"]);
-        return;
-    }
-
-    $attachment = new Image($achievement->prize_image_url);
-    $message = OutgoingMessage::create(
-        "*" .
-        $achievement->prize_description . "*"
-    )
-        ->withAttachment($attachment);
-
-    $bot->reply($message, ["parse_mode" => "Markdown"]);
-
-
-    $stat = \App\Stat::where("user_id", "=", $user->id, 'and')
-        ->where("stat_type", "=", $achievement->trigger_type->value)
-        ->first();
-
-    $currentVal = $stat == null ? 0 : $stat->stat_value;
-
-    if ($currentVal >= $achievement->trigger_value) {
-        $tmp_id = "$id";
-        while (strlen($tmp_id) < 10)
-            $tmp_id = "0" . $tmp_id;
-
-        $tmp_achievement_id = (string)$achievement->id;
-        while (strlen($tmp_achievement_id) < 10)
-            $tmp_achievement_id = "0" . $tmp_achievement_id;
-
-        $code = base64_encode("012" . $tmp_id . $tmp_achievement_id);
-
-        $attachment = new Image("https://api.qrserver.com/v1/create-qr-code/?size=150x150&data=https://t.me/" . env("APP_BOT_NAME") . "?start=$code");
-
-        // Build message object
-        $message = OutgoingMessage::create('_Код для активации достижения_')
-            ->withAttachment($attachment);
-
-
-        // Reply message object
-        $bot->reply($message, ["parse_mode" => "Markdown"]);
-    }
-
-
-});*/
 $botman->hears('/achievements_description ([0-9]+)', function ($bot, $achievementId) {
 
     $achievement = \App\Achievement::find($achievementId);
@@ -996,6 +913,37 @@ $botman->hears('/about', function ($bot) {
 });
 $botman->hears('/developers', function ($bot) {
     $bot->reply("Разработчики (тест)", ["parse_mode" => "Markdown"]);
+
+});
+
+$botman->hears('/activity_information', function ($bot) {
+
+    $stat_types = [
+        "Количество активация приза по акции",
+        "Количество рефералов",
+        "Максимальное количество накопленного CashBack",
+        "Количество переходов из ВК",
+        "Количество переходов из Facebook",
+        "Количество переходов из Instagram",
+        "Количество переходов из других источников",
+        "Масимальный реферальный бонус",
+        "Количество активированных достижений",
+        "Максимальное количество списанного CashBack",
+    ];
+
+    $telegramUser = $bot->getUser();
+    $id = $telegramUser->getId();
+    $user = \App\User::where("telegram_chat_id", $id)->first();
+
+    $stats = \App\Stat::where("user_id", $user->id)
+        ->get();
+
+    $message = "";
+
+    foreach ($stats as $stat)
+        $message .= $stat_types[$stat->stat_type->value] . "=*" . $stat->stat_value . "*\n";
+
+    $bot->reply($message, ["parse_mode" => "Markdown"]);
 
 });
 
