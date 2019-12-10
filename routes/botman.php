@@ -918,16 +918,16 @@ $botman->hears('/developers', function ($bot) {
 $botman->hears('/activity_information', function ($bot) {
 
     $stat_types = [
-        "Количество активация приза по акции",
-        "Количество рефералов",
-        "Максимальное количество накопленного CashBack",
-        "Количество переходов из ВК",
-        "Количество переходов из Facebook",
-        "Количество переходов из Instagram",
-        "Количество переходов из других источников",
-        "Масимальный реферальный бонус",
-        "Количество активированных достижений",
-        "Максимальное количество списанного CashBack",
+        "\xE2\x96\xAAКоличество активация приза по акции: *%d* раз.\n",
+        "\xE2\x96\xAAКоличество рефералов:  *%d* человек.\n",
+        "\xE2\x96\xAAМаксимальное количество накопленного CashBack: *%d* руб.\n",
+        "\xE2\x96\xAAКоличество переходов из ВК: *%d* раз.\n",
+        "\xE2\x96\xAAКоличество переходов из Facebook: *%d* раз.\n",
+        "\xE2\x96\xAAКоличество переходов из Instagram: *%d* раз.\n",
+        "\xE2\x96\xAAКоличество переходов из других источников: *%d* раз.\n",
+        "\xE2\x96\xAAМасимальный реферальный бонус: *%d* руб.\n",
+        "\xE2\x96\xAAКоличество активированных достижений: *%d* ед.\n",
+        "\xE2\x96\xAAМаксимальное количество списанного CashBack: *%d* руб.\n",
     ];
 
     $telegramUser = $bot->getUser();
@@ -940,7 +940,7 @@ $botman->hears('/activity_information', function ($bot) {
     $message = "";
 
     foreach ($stats as $stat)
-        $message .= $stat_types[$stat->stat_type->value] . "=*" . $stat->stat_value . "*\n";
+        $message .= sprintf($stat_types[$stat->stat_type->value], $stat->stat_value);
 
     $bot->reply($message, ["parse_mode" => "Markdown"]);
 
