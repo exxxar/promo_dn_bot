@@ -867,8 +867,8 @@ $botman->hears('/achievements_description ([0-9]+)', function ($bot, $achievemen
 
     $attachment = new Image($achievement->prize_image_url);
     $message = OutgoingMessage::create(
-        "*" .
-        $achievement->prize_description . "*"
+        "*\xF0\x9F\x91\x86Ваш приз:*\n_" .
+        $achievement->prize_description . "_"
     )
         ->withAttachment($attachment);
 
@@ -942,7 +942,7 @@ $botman->hears('/activity_information', function ($bot) {
     foreach ($stats as $stat)
         $message .= sprintf($stat_types[$stat->stat_type->value], $stat->stat_value);
 
-    $bot->reply(count($stats)>0?$message:"Статистика еще не ведется для вашего аккаунта!", ["parse_mode" => "Markdown"]);
+    $bot->reply(count($stats) > 0 ? $message : "Статистика еще не ведется для вашего аккаунта!", ["parse_mode" => "Markdown"]);
 
 });
 
