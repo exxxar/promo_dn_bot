@@ -883,8 +883,9 @@ $botman->hears('/achievements_description ([0-9]+)', function ($bot, $achievemen
 
         $btn_tmp = [];
 
-        if ($on_ach_activated->activated == false)
-            array_push($btn_tmp, Button::create("\xF0\x9F\x8E\x81Получить приз")->value("/achievements_get_prize $achievementId"));
+        if ($on_ach_activated)
+            if ($on_ach_activated->activated == false)
+                array_push($btn_tmp, Button::create("\xF0\x9F\x8E\x81Получить приз")->value("/achievements_get_prize $achievementId"));
         array_push($btn_tmp, Button::create("\xE2\x8F\xAAВернуться назад")->value("/achievements_panel"));
 
         $message = Question::create("Дальнейшие действия")
