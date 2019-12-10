@@ -251,12 +251,12 @@ class StartDataConversation extends Conversation
             switch ($this->code){
                 case "004": event(new AchievementEvent(AchievementTriggers::VKLinksActivationCount,1,$this->user)); break;
                 case "005": event(new AchievementEvent(AchievementTriggers::FBLinksActivationCount,1,$this->user)); break;
+                case "006": event(new AchievementEvent(AchievementTriggers::InstaLinksActivationCount,1,$this->user)); break;
                 case "007":
                 case "008":
                 case "009":
                 case "010":
-                case "011":
-                case "006": event(new AchievementEvent(AchievementTriggers::QRActivationCount,1,$this->user)); break;
+                case "011":event(new AchievementEvent(AchievementTriggers::QRActivationCount,1,$this->user)); break;
                 default:
                     event(new AchievementEvent(AchievementTriggers::ReferralCount,1,$sender_user));
                     break;

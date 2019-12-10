@@ -49,7 +49,7 @@ $botman->hears("\xE2\x9B\x84Мероприятия", function ($bot) {
         ]);
 });
 
-$botman->hears("/ref", function ($bot) {
+$botman->hears("/ref ([0-9]+)", function ($bot, $refId) {
     $telegramUser = $bot->getUser();
     $id = $telegramUser->getId();
 
@@ -68,10 +68,33 @@ $botman->hears("/ref", function ($bot) {
     while (strlen($tmp_id) < 10)
         $tmp_id = "0" . $tmp_id;
 
-    $code = base64_encode("001" . $tmp_id . "0000000000");
-    $url_link = "<a href='https://t.me/" . env("APP_BOT_NAME") . "?start=$code'>Пересылай сообщение друзьям и получай больше баллов!</a>";
+    $comand_code = "001";
+    switch ($refId) {
+        default:
+        case 1:
+            $comand_code = "001";
+            break;
+        case 2:
+            $comand_code = "004";
+            break;
+        case 3:
+            $comand_code = "005";
+            break;
+        case 4:
+            $comand_code = "006";
+            break;
+    }
 
-    $bot->reply($url_link, ["parse_mode" => "HTML"]);
+    $code = base64_encode($comand_code . $tmp_id . "0000000000");
+
+
+    $url_link = "https://t.me/" . env("APP_BOT_NAME") . "?start=$code";
+
+    $href_url_link = "<a href='" . $url_link . "'>Пересылай сообщение друзьям и получай больше баллов!</a>";
+
+
+    $bot->reply($refId == 1 ? $href_url_link : $url_link, ["parse_mode" => "HTML"]);
+
 });
 
 $botman->hears("\xF0\x9F\x93\xB2Мои друзья", function ($bot) {
@@ -119,11 +142,10 @@ $botman->hears("\xF0\x9F\x93\xB2Мои друзья", function ($bot) {
 
 });
 $botman->hears("\xE2\x9D\x93F.A.Q.", function ($bot) {
-    $bot->reply("FAQ");
     $keyboard1 = [
         'inline_keyboard' => [
             [
-                ['text' => "Как пользоваться", 'callback_data' => "/about"],
+                ['text' => "Как пользоваться", 'callback_data' => "/help"],
             ],
             [
                 ['text' => "О компании", 'callback_data' => "/about"],
@@ -139,18 +161,18 @@ $botman->hears("\xE2\x9D\x93F.A.Q.", function ($bot) {
                 ['text' => "Промоутеру", 'url' => "https://vk.com/it_rest_service"],
             ],
             [
-                ['text' => "Telegram", 'callback_data' => "/ref"],
-                ['text' => "Vkontakte", 'callback_data' => "/about"],
+                ['text' => "Telegram", 'callback_data' => "/ref 1"],
+                ['text' => "Vkontakte", 'callback_data' => "/ref 2"],
 
             ],
             [
-                ['text' => "Facebook", 'callback_data' => "/about"],
-                ['text' => "Intagram", 'callback_data' => "/about"],
+                ['text' => "Facebook", 'callback_data' => "/ref 3"],
+                ['text' => "Intagram", 'callback_data' => "/ref 4"],
 
             ],
 
             [
-                ['text' => "Статистика активности", 'callback_data' => "/about"],
+                ['text' => "Статистика активности", 'callback_data' => "/activity_information"],
             ],
 
 
@@ -159,7 +181,7 @@ $botman->hears("\xE2\x9D\x93F.A.Q.", function ($bot) {
 
     $bot->sendRequest("sendMessage",
         [
-            "text" => '_Не знаете как начать пользоваться? - Почитайте наше описание! Узнайте больше о приложении, компании и разработчике!_',
+            "text" => "*F.A.Q.*\n_Не знаете как начать пользоваться? - Почитайте наше описание! Узнайте больше о приложении, компании и разработчике!_",
             "parse_mode" => "Markdown",
             'reply_markup' => json_encode($keyboard1)
         ]);
@@ -704,11 +726,16 @@ $botman->hears('/achievements_all ([0-9]+)', function ($bot, $page) {
     if (count($attachments) > 0) {
         foreach ($attachments as $key => $achievement) {
 
-            $attachment = new Image($achievement->ach_image_url);
+           /* $attachment = new Image($achievement->ach_image_url);
             $message = OutgoingMessage::create("*" . $achievement->title . "*\n")
                 ->withAttachment($attachment);
 
-            $bot->reply($message, ["parse_mode" => "Markdown"]);
+            $bot->reply($message, ["parse_mode" => "Markdown"]);*/
+
+            $bot->reply("*" .
+                $achievement->title . ($achievement->activated == 0 ? "\xE2\x9D\x8E" : "\xE2\x9C\x85") . "*\n" .
+                $achievement->description . "\n" . $achievement->ach_image_url, ["parse_mode" => "Markdown"]);
+
 
             $keyboard = [
                 'inline_keyboard' => [
