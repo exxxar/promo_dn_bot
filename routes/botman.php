@@ -123,12 +123,23 @@ $botman->hears("\xE2\x9D\x93F.A.Q.", function ($bot) {
     $keyboard = [
         'inline_keyboard' => [
             [
-                ['text' => "Больше баллов", 'callback_data' => "/ref"],
-                ['text' => "Кабинет промоутера", 'callback_data' => "/cabinet"],
-            ],
-            [
                 ['text' => "Как пользоваться", 'callback_data' => "/about"],
             ],
+            [
+                ['text' => "Больше баллов", 'callback_data' => "/ref"],
+                ['text' => "Промоутеру", 'url' => "https://vk.com/it_rest_service"],
+            ],
+            [
+                ['text' => "VK", 'callback_data' => "/about"],
+                ['text' => "FB", 'callback_data' => "/about"],
+                ['text' => "Insta", 'callback_data' => "/about"],
+            ],
+
+            [
+                ['text' => "Статистика активности", 'callback_data' => "/about"],
+            ],
+
+
             [
                 ['text' => "О компании", 'callback_data' => "/about"],
                 ['text' => "О разработчике", 'callback_data' => "/developers"],
