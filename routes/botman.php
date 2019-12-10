@@ -106,9 +106,9 @@ $botman->hears("\xF0\x9F\x93\xB2Мои друзья", function ($bot) {
 
     $ref = $user->referrals_count;
 
-    $network = $user->network_friends_count;
+    $network = $user->network_friends_count + $ref;
 
-    $network_tmp = $user->current_network_level > 0 ? "У вас в сети *$network* друзей!\n" : "";
+    $network_tmp = $user->current_network_level > 0 ? "Сеть друзей *$network* чел.!\n" : "";
 
     $tmp_message = "Вы пригласили *$ref* друзей!\n" . $network_tmp . "_Делитесь Вашим QR-кодом и накапливайте баллы!_\n";
 
@@ -942,7 +942,7 @@ $botman->hears('/activity_information', function ($bot) {
     foreach ($stats as $stat)
         $message .= sprintf($stat_types[$stat->stat_type->value], $stat->stat_value);
 
-    $bot->reply($message, ["parse_mode" => "Markdown"]);
+    $bot->reply(count($stats)>0?$message:"Статистика еще не ведется для вашего аккаунта!", ["parse_mode" => "Markdown"]);
 
 });
 
