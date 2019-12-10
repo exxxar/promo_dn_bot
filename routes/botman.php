@@ -893,11 +893,65 @@ $botman->hears('/achievements_description ([0-9]+)', function ($bot, $achievemen
         $bot->reply($message, ["parse_mode" => "Markdown"]);
     }
 
+    $on_ach_activated = \App\UserHasAchievement::where("achievement_id", "=", $achievementId, "and")
+        ->where("user_id", "=", $user->id, "and")
+        ->where("activated", "=", 0)
+        ->first();
+
+    $btn_tmp = [];
+
+    if ($on_ach_activated != null)
+        array_push($btn_tmp, Button::create("\xF0\x9F\x8E\x81Получить приз")->value("/achievements_get_prize $achievementId"))
+    array_push($btn_tmp, Button::create("\xE2\x8F\xAAВернуться назад")->value("/achievements_panel"));
+
     $message = Question::create("Дальнейшие действия")
-        ->addButtons([
-            Button::create("\xE2\x8F\xAAВернуться назад")->value("/achievements_panel"),
-        ]);
+        ->addButtons($btn_tmp);
+
     $bot->reply($message, ["parse_mode" => "Markdown"]);
+
+
+});
+$botman->hears('/achievements_get_prize ([0-9]+)', function ($bot, $achievementId) {
+    $achievement = \App\Achievement::find($achievementId);
+    $telegramUser = $bot->getUser();
+    $id = $telegramUser->getId();
+    $user = \App\User::where("telegram_chat_id", $id)->first();
+
+
+    $on_ach_activated = \App\UserHasAchievement::where("achievement_id", "=", $achievementId, "and")
+        ->where("user_id", "=", $user->id, "and")
+        ->where("activated", "=", 0)
+        ->first();
+
+    if ($on_ach_activated == null) {
+        $bot->reply("Вы уже получили приз за данное достижение!", ["parse_mode" => "Markdown"]);
+        return;
+    }
+
+    $stat = \App\Stat::where("user_id", "=", $user->id, 'and')
+        ->where("stat_type", "=", $achievement->trigger_type->value)
+        ->first();
+    $currentVal = $stat == null ? 0 : $stat->stat_value;
+
+    if ($currentVal >= $achievement->trigger_value) {
+        $tmp_id = "$id";
+        while (strlen($tmp_id) < 10)
+            $tmp_id = "0" . $tmp_id;
+
+        $tmp_achievement_id = (string)$achievement->id;
+        while (strlen($tmp_achievement_id) < 10)
+            $tmp_achievement_id = "0" . $tmp_achievement_id;
+
+        $code = base64_encode("012" . $tmp_id . $tmp_achievement_id);
+
+        $attachment = new Image("https://api.qrserver.com/v1/create-qr-code/?size=150x150&data=https://t.me/" . env("APP_BOT_NAME") . "?start=$code");
+
+        $message = OutgoingMessage::create('_Код для активации достижения_')
+            ->withAttachment($attachment);
+
+        $bot->reply($message, ["parse_mode" => "Markdown"]);
+    } else
+        $bot->reply("Вы не можете получить приз за данное достижение", ["parse_mode" => "Markdown"]);
 
 
 });
