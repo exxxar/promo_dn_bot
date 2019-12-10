@@ -755,7 +755,7 @@ $botman->hears('/achievements_all ([0-9]+)', function ($bot, $page) {
     if (count($attachments) > 0) {
         $tmp = [];
         foreach ($attachments as $key => $achievement)
-            array_push($tmp, Button::create($achievement->activated == 0 ? "\xE2\x9D\x8E" : "\xE2\x9C\x85" . $achievement->title)
+            array_push($tmp, Button::create(($achievement->activated == 0 ? "\xE2\x9D\x8E" : "\xE2\x9C\x85") . $achievement->title)
                 ->value("/achievements_description " . $achievement->id)
             );
 
@@ -813,7 +813,7 @@ $botman->hears('/achievements_my ([0-9]+)', function ($bot, $page) {
 
             $tmp = [];
             foreach ($user->achievements as $key => $ach)
-                array_push($tmp, Button::create($ach->activated == 0 ? "\xE2\x9D\x8E" : "\xE2\x9C\x85" . $ach->title)
+                array_push($tmp, Button::create(($ach->activated == 0 ? "\xE2\x9D\x8E" : "\xE2\x9C\x85") . $ach->title)
                     ->value("/achievements_description " . $ach->id)
                 );
 
