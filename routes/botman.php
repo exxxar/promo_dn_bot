@@ -874,27 +874,27 @@ $botman->hears('/achievements_description ([0-9]+)', function ($bot, $achievemen
 
     $bot->reply($message, ["parse_mode" => "Markdown"]);
 
-    if ($currentVal >= $achievement->trigger_value) {
-        $tmp_id = "$id";
-        while (strlen($tmp_id) < 10)
-            $tmp_id = "0" . $tmp_id;
+    /* if ($currentVal >= $achievement->trigger_value) {
+         $tmp_id = "$id";
+         while (strlen($tmp_id) < 10)
+             $tmp_id = "0" . $tmp_id;
 
-        $tmp_achievement_id = (string)$achievement->id;
-        while (strlen($tmp_achievement_id) < 10)
-            $tmp_achievement_id = "0" . $tmp_achievement_id;
+         $tmp_achievement_id = (string)$achievement->id;
+         while (strlen($tmp_achievement_id) < 10)
+             $tmp_achievement_id = "0" . $tmp_achievement_id;
 
-        $code = base64_encode("012" . $tmp_id . $tmp_achievement_id);
+         $code = base64_encode("012" . $tmp_id . $tmp_achievement_id);
 
-        $attachment = new Image("https://api.qrserver.com/v1/create-qr-code/?size=150x150&data=https://t.me/" . env("APP_BOT_NAME") . "?start=$code");
+         $attachment = new Image("https://api.qrserver.com/v1/create-qr-code/?size=150x150&data=https://t.me/" . env("APP_BOT_NAME") . "?start=$code");
 
-        $message = OutgoingMessage::create('_Код для активации достижения_')
-            ->withAttachment($attachment);
+         $message = OutgoingMessage::create('_Код для активации достижения_')
+             ->withAttachment($attachment);
 
-        $bot->reply($message, ["parse_mode" => "Markdown"]);
-    }
+         $bot->reply($message, ["parse_mode" => "Markdown"]);
+     }*/
 
-    $on_ach_activated = \App\UserHasAchievement::where("achievement_id", "=", $achievementId, "and")
-        ->where("user_id", "=", $user->id, "and")
+    $on_ach_activated = \App\UserHasAchievement::where("achievement_id", "=", $achievementId)
+        ->where("user_id", "=", $user->id)
         ->where("activated", "=", 0)
         ->first();
 
@@ -918,8 +918,8 @@ $botman->hears('/achievements_get_prize ([0-9]+)', function ($bot, $achievementI
     $user = \App\User::where("telegram_chat_id", $id)->first();
 
 
-    $on_ach_activated = \App\UserHasAchievement::where("achievement_id", "=", $achievementId, "and")
-        ->where("user_id", "=", $user->id, "and")
+    $on_ach_activated = \App\UserHasAchievement::where("achievement_id", "=", $achievementId)
+        ->where("user_id", "=", $user->id)
         ->where("activated", "=", 0)
         ->first();
 
