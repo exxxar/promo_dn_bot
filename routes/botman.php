@@ -93,7 +93,7 @@ $botman->hears("/ref ([0-9]+)", function ($bot, $refId) {
     $href_url_link = "<a href='" . $url_link . "'>Пересылай сообщение друзьям и получай больше баллов!</a>";
 
 
-    $bot->reply($refId == 1 ? $href_url_link : $url_link, ["parse_mode" => "HTML"]);
+    $bot->reply("Делись ссылкой с друзьями:\n" . ($refId == 1 ? $href_url_link : $url_link), ["parse_mode" => "HTML"]);
 
 });
 
@@ -443,20 +443,20 @@ $botman->hears('/friends ([0-9]+)', function ($bot, $page) {
 
     $inline_keyboard = [];
     if ($page == 0 && count($refs) == 10)
-        array_push($inline_keyboard, ['text' => 'Далее', 'callback_data' => '/friends ' . ($page + 1)]);
+        array_push($inline_keyboard, ['text' => "\xE2\x9E\xA1Далее", 'callback_data' => '/friends ' . ($page + 1)]);
 
     if ($page > 0) {
         if (count($refs) == 0) {
-            array_push($inline_keyboard, ['text' => 'Назад', 'callback_data' => '/friends ' . ($page - 1)]);
+            array_push($inline_keyboard, ['text' => "\xF0\x9F\x94\x99Назад", 'callback_data' => '/friends ' . ($page - 1)]);
         }
 
         if (count($refs) == 10) {
-            array_push($inline_keyboard, ['text' => 'Назад', 'callback_data' => '/friends ' . ($page - 1)]);
-            array_push($inline_keyboard, ['text' => 'Далее', 'callback_data' => '/friends ' . ($page + 1)]);
+            array_push($inline_keyboard, ['text' => "\xF0\x9F\x94\x99Назад", 'callback_data' => '/friends ' . ($page - 1)]);
+            array_push($inline_keyboard, ['text' => "\xE2\x9E\xA1Далее", 'callback_data' => '/friends ' . ($page + 1)]);
         }
 
         if (count($refs) > 0 && count($refs) < 10) {
-            array_push($inline_keyboard, ['text' => 'Назад', 'callback_data' => '/friends ' . ($page - 1)]);
+            array_push($inline_keyboard, ['text' => "\xF0\x9F\x94\x99Назад", 'callback_data' => '/friends ' . ($page - 1)]);
         }
     }
 
@@ -509,20 +509,20 @@ $botman->hears('/payments ([0-9]+)', function ($bot, $page) {
 
     $inline_keyboard = [];
     if ($page == 0 && count($refs) == 10)
-        array_push($inline_keyboard, ['text' => 'Далее', 'callback_data' => '/payments ' . ($page + 1)]);
+        array_push($inline_keyboard, ['text' => "\xE2\x9E\xA1Далее", 'callback_data' => '/payments ' . ($page + 1)]);
 
     if ($page > 0) {
         if (count($refs) == 0) {
-            array_push($inline_keyboard, ['text' => 'Назад', 'callback_data' => '/payments ' . ($page - 1)]);
+            array_push($inline_keyboard, ['text' => "\xF0\x9F\x94\x99Назад", 'callback_data' => '/payments ' . ($page - 1)]);
         }
 
         if (count($refs) == 10) {
-            array_push($inline_keyboard, ['text' => 'Назад', 'callback_data' => '/payments ' . ($page - 1)]);
-            array_push($inline_keyboard, ['text' => 'Далее', 'callback_data' => '/payments ' . ($page + 1)]);
+            array_push($inline_keyboard, ['text' => "\xF0\x9F\x94\x99Назад", 'callback_data' => '/payments ' . ($page - 1)]);
+            array_push($inline_keyboard, ['text' => "\xE2\x9E\xA1Далее", 'callback_data' => '/payments ' . ($page + 1)]);
         }
 
         if (count($refs) > 0 && count($refs) < 10) {
-            array_push($inline_keyboard, ['text' => 'Назад', 'callback_data' => '/payments ' . ($page - 1)]);
+            array_push($inline_keyboard, ['text' => "\xF0\x9F\x94\x99Назад", 'callback_data' => '/payments ' . ($page - 1)]);
         }
     }
 
@@ -575,20 +575,20 @@ $botman->hears('/cashbacks ([0-9]+)', function ($bot, $page) {
 
     $inline_keyboard = [];
     if ($page == 0 && count($cashbacks) == 10)
-        array_push($inline_keyboard, ['text' => 'Далее', 'callback_data' => '/cashbacks ' . ($page + 1)]);
+        array_push($inline_keyboard, ['text' => "\xE2\x9E\xA1Далее", 'callback_data' => '/cashbacks ' . ($page + 1)]);
 
     if ($page > 0) {
         if (count($cashbacks) == 0) {
-            array_push($inline_keyboard, ['text' => 'Назад', 'callback_data' => '/cashbacks ' . ($page - 1)]);
+            array_push($inline_keyboard, ['text' => "\xF0\x9F\x94\x99Назад", 'callback_data' => '/cashbacks ' . ($page - 1)]);
         }
 
         if (count($cashbacks) == 10) {
-            array_push($inline_keyboard, ['text' => 'Назад', 'callback_data' => '/cashbacks ' . ($page - 1)]);
-            array_push($inline_keyboard, ['text' => 'Далее', 'callback_data' => '/cashbacks ' . ($page + 1)]);
+            array_push($inline_keyboard, ['text' => "\xF0\x9F\x94\x99Назад", 'callback_data' => '/cashbacks ' . ($page - 1)]);
+            array_push($inline_keyboard, ['text' => "\xE2\x9E\xA1Далее", 'callback_data' => '/cashbacks ' . ($page + 1)]);
         }
 
         if (count($cashbacks) > 0 && count($cashbacks) < 10) {
-            array_push($inline_keyboard, ['text' => 'Назад', 'callback_data' => '/cashbacks ' . ($page - 1)]);
+            array_push($inline_keyboard, ['text' => "\xF0\x9F\x94\x99Назад", 'callback_data' => '/cashbacks ' . ($page - 1)]);
         }
     }
 
@@ -630,20 +630,20 @@ $botman->hears('/events ([0-9]+)', function ($bot, $page) {
 
     $inline_keyboard = [];
     if ($page == 0 && count($events) == 5)
-        array_push($inline_keyboard, ['text' => 'Далее', 'callback_data' => '/events ' . ($page + 1)]);
+        array_push($inline_keyboard, ['text' => "\xE2\x9E\xA1Далее", 'callback_data' => '/events ' . ($page + 1)]);
 
     if ($page > 0) {
         if (count($events) == 0) {
-            array_push($inline_keyboard, ['text' => 'Назад', 'callback_data' => '/events ' . ($page - 1)]);
+            array_push($inline_keyboard, ['text' => "\xF0\x9F\x94\x99Назад", 'callback_data' => '/events ' . ($page - 1)]);
         }
 
         if (count($events) == 5) {
-            array_push($inline_keyboard, ['text' => 'Назад', 'callback_data' => '/events ' . ($page - 1)]);
-            array_push($inline_keyboard, ['text' => 'Далее', 'callback_data' => '/events ' . ($page + 1)]);
+            array_push($inline_keyboard, ['text' => "\xF0\x9F\x94\x99Назад", 'callback_data' => '/events ' . ($page - 1)]);
+            array_push($inline_keyboard, ['text' => "\xE2\x9E\xA1Далее", 'callback_data' => '/events ' . ($page + 1)]);
         }
 
         if (count($events) > 0 && count($events) < 5) {
-            array_push($inline_keyboard, ['text' => 'Назад', 'callback_data' => '/events ' . ($page - 1)]);
+            array_push($inline_keyboard, ['text' => "\xF0\x9F\x94\x99Назад", 'callback_data' => '/events ' . ($page - 1)]);
         }
     }
 
@@ -697,11 +697,40 @@ $botman->hears('/cashback_get', function ($bot) {
 $botman->hears('/statistic', function ($bot) {
     $message = Question::create("Вы можете отслеживать начисления CashBack бонусов и их списание")
         ->addButtons([
-            // Button::create("Больше баллов")->value("/ref"),
-            // Button::create("Кабинет промоутера")->value("/cabinet"),
             Button::create("Начисления")->value("/cashbacks 0"),
             Button::create("Списания")->value("/payments 0"),
         ]);
+    $bot->reply($message, ["parse_mode" => "Markdown"]);
+
+});
+
+$botman->hears('/activity_information', function ($bot) {
+
+    $types = [
+        "Количество активация приза по акции",
+        "Количество рефералов",
+        "Максимальное количество накопленного CashBack",
+        "Количество переходов из ВК",
+        "Количество переходов из Facebook",
+        "Количество переходов из Instagram",
+        "Количество переходов из других источников",
+        "Масимальный реферальный бонус",
+        "Количество активированных достижений",
+        "Максимальное количество списанного CashBack",
+    ];
+
+    $telegramUser = $bot->getUser();
+    $id = $telegramUser->getId();
+    $user = \App\User::where("telegram_chat_id", $id)->first();
+
+    $stats = \App\Stat::where("user_id", $user->id)
+        ->get();
+
+    $message = "";
+
+    foreach ($stats as $stat)
+        $message .= $types[$stat->trigger_type->value] . "=*" . $stat->trigger_value . "*\n";
+
     $bot->reply($message, ["parse_mode" => "Markdown"]);
 
 });
@@ -710,7 +739,7 @@ $botman->hears('/achievements_panel', function ($bot) {
     $message = Question::create("Получайте достижения и обменивайте их на крутейшие призы!")
         ->addButtons([
             Button::create("\xF0\x9F\x8D\x80Все достижения")->value("/achievements_all 0"),
-            Button::create("Мои достижения")->value("/achievements_my 0"),
+            Button::create("\xE2\xAD\x90Мои достижения")->value("/achievements_my 0"),
         ]);
     $bot->reply($message, ["parse_mode" => "Markdown"]);
 
@@ -724,45 +753,34 @@ $botman->hears('/achievements_all ([0-9]+)', function ($bot, $page) {
         ->get();
 
     if (count($attachments) > 0) {
-        foreach ($attachments as $key => $achievement) {
+        $tmp = [];
+        foreach ($attachments as $key => $achievement)
+            array_push($tmp, Button::create($achievement->activated == 0 ? "\xE2\x9D\x8E" : "\xE2\x9C\x85" . $achievement->title)
+                ->value("/achievements_description " . $achievement->id)
+            );
 
-            $keyboard = [
-                'inline_keyboard' => [
-                    [
-                        ['text' => "Награда", 'callback_data' => "/achievements_reward " . $achievement->id],
-                        ['text' => "Как получить", 'callback_data' => "/achievements_description " . $achievement->id],
-                    ],
-
-                ]
-            ];
-
-            $bot->sendRequest("sendMessage",
-                ["text" => "*" .
-                    $achievement->title . ($achievement->activated == 0 ? "\xE2\x9D\x8E" : "\xE2\x9C\x85") . "*\n" .
-                    $achievement->description . "\n" . $achievement->ach_image_url,
-                    'reply_markup' => json_encode($keyboard),
-                    "parse_mode" => "Markdown"
-                ]);
-        }
+        $message = Question::create("*Все доступные достижения:*")
+            ->addButtons($tmp);
+        $bot->reply($message, ["parse_mode" => "Markdown"]);
     } else
         $bot->reply("Достижения появтяся в скором времени!", ["parse_mode" => "Markdown"]);
 
     $inline_keyboard = [];
     if ($page == 0 && count($attachments) == 5)
-        array_push($inline_keyboard, ['text' => 'Далее', 'callback_data' => '/achievements_all ' . ($page + 1)]);
+        array_push($inline_keyboard, ['text' => "\xE2\x9E\xA1Далее", 'callback_data' => '/achievements_all ' . ($page + 1)]);
 
     if ($page > 0) {
         if (count($attachments) == 0) {
-            array_push($inline_keyboard, ['text' => 'Назад', 'callback_data' => '/achievements_all ' . ($page - 1)]);
+            array_push($inline_keyboard, ['text' => "\xF0\x9F\x94\x99Назад", 'callback_data' => '/achievements_all ' . ($page - 1)]);
         }
 
         if (count($attachments) == 5) {
-            array_push($inline_keyboard, ['text' => 'Назад', 'callback_data' => '/achievements_all ' . ($page - 1)]);
-            array_push($inline_keyboard, ['text' => 'Далее', 'callback_data' => '/achievements_all ' . ($page + 1)]);
+            array_push($inline_keyboard, ['text' => "\xF0\x9F\x94\x99Назад", 'callback_data' => '/achievements_all ' . ($page - 1)]);
+            array_push($inline_keyboard, ['text' => "\xE2\x9E\xA1Далее", 'callback_data' => '/achievements_all ' . ($page + 1)]);
         }
 
         if (count($attachments) > 0 && count($attachments) < 5) {
-            array_push($inline_keyboard, ['text' => 'Назад', 'callback_data' => '/achievements_all ' . ($page - 1)]);
+            array_push($inline_keyboard, ['text' => "\xF0\x9F\x94\x99Назад", 'callback_data' => '/achievements_all ' . ($page - 1)]);
         }
     }
 
@@ -792,47 +810,35 @@ $botman->hears('/achievements_my ([0-9]+)', function ($bot, $page) {
 
 
         if (count($user->achievements) > 0) {
-            foreach ($user->achievements as $key => $ach) {
 
-                $keyboard = [
-                    'inline_keyboard' => [
-                        [
-                            ['text' => "Награда", 'callback_data' => "/achievements_reward " . $ach->id],
-                            ['text' => "Как получить", 'callback_data' => "/achievements_description " . $ach->id],
-                        ],
-                        [
-                            ['text' => "К достижениям", 'callback_data' => "/achievements_panel"],
-                        ]
-                    ]
-                ];
+            $tmp = [];
+            foreach ($user->achievements as $key => $ach)
+                array_push($tmp, Button::create($ach->activated == 0 ? "\xE2\x9D\x8E" : "\xE2\x9C\x85" . $ach->title)
+                    ->value("/achievements_description " . $ach->id)
+                );
 
-                $bot->sendRequest("sendMessage",
-                    ["text" => "*" .
-                        $ach->title . ($ach->activated == 0 ? "\xE2\x9D\x8E" : "\xE2\x9C\x85") . "*\n" .
-                        $ach->description . "\n" . $ach->ach_image_url,
-                        'reply_markup' => json_encode($keyboard),
-                        "parse_mode" => "Markdown"
-                    ]);
-            }
+            $message = Question::create("*Ваши текущие достижения:*")
+                ->addButtons($tmp);
+            $bot->reply($message, ["parse_mode" => "Markdown"]);
         } else
             $bot->reply("У вас еще активированных нет достижений!", ["parse_mode" => "Markdown"]);
 
         $inline_keyboard = [];
         if ($page == 0 && count($user->achievements) == 5)
-            array_push($inline_keyboard, ['text' => 'Далее', 'callback_data' => '/achievements_my ' . ($page + 1)]);
+            array_push($inline_keyboard, ['text' => "\xE2\x9E\xA1Далее", 'callback_data' => '/achievements_my ' . ($page + 1)]);
 
         if ($page > 0) {
             if (count($user->achievements) == 0) {
-                array_push($inline_keyboard, ['text' => 'Назад', 'callback_data' => '/achievements_my ' . ($page - 1)]);
+                array_push($inline_keyboard, ['text' => "\xF0\x9F\x94\x99Назад", 'callback_data' => '/achievements_my ' . ($page - 1)]);
             }
 
             if (count($user->achievements) == 5) {
-                array_push($inline_keyboard, ['text' => 'Назад', 'callback_data' => '/achievements_my ' . ($page - 1)]);
-                array_push($inline_keyboard, ['text' => 'Далее', 'callback_data' => '/achievements_my ' . ($page + 1)]);
+                array_push($inline_keyboard, ['text' => "\xF0\x9F\x94\x99Назад", 'callback_data' => '/achievements_my ' . ($page - 1)]);
+                array_push($inline_keyboard, ['text' => "\xE2\x9E\xA1Далее", 'callback_data' => '/achievements_my ' . ($page + 1)]);
             }
 
             if (count($user->achievements) > 0 && count($user->achievements) < 5) {
-                array_push($inline_keyboard, ['text' => 'Назад', 'callback_data' => '/achievements_my ' . ($page - 1)]);
+                array_push($inline_keyboard, ['text' => "\xF0\x9F\x94\x99Назад", 'callback_data' => '/achievements_my ' . ($page - 1)]);
             }
         }
 
@@ -854,7 +860,7 @@ $botman->hears('/achievements_my ([0-9]+)', function ($bot, $page) {
         $bot->reply($e->getMessage() . " " . $e->getLine());
     }
 });
-
+/*
 $botman->hears('/achievements_reward ([0-9]+)', function ($bot, $achievementId) {
 
     $telegramUser = $bot->getUser();
@@ -907,7 +913,7 @@ $botman->hears('/achievements_reward ([0-9]+)', function ($bot, $achievementId) 
     }
 
 
-});
+});*/
 $botman->hears('/achievements_description ([0-9]+)', function ($bot, $achievementId) {
 
     $achievement = \App\Achievement::find($achievementId);
@@ -943,6 +949,53 @@ $botman->hears('/achievements_description ([0-9]+)', function ($bot, $achievemen
 
     $bot->reply($message, ["parse_mode" => "Markdown"]);
 
+    $attachment = new Image($achievement->prize_image_url);
+    $message = OutgoingMessage::create(
+        "*" .
+        $achievement->prize_description . "*"
+    )
+        ->withAttachment($attachment);
+
+    $bot->reply($message, ["parse_mode" => "Markdown"]);
+
+    if ($currentVal >= $achievement->trigger_value) {
+        $tmp_id = "$id";
+        while (strlen($tmp_id) < 10)
+            $tmp_id = "0" . $tmp_id;
+
+        $tmp_achievement_id = (string)$achievement->id;
+        while (strlen($tmp_achievement_id) < 10)
+            $tmp_achievement_id = "0" . $tmp_achievement_id;
+
+        $code = base64_encode("012" . $tmp_id . $tmp_achievement_id);
+
+        $attachment = new Image("https://api.qrserver.com/v1/create-qr-code/?size=150x150&data=https://t.me/" . env("APP_BOT_NAME") . "?start=$code");
+
+        $message = OutgoingMessage::create('_Код для активации достижения_')
+            ->withAttachment($attachment);
+
+        $bot->reply($message, ["parse_mode" => "Markdown"]);
+    }
+
+    $message = Question::create("Дальнейшие действия")
+        ->addButtons([
+            Button::create("\xF0\x9F\x94\x99Вернуться назад")->value("/achievements_panel"),
+        ]);
+    $bot->reply($message, ["parse_mode" => "Markdown"]);
+
+
+});
+
+$botman->hears('/help', function ($bot) {
+    $bot->reply("Помощь (тест)", ["parse_mode" => "Markdown"]);
+
+});
+$botman->hears('/about', function ($bot) {
+    $bot->reply("О компании (тест)", ["parse_mode" => "Markdown"]);
+
+});
+$botman->hears('/developers', function ($bot) {
+    $bot->reply("Разработчики (тест)", ["parse_mode" => "Markdown"]);
 
 });
 
