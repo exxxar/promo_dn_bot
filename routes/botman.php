@@ -119,11 +119,12 @@ $botman->hears("\xF0\x9F\x93\xB2Мои друзья", function ($bot) {
 
 });
 $botman->hears("\xE2\x9D\x93F.A.Q.", function ($bot) {
+    $bot->reply("FAQ");
     $keyboard = [
         'inline_keyboard' => [
             [
                 ['text' => "Больше баллов", 'callback_data' => "/ref"],
-                ['text' => "Кабинет промоутера", 'url' => "/cabinet"],
+                ['text' => "Кабинет промоутера", 'callback_data' => "/cabinet"],
             ],
             [
                 ['text' => "Как пользоваться", 'callback_data' => "/about"],
