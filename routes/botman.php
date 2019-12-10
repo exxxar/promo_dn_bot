@@ -726,17 +726,6 @@ $botman->hears('/achievements_all ([0-9]+)', function ($bot, $page) {
     if (count($attachments) > 0) {
         foreach ($attachments as $key => $achievement) {
 
-           /* $attachment = new Image($achievement->ach_image_url);
-            $message = OutgoingMessage::create("*" . $achievement->title . "*\n")
-                ->withAttachment($attachment);
-
-            $bot->reply($message, ["parse_mode" => "Markdown"]);*/
-
-            $bot->reply("*" .
-                $achievement->title . ($achievement->activated == 0 ? "\xE2\x9D\x8E" : "\xE2\x9C\x85") . "*\n" .
-                $achievement->description . "\n" . $achievement->ach_image_url, ["parse_mode" => "Markdown"]);
-
-
             $keyboard = [
                 'inline_keyboard' => [
                     [
@@ -748,7 +737,11 @@ $botman->hears('/achievements_all ([0-9]+)', function ($bot, $page) {
             ];
 
             $bot->sendRequest("sendMessage",
-                ["text" => 'Детали достижения', 'reply_markup' => json_encode($keyboard)
+                ["text" => "*" .
+                    $achievement->title . ($achievement->activated == 0 ? "\xE2\x9D\x8E" : "\xE2\x9C\x85") . "*\n" .
+                    $achievement->description . "\n" . $achievement->ach_image_url,
+                    'reply_markup' => json_encode($keyboard),
+                    "parse_mode" => "Markdown"
                 ]);
         }
     } else
@@ -801,18 +794,6 @@ $botman->hears('/achievements_my ([0-9]+)', function ($bot, $page) {
         if (count($user->achievements) > 0) {
             foreach ($user->achievements as $key => $ach) {
 
-                /*   $attachment = new Image($ach->ach_image_url);
-                   $message = OutgoingMessage::create(
-                       "*" .
-                       $ach->title . ($ach->activated == 0 ? "\xE2\x9D\x8E" :  "\xE2\x9C\x85") . "*\n" .
-                       $ach->description
-                   )
-                       ->withAttachment($attachment);*/
-
-                $bot->reply("*" .
-                    $ach->title . ($ach->activated == 0 ? "\xE2\x9D\x8E" : "\xE2\x9C\x85") . "*\n" .
-                    $ach->description . "\n" . $ach->ach_image_url, ["parse_mode" => "Markdown"]);
-
                 $keyboard = [
                     'inline_keyboard' => [
                         [
@@ -826,7 +807,11 @@ $botman->hears('/achievements_my ([0-9]+)', function ($bot, $page) {
                 ];
 
                 $bot->sendRequest("sendMessage",
-                    ["text" => 'Детали достижения', 'reply_markup' => json_encode($keyboard)
+                    ["text" => "*" .
+                        $ach->title . ($ach->activated == 0 ? "\xE2\x9D\x8E" : "\xE2\x9C\x85") . "*\n" .
+                        $ach->description . "\n" . $ach->ach_image_url,
+                        'reply_markup' => json_encode($keyboard),
+                        "parse_mode" => "Markdown"
                     ]);
             }
         } else
