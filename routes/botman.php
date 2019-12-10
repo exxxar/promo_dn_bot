@@ -118,6 +118,29 @@ $botman->hears("\xF0\x9F\x93\xB2Мои друзья", function ($bot) {
 
 
 });
+$botman->hears("\xE2\x9D\x93F.A.Q.", function ($bot) {
+    $keyboard = [
+        'inline_keyboard' => [
+            [
+                ['text' => "Больше баллов", 'callback_data' => "/ref"],
+                ['text' => "Кабинет промоутера", 'url' => "/cabinet"],
+            ],
+            [
+                ['text' => "Как пользоваться", 'callback_data' => "/about"],
+            ],
+            [
+                ['text' => "О компании", 'callback_data' => "/about"],
+                ['text' => "О разработчике", 'callback_data' => "/developers"],
+            ],
+
+        ]
+    ];
+
+    $bot->sendRequest("sendMessage",
+        ["text" => 'Детали достижения', 'reply_markup' => json_encode($keyboard)
+        ]);
+
+});
 $botman->hears("\xF0\x9F\x92\xB3Мои баллы", function ($bot) {
     $telegramUser = $bot->getUser();
 
@@ -621,7 +644,7 @@ $botman->hears('/cashback_get', function ($bot) {
 $botman->hears('/statistic', function ($bot) {
     $message = Question::create("Вы можете отслеживать начисления CashBack бонусов и их списание")
         ->addButtons([
-            Button::create("Больше баллов")->value("/ref"),
+           // Button::create("Больше баллов")->value("/ref"),
             // Button::create("Кабинет промоутера")->value("/cabinet"),
             Button::create("Начисления")->value("/cashbacks 0"),
             Button::create("Списания")->value("/payments 0"),
@@ -720,19 +743,17 @@ $botman->hears('/achievements_my ([0-9]+)', function ($bot, $page) {
         if (count($user->achievements) > 0) {
             foreach ($user->achievements as $key => $ach) {
 
-             /*   $activated = \App\UserHasAchievement::where("user_id","=",$user->id,"and")
-                    ->where("achievement_id","=",$ach->id)
-                    ->first();*/
+                /*   $attachment = new Image($ach->ach_image_url);
+                   $message = OutgoingMessage::create(
+                       "*" .
+                       $ach->title . ($ach->activated == 0 ? "\xE2\x9D\x8E" :  "\xE2\x9C\x85") . "*\n" .
+                       $ach->description
+                   )
+                       ->withAttachment($attachment);*/
 
-                $attachment = new Image($ach->ach_image_url);
-                $message = OutgoingMessage::create(
-                    "*" .
-                    $ach->title . ($ach->activated == 0 ? "\xE2\x9D\x8E" :  "\xE2\x9C\x85") . "*\n" .
-                    $ach->description
-                )
-                    ->withAttachment($attachment);
-
-                $bot->reply($message, ["parse_mode" => "Markdown"]);
+                $bot->reply("*" .
+                    $ach->title . ($ach->activated == 0 ? "\xE2\x9D\x8E" : "\xE2\x9C\x85") . "*\n" .
+                    $ach->description . "\n" . $ach->ach_image_url, ["parse_mode" => "Markdown"]);
 
                 $keyboard = [
                     'inline_keyboard' => [
@@ -740,7 +761,9 @@ $botman->hears('/achievements_my ([0-9]+)', function ($bot, $page) {
                             ['text' => "Награда", 'callback_data' => "/achievements_reward " . $ach->id],
                             ['text' => "Как получить", 'callback_data' => "/achievements_description " . $ach->id],
                         ],
-
+                        [
+                            ['text' => "К достижениям", 'callback_data' => "/achievements_panel"],
+                        ]
                     ]
                 ];
 
