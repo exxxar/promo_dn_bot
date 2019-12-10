@@ -443,20 +443,20 @@ $botman->hears('/friends ([0-9]+)', function ($bot, $page) {
 
     $inline_keyboard = [];
     if ($page == 0 && count($refs) == 10)
-        array_push($inline_keyboard, ['text' => "\xE2\x9E\xA1Далее", 'callback_data' => '/friends ' . ($page + 1)]);
+        array_push($inline_keyboard, ['text' => "\xE2\x8F\xA9Далее", 'callback_data' => '/friends ' . ($page + 1)]);
 
     if ($page > 0) {
         if (count($refs) == 0) {
-            array_push($inline_keyboard, ['text' => "\xF0\x9F\x94\x99Назад", 'callback_data' => '/friends ' . ($page - 1)]);
+            array_push($inline_keyboard, ['text' => "\xE2\x8F\xAAНазад", 'callback_data' => '/friends ' . ($page - 1)]);
         }
 
         if (count($refs) == 10) {
-            array_push($inline_keyboard, ['text' => "\xF0\x9F\x94\x99Назад", 'callback_data' => '/friends ' . ($page - 1)]);
-            array_push($inline_keyboard, ['text' => "\xE2\x9E\xA1Далее", 'callback_data' => '/friends ' . ($page + 1)]);
+            array_push($inline_keyboard, ['text' => "\xE2\x8F\xAAНазад", 'callback_data' => '/friends ' . ($page - 1)]);
+            array_push($inline_keyboard, ['text' => "\xE2\x8F\xA9Далее", 'callback_data' => '/friends ' . ($page + 1)]);
         }
 
         if (count($refs) > 0 && count($refs) < 10) {
-            array_push($inline_keyboard, ['text' => "\xF0\x9F\x94\x99Назад", 'callback_data' => '/friends ' . ($page - 1)]);
+            array_push($inline_keyboard, ['text' => "\xE2\x8F\xAAНазад", 'callback_data' => '/friends ' . ($page - 1)]);
         }
     }
 
@@ -509,20 +509,20 @@ $botman->hears('/payments ([0-9]+)', function ($bot, $page) {
 
     $inline_keyboard = [];
     if ($page == 0 && count($refs) == 10)
-        array_push($inline_keyboard, ['text' => "\xE2\x9E\xA1Далее", 'callback_data' => '/payments ' . ($page + 1)]);
+        array_push($inline_keyboard, ['text' => "\xE2\x8F\xA9Далее", 'callback_data' => '/payments ' . ($page + 1)]);
 
     if ($page > 0) {
         if (count($refs) == 0) {
-            array_push($inline_keyboard, ['text' => "\xF0\x9F\x94\x99Назад", 'callback_data' => '/payments ' . ($page - 1)]);
+            array_push($inline_keyboard, ['text' => "\xE2\x8F\xAAНазад", 'callback_data' => '/payments ' . ($page - 1)]);
         }
 
         if (count($refs) == 10) {
-            array_push($inline_keyboard, ['text' => "\xF0\x9F\x94\x99Назад", 'callback_data' => '/payments ' . ($page - 1)]);
-            array_push($inline_keyboard, ['text' => "\xE2\x9E\xA1Далее", 'callback_data' => '/payments ' . ($page + 1)]);
+            array_push($inline_keyboard, ['text' => "\xE2\x8F\xAAНазад", 'callback_data' => '/payments ' . ($page - 1)]);
+            array_push($inline_keyboard, ['text' => "\xE2\x8F\xA9Далее", 'callback_data' => '/payments ' . ($page + 1)]);
         }
 
         if (count($refs) > 0 && count($refs) < 10) {
-            array_push($inline_keyboard, ['text' => "\xF0\x9F\x94\x99Назад", 'callback_data' => '/payments ' . ($page - 1)]);
+            array_push($inline_keyboard, ['text' => "\xE2\x8F\xAAНазад", 'callback_data' => '/payments ' . ($page - 1)]);
         }
     }
 
@@ -575,20 +575,20 @@ $botman->hears('/cashbacks ([0-9]+)', function ($bot, $page) {
 
     $inline_keyboard = [];
     if ($page == 0 && count($cashbacks) == 10)
-        array_push($inline_keyboard, ['text' => "\xE2\x9E\xA1Далее", 'callback_data' => '/cashbacks ' . ($page + 1)]);
+        array_push($inline_keyboard, ['text' => "\xE2\x8F\xA9Далее", 'callback_data' => '/cashbacks ' . ($page + 1)]);
 
     if ($page > 0) {
         if (count($cashbacks) == 0) {
-            array_push($inline_keyboard, ['text' => "\xF0\x9F\x94\x99Назад", 'callback_data' => '/cashbacks ' . ($page - 1)]);
+            array_push($inline_keyboard, ['text' => "\xE2\x8F\xAAНазад", 'callback_data' => '/cashbacks ' . ($page - 1)]);
         }
 
         if (count($cashbacks) == 10) {
-            array_push($inline_keyboard, ['text' => "\xF0\x9F\x94\x99Назад", 'callback_data' => '/cashbacks ' . ($page - 1)]);
-            array_push($inline_keyboard, ['text' => "\xE2\x9E\xA1Далее", 'callback_data' => '/cashbacks ' . ($page + 1)]);
+            array_push($inline_keyboard, ['text' => "\xE2\x8F\xAAНазад", 'callback_data' => '/cashbacks ' . ($page - 1)]);
+            array_push($inline_keyboard, ['text' => "\xE2\x8F\xA9Далее", 'callback_data' => '/cashbacks ' . ($page + 1)]);
         }
 
         if (count($cashbacks) > 0 && count($cashbacks) < 10) {
-            array_push($inline_keyboard, ['text' => "\xF0\x9F\x94\x99Назад", 'callback_data' => '/cashbacks ' . ($page - 1)]);
+            array_push($inline_keyboard, ['text' => "\xE2\x8F\xAAНазад", 'callback_data' => '/cashbacks ' . ($page - 1)]);
         }
     }
 
@@ -630,20 +630,20 @@ $botman->hears('/events ([0-9]+)', function ($bot, $page) {
 
     $inline_keyboard = [];
     if ($page == 0 && count($events) == 5)
-        array_push($inline_keyboard, ['text' => "\xE2\x9E\xA1Далее", 'callback_data' => '/events ' . ($page + 1)]);
+        array_push($inline_keyboard, ['text' => "\xE2\x8F\xA9Далее", 'callback_data' => '/events ' . ($page + 1)]);
 
     if ($page > 0) {
         if (count($events) == 0) {
-            array_push($inline_keyboard, ['text' => "\xF0\x9F\x94\x99Назад", 'callback_data' => '/events ' . ($page - 1)]);
+            array_push($inline_keyboard, ['text' => "\xE2\x8F\xAAНазад", 'callback_data' => '/events ' . ($page - 1)]);
         }
 
         if (count($events) == 5) {
-            array_push($inline_keyboard, ['text' => "\xF0\x9F\x94\x99Назад", 'callback_data' => '/events ' . ($page - 1)]);
-            array_push($inline_keyboard, ['text' => "\xE2\x9E\xA1Далее", 'callback_data' => '/events ' . ($page + 1)]);
+            array_push($inline_keyboard, ['text' => "\xE2\x8F\xAAНазад", 'callback_data' => '/events ' . ($page - 1)]);
+            array_push($inline_keyboard, ['text' => "\xE2\x8F\xA9Далее", 'callback_data' => '/events ' . ($page + 1)]);
         }
 
         if (count($events) > 0 && count($events) < 5) {
-            array_push($inline_keyboard, ['text' => "\xF0\x9F\x94\x99Назад", 'callback_data' => '/events ' . ($page - 1)]);
+            array_push($inline_keyboard, ['text' => "\xE2\x8F\xAAНазад", 'callback_data' => '/events ' . ($page - 1)]);
         }
     }
 
@@ -767,20 +767,20 @@ $botman->hears('/achievements_all ([0-9]+)', function ($bot, $page) {
 
     $inline_keyboard = [];
     if ($page == 0 && count($attachments) == 5)
-        array_push($inline_keyboard, ['text' => "\xE2\x9E\xA1Далее", 'callback_data' => '/achievements_all ' . ($page + 1)]);
+        array_push($inline_keyboard, ['text' => "\xE2\x8F\xA9Далее", 'callback_data' => '/achievements_all ' . ($page + 1)]);
 
     if ($page > 0) {
         if (count($attachments) == 0) {
-            array_push($inline_keyboard, ['text' => "\xF0\x9F\x94\x99Назад", 'callback_data' => '/achievements_all ' . ($page - 1)]);
+            array_push($inline_keyboard, ['text' => "\xE2\x8F\xAAНазад", 'callback_data' => '/achievements_all ' . ($page - 1)]);
         }
 
         if (count($attachments) == 5) {
-            array_push($inline_keyboard, ['text' => "\xF0\x9F\x94\x99Назад", 'callback_data' => '/achievements_all ' . ($page - 1)]);
-            array_push($inline_keyboard, ['text' => "\xE2\x9E\xA1Далее", 'callback_data' => '/achievements_all ' . ($page + 1)]);
+            array_push($inline_keyboard, ['text' => "\xE2\x8F\xAAНазад", 'callback_data' => '/achievements_all ' . ($page - 1)]);
+            array_push($inline_keyboard, ['text' => "\xE2\x8F\xA9Далее", 'callback_data' => '/achievements_all ' . ($page + 1)]);
         }
 
         if (count($attachments) > 0 && count($attachments) < 5) {
-            array_push($inline_keyboard, ['text' => "\xF0\x9F\x94\x99Назад", 'callback_data' => '/achievements_all ' . ($page - 1)]);
+            array_push($inline_keyboard, ['text' => "\xE2\x8F\xAAНазад", 'callback_data' => '/achievements_all ' . ($page - 1)]);
         }
     }
 
@@ -825,20 +825,20 @@ $botman->hears('/achievements_my ([0-9]+)', function ($bot, $page) {
 
         $inline_keyboard = [];
         if ($page == 0 && count($user->achievements) == 5)
-            array_push($inline_keyboard, ['text' => "\xE2\x9E\xA1Далее", 'callback_data' => '/achievements_my ' . ($page + 1)]);
+            array_push($inline_keyboard, ['text' => "\xE2\x8F\xA9Далее", 'callback_data' => '/achievements_my ' . ($page + 1)]);
 
         if ($page > 0) {
             if (count($user->achievements) == 0) {
-                array_push($inline_keyboard, ['text' => "\xF0\x9F\x94\x99Назад", 'callback_data' => '/achievements_my ' . ($page - 1)]);
+                array_push($inline_keyboard, ['text' => "\xE2\x8F\xAAНазад", 'callback_data' => '/achievements_my ' . ($page - 1)]);
             }
 
             if (count($user->achievements) == 5) {
-                array_push($inline_keyboard, ['text' => "\xF0\x9F\x94\x99Назад", 'callback_data' => '/achievements_my ' . ($page - 1)]);
-                array_push($inline_keyboard, ['text' => "\xE2\x9E\xA1Далее", 'callback_data' => '/achievements_my ' . ($page + 1)]);
+                array_push($inline_keyboard, ['text' => "\xE2\x8F\xAAНазад", 'callback_data' => '/achievements_my ' . ($page - 1)]);
+                array_push($inline_keyboard, ['text' => "\xE2\x8F\xA9Далее", 'callback_data' => '/achievements_my ' . ($page + 1)]);
             }
 
             if (count($user->achievements) > 0 && count($user->achievements) < 5) {
-                array_push($inline_keyboard, ['text' => "\xF0\x9F\x94\x99Назад", 'callback_data' => '/achievements_my ' . ($page - 1)]);
+                array_push($inline_keyboard, ['text' => "\xE2\x8F\xAAНазад", 'callback_data' => '/achievements_my ' . ($page - 1)]);
             }
         }
 
@@ -979,7 +979,7 @@ $botman->hears('/achievements_description ([0-9]+)', function ($bot, $achievemen
 
     $message = Question::create("Дальнейшие действия")
         ->addButtons([
-            Button::create("\xF0\x9F\x94\x99Вернуться назад")->value("/achievements_panel"),
+            Button::create("\xE2\x8F\xAAВернуться назад")->value("/achievements_panel"),
         ]);
     $bot->reply($message, ["parse_mode" => "Markdown"]);
 
