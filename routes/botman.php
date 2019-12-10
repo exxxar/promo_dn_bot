@@ -716,7 +716,6 @@ $botman->hears('/achievements_panel', function ($bot) {
 });
 $botman->hears('/achievements_all ([0-9]+)', function ($bot, $page) {
 
-
     $attachments = \App\Achievement::skip($page * 5)
         ->take(5)
         ->orderBy('id', 'DESC')
@@ -725,7 +724,7 @@ $botman->hears('/achievements_all ([0-9]+)', function ($bot, $page) {
     if (count($attachments) > 0) {
         $ach_btn_tmp = [];
         foreach ($attachments as $key => $achievement)
-            array_push($ach_btn_tmp, Button::create(($achievement->activated == 0 ? "\xE2\x9D\x8E" : "\xE2\x9C\x85") . ($achievement->title ?? "Без названия [#" . $achievement->id . "]"))
+            array_push($ach_btn_tmp, Button::create(($achievement->activated == 0 ? "" : "\xE2\x9C\x85") . ($achievement->title ?? "Без названия [#" . $achievement->id . "]"))
                 ->value("/achievements_description " . $achievement->id)
             );
 
