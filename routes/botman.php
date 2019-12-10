@@ -895,12 +895,12 @@ $botman->hears('/achievements_description ([0-9]+)', function ($bot, $achievemen
 
     $on_ach_activated = \App\UserHasAchievement::where("achievement_id", "=", $achievementId)
         ->where("user_id", "=", $user->id)
-        ->where("activated", "=", false)
         ->first();
 
+    $bot->reply("TEST2 ".print_r($on_ach_activated,true));
     $btn_tmp = [];
 
-    if ($on_ach_activated != null)
+    if ($on_ach_activated->activated == false)
         array_push($btn_tmp, Button::create("\xF0\x9F\x8E\x81Получить приз")->value("/achievements_get_prize $achievementId"));
     array_push($btn_tmp, Button::create("\xE2\x8F\xAAВернуться назад")->value("/achievements_panel"));
 
@@ -920,10 +920,10 @@ $botman->hears('/achievements_get_prize ([0-9]+)', function ($bot, $achievementI
 
     $on_ach_activated = \App\UserHasAchievement::where("achievement_id", "=", $achievementId)
         ->where("user_id", "=", $user->id)
-        ->where("activated", "=", false)
         ->first();
 
-    if ($on_ach_activated == null) {
+    $bot->reply("TEST".print_r($on_ach_activated,true));
+    if ($on_ach_activated->activated == true) {
         $bot->reply("Вы уже получили приз за данное достижение!", ["parse_mode" => "Markdown"]);
         return;
     }
