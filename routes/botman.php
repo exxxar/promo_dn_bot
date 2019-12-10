@@ -895,7 +895,7 @@ $botman->hears('/achievements_description ([0-9]+)', function ($bot, $achievemen
 
     $on_ach_activated = \App\UserHasAchievement::where("achievement_id", "=", $achievementId)
         ->where("user_id", "=", $user->id)
-        ->where("activated", "=", 0)
+        ->where("activated", "=", false)
         ->first();
 
     $btn_tmp = [];
@@ -920,7 +920,7 @@ $botman->hears('/achievements_get_prize ([0-9]+)', function ($bot, $achievementI
 
     $on_ach_activated = \App\UserHasAchievement::where("achievement_id", "=", $achievementId)
         ->where("user_id", "=", $user->id)
-        ->where("activated", "=", 0)
+        ->where("activated", "=", false)
         ->first();
 
     if ($on_ach_activated == null) {
