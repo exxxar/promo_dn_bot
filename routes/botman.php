@@ -836,7 +836,9 @@ $botman->hears('/achievements_description ([0-9]+)', function ($bot, $achievemen
 
     $telegramUser = $bot->getUser();
     $id = $telegramUser->getId();
-    $user = \App\User::where("telegram_chat_id", $id)->first();
+    $user = \App\User::with(["achievements"])
+        ->where("telegram_chat_id", $id)
+        ->first();
 
     $stat = \App\Stat::where("user_id", "=", $user->id, 'and')
         ->where("stat_type", "=", $achievement->trigger_type->value)
@@ -874,30 +876,11 @@ $botman->hears('/achievements_description ([0-9]+)', function ($bot, $achievemen
 
     $bot->reply($message, ["parse_mode" => "Markdown"]);
 
-    /* if ($currentVal >= $achievement->trigger_value) {
-         $tmp_id = "$id";
-         while (strlen($tmp_id) < 10)
-             $tmp_id = "0" . $tmp_id;
-
-         $tmp_achievement_id = (string)$achievement->id;
-         while (strlen($tmp_achievement_id) < 10)
-             $tmp_achievement_id = "0" . $tmp_achievement_id;
-
-         $code = base64_encode("012" . $tmp_id . $tmp_achievement_id);
-
-         $attachment = new Image("https://api.qrserver.com/v1/create-qr-code/?size=150x150&data=https://t.me/" . env("APP_BOT_NAME") . "?start=$code");
-
-         $message = OutgoingMessage::create('_Код для активации достижения_')
-             ->withAttachment($attachment);
-
-         $bot->reply($message, ["parse_mode" => "Markdown"]);
-     }*/
-
-    $on_ach_activated = \App\UserHasAchievement::where("achievement_id", "=", $achievementId)
-        ->where("user_id", "=", $user->id)
+    $on_ach_activated = $user->achievements()
+        ->where("achievement_id", "=", $achievementId)
         ->first();
 
-    $bot->reply("TEST2 ".print_r($on_ach_activated,true));
+
     $btn_tmp = [];
 
     if ($on_ach_activated->activated == false)
@@ -915,14 +898,13 @@ $botman->hears('/achievements_get_prize ([0-9]+)', function ($bot, $achievementI
     $achievement = \App\Achievement::find($achievementId);
     $telegramUser = $bot->getUser();
     $id = $telegramUser->getId();
-    $user = \App\User::where("telegram_chat_id", $id)->first();
+    $user = \App\User::with(["achievements"])->where("telegram_chat_id", $id)->first();
 
-
-    $on_ach_activated = \App\UserHasAchievement::where("achievement_id", "=", $achievementId)
-        ->where("user_id", "=", $user->id)
+    $on_ach_activated = $user->achievements()
+        ->where("achievement_id", "=", $achievementId)
         ->first();
 
-    $bot->reply("TEST".print_r($on_ach_activated,true));
+
     if ($on_ach_activated->activated == true) {
         $bot->reply("Вы уже получили приз за данное достижение!", ["parse_mode" => "Markdown"]);
         return;
