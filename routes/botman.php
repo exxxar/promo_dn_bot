@@ -729,7 +729,7 @@ $botman->hears('/activity_information', function ($bot) {
     $message = "";
 
     foreach ($stats as $stat)
-        $message .= $types[$stat->trigger_type->value] . "=*" . $stat->trigger_value . "*\n";
+        $message .= $types[$stat->stat_type->value] . "=*" . $stat->stat_value . "*\n";
 
     $bot->reply($message, ["parse_mode" => "Markdown"]);
 
@@ -753,14 +753,14 @@ $botman->hears('/achievements_all ([0-9]+)', function ($bot, $page) {
         ->get();
 
     if (count($attachments) > 0) {
-        $tmp = [];
+        $ach_btn_tmp = [];
         foreach ($attachments as $key => $achievement)
-            array_push($tmp, Button::create(($achievement->activated == 0 ? "\xE2\x9D\x8E" : "\xE2\x9C\x85") . $achievement->title)
+            array_push($ach_btn_tmp, Button::create(($achievement->activated == 0 ? "\xE2\x9D\x8E" : "\xE2\x9C\x85") . $achievement->title)
                 ->value("/achievements_description " . $achievement->id)
             );
 
         $message = Question::create("*Все доступные достижения:*")
-            ->addButtons($tmp);
+            ->addButtons($ach_btn_tmp);
         $bot->reply($message, ["parse_mode" => "Markdown"]);
     } else
         $bot->reply("Достижения появтяся в скором времени!", ["parse_mode" => "Markdown"]);
