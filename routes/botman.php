@@ -120,19 +120,33 @@ $botman->hears("\xF0\x9F\x93\xB2Мои друзья", function ($bot) {
 });
 $botman->hears("\xE2\x9D\x93F.A.Q.", function ($bot) {
     $bot->reply("FAQ");
-    $keyboard = [
+    $keyboard1 = [
         'inline_keyboard' => [
             [
                 ['text' => "Как пользоваться", 'callback_data' => "/about"],
             ],
             [
-                ['text' => "Больше баллов", 'callback_data' => "/ref"],
+                ['text' => "О компании", 'callback_data' => "/about"],
+                ['text' => "О разработчике", 'callback_data' => "/developers"],
+            ],
+        ]
+    ];
+
+
+    $keyboard2 = [
+        'inline_keyboard' => [
+            [
                 ['text' => "Промоутеру", 'url' => "https://vk.com/it_rest_service"],
             ],
             [
-                ['text' => "VK", 'callback_data' => "/about"],
-                ['text' => "FB", 'callback_data' => "/about"],
-                ['text' => "Insta", 'callback_data' => "/about"],
+                ['text' => "Telegram", 'callback_data' => "/ref"],
+                ['text' => "Vkontakte", 'callback_data' => "/about"],
+
+            ],
+            [
+                ['text' => "Facebook", 'callback_data' => "/about"],
+                ['text' => "Intagram", 'callback_data' => "/about"],
+
             ],
 
             [
@@ -140,16 +154,21 @@ $botman->hears("\xE2\x9D\x93F.A.Q.", function ($bot) {
             ],
 
 
-            [
-                ['text' => "О компании", 'callback_data' => "/about"],
-                ['text' => "О разработчике", 'callback_data' => "/developers"],
-            ],
-
         ]
     ];
 
     $bot->sendRequest("sendMessage",
-        ["text" => 'Детали достижения', 'reply_markup' => json_encode($keyboard)
+        [
+            "text" => '_Не знаете как начать пользоваться? - Почитайте наше описание! Узнайте больше о приложении, компании и разработчике!_',
+            "parse_mode" => "Markdown",
+            'reply_markup' => json_encode($keyboard1)
+        ]);
+
+    $bot->sendRequest("sendMessage",
+        [
+            "text" => '_Вы хотите быть промоутером? Тогда этот раздел именно для вас! Выбирайте соц. сеть, делитесь ссылкой из сообщения и накапливайте бонусы! Вы также можете просматривать полную статистику по своему аккаунту._',
+            "parse_mode" => "Markdown",
+            'reply_markup' => json_encode($keyboard2)
         ]);
 
 });
@@ -656,7 +675,7 @@ $botman->hears('/cashback_get', function ($bot) {
 $botman->hears('/statistic', function ($bot) {
     $message = Question::create("Вы можете отслеживать начисления CashBack бонусов и их списание")
         ->addButtons([
-           // Button::create("Больше баллов")->value("/ref"),
+            // Button::create("Больше баллов")->value("/ref"),
             // Button::create("Кабинет промоутера")->value("/cabinet"),
             Button::create("Начисления")->value("/cashbacks 0"),
             Button::create("Списания")->value("/payments 0"),
