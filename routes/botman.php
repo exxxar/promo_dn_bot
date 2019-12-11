@@ -831,70 +831,68 @@ $botman->hears('/achievements_my ([0-9]+)', function ($bot, $page) {
 });
 
 $botman->hears('/achievements_description ([0-9]+)', function ($bot, $achievementId) {
-    try {
-        $achievement = \App\Achievement::find($achievementId);
 
-        $telegramUser = $bot->getUser();
-        $id = $telegramUser->getId();
-        $user = \App\User::with(["achievements"])
-            ->where("telegram_chat_id", $id)
-            ->first();
+    $achievement = \App\Achievement::find($achievementId);
 
-        $stat = \App\Stat::where("user_id", "=", $user->id, 'and')
-            ->where("stat_type", "=", $achievement->trigger_type->value)
-            ->first();
+    $telegramUser = $bot->getUser();
+    $id = $telegramUser->getId();
+    $user = \App\User::with(["achievements"])
+        ->where("telegram_chat_id", $id)
+        ->first();
 
-        if ($achievement == null) {
-            $bot->reply("Достижение не найдено!", ["parse_mode" => "Markdown"]);
-            return;
-        }
+    $stat = \App\Stat::where("user_id", "=", $user->id, 'and')
+        ->where("stat_type", "=", $achievement->trigger_type->value)
+        ->first();
 
-
-        $currentVal = $stat == null ? 0 : $stat->stat_value;
-
-        $progress = $currentVal >= $achievement->trigger_value ?
-            "\n*Успешно выполнено!*" :
-            "Прогресс:*" . $currentVal . "* из *" . $achievement->trigger_value . "*";
-
-        $attachment = new Image($achievement->ach_image_url);
-        $message = OutgoingMessage::create(
-            "*" .
-            $achievement->title . "*\n_" .
-            $achievement->description . "_\n" .
-            $progress
-        )
-            ->withAttachment($attachment);
-
-        $bot->reply($message, ["parse_mode" => "Markdown"]);
-
-        $attachment = new Image($achievement->prize_image_url);
-        $message = OutgoingMessage::create(
-            "*\xF0\x9F\x91\x86Ваш приз:*\n_" .
-            $achievement->prize_description . "_"
-        )
-            ->withAttachment($attachment);
-
-        $bot->reply($message, ["parse_mode" => "Markdown"]);
-
-        $on_ach_activated = $user->achievements()
-            ->where("achievement_id", "=", $achievementId)
-            ->first();
-
-
-        $btn_tmp = [];
-
-        if ($on_ach_activated)
-            if ($on_ach_activated->activated == false)
-                array_push($btn_tmp, Button::create("\xF0\x9F\x8E\x81Получить приз")->value("/achievements_get_prize $achievementId"));
-        array_push($btn_tmp, Button::create("\xE2\x8F\xAAВернуться назад")->value("/achievements_panel"));
-
-        $message = Question::create("Дальнейшие действия")
-            ->addButtons($btn_tmp);
-
-        $bot->reply($message, ["parse_mode" => "Markdown"]);
-    } catch (Exception $e) {
-        $bot->reply($e->getMessage() . " " . $e->getLine());
+    if ($achievement == null) {
+        $bot->reply("Достижение не найдено!", ["parse_mode" => "Markdown"]);
+        return;
     }
+
+
+    $currentVal = $stat == null ? 0 : $stat->stat_value;
+
+    $progress = $currentVal >= $achievement->trigger_value ?
+        "\n*Успешно выполнено!*" :
+        "Прогресс:*" . $currentVal . "* из *" . $achievement->trigger_value . "*";
+
+    $attachment = new Image($achievement->ach_image_url);
+    $message = OutgoingMessage::create(
+        "*" .
+        $achievement->title . "*\n_" .
+        $achievement->description . "_\n" .
+        $progress
+    )
+        ->withAttachment($attachment);
+
+    $bot->reply($message, ["parse_mode" => "Markdown"]);
+
+    $attachment = new Image($achievement->prize_image_url);
+    $message = OutgoingMessage::create(
+        "*\xF0\x9F\x91\x86Ваш приз:*\n_" .
+        $achievement->prize_description . "_"
+    )
+        ->withAttachment($attachment);
+
+    $bot->reply($message, ["parse_mode" => "Markdown"]);
+
+    $on_ach_activated = $user->achievements()
+        ->where("achievement_id", "=", $achievementId)
+        ->first();
+
+
+    $btn_tmp = [];
+
+    if ($on_ach_activated)
+        if ($on_ach_activated->activated == false)
+            array_push($btn_tmp, Button::create("\xF0\x9F\x8E\x81Получить приз")->value("/achievements_get_prize $achievementId"));
+    array_push($btn_tmp, Button::create("\xE2\x8F\xAAВернуться назад")->value("/achievements_panel"));
+
+    $message = Question::create("Дальнейшие действия")
+        ->addButtons($btn_tmp);
+
+    $bot->reply($message, ["parse_mode" => "Markdown"]);
+
 
 });
 $botman->hears('/achievements_get_prize ([0-9]+)', function ($bot, $achievementId) {
@@ -942,7 +940,7 @@ $botman->hears('/achievements_get_prize ([0-9]+)', function ($bot, $achievementI
 });
 
 $botman->hears('/help', function ($bot) {
-    $bot->reply("Помощь (тест)", ["parse_mode" => "Markdown"]);
+    $bot->reply("https://telegra.ph/Promouteru-12-11", ["parse_mode" => "Markdown"]);
 
 });
 $botman->hears('/about', function ($bot) {
