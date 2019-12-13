@@ -90,7 +90,7 @@ class PaymentConversation extends Conversation
             }
 
 
-            if ($recipient_user->referral_bonus_count + $recipient_user->cashback_bonus_count > intval($nedded_bonus)) {
+            if ($recipient_user->referral_bonus_count + $recipient_user->cashback_bonus_count >= intval($nedded_bonus)) {
 
                 RefferalsPaymentHistory::create([
                     'user_id' => $recipient_user->id,
