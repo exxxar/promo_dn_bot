@@ -115,11 +115,11 @@ class PaymentConversation extends Conversation
                 $company_name = Company::find($this->company_id)->title;
                 Telegram::sendMessage([
                     'chat_id' => $recipient_user->telegram_chat_id,
-                    'parse_mode' => 'HTML',
+                    'parse_mode' => 'Markdown',
                     'text' => " _ $recipient_user->updated_at _ *$company_name* в произвели списание $nedded_bonus бонусов",
                 ]);
 
-
+                $this->mainMenu("Спасибо! Успешно списалось $nedded_bonus руб.");
             } else {
                 $money = $recipient_user->referral_bonus_count + $recipient_user->cashback_bonus_count;
 
