@@ -53,7 +53,7 @@ class PaymentConversation extends Conversation
 
     public function askForAction()
     {
-        $question = Question::create('Выбери действие')
+        $question = Question::create('Выберите действие')
             ->addButtons([
                 Button::create('Списать средства')->value('askpay'),
                 Button::create('Начислить CashBack')->value('getcashabck'),
@@ -116,7 +116,7 @@ class PaymentConversation extends Conversation
                 Telegram::sendMessage([
                     'chat_id' => $recipient_user->telegram_chat_id,
                     'parse_mode' => 'Markdown',
-                    'text' => " _ $recipient_user->updated_at _ *$company_name* в произвели списание $nedded_bonus бонусов",
+                    'text' => " _ $recipient_user->updated_at _ в *$company_name* произведено списание $nedded_bonus бонусов",
                 ]);
 
                 $this->mainMenu("Спасибо! Успешно списалось $nedded_bonus руб.");
@@ -191,10 +191,12 @@ class PaymentConversation extends Conversation
             'user_id' => $user->id,
         ]);
 
+        $companyName = Company::find($this->company_id)->title??"Неизвестная компания";
+
         Telegram::sendMessage([
             'chat_id' => $user->telegram_chat_id,
             'parse_mode' => 'Markdown',
-            'text' => "Сумма в чеке *$this->money_in_check* руб.\nВам начислен *CashBack* в размере *$cashBack* руб.",
+            'text' => "Сумма в чеке *$this->money_in_check* руб.\nВам начислен *CashBack* в размере *$cashBack* руб от компании *$companyName*",
             'disable_notification' => 'false'
         ]);
         $this->mainMenu("Отлично! CashBack начислен пользователю " . ($user->phone ?? $user->fio_from_telegram ?? $user->name ?? $user->email));

@@ -51,11 +51,11 @@ class PromoConversation extends Conversation
 
     public function askForStartPromo()
     {
-        $question = Question::create('Хочешь поучаствовать в акции?')
+        $question = Question::create('Желаете поучаствовать в акции?')
             ->fallback('Ничего страшного, в следующий раз получится!')
             ->addButtons([
                 Button::create('Детали акции')->value('promo_info'),
-                Button::create('Да, хочу')->value('yes'),
+                Button::create('Участвовать в акции')->value('yes'),
                 Button::create('Нет, в другой раз')->value('no'),
             ]);
 
@@ -148,8 +148,8 @@ class PromoConversation extends Conversation
             return;
         }
 
-        $question = Question::create('Скажие мне свой телефонный номер')
-            ->fallback('Спасибо что пообщался со мной:)!');
+        $question = Question::create('Скажие мне свой номер телефона')
+            ->fallback('Спасибо что пообщались со мной:)!');
 
         $this->ask($question, function (Answer $answer) {
 
@@ -202,11 +202,11 @@ class PromoConversation extends Conversation
             return;
         }
 
-        $question = Question::create('А какого ты пола?')
-            ->fallback('Спасибо что пообщался со мной:)!')
+        $question = Question::create('А какого вы пола?')
+            ->fallback('Спасибо что пообщались со мной:)!')
             ->addButtons([
-                Button::create("\xF0\x9F\x91\xA6Парень")->value('man'),
-                Button::create("\xF0\x9F\x91\xA7Девушка")->value('woman'),
+                Button::create("\xF0\x9F\x91\xA6Мужской")->value('man'),
+                Button::create("\xF0\x9F\x91\xA7Женский")->value('woman'),
             ]);
 
         $this->ask($question, function (Answer $answer) {
@@ -230,8 +230,8 @@ class PromoConversation extends Conversation
             return;
         }
 
-        $question = Question::create('Следующий вопрос - дата твоего рождения:')
-            ->fallback('Спасибо что пообщался со мной:)!');
+        $question = Question::create('Следующий вопрос - дата вашего рождения:')
+            ->fallback('Спасибо что пообщались со мной:)!');
 
         $this->ask($question, function (Answer $answer) {
             $this->user->birthday = $answer->getText();
@@ -250,8 +250,8 @@ class PromoConversation extends Conversation
             return;
         }
 
-        $question = Question::create('Из какого ты города?')
-            ->fallback('Спасибо что пообщался со мной:)!');
+        $question = Question::create('Из какого вы города?')
+            ->fallback('Спасибо что пообщались со мной:)!');
 
         $this->ask($question, function (Answer $answer) {
             $this->user->address = $answer->getText();
