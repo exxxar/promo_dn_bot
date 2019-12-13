@@ -21,6 +21,7 @@ class CreateCompaniesTable extends Migration
             $table->string('description',5000)->default('');
             $table->string('phone')->default('');
             $table->string('email')->default('');
+            $table->double('cashback')->default(5);//индивиудальное значние CashBack для каждой компании
             $table->string('bailee')->default('');//имя ответственного лица от предприятия
             $table->string('logo_url',1000)->default('');
             $table->timestamps();

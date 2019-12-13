@@ -120,8 +120,20 @@ class PaymentConversation extends Conversation
                 ]);
 
 
-            } else
-                $this->mainMenu("У пользователя недостаточно боунсных баллов!");
+            } else {
+                $money = $recipient_user->referral_bonus_count + $recipient_user->cashback_bonus_count;
+
+                Telegram::sendMessage([
+                    'chat_id' => $recipient_user->telegram_chat_id,
+                    'parse_mode' => 'Markdown',
+                    'text' => "\xE2\x9D\x97Внимание\xE2\x9D\x97Требуется списать *$nedded_bonus* руб, но у вас на счету только $money руб.",
+                    'disable_notification' => 'false'
+                ]);
+
+                $this->bot->reply("У пользователя недостаточно боунсных баллов! В наличии $money руб.");
+
+                $this->askForAction();
+            }
 
         });
     }

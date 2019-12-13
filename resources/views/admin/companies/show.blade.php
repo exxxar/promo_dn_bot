@@ -53,6 +53,12 @@
                         </td>
                     </tr>
                     <tr>
+                        <td>Процент CashBack</td>
+                        <td>
+                            <p>{{$company->cashback}}</p>
+                        </td>
+                    </tr>
+                    <tr>
                         <td>Адрес</td>
                         <td>
                             <p>{{$company->address}}</p>

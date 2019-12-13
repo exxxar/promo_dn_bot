@@ -1,6 +1,7 @@
 <?php
 
 use App\CashbackHistory;
+use App\Conversations\StartConversation;
 use App\Drivers\TelegramInlineQueryDriver;
 use App\Event;
 use App\Http\Controllers\BotManController;
@@ -31,6 +32,18 @@ $botman->hears('/fillinfo', BotManController::class . '@fillInfoConversation');
 $botman->hears('/payment ([0-9]{1,10}) ([0-9]{1,10})', BotManController::class . '@paymentConversation');
 
 $botman->hears("\xE2\x9B\x84Мероприятия", function ($bot) {
+    $telegramUser = $bot->getUser();
+
+    $id = $telegramUser->getId();
+
+    $user = \App\User::where("telegram_chat_id", $id)->first();
+
+    if (!$user) {
+        $bot->startConversation(new StartConversation($bot));
+        return;
+    }
+
+
     $keyboard = [
         'inline_keyboard' => [
             [
@@ -104,6 +117,11 @@ $botman->hears("\xF0\x9F\x93\xB2Мои друзья", function ($bot) {
 
     $user = \App\User::where("telegram_chat_id", $id)->first();
 
+    if (!$user) {
+        $bot->startConversation(new StartConversation($bot));
+        return;
+    }
+
     $ref = $user->referrals_count;
 
     $network = $user->network_friends_count + $ref;
@@ -142,6 +160,16 @@ $botman->hears("\xF0\x9F\x93\xB2Мои друзья", function ($bot) {
 
 });
 $botman->hears("\xE2\x9D\x93F.A.Q.", function ($bot) {
+    $telegramUser = $bot->getUser();
+
+    $id = $telegramUser->getId();
+
+    $user = \App\User::where("telegram_chat_id", $id)->first();
+
+    if (!$user) {
+        $bot->startConversation(new StartConversation($bot));
+        return;
+    }
     $keyboard1 = [
         'inline_keyboard' => [
             [
@@ -201,66 +229,82 @@ $botman->hears("\xF0\x9F\x92\xB3Мои баллы", function ($bot) {
 
     $user = \App\User::where("telegram_chat_id", $id)->first();
 
-    if ($user != null) {
-        $summary = $user->referral_bonus_count + $user->cashback_bonus_count + $user->network_cashback_bonus_count;
-        $cashback = $user->cashback_bonus_count;
-
-        $tmp_network = $user->network_friends_count >= 150 ? "Сетевой бонус *" . $user->network_cashback_bonus_count . "*\n" : '';
-
-        $tmp_message = "У вас *$summary* баллов, из них *$cashback* - бонус CashBack!\n" . $tmp_network . "_Для оплаты дайте отсканировать данный QR-код сотруднику!_\n";
+    if (!$user) {
+        $bot->startConversation(new StartConversation($bot));
+        return;
+    }
 
 
-        $tmp_buttons = [];
+    $summary = $user->referral_bonus_count + $user->cashback_bonus_count + $user->network_cashback_bonus_count;
+    $cashback = $user->cashback_bonus_count;
 
-        array_push($tmp_buttons, Button::create("Мой бюджет")->value("/statistic"));
+    $tmp_network = $user->network_friends_count >= 150 ? "Сетевой бонус *" . $user->network_cashback_bonus_count . "*\n" : '';
 
-
-        if ($user->phone != null) {
-
-            $cashback_history = CashbackHistory::where("user_phone", $user->phone)
-                ->get();
-
-            if (count($cashback_history) > 0) {
-                $tmp_money = 0;
-                foreach ($cashback_history as $ch)
-                    if ($ch->activated == 0)
-                        $tmp_money += round(intval($ch->money_in_check) * env("CAHSBAK_PROCENT") / 100);
+    $tmp_message = "У вас *$summary* баллов, из них *$cashback* - бонус CashBack!\n" . $tmp_network . "_Для оплаты дайте отсканировать данный QR-код сотруднику!_\n";
 
 
-                if ($tmp_money > 0)
-                    array_push($tmp_buttons, Button::create("Зачислить мне $tmp_money руб. CashBack")->value("/cashback_get"));
+    $tmp_buttons = [];
+
+    array_push($tmp_buttons, Button::create("Мой бюджет")->value("/statistic"));
 
 
-            }
+    if ($user->phone != null) {
+
+        $cashback_history = CashbackHistory::where("user_phone", $user->phone)
+            ->get();
+
+        if (count($cashback_history) > 0) {
+            $tmp_money = 0;
+            foreach ($cashback_history as $ch)
+                if ($ch->activated == 0)
+                    $tmp_money += round(intval($ch->money_in_check) * env("CAHSBAK_PROCENT") / 100);
+
+
+            if ($tmp_money > 0)
+                array_push($tmp_buttons, Button::create("Зачислить мне $tmp_money руб. CashBack")->value("/cashback_get"));
 
 
         }
 
-        $message = Question::create($tmp_message)
-            ->addButtons($tmp_buttons);
-
-        $bot->reply($message, ["parse_mode" => "Markdown"]);
-
-        $tmp_id = "$id";
-        while (strlen($tmp_id) < 10)
-            $tmp_id = "0" . $tmp_id;
-
-        $code = base64_encode("002" . $tmp_id . "0000000000");
-
-
-        $attachment = new Image("https://api.qrserver.com/v1/create-qr-code/?size=150x150&data=https://t.me/" . env("APP_BOT_NAME") . "?start=$code");
-
-        // Build message object
-        $message = OutgoingMessage::create('_Ваш код для оплаты_')
-            ->withAttachment($attachment);
-
-        // Reply message object
-        $bot->reply($message, ["parse_mode" => "Markdown"]);
 
     }
 
+    $message = Question::create($tmp_message)
+        ->addButtons($tmp_buttons);
+
+    $bot->reply($message, ["parse_mode" => "Markdown"]);
+
+    $tmp_id = "$id";
+    while (strlen($tmp_id) < 10)
+        $tmp_id = "0" . $tmp_id;
+
+    $code = base64_encode("002" . $tmp_id . "0000000000");
+
+
+    $attachment = new Image("https://api.qrserver.com/v1/create-qr-code/?size=150x150&data=https://t.me/" . env("APP_BOT_NAME") . "?start=$code");
+
+    // Build message object
+    $message = OutgoingMessage::create('_Ваш код для оплаты_')
+        ->withAttachment($attachment);
+
+    // Reply message object
+    $bot->reply($message, ["parse_mode" => "Markdown"]);
+
+
 });
 $botman->hears("\xF0\x9F\x94\xA5По категориям", function ($bot) {
+
+    $telegramUser = $bot->getUser();
+
+    $id = $telegramUser->getId();
+
+    $user = \App\User::where("telegram_chat_id", $id)->first();
+
+    if (!$user) {
+        $bot->startConversation(new StartConversation($bot));
+        return;
+    }
+
     $categories = \App\Category::all();
 
     $tmp = [];
@@ -276,6 +320,18 @@ $botman->hears("\xF0\x9F\x94\xA5По категориям", function ($bot) {
     $bot->reply($message);
 });
 $botman->hears("\xF0\x9F\x94\xA5По компаниям", function ($bot) {
+
+    $telegramUser = $bot->getUser();
+
+    $id = $telegramUser->getId();
+
+    $user = \App\User::where("telegram_chat_id", $id)->first();
+
+    if (!$user) {
+        $bot->startConversation(new StartConversation($bot));
+        return;
+    }
+
     $companies = \App\Company::all();
 
     $tmp = [];
@@ -944,11 +1000,11 @@ $botman->hears('/help', function ($bot) {
 
 });
 $botman->hears('/about', function ($bot) {
-    $bot->reply("О компании (тест)", ["parse_mode" => "Markdown"]);
+    $bot->reply("https://telegra.ph/O-nas-12-13", ["parse_mode" => "Markdown"]);
 
 });
 $botman->hears('/developers', function ($bot) {
-    $bot->reply("Разработчики (тест)", ["parse_mode" => "Markdown"]);
+    $bot->reply("https://telegra.ph/Razrabotchiki-12-13", ["parse_mode" => "Markdown"]);
 
 });
 

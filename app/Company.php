@@ -14,6 +14,7 @@ class Company extends Model
         'phone',
         'email',
         'bailee',
+        'cashback',//добавить в бд
         'logo_url',
     ];
 
