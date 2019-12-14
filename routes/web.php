@@ -16,23 +16,25 @@ use App\Events\NetworkLevelRecounterEvent;
 use Illuminate\Support\Facades\Storage;
 use SimpleSoftwareIO\QrCode\Facades\QrCode;
 
-Route::get('/test_user',function (){
- /*  $users = \App\User::with(["parent","childs"])->get();
-   foreach($users as $user)
-       foreach ($user->childs as $key=>$u) {
-           echo ($key + 1) . ")" .$user->name." child=". $u->name . "<br>";
-            foreach ($u->childs as $u1)
-                echo $u1->name;
-       }*/
+Route::get('/test_user', function () {
+    /*  $users = \App\User::with(["parent","childs"])->get();
+      foreach($users as $user)
+          foreach ($user->childs as $key=>$u) {
+              echo ($key + 1) . ")" .$user->name." child=". $u->name . "<br>";
+               foreach ($u->childs as $u1)
+                   echo $u1->name;
+          }*/
     //event(new NetworkLevelRecounterEvent(10));
     //event(new NetworkCashBackEvent(6,100));
-$user = \App\User::find(10);
-    event(new \App\Events\AchievementEvent(3,150,$user));
+    $user = \App\User::find(10);
+    event(new \App\Events\AchievementEvent(3, 150, $user));
 
 });
-Route::get('/cabinet','HomeController@cabinet');
-Route::get('/test_get_updates','BotManController@testGetUpdates');
+Route::get('/cabinet', 'HomeController@cabinet');
 
+
+
+Route::get('/test_get_updates', 'BotManController@testGetUpdates');
 
 
 Route::get('/', function (Request $request) {
@@ -46,8 +48,6 @@ Route::get('/botman/tinker', 'BotManController@tinker');
 Auth::routes();
 
 Route::get('auth/telegram/callback', 'TelegramAuthController@handleTelegramCallback')->name('auth.telegram.handle');
-
-
 
 
 Route::prefix('admin')->group(function () {
@@ -65,15 +65,20 @@ Route::prefix('admin')->group(function () {
     Route::post('/announce', 'HomeController@announce')
         ->name('users.announce');
 
-    Route::post("/users/cashback/add","HomeController@cashback")
+    Route::get('/sender', 'HomeController@sender');
+    Route::post('/sender', 'HomeController@announceCustom')
+        ->name("sender.announce");
+
+
+    Route::post("/users/cashback/add", "HomeController@cashback")
         ->name("users.cashback.add");
 
 
-    Route::get("/users/show/byPhone/{phone}","UsersController@showByPhone")
+    Route::get("/users/show/byPhone/{phone}", "UsersController@showByPhone")
         ->name("users.show.phone");
 
 
-    Route::get("/users/cashback/{id}","UsersController@cashBackPage")->name("users.cashback.index");
+    Route::get("/users/cashback/{id}", "UsersController@cashBackPage")->name("users.cashback.index");
 
     Route::resources([
         'users' => 'UsersController',

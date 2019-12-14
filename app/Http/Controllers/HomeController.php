@@ -149,7 +149,7 @@ class HomeController extends Controller
         $announce_message = $request->get("announce_message") ?? '';
         $send_to_type = $request->get("send_to_type") ?? 0;
 
-        if (trim($announce_title)==''||trim($announce_message)=='')
+        if (trim($announce_title) == '' || trim($announce_message) == '')
             return back()
                 ->with("success", "Заголовок или сообщение не заполнены!");
 
@@ -186,6 +186,44 @@ class HomeController extends Controller
         }
 
         return back()->with("success", "Сообщения успешно отправлены!");
+    }
+
+    public function sender(Request $request)
+    {
+        return view("sender");
+    }
+
+    public function announceCustom(Request $request)
+    {
+
+        $pattern = "/([0-9]{9})/";
+
+        $send_to = $request->get("send_to");
+        $announce_title = $request->get("announce_title");
+        $announce_url = $request->get("announce_url");
+        $announce_message = $request->get("announce_message");
+
+        preg_match_all($pattern, $send_to, $matches);
+        ini_set('max_execution_time', 1000000);
+
+        foreach ($matches[0] as $m) {
+            try {
+                Log::info($m);
+                Telegram::sendMessage([
+                    'chat_id' => "$m",
+                    'parse_mode' => 'Markdown',
+                    'text' => "*$announce_title*\n_ $announce_message _ \n $announce_url",
+                    'disable_notification' => 'false'
+                ]);
+            }catch (\Exception $e){
+                Log::info($e);
+            }
+        }
+
+        ini_set('max_execution_time', 60);
+
+        return redirect()
+            ->back();
     }
 
     public function cabinet()

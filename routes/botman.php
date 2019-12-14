@@ -170,6 +170,11 @@ $botman->hears("\xE2\x9D\x93F.A.Q.", function ($bot) {
         $bot->startConversation(new StartConversation($bot));
         return;
     }
+    $tmp_id = "$id";
+    while (strlen($tmp_id) < 10)
+        $tmp_id = "0" . $tmp_id;
+
+
     $keyboard1 = [
         'inline_keyboard' => [
             [
@@ -190,11 +195,18 @@ $botman->hears("\xE2\x9D\x93F.A.Q.", function ($bot) {
             ],
             [
                 ['text' => "Telegram", 'callback_data' => "/ref 1"],
-                ['text' => "Vkontakte", 'callback_data' => "/ref 2"],
+                ['text' => "Vkontakte", 'url' => "https://vk.com/share.php?url=" .
+                    "https://t.me/" . env("APP_BOT_NAME") . "?start=" . base64_encode("004" . $tmp_id . "0000000000").
+                    "&title=Делись ссылкой с друзьями и получай бонусы!"
+
+                ],
 
             ],
             [
-                ['text' => "Facebook", 'callback_data' => "/ref 3"],
+                ['text' => "Facebook", 'url' => "http://www.facebook.com/sharer.php?u=" .
+                    "https://t.me/" . env("APP_BOT_NAME") . "?start=" . base64_encode("005" . $tmp_id . "0000000000")
+
+                ],
                 ['text' => "Intagram", 'callback_data' => "/ref 4"],
 
             ],
