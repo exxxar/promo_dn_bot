@@ -303,7 +303,7 @@ class PromoConversation extends Conversation
 
             $code = base64_encode("003" . $tmp_id . $tmp_promo_id);
 
-            $attachment = new Image("https://api.qrserver.com/v1/create-qr-code/?size=150x150&data=https://t.me/" . env("APP_BOT_NAME") . "?start=$code");
+            $attachment = new Image("https://api.qrserver.com/v1/create-qr-code/?size=70x70&data=https://t.me/" . env("APP_BOT_NAME") . "?start=$code");
 
             // Build message object
             $message = OutgoingMessage::create('_Код для получения приза по акции_')
