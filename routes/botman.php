@@ -147,7 +147,7 @@ $botman->hears("\xF0\x9F\x93\xB2Мои друзья", function ($bot) {
 
     $code = base64_encode("001" . $tmp_id . "0000000000");
 
-    $attachment = new Image("https://api.qrserver.com/v1/create-qr-code/?size=150x150&margin=30&data=https://t.me/" . env("APP_BOT_NAME") . "?start=$code");
+    $attachment = new Image(env("QR_URL")."https://t.me/" . env("APP_BOT_NAME") . "?start=$code");
 
     // Build message object
     $message = OutgoingMessage::create('_Ваш реферальный код_')
@@ -293,7 +293,7 @@ $botman->hears("\xF0\x9F\x92\xB3Мои баллы", function ($bot) {
     $code = base64_encode("002" . $tmp_id . "0000000000");
 
 
-    $attachment = new Image("https://api.qrserver.com/v1/create-qr-code/?size=150x150&margin=30&data=https://t.me/" . env("APP_BOT_NAME") . "?start=$code");
+    $attachment = new Image(env("QR_URL")."https://t.me/" . env("APP_BOT_NAME") . "?start=$code");
 
     // Build message object
     $message = OutgoingMessage::create('_Ваш код для оплаты_')
