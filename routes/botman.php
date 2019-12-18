@@ -641,7 +641,7 @@ $botman->hears('/cashbacks ([0-9]+)', function ($bot, $page) {
     foreach ($cashbacks as $key => $cash) {
         $check_info = $cash->check_info;
         $cb = round(intval($cash->money_in_check) * env("CAHSBAK_PROCENT") / 100);
-        $tmp .= "Завдение *" . $cash->company->title . "* _" . $cash->created_at . "_ чек №" . $check_info . " принес вам *" . $cb . "* руб. CashBack \n";
+        $tmp .= "Заведение *" . $cash->company->title . "* _" . $cash->created_at . "_ чек №" . $check_info . " принес вам *" . $cb . "* руб. CashBack \n";
 
     }
 
