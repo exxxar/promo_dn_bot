@@ -22,7 +22,9 @@ class CategoryController extends Controller
     public function index(Request $request)
     {
         //
-        $categories = Category::orderBy('id', 'DESC')->paginate(15);
+        $categories = Category::orderBy('id', 'DESC')
+            ->orderBy('position', 'DESC')
+            ->paginate(15);
 
         return view('admin.categories.index', compact('categories'))
             ->with('i', ($request->get('page', 1) - 1) * 15);
@@ -51,12 +53,14 @@ class CategoryController extends Controller
             'title' => 'required',
             'description' => 'required',
             'image_url' => 'required',
+            'position' => 'required',
         ]);
 
         $category = Category::create([
             'title' =>  $request->get('title') ?? '',
             'description' => $request->get('description') ?? '',
             'image_url' => $request->get('image_url') ?? '',
+            'position' => $request->get('position') ?? 0,
             'created_at' => Carbon::now(),
             'updated_at' => Carbon::now(),
         ]);
@@ -106,12 +110,14 @@ class CategoryController extends Controller
             'title' => 'required',
             'description' => 'required',
             'image_url' => 'max:1000',
+            'position' => 'required',
         ]);
 
         $category = Category::find($id);
         $category->title = $request->get('title') ?? '';
         $category->description = $request->get('description') ?? '';
         $category->image_url = $request->get('image_url') ?? '';
+        $category->position = $request->get('position') ?? 0;
         $category->save();
 
         return redirect()

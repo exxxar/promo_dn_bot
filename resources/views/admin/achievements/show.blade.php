@@ -41,6 +41,13 @@
                         </tr>
 
                         <tr>
+                            <td>Позиция в размещении</td>
+                            <td>
+                                <p>{{$achievement->position}}</p>
+                            </td>
+                        </tr>
+
+                        <tr>
                             <td>Ссылка на изображение к достижению</td>
                             <td>
                                 <img src="{{$achievement->ach_image_url}}" class="img-thumbnail"

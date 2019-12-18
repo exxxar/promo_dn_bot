@@ -23,6 +23,9 @@ class CreateAchievementsTable extends Migration
             $table->integer('trigger_value')->default(0);
             $table->string('prize_description',1000)->nullable(false);
             $table->string('prize_image_url',1000)->nullable(false);
+
+            $table->integer('position')->default(0);
+
             $table->timestamps();
         });
         Schema::enableForeignKeyConstraints();

@@ -60,6 +60,15 @@
                         </tr>
 
                         <tr>
+                            <td>Позиция в размещении</td>
+                            <td>
+                                <input type="number" value="{{$event->position}}" min="0" name="position"
+                                       class="form-control"
+                                       required>
+                            </td>
+                        </tr>
+
+                        <tr>
                             <td>Ссылка на изображение к мероприятию</td>
                             <td>
                                 <input type="url" name="event_image_url" value="{{$event->event_image_url}}"

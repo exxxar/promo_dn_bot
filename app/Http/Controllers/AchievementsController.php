@@ -29,10 +29,9 @@ class AchievementsController extends Controller
     public function index(Request $request)
     {
         //
-        $achievements = Achievement::orderBy('id', 'DESC')->paginate(15);
-
-
-
+        $achievements = Achievement::orderBy('id', 'DESC')
+            ->orderBy('position', 'DESC')
+            ->paginate(15);
 
 
         return view('admin.achievements.index', compact('achievements'))
@@ -68,6 +67,7 @@ class AchievementsController extends Controller
             'trigger_value'=> 'required',
             'prize_description'=> 'required',
             'prize_image_url'=> 'required',
+            'position'=> 'required',
         ]);
 
         $achievement = Achievement::create([
@@ -78,6 +78,7 @@ class AchievementsController extends Controller
             'trigger_value'=> $request->get('trigger_value')??'',
             'prize_description'=> $request->get('prize_description')??'',
             'prize_image_url'=> $request->get('prize_image_url')??'',
+            'position'=> $request->get('position')??0,
             'created_at' => Carbon::now(),
             'updated_at' => Carbon::now(),
         ]);
@@ -135,6 +136,7 @@ class AchievementsController extends Controller
             'trigger_value'=> 'required',
             'prize_description'=> 'required',
             'prize_image_url'=> 'required',
+            'position'=> 'required',
 
         ]);
 
@@ -147,6 +149,7 @@ class AchievementsController extends Controller
         $achievement->trigger_value = $request->get("trigger_value");
         $achievement->prize_description = $request->get("prize_description")??'';
         $achievement->prize_image_url = $request->get("prize_image_url")??'';
+        $achievement->position = $request->get("position")??0;
 
         $achievement->save();
 

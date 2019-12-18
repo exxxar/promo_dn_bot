@@ -22,6 +22,7 @@ class Achievement extends Model
         'trigger_value',
         'prize_description',
         'prize_image_url',
+        'position'
     ];
 
     public function users()

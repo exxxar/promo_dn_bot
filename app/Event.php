@@ -13,7 +13,8 @@ class Event extends Model
         'event_image_url',
         'start_at',
         'end_at',
-        'company_id'
+        'company_id',
+        'position'
     ];
 
     public function company()

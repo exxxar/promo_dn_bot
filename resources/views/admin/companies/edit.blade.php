@@ -55,6 +55,14 @@
                             </td>
                         </tr>
                         <tr>
+                            <td>Позиция в размещении</td>
+                            <td>
+                                <input type="number" value="{{$company->position}}" min="0" name="position"
+                                       class="form-control"
+                                       required>
+                            </td>
+                        </tr>
+                        <tr>
                             <td>Процент CashBack</td>
                             <td>
                                 <input type="number" min="0" max="100" name="cashback" value="{{$company->cashback}}" class="form-control"

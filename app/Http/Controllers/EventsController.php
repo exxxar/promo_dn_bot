@@ -21,7 +21,9 @@ class EventsController extends Controller
     public function index(Request $request)
     {
         //
-        $events = Event::orderBy('id', 'DESC')->paginate(15);
+        $events = Event::orderBy('id', 'DESC')
+            ->orderBy('position', 'DESC')
+            ->paginate(15);
 
         return view('admin.events.index', compact('events'))
             ->with('i', ($request->get('page', 1) - 1) * 15);
@@ -55,6 +57,7 @@ class EventsController extends Controller
             'start_at'=> 'required',
             'end_at'=> 'required',
             'company_id'=> 'required|integer',
+            'position'=> 'required',
         ]);
 
         $promotions = Event::create([
@@ -66,6 +69,7 @@ class EventsController extends Controller
 
             'company_id'=> $request->get('company_id'),
             'category_id'=> $request->get('category_id'),
+            'position'=> $request->get('position')??0,
 
             'created_at' => Carbon::now(),
             'updated_at' => Carbon::now(),
@@ -119,6 +123,7 @@ class EventsController extends Controller
             'event_image_url'=> 'max:1000',
             'start_at'=> 'required',
             'end_at'=> 'required',
+            'position'=> 'position',
             'company_id'=> 'required|integer',
 
         ]);
@@ -130,6 +135,7 @@ class EventsController extends Controller
         $promotion->event_image_url = $request->get("event_image_url");
         $promotion->start_at = $request->get("start_at");
         $promotion->end_at = $request->get("end_at");
+        $promotion->position = $request->get("position")??0;
 
         $promotion->company_id = $request->get("company_id");
 

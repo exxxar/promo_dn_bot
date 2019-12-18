@@ -42,6 +42,8 @@ class CreatePromotionsTable extends Migration
             $table->unsignedInteger('company_id')->nullable();
             $table->unsignedInteger('category_id')->nullable();
 
+            $table->integer('position')->default(0);
+
             if (env("DB_CONNECTION") == 'mysql') {
                 $table->foreign('company_id')->references('id')->on('companies');
                 $table->foreign('category_id')->references('id')->on('categories');

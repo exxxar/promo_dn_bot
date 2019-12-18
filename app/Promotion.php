@@ -25,6 +25,7 @@ class Promotion extends Model
         'created_at',
         'updated_at',
         'handler',
+        'position'
     ];
 
     public function users()

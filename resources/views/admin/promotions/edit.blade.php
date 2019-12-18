@@ -53,6 +53,14 @@
                                           required>{{$promotion->description}}</textarea>
                             </td>
                         </tr>
+                        <tr>
+                            <td>Позиция в размещении</td>
+                            <td>
+                                <input type="number" value="{{$promotion->position}}" min="0" name="position"
+                                       class="form-control"
+                                       required>
+                            </td>
+                        </tr>
 
                         <tr>
                             <td>Ссылка на изображение к акции</td>

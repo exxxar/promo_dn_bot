@@ -13,6 +13,7 @@ class Category extends Model
         'image_url',
         'created_at',
         'updated_at',
+        'position'
     ];
 
     public function promotions()

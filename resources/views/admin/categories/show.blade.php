@@ -36,6 +36,13 @@
                             <p>{{$category->description}}</p>
                         </td>
                     </tr>
+
+                    <tr>
+                        <td>Позиция в размещении</td>
+                        <td>
+                            <p>{{$category->position}}</p>
+                        </td>
+                    </tr>
                     <tr>
                         <td>Ссылка на изображение к категории</td>
                         <td>

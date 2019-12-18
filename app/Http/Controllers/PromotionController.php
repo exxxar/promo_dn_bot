@@ -22,7 +22,9 @@ class PromotionController extends Controller
      */
     public function index(Request $request)
     {
-        $promotions = Promotion::orderBy('id', 'DESC')->paginate(15);
+        $promotions = Promotion::orderBy('id', 'DESC')
+            ->orderBy('position', 'DESC')
+            ->paginate(15);
 
         return view('admin.promotions.index', compact('promotions'))
             ->with('i', ($request->get('page', 1) - 1) * 15);
@@ -62,6 +64,7 @@ class PromotionController extends Controller
             'company_id'=> 'required|integer',
             'category_id'=> 'required|integer',
             'refferal_bonus'=> 'integer',
+            'position'=> 'required',
         ]);
 
         $promotions = Promotion::create([
@@ -80,6 +83,7 @@ class PromotionController extends Controller
             'location_coords'=> $request->get('location_coords')??'',
             'immediately_activate'=>$request->get('immediately_activate')??false,
             'refferal_bonus'=>$request->get('refferal_bonus')??0,
+            'position'=>$request->get('position')??0,
             'created_at' => Carbon::now(),
             'updated_at' => Carbon::now(),
         ]);
@@ -140,6 +144,7 @@ class PromotionController extends Controller
             'activation_count'=> 'required',
             'activation_text'=> 'required',
             'location_address'=> 'required',
+            'position'=> 'required',
             'company_id'=> 'required|integer',
             'category_id'=> 'required|integer',
             'refferal_bonus'=> 'integer',
@@ -161,6 +166,7 @@ class PromotionController extends Controller
         $promotion->company_id = $request->get("company_id");
         $promotion->category_id = $request->get("category_id");
         $promotion->refferal_bonus = $request->get("refferal_bonus");
+        $promotion->position = $request->get("position")??0;
         $promotion->save();
 
         return redirect()

@@ -55,6 +55,16 @@
                     </textarea>
                             </td>
                         </tr>
+
+                        <tr>
+                            <td>Позиция в размещении</td>
+                            <td>
+                                <input type="number" value="{{$category->position}}" min="0" name="position"
+                                       class="form-control"
+                                       required>
+                            </td>
+                        </tr>
+
                         <tr>
                             <td>Ссылка на изображение к категории</td>
                             <td>

@@ -42,6 +42,13 @@
                         </tr>
 
                         <tr>
+                            <td>Позиция в размещении</td>
+                            <td>
+                                <p>{{$event->position}}</p>
+                            </td>
+                        </tr>
+
+                        <tr>
                             <td>Ссылка на изображение к мероприятию</td>
                             <td>
                                 <a href="{{$event->event_image_url}}}" target="_blank"><img

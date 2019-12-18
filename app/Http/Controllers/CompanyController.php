@@ -20,7 +20,9 @@ class CompanyController extends Controller
     public function index(Request $request)
     {
         //
-        $companies = Company::orderBy('id', 'DESC')->paginate(15);
+        $companies = Company::orderBy('id', 'DESC')
+            ->orderBy('position', 'DESC')
+            ->paginate(15);
 
         return view('admin.companies.index', compact('companies'))
             ->with('i', ($request->get('page', 1) - 1) * 15);
@@ -54,6 +56,7 @@ class CompanyController extends Controller
             'email' => 'required',
             'bailee' => 'required',
             'logo_url' => 'required',
+            'position' => 'required',
         ]);
 
 
@@ -65,6 +68,7 @@ class CompanyController extends Controller
             'email' => $request->get('email') ?? '',
             'bailee' => $request->get('bailee') ?? '',
             'logo_url' => $request->get('logo_url') ?? '',
+            'position' => $request->get('position') ?? 0,
             'created_at' => Carbon::now(),
             'updated_at' => Carbon::now(),
         ]);
@@ -119,6 +123,7 @@ class CompanyController extends Controller
             'email' => 'required',
             'bailee' => 'required',
             'logo_url' => 'required',
+            'position' => 'required',
         ]);
 
 
@@ -130,6 +135,7 @@ class CompanyController extends Controller
         $company->email = $request->get('email') ?? '';
         $company->bailee = $request->get('bailee') ?? '';
         $company->logo_url = $request->get('logo_url') ?? '';
+        $company->position = $request->get('position') ?? 0;
         $company->save();
 
         return redirect()

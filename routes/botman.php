@@ -36,7 +36,8 @@ $botman->hears("\xE2\x9B\x84Мероприятия", function ($bot) {
 
     $id = $telegramUser->getId();
 
-    $user = \App\User::where("telegram_chat_id", $id)->first();
+    $user = \App\User::where("telegram_chat_id", $id)
+        ->first();
 
     if (!$user) {
         $bot->startConversation(new StartConversation($bot));
@@ -317,7 +318,9 @@ $botman->hears("\xF0\x9F\x94\xA5По категориям", function ($bot) {
         return;
     }
 
-    $categories = \App\Category::all();
+    $categories = \App\Category::orderBy('id', 'DESC')
+        ->orderBy('position', 'DESC')
+        ->get();
 
     $tmp = [];
 
@@ -344,7 +347,9 @@ $botman->hears("\xF0\x9F\x94\xA5По компаниям", function ($bot) {
         return;
     }
 
-    $companies = \App\Company::all();
+    $companies = \App\Company::orderBy('id', 'DESC')
+        ->orderBy('position', 'DESC')
+        ->get();
 
     $tmp = [];
 
@@ -382,6 +387,8 @@ $botman->hears('stop', function ($bot) {
 $botman->hears('/category ([0-9]+)', function ($bot, $category_id) {
 
     $promotions = \App\Promotion::with(["users"])->where("category_id", "=", $category_id)
+        ->orderBy('id', 'DESC')
+        ->orderBy('position', 'DESC')
         ->get();
 
     $tmp = [];
@@ -682,6 +689,7 @@ $botman->hears('/events ([0-9]+)', function ($bot, $page) {
     $events = Event::skip($page * 5)
         ->take(5)
         ->orderBy('id', 'DESC')
+        ->orderBy('position', 'DESC')
         ->get();
 
     if (count($events) > 0) {
@@ -787,6 +795,7 @@ $botman->hears('/achievements_all ([0-9]+)', function ($bot, $page) {
     $attachments = \App\Achievement::skip($page * 5)
         ->take(5)
         ->orderBy('id', 'DESC')
+        ->orderBy('position', 'DESC')
         ->get();
 
     if (count($attachments) > 0) {

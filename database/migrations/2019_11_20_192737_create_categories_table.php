@@ -21,6 +21,7 @@ class CreateCategoriesTable extends Migration
             $table->string('title')->default('');
             $table->string('description')->default('')->nullable();
             $table->string('image_url',1000)->default('')->nullable();
+            $table->integer('position')->default(0);
             $table->timestamps();
         });
         Schema::enableForeignKeyConstraints();

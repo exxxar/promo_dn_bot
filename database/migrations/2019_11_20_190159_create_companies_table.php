@@ -24,6 +24,7 @@ class CreateCompaniesTable extends Migration
             $table->double('cashback')->default(5);//индивиудальное значние CashBack для каждой компании
             $table->string('bailee')->default('');//имя ответственного лица от предприятия
             $table->string('logo_url',1000)->default('');
+            $table->integer('position')->default(0);
             $table->timestamps();
         });
         Schema::enableForeignKeyConstraints();

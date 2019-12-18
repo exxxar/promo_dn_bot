@@ -53,6 +53,12 @@
                         </td>
                     </tr>
                     <tr>
+                        <td>Позиция в размещении</td>
+                        <td>
+                            <p>{{$company->position}}</p>
+                        </td>
+                    </tr>
+                    <tr>
                         <td>Процент CashBack</td>
                         <td>
                             <p>{{$company->cashback}}</p>

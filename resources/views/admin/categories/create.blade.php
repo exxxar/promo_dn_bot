@@ -51,6 +51,14 @@
                             </td>
                         </tr>
                         <tr>
+                            <td>Позиция в размещении</td>
+                            <td>
+                                <input type="number" value="" min="0" name="position"
+                                       class="form-control"
+                                       required>
+                            </td>
+                        </tr>
+                        <tr>
                             <td>Ссылка на изображение к категории</td>
                             <td>
                                 <input type="url" name="image_url" placeholder="https://example.com"
