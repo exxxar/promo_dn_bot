@@ -318,8 +318,7 @@ $botman->hears("\xF0\x9F\x94\xA5По категориям", function ($bot) {
         return;
     }
 
-    $categories = \App\Category::orderBy('id', 'DESC')
-        ->orderBy('position', 'DESC')
+    $categories = \App\Category::orderBy('position', 'DESC')
         ->get();
 
     $tmp = [];
@@ -347,8 +346,7 @@ $botman->hears("\xF0\x9F\x94\xA5По компаниям", function ($bot) {
         return;
     }
 
-    $companies = \App\Company::orderBy('id', 'DESC')
-        ->orderBy('position', 'DESC')
+    $companies = \App\Company::orderBy('position', 'DESC')
         ->get();
 
     $tmp = [];
@@ -387,7 +385,6 @@ $botman->hears('stop', function ($bot) {
 $botman->hears('/category ([0-9]+)', function ($bot, $category_id) {
 
     $promotions = \App\Promotion::with(["users"])->where("category_id", "=", $category_id)
-        ->orderBy('id', 'DESC')
         ->orderBy('position', 'DESC')
         ->get();
 
@@ -688,7 +685,6 @@ $botman->hears('/events ([0-9]+)', function ($bot, $page) {
 
     $events = Event::skip($page * 5)
         ->take(5)
-        ->orderBy('id', 'DESC')
         ->orderBy('position', 'DESC')
         ->get();
 
@@ -794,7 +790,6 @@ $botman->hears('/achievements_all ([0-9]+)', function ($bot, $page) {
 
     $attachments = \App\Achievement::skip($page * 5)
         ->take(5)
-        ->orderBy('id', 'DESC')
         ->orderBy('position', 'DESC')
         ->get();
 

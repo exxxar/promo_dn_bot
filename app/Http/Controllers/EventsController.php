@@ -21,8 +21,7 @@ class EventsController extends Controller
     public function index(Request $request)
     {
         //
-        $events = Event::orderBy('id', 'DESC')
-            ->orderBy('position', 'DESC')
+        $events = Event::orderBy('position', 'DESC')
             ->paginate(15);
 
         return view('admin.events.index', compact('events'))

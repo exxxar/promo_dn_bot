@@ -29,8 +29,7 @@ class AchievementsController extends Controller
     public function index(Request $request)
     {
         //
-        $achievements = Achievement::orderBy('id', 'DESC')
-            ->orderBy('position', 'DESC')
+        $achievements = Achievement::orderBy('position', 'DESC')
             ->paginate(15);
 
 
