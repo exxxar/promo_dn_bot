@@ -52,7 +52,9 @@ class StartConversation extends Conversation
 
         $this->mainMenu("Добрый день!Приветствуем вас в нашем акционном боте! У нас вы сможете найти самые актуальные акции");
 
-        $categories = Category::all();
+        $categories = Category::orderBy('id', 'DESC')
+            ->orderBy('position', 'DESC')
+            ->get();
 
         if (count($categories) > 0) {
             $tmp = [];
