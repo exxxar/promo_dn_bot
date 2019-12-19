@@ -30,7 +30,7 @@ class AchievementsController extends Controller
     {
         //
         $achievements = Achievement::where("is_active", 1)
-            ->orderBy('position', 'DESC')
+            ->orderBy('position', 'ASC')
             ->paginate(15);
 
 
