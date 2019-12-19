@@ -141,7 +141,7 @@
                 items: 10,
                 scrollBar: false,
                 ajax: {
-                    url: '/admin/search_ajax/',
+                    url: '{{route('users.ajax.searc')}}',
                     timeout: 300,
                     method: 'get',
                     preDispatch: function (query) {
