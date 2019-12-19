@@ -129,29 +129,40 @@
     <script src='https://cdn.jsdelivr.net/npm/botman-web-widget@0/build/js/widget.js'></script>
 
     <script src="{{asset('/js/jquery.mask.min.js')}}"></script>
+    <script src="{{asset('/js/bootstrap-typeahead.min.js')}}"></script>
     <script>
         $(document).ready(function () {
             $('.phone').mask('+38(000) 000-00-00');
 
-            $("#phone,#user_phone").keyup(function () {
-                var phone = $(this).val();
-                var token = '{{csrf_token()}}';
-                var target = $(this).attr("data-target");
-                $(target).html("");
-                if (phone.trim().length > 0)
-                    $.post('{{route('users.ajax.search')}}', {
-                        phone: phone,
-                        _token: token
-                    }).then(resp => {
-                        var users = resp.users;
-                        var tmp = '';
-                        users.forEach((a, b) => {
-                            console.log(a, b);
-                           tmp += "<a href='{{url("/admin/users/show/byPhone/")}}/"+a.phone+"'>"+a.phone+"</a>, ";
-                        });
-                        $(target).html(tmp);
-                    });
+            $('#user_phone').typeahead({
+                source: [
+                ],
+                displayField:'phone',
+                items: 10,
+                scrollBar: false,
+                ajax: {
+                    url: '/admin/search_ajax/',
+                    timeout: 300,
+                    method: 'get',
+                    preDispatch: function (query) {
+                        return {
+                            search: query
+                        }
+                    },
+                    preProcess: function (data) {
+                        if (data.success === false) {
+                            // Hide the list, there was some error
+                            return false;
+                        }
+
+                        console.log(data);
+                        // We good!
+                        return data;
+                    }
+                }
             });
+
+
 
         });
     </script>

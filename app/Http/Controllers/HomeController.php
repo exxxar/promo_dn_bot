@@ -60,16 +60,15 @@ class HomeController extends Controller
 
     public function searchAjax(Request $request)
     {
-        Log::info("TEST");
+
         $vowels = array("(", ")", "-", " ");
-        $tmp_phone = $request->get("phone");
+        $tmp_phone = $request->get("query");
 
         $tmp_phone = str_replace($vowels, "", $tmp_phone);
 
 
-        return response()->json([
-            "users" => User::where('phone', 'like', '%' . $tmp_phone . '%')->get()
-        ], 200);
+        return  User::where('phone', 'like', '%' . $tmp_phone . '%')->get();
+
 
     }
 

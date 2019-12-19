@@ -62,7 +62,7 @@ Route::prefix('admin')->group(function () {
     Route::post('/search', 'HomeController@search')
         ->name('users.search');
 
-    Route::post('/search_ajax', 'HomeController@searchAjax')
+    Route::get('/search_ajax/', 'HomeController@searchAjax')
         ->name('users.ajax.search');
 
 
