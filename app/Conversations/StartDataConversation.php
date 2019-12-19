@@ -258,7 +258,7 @@ class StartDataConversation extends Conversation
                 case "010":
                 case "011":event(new AchievementEvent(AchievementTriggers::QRActivationCount,1,$this->user)); break;
                 default:
-                    event(new AchievementEvent(AchievementTriggers::ReferralCount,1,$sender_user));
+                    event(new AchievementEvent(AchievementTriggers::QRActivationCount,1,$this->user));
                     break;
             }
 
