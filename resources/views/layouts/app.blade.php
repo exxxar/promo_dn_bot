@@ -119,10 +119,10 @@
 
     <script>
         var botmanWidget = {
-            title:'SkidkiDN - веб-версия',
-            introMessage:'Спасибо что используете Веб-версию нашего бота. Полноценный набор функций доступен в боте telegram',
-            mainColor:'#ff9800',
-            chatServer:'https://promodnbot.herokuapp.com/public/botman'
+            title: 'SkidkiDN - веб-версия',
+            introMessage: 'Спасибо что используете Веб-версию нашего бота. Полноценный набор функций доступен в боте telegram',
+            mainColor: '#ff9800',
+            chatServer: 'https://promodnbot.herokuapp.com/public/botman'
         };
 
     </script>
@@ -132,6 +132,27 @@
     <script>
         $(document).ready(function () {
             $('.phone').mask('+38(000) 000-00-00');
+
+            $("#phone,#user_phone").keyup(function () {
+                var phone = $(this).val();
+                var token = '{{csrf_token()}}';
+                var target = $(this).attr("data-target");
+                $(target).html("");
+                if (phone.trim().length > 0)
+                    $.post('{{route('users.ajax.search')}}', {
+                        phone: phone,
+                        _token: token
+                    }).then(resp => {
+                        var users = resp.users;
+                        var tmp = '';
+                        users.forEach((a, b) => {
+                            console.log(a, b);
+                           tmp += "<a href='{{url("/admin/users/show/byPhone/")}}/"+a.phone+"'>"+a.phone+"</a>, ";
+                        });
+                        $(target).html(tmp);
+                    });
+            });
+
         });
     </script>
 </div>

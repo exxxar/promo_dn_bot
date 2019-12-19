@@ -14,7 +14,8 @@
 
         <div class="col form-group">
             <label for="user_phone">Телефон:+38(071)123-45-67 </label>
-            <input class="form-control phone"  id="user_phone" name="user_phone"  required>
+            <input class="form-control phone"  data-target="#livesearch" id="user_phone" name="user_phone"  required>
+            <div id="livesearch"></div>
         </div>
 
 

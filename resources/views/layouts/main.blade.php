@@ -10,11 +10,11 @@
     <title>{{ config('app.name', 'Laravel') }}</title>
 
     <!-- Scripts -->
-    <meta property="og:url"           content="https://vk.com/exxxar" />
-    <meta property="og:type"          content="website" />
-    <meta property="og:title"         content="Your Website Title" />
-    <meta property="og:description"   content="Your description" />
-    <meta property="og:image"         content="https://instaforum.ru/attachments/22-jpg.1774/" />
+    <meta property="og:url" content="https://vk.com/exxxar"/>
+    <meta property="og:type" content="website"/>
+    <meta property="og:title" content="Your Website Title"/>
+    <meta property="og:description" content="Your description"/>
+    <meta property="og:image" content="https://instaforum.ru/attachments/22-jpg.1774/"/>
 
     <!-- Fonts -->
     <link rel="dns-prefetch" href="//fonts.gstatic.com">
@@ -32,8 +32,27 @@
     </main>
 
 
+    <script src="https://code.jquery.com/jquery-2.2.4.min.js"></script>
 
+    <script src="{{asset('/js/jquery.mask.min.js')}}"></script>
+    <script>
+        $(document).ready(function () {
+            alert("Test");
+            $('.phone').mask('+38(000) 000-00-00');
 
+            $("#phone,#user_phone").keyup(function () {
+                console.log("Test");
+                var phone = $(this).val();
+                var target = $(this).attr("data-target");
+                console.log("Test2");
+                $.post('{{route('users.search')}}', {
+                    phone: phone
+                }).then(resp => {
+                    $(target).html(resp.data.users);
+                });
+            });
+        });
+    </script>
 
 </div>
 </body>

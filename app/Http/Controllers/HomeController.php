@@ -58,14 +58,28 @@ class HomeController extends Controller
         return view('home', compact('users', 'promotions', 'current_user'));
     }
 
-
-    public function search(Request $request)
+    public function searchAjax(Request $request)
     {
-
+        Log::info("TEST");
         $vowels = array("(", ")", "-", " ");
         $tmp_phone = $request->get("phone");
 
         $tmp_phone = str_replace($vowels, "", $tmp_phone);
+
+
+        return response()->json([
+            "users" => User::where('phone', 'like', '%' . $tmp_phone . '%')->get()
+        ], 200);
+
+    }
+
+    public function search(Request $request)
+    {
+        $vowels = array("(", ")", "-", " ");
+        $tmp_phone = $request->get("phone");
+
+        $tmp_phone = str_replace($vowels, "", $tmp_phone);
+
 
         $user = User::where("phone", $tmp_phone)->first();
 
@@ -193,6 +207,7 @@ class HomeController extends Controller
         return view("sender");
     }
 
+
     public function announceCustom(Request $request)
     {
 
@@ -215,7 +230,7 @@ class HomeController extends Controller
                     'text' => "*$announce_title*\n_ $announce_message _ \n $announce_url",
                     'disable_notification' => 'false'
                 ]);
-            }catch (\Exception $e){
+            } catch (\Exception $e) {
                 Log::info($e);
             }
         }
