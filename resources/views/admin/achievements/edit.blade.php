@@ -59,14 +59,14 @@
                             </td>
                         </tr>
 
-                     {{--   <tr>
+                        <tr>
                             <td>Позиция в размещении</td>
                             <td>
                                 <input type="number" value="{{$achievement->position}}" min="0" name="position"
                                        class="form-control"
                                        required>
                             </td>
-                        </tr>--}}
+                        </tr>
 
                         <tr>
                             <td>Ссылка на изображение к мероприятию</td>

@@ -791,7 +791,7 @@ $botman->hears('/achievements_all ([0-9]+)', function ($bot, $page) {
     $attachments = \App\Achievement::where("is_active",1)
         ->skip($page * 5)
         ->take(5)
-        ->orderBy('id', 'DESC')
+        ->orderBy('position', 'ASC')
         ->get();
 
     if (count($attachments) > 0) {
