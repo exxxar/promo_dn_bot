@@ -33,7 +33,6 @@ Route::get('/test_user', function () {
 Route::get('/cabinet', 'HomeController@cabinet');
 
 
-
 Route::get('/test_get_updates', 'BotManController@testGetUpdates');
 
 
@@ -99,21 +98,23 @@ Route::prefix('admin')->group(function () {
 });
 
 
-
-
-
-
-Route::get("/image",function (\Illuminate\Http\Request $request){
+Route::get("/image", function (\Illuminate\Http\Request $request) {
 
     try {
         $tmp_data = base64_decode($request->get("data"));
-    }catch (Exception $e){
+    } catch (Exception $e) {
         $tmp_data = $request->get("data");
     }
-    $pngImage = QrCode::format('png')->merge(env("APP_URL").'bot.png', 0.3, true)
-        ->size(500)->errorCorrection('H')
-        ->generate($tmp_data);
 
-    return response($pngImage)->header('Content-type','image/png');
+    try {
+        $pngImage = QrCode::format('png')->merge(env("APP_URL") . 'bot.png', 0.3, true)
+            ->size(500)->errorCorrection('H')
+            ->generate($tmp_data);
+
+        return response($pngImage)->header('Content-type', 'image/png');
+    } catch (Exception $e) {
+        return "https://api.qrserver.com/v1/create-qr-code/?size=150x150&data=https://t.me/" . env("APP_BOT_NAME");
+
+    }
 });
 
