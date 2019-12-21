@@ -240,5 +240,20 @@ class UsersController extends Controller
 
     }
 
+    public function search(Request $request){
+        $user = $request->get("user-search");
+        $users = User::where("name","like","%$user%")
+            ->orWhere("email","like","%$user%")
+            ->orWhere("fio_from_telegram","like","%$user%")
+            ->orWhere("fio_from_request","like","%$user%")
+            ->orWhere("phone","like","%$user%")
+            ->orWhere("address","like","%$user%")
+            ->orderBy('id',"DESC")
+            ->paginate(15);
+
+        return view('admin.users.index', compact('users'))
+            ->with('i', ($request->get('page', 1) - 1) * 15);
+    }
+
 
 }

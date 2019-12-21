@@ -20,7 +20,7 @@ class CashbackHistoryController extends Controller
     public function index(Request $request)
     {
         //
-        $cashbacks = CashbackHistory::with(["employee"])
+        $cashbacks = CashbackHistory::with(["employee","company"])
             ->orderBy('id', 'DESC')
             ->paginate(15);
 

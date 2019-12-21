@@ -23,7 +23,20 @@
                 @endif
 
                 @isset($users)
-                    <table class="table mt-2">
+                        <form class="row mb-2" action="{{route("users.search")}}" method="post">
+                            @csrf
+                            <div class="form-group col-md-5">
+                                <input type="text" class="form-control pull-right" id="usersSearch"
+                                       name="users-search" placeholder="Поиск по таблице">
+                            </div>
+                            <div class="form-group col-md-1">
+                                <button type="submit" class="btn btn-info btn-pill pull-right">Искать</button>
+                            </div>
+
+
+                        </form>
+
+                        <table class="table mt-2">
 
                         <thead class="thead-light">
                         <tr>

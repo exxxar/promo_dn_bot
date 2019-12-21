@@ -83,6 +83,8 @@ Route::prefix('admin')->group(function () {
 
     Route::get("/users/cashback/{id}", "UsersController@cashBackPage")->name("users.cashback.index");
 
+    Route::post('users/search', 'UsersController@search')->name("users.search");
+
     Route::resources([
         'users' => 'UsersController',
         'categories' => 'CategoryController',
@@ -96,6 +98,7 @@ Route::prefix('admin')->group(function () {
     ]);
 
 });
+
 
 
 Route::get("/image", function (\Illuminate\Http\Request $request) {
