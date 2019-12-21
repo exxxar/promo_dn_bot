@@ -103,9 +103,9 @@ Route::prefix('admin')->group(function () {
 
 
 
-Route::get("/image/{data}",function ($data){
+Route::get("/image",function (\Illuminate\Http\Request $request){
 
-    $tmp_data = base64_decode($data);
+    $tmp_data = base64_decode($request->get("data"));
     $pngImage = QrCode::format('png')->merge(env("APP_URL").'bot.png', 0.3, true)
         ->size(200)->errorCorrection('H')
         ->generate($tmp_data);
