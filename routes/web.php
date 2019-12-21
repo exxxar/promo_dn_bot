@@ -103,8 +103,13 @@ Route::prefix('admin')->group(function () {
 
 
 
-/*Route::get("/image/{img}",function ($img){
+Route::get("/image/{data}",function ($data){
 
-   return Storage::disk("public")->download($img);
-});*/
+    $tmp_data = base64_decode($data);
+    $pngImage = QrCode::format('png')->merge('https://psv4.userapi.com/c848220/u138206920/docs/d16/6f7adde4f371/bot.png', 0.3, true)
+        ->size(200)->errorCorrection('H')
+        ->generate($tmp_data);
+
+    return response($pngImage)->header('Content-type','image/png');
+});
 

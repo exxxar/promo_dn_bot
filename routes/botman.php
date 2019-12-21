@@ -148,7 +148,8 @@ $botman->hears("\xF0\x9F\x93\xB2Мои друзья", function ($bot) {
 
     $code = base64_encode("001" . $tmp_id . "0000000000");
 
-    $attachment = new Image(env("QR_URL")."https://t.me/" . env("APP_BOT_NAME") . "?start=$code");
+    //$attachment = new Image(env("QR_URL")."https://t.me/" . env("APP_BOT_NAME") . "?start=$code");
+    $attachment = new Image(env("APP_URL")."/image/".base64_encode("https://t.me/" . env("APP_BOT_NAME") . "?start=$code"));
 
     // Build message object
     $message = OutgoingMessage::create('_Ваш реферальный код_')
@@ -182,8 +183,8 @@ $botman->hears("\xE2\x9D\x93F.A.Q.", function ($bot) {
                 ['text' => "Как пользоваться", 'callback_data' => "/help"],
             ],
             [
-                ['text' => "О компании", 'callback_data' => "/about"],
-                ['text' => "О разработчике", 'callback_data' => "/developers"],
+                ['text' => "Условия использования", 'callback_data' => "/about"],
+                ['text' => "Промоутеру", 'callback_data' => "/developers"],
             ],
         ]
     ];
@@ -294,7 +295,8 @@ $botman->hears("\xF0\x9F\x92\xB3Мои баллы", function ($bot) {
     $code = base64_encode("002" . $tmp_id . "0000000000");
 
 
-    $attachment = new Image(env("QR_URL")."https://t.me/" . env("APP_BOT_NAME") . "?start=$code");
+   // $attachment = new Image(env("QR_URL")."https://t.me/" . env("APP_BOT_NAME") . "?start=$code");
+    $attachment = new Image(env("APP_URL")."/image/".base64_encode("https://t.me/" . env("APP_BOT_NAME") . "?start=$code"));
 
     // Build message object
     $message = OutgoingMessage::create('_Ваш код для оплаты_')
@@ -1000,7 +1002,8 @@ $botman->hears('/achievements_get_prize ([0-9]+)', function ($bot, $achievementI
 
         $code = base64_encode("012" . $tmp_id . $tmp_achievement_id);
 
-        $attachment = new Image("https://api.qrserver.com/v1/create-qr-code/?size=150x150&data=https://t.me/" . env("APP_BOT_NAME") . "?start=$code");
+       // $attachment = new Image("https://api.qrserver.com/v1/create-qr-code/?size=150x150&data=https://t.me/" . env("APP_BOT_NAME") . "?start=$code");
+        $attachment = new Image(env("APP_URL")."/image/".base64_encode("https://t.me/" . env("APP_BOT_NAME") . "?start=$code"));
 
         $message = OutgoingMessage::create('_Код для активации достижения_')
             ->withAttachment($attachment);
@@ -1013,15 +1016,15 @@ $botman->hears('/achievements_get_prize ([0-9]+)', function ($bot, $achievementI
 });
 
 $botman->hears('/help', function ($bot) {
-    $bot->reply("https://telegra.ph/Promouteru-12-11", ["parse_mode" => "Markdown"]);
+    $bot->reply("https://telegra.ph/Potrebitelyam-uslug-12-21", ["parse_mode" => "Markdown"]);
 
 });
 $botman->hears('/about', function ($bot) {
-    $bot->reply("https://telegra.ph/O-nas-12-13", ["parse_mode" => "Markdown"]);
+    $bot->reply("https://telegra.ph/Usloviya-obnalichivaniya-bonusov-12-21", ["parse_mode" => "Markdown"]);
 
 });
 $botman->hears('/developers', function ($bot) {
-    $bot->reply("https://telegra.ph/Razrabotchiki-12-13", ["parse_mode" => "Markdown"]);
+    $bot->reply("https://telegra.ph/Promouteru-12-21", ["parse_mode" => "Markdown"]);
 
 });
 
