@@ -67,7 +67,7 @@ class HomeController extends Controller
         $tmp_phone = str_replace($vowels, "", $tmp_phone);
 
 
-        return  User::where('phone', 'like', '%' . $tmp_phone . '%')->get();
+        return User::where('phone', 'like', '%' . $tmp_phone . '%')->get();
 
 
     }
@@ -125,14 +125,21 @@ class HomeController extends Controller
                 'user_id' => $user->id,
 
             ]);
+            try {
 
-            Telegram::sendMessage([
-                'chat_id' => $user->telegram_chat_id,
-                'parse_mode' => 'Markdown',
-                'text' => "Сумма в чеке *$money_in_check* руб.\nВам начислен *CashBack* в размере *$cashBack* руб.",
-                'disable_notification' => 'false'
-            ]);
+                Telegram::sendMessage([
+                    'chat_id' => $user->telegram_chat_id,
+                    'parse_mode' => 'Markdown',
+                    'text' => "Сумма в чеке *$money_in_check* руб.\nВам начислен *CashBack* в размере *$cashBack* руб.",
+                    'disable_notification' => 'false'
+                ]);
+            } catch (\Exception $e) {
+                $user->activated = false;
+                $user->save();
 
+                return back()
+                    ->with("success", "Пользователь больше не использует данный телеграм-бот!");
+            }
             return back()
                 ->with("success", "Кэшбэк успешно добавлен!");
         }
