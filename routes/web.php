@@ -106,7 +106,7 @@ Route::prefix('admin')->group(function () {
 Route::get("/image/{data}",function ($data){
 
     $tmp_data = base64_decode($data);
-    $pngImage = QrCode::format('png')->merge('https://psv4.userapi.com/c848220/u138206920/docs/d16/6f7adde4f371/bot.png', 0.3, true)
+    $pngImage = QrCode::format('png')->merge(env("APP_URL").'bot.png', 0.3, true)
         ->size(200)->errorCorrection('H')
         ->generate($tmp_data);
 
