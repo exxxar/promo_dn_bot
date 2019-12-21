@@ -50,7 +50,7 @@
                                     @isset($cashback->employee)
                                         <a href="{{ route('users.show',$cashback->employee->id) }}">
                                             {{$cashback->employee->phone??$cashback->employee->name??$cashback->employee->telegram_chat_id}}
-                                        [ {{$cashback->company->name??"Неизвестно"}}]
+                                        [ {{$cashback->company->title??"Неизвестно"}}]
                                         </a>
                                     @endisset
                                 </td>

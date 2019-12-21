@@ -241,7 +241,7 @@ class UsersController extends Controller
     }
 
     public function search(Request $request){
-        $user = $request->get("user-search");
+        $user = $request->get("users-search");
         $users = User::where("name","like","%$user%")
             ->orWhere("email","like","%$user%")
             ->orWhere("fio_from_telegram","like","%$user%")
