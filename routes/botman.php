@@ -48,8 +48,7 @@ $botman->hears("\xE2\x9B\x84Мероприятия", function ($bot) {
     $keyboard = [
         'inline_keyboard' => [
             [
-                ['text' => "\xF0\x9F\x8E\xAAМероприятия", 'callback_data' => "/events 0"],
-                ['text' => "\xF0\x9F\x8E\x81Призы!", 'url' => env("APP_PROMO_LINK")],
+                ['text' => "\xF0\x9F\x8E\xAAСобытия", 'callback_data' => "/events 0"],
             ],
             [
                 ['text' => "\xE2\xAD\x90Достижения", 'callback_data' => "/achievements_panel"],
@@ -326,7 +325,7 @@ $botman->hears("\xE2\x9A\xA1Все акции", function ($bot) {
                 ['text' => 'Все акции на нашем сайте!', 'url' => env("APP_PROMO_LINK")],
             ],
             [
-                ['text' => 'Празднуй новый год с нами!', 'url' => env("APP_PROMO_LINK")],
+                ['text' => "\xF0\x9F\x8E\x81Призы!", 'url' => env("APP_PROMO_LINK")],
             ]
         ]
     ];
