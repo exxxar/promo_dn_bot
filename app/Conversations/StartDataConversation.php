@@ -236,6 +236,7 @@ class StartDataConversation extends Conversation
             ->first();
 
         $this->bot->reply($this->user->id??"user id is null");
+        $this->bot->reply($sender_user->id??"sender user id is null");
 
         if ($this->user->id == $sender_user->id) {
             $this->bot->reply("Вы перешли по собственной ссылке", ["parse_mode" => "Markdown"]);
