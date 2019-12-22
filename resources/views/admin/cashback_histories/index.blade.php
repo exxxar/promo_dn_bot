@@ -50,15 +50,18 @@
                                     @isset($cashback->employee)
                                         <a href="{{ route('users.show',$cashback->employee->id) }}">
                                             {{$cashback->employee->phone??$cashback->employee->name??$cashback->employee->telegram_chat_id}}
-                                        [ {{$cashback->company->title??"Неизвестно"}}]
+                                            [ {{$cashback->company->title??"Неизвестно"}}]
                                         </a>
                                     @endisset
                                 </td>
                                 <td>
-                                    @isset($cashback->user_phone)
-                                    <a href="{{ route('users.show.phone',$cashback->user_phone) }}">
-                                        {{$cashback->user_phone}}</a>
-                                    @endisset
+                                    @if($cashback->user)
+                                        <a href="{{ route('users.show',$cashback->user->id) }}">
+                                            {{$cashback->user->phone??$cashback->user->name??$cashback->user->telegram_chat_id}}</a>
+                                    @else
+                                        <a href="{{ route('users.show.phone',$cashback->user_phone) }}">
+                                            {{$cashback->user_phone}}</a>
+                                    @endif
                                 </td>
 
 

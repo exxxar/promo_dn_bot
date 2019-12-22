@@ -790,40 +790,39 @@ $botman->hears('/achievements_panel', function ($bot) {
 });
 $botman->hears('/achievements_all ([0-9]+)', function ($bot, $page) {
 
-    $attachments = \App\Achievement::where("is_active",1)
+    $achievements = \App\Achievement::where("is_active",1)
         ->skip($page * 5)
         ->take(5)
         ->orderBy('position', 'ASC')
         ->get();
 
-    if (count($attachments) > 0) {
-        $ach_btn_tmp = [];
-        foreach ($attachments as $key => $achievement)
-            array_push($ach_btn_tmp, Button::create(($achievement->activated == 0 ? "" : "\xE2\x9C\x85") . ($achievement->title ?? "Без названия [#" . $achievement->id . "]"))
-                ->value("/achievements_description " . $achievement->id)
-            );
+    if (count($achievements) > 0) {
 
-        $message = Question::create("*Все доступные достижения:*")
-            ->addButtons($ach_btn_tmp);
-        $bot->reply($message, ["parse_mode" => "Markdown"]);
+        foreach ($achievements as $key => $achievement) {
+            $message = Question::create(($achievement->activated == 0 ? "" : "\xE2\x9C\x85") . ($achievement->title ?? "Без названия [#" . $achievement->id . "]"))
+                ->addButtons([Button::create("Подробнее")
+                    ->value("/achievements_description " . $achievement->id)]);
+            $bot->reply($message, ["parse_mode" => "Markdown"]);
+        }
+
     } else
         $bot->reply("Достижения появтяся в скором времени!", ["parse_mode" => "Markdown"]);
 
     $inline_keyboard = [];
-    if ($page == 0 && count($attachments) == 5)
+    if ($page == 0 && count($achievements) == 5)
         array_push($inline_keyboard, ['text' => "\xE2\x8F\xA9Далее", 'callback_data' => '/achievements_all ' . ($page + 1)]);
 
     if ($page > 0) {
-        if (count($attachments) == 0) {
+        if (count($achievements) == 0) {
             array_push($inline_keyboard, ['text' => "\xE2\x8F\xAAНазад", 'callback_data' => '/achievements_all ' . ($page - 1)]);
         }
 
-        if (count($attachments) == 5) {
+        if (count($achievements) == 5) {
             array_push($inline_keyboard, ['text' => "\xE2\x8F\xAAНазад", 'callback_data' => '/achievements_all ' . ($page - 1)]);
             array_push($inline_keyboard, ['text' => "\xE2\x8F\xA9Далее", 'callback_data' => '/achievements_all ' . ($page + 1)]);
         }
 
-        if (count($attachments) > 0 && count($attachments) < 5) {
+        if (count($achievements) > 0 && count($achievements) < 5) {
             array_push($inline_keyboard, ['text' => "\xE2\x8F\xAAНазад", 'callback_data' => '/achievements_all ' . ($page - 1)]);
         }
     }
@@ -854,16 +853,12 @@ $botman->hears('/achievements_my ([0-9]+)', function ($bot, $page) {
 
 
         if (count($user->achievements) > 0) {
-
-            $tmp = [];
-            foreach ($user->achievements as $key => $ach)
-                array_push($tmp, Button::create(($ach->activated == 0 ? "\xE2\x9D\x8E" : "\xE2\x9C\x85") . $ach->title)
-                    ->value("/achievements_description " . $ach->id)
-                );
-
-            $message = Question::create("*Ваши текущие достижения:*")
-                ->addButtons($tmp);
-            $bot->reply($message, ["parse_mode" => "Markdown"]);
+            foreach ($user->achievements as $key => $achievement) {
+                $message = Question::create(($achievement->activated == 0 ? "" : "\xE2\x9C\x85") . ($achievement->title ?? "Без названия [#" . $achievement->id . "]"))
+                    ->addButtons([Button::create("Подробнее")
+                        ->value("/achievements_description " . $achievement->id)]);
+                $bot->reply($message, ["parse_mode" => "Markdown"]);
+            }
         } else
             $bot->reply("У вас еще активированных нет достижений!", ["parse_mode" => "Markdown"]);
 
