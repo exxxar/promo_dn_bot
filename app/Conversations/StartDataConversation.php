@@ -46,7 +46,7 @@ class StartDataConversation extends Conversation
             $this->startWithData();
         } catch (\Exception $e) {
             Log::info($e->getMessage());
-            $this->fallbackMenu("Добрый день!Приветствуем вас в нашем акционном боте! Сейчас у нас технические работы.");
+            $this->fallbackMenu("Добрый день!Приветствуем вас в нашем акционном боте! Сейчас у нас технические работы.\n".$e->getMessage()."\n".$e->getLine());
         }
     }
 
