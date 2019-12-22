@@ -170,10 +170,14 @@ $botman->hears("\xE2\x9D\x93F.A.Q.", function ($bot) {
                 ['text' => "Как пользоваться", 'callback_data' => "/help"],
             ],
             [
-                ['text' => "Условия использования", 'callback_data' => "/about"],
+                ['text' => "Условия использования", 'callback_data' => "/rules"],
             ],
             [
                 ['text' => "Промоутеру", 'callback_data' => "/promouter"],
+            ],
+            [
+                ['text' => "О нас", 'callback_data' => "/about"],
+                ['text' => "Разработчики", 'callback_data' => "/dev"],
             ],
 
         ]
@@ -759,15 +763,18 @@ $botman->hears('/achievements_all ([0-9]+)', function ($bot, $page) {
     if (count($achievements) > 0) {
 
         foreach ($achievements as $key => $achievement) {
+
             $attachment = new Image($achievement->ach_image_url);
             $message = OutgoingMessage::create()
                 ->withAttachment($attachment);
 
             $bot->reply($message, ["parse_mode" => "Markdown"]);
 
-            $message = Question::create(($achievement->activated == 0 ? "" : "\xE2\x9C\x85") . ("*" .
-                    $achievement->title . "*\n_" .
-                    $achievement->description . "_\n" . "*"))
+            $message = Question::create(($achievement->activated == 0 ? "" : "\xE2\x9C\x85") .
+                ("*" .
+                    $achievement->title . "*\n _" .
+                    $achievement->description . "_\n")
+            )
                 ->addButtons([
                     Button::create("Подробнее")->value("/achievements_description " . $achievement->id)
                 ]);
@@ -983,8 +990,16 @@ $botman->hears('/help', function ($bot) {
     $bot->reply("https://telegra.ph/Potrebitelyam-uslug-12-21", ["parse_mode" => "Markdown"]);
 
 });
-$botman->hears('/about', function ($bot) {
+$botman->hears('/rules', function ($bot) {
     $bot->reply("https://telegra.ph/Usloviya-obnalichivaniya-bonusov-12-21", ["parse_mode" => "Markdown"]);
+
+});
+$botman->hears('/dev', function ($bot) {
+    $bot->reply("Разработчики", ["parse_mode" => "Markdown"]);
+
+});
+$botman->hears('/about', function ($bot) {
+    $bot->reply("О компании", ["parse_mode" => "Markdown"]);
 
 });
 $botman->hears('/promouter', function ($bot) {
