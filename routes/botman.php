@@ -32,34 +32,35 @@ $botman->hears('/fillinfo', BotManController::class . '@fillInfoConversation');
 $botman->hears('/payment ([0-9]{1,10}) ([0-9]{1,10})', BotManController::class . '@paymentConversation');
 
 $botman->hears("\xE2\x9B\x84Мероприятия", function ($bot) {
-    $telegramUser = $bot->getUser();
+    $events = Event::skip(0)
+        ->take(5)
+        ->orderBy('position', 'DESC')
+        ->get();
 
-    $id = $telegramUser->getId();
+    if (count($events) > 0) {
+        foreach ($events as $key => $event) {
 
-    $user = \App\User::where("telegram_chat_id", $id)
-        ->first();
+            $attachment = new Image($event->event_image_url);
+            $message = OutgoingMessage::create("*" . $event->title . "*\n" . $event->description)
+                ->withAttachment($attachment);
 
-    if (!$user) {
-        $bot->startConversation(new StartConversation($bot));
-        return;
-    }
+            $bot->reply($message, ["parse_mode" => "Markdown"]);
+        }
+    } else
+        $bot->reply("Мероприятия появтяся в скором времени!", ["parse_mode" => "Markdown"]);
 
-
-    $keyboard = [
-        'inline_keyboard' => [
+    if (count($events) == 5)
+        $bot->sendRequest("sendMessage",
             [
-                ['text' => "\xF0\x9F\x8E\xAAСобытия", 'callback_data' => "/events 0"],
-            ],
-            [
-                ['text' => "\xE2\xAD\x90Достижения", 'callback_data' => "/achievements_panel"],
-            ],
-
-        ]
-    ];
-
-    $bot->sendRequest("sendMessage",
-        ["text" => 'Мы готовим для вас самые крутые мероприятия в городе! Посмотри!', 'reply_markup' => json_encode($keyboard)
-        ]);
+                "text" => "Выберите действие",
+                'reply_markup' => json_encode([
+                    'inline_keyboard' => [
+                        [
+                            ['text' => "\xE2\x8F\xA9Далее", 'callback_data' => '/events 1']
+                        ]
+                    ]
+                ])
+            ]);
 });
 
 $botman->hears("/ref ([0-9]+)", function ($bot, $refId) {
@@ -148,7 +149,7 @@ $botman->hears("\xF0\x9F\x93\xB2Мои друзья", function ($bot) {
     $code = base64_encode("001" . $tmp_id . "0000000000");
 
     //$attachment = new Image(env("QR_URL")."https://t.me/" . env("APP_BOT_NAME") . "?start=$code");
-    $attachment = new Image(env("APP_URL")."/image/?data=".base64_encode("https://t.me/" . env("APP_BOT_NAME") . "?start=$code"));
+    $attachment = new Image(env("APP_URL") . "/image/?data=" . base64_encode("https://t.me/" . env("APP_BOT_NAME") . "?start=$code"));
 
     // Build message object
     $message = OutgoingMessage::create('_Ваш реферальный код_')
@@ -179,15 +180,12 @@ $botman->hears("\xE2\x9D\x93F.A.Q.", function ($bot) {
     ];
 
 
-
-
     $bot->sendRequest("sendMessage",
         [
             "text" => "*F.A.Q.*\n_Не знаете как начать пользоваться? - Почитайте наше описание! Узнайте больше о приложении, компании и разработчике!_",
             "parse_mode" => "Markdown",
             'reply_markup' => json_encode($keyboard1)
         ]);
-
 
 
 });
@@ -250,8 +248,8 @@ $botman->hears("\xF0\x9F\x92\xB3Мои баллы", function ($bot) {
     $code = base64_encode("002" . $tmp_id . "0000000000");
 
 
-   // $attachment = new Image(env("QR_URL")."https://t.me/" . env("APP_BOT_NAME") . "?start=$code");
-    $attachment = new Image(env("APP_URL")."/image/?data=".base64_encode("https://t.me/" . env("APP_BOT_NAME") . "?start=$code"));
+    // $attachment = new Image(env("QR_URL")."https://t.me/" . env("APP_BOT_NAME") . "?start=$code");
+    $attachment = new Image(env("APP_URL") . "/image/?data=" . base64_encode("https://t.me/" . env("APP_BOT_NAME") . "?start=$code"));
 
     // Build message object
     $message = OutgoingMessage::create('_Ваш код для оплаты_')
@@ -262,7 +260,8 @@ $botman->hears("\xF0\x9F\x92\xB3Мои баллы", function ($bot) {
 
 
 });
-$botman->hears("\xF0\x9F\x94\xA5По категориям", function ($bot) {
+
+$botman->hears("/promo_by_category", function ($bot) {
 
     $telegramUser = $bot->getUser();
 
@@ -290,7 +289,7 @@ $botman->hears("\xF0\x9F\x94\xA5По категориям", function ($bot) {
 
     $bot->reply($message);
 });
-$botman->hears("\xF0\x9F\x94\xA5По компаниям", function ($bot) {
+$botman->hears("/promo_by_company", function ($bot) {
 
     $telegramUser = $bot->getUser();
 
@@ -318,15 +317,21 @@ $botman->hears("\xF0\x9F\x94\xA5По компаниям", function ($bot) {
 
     $bot->reply($message);
 });
-$botman->hears("\xE2\x9A\xA1Все акции", function ($bot) {
+
+$botman->hears("\xF0\x9F\x94\xA5Акции", function ($bot) {
     $keyboard = [
         'inline_keyboard' => [
             [
-                ['text' => 'Все акции на нашем сайте!', 'url' => env("APP_PROMO_LINK")],
+                ['text' => "\xF0\x9F\x94\xA5По категориям", 'callback_data' => '/promo_by_category'],
+                ['text' => "\xF0\x9F\x94\xA5По компаниям", 'callback_data' => '/promo_by_company'],
             ],
             [
-                ['text' => "\xF0\x9F\x8E\x81Призы!", 'url' => env("APP_PROMO_LINK")],
-            ]
+                ['text' => "\xE2\xAD\x90Достижения", 'callback_data' => "/achievements_panel"],
+            ],
+            [
+                ['text' => "\xE2\x9A\xA1Акции и призы на сайте", 'url' => env("APP_PROMO_LINK")],
+            ],
+
         ]
     ];
 
@@ -745,7 +750,7 @@ $botman->hears('/achievements_panel', function ($bot) {
 });
 $botman->hears('/achievements_all ([0-9]+)', function ($bot, $page) {
 
-    $achievements = \App\Achievement::where("is_active",1)
+    $achievements = \App\Achievement::where("is_active", 1)
         ->skip($page * 5)
         ->take(5)
         ->orderBy('position', 'ASC')
@@ -952,8 +957,8 @@ $botman->hears('/achievements_get_prize ([0-9]+)', function ($bot, $achievementI
 
         $code = base64_encode("012" . $tmp_id . $tmp_achievement_id);
 
-       // $attachment = new Image("https://api.qrserver.com/v1/create-qr-code/?size=150x150&data=https://t.me/" . env("APP_BOT_NAME") . "?start=$code");
-        $attachment = new Image(env("APP_URL")."/image/?data=".base64_encode("https://t.me/" . env("APP_BOT_NAME") . "?start=$code"));
+        // $attachment = new Image("https://api.qrserver.com/v1/create-qr-code/?size=150x150&data=https://t.me/" . env("APP_BOT_NAME") . "?start=$code");
+        $attachment = new Image(env("APP_URL") . "/image/?data=" . base64_encode("https://t.me/" . env("APP_BOT_NAME") . "?start=$code"));
 
         $message = OutgoingMessage::create('_Код для активации достижения_')
             ->withAttachment($attachment);
@@ -989,13 +994,12 @@ $botman->hears('/promouter', function ($bot) {
         $tmp_id = "0" . $tmp_id;
 
 
-
     $keyboard2 = [
         'inline_keyboard' => [
             [
                 ['text' => "Telegram", 'callback_data' => "/ref 1"],
                 ['text' => "Vkontakte", 'url' => "https://vk.com/share.php?url=" .
-                    "https://t.me/" . env("APP_BOT_NAME") . "?start=" . base64_encode("004" . $tmp_id . "0000000000").
+                    "https://t.me/" . env("APP_BOT_NAME") . "?start=" . base64_encode("004" . $tmp_id . "0000000000") .
                     "&title=Делись ссылкой с друзьями и получай бонусы!"
 
                 ],
