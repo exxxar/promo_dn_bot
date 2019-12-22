@@ -234,8 +234,8 @@ class StartDataConversation extends Conversation
         $sender_user = User::where("telegram_chat_id", intval($this->request_user_id))
             ->first();
 
-        $this->bot->reply($this->request_user_id??"empty");
-        $this->bot->reply($sender_user->id??"empty");
+       /* $this->bot->reply($this->request_user_id??"empty");
+        $this->bot->reply($sender_user->id??"empty");*/
 
         if ($this->user->id == $sender_user->id) {
             $this->bot->reply("Вы перешли по собственной ссылке", ["parse_mode" => "Markdown"]);
