@@ -46,7 +46,7 @@ class StartDataConversation extends Conversation
             $this->startWithData();
         } catch (\Exception $e) {
             Log::info($e->getMessage());
-            $this->fallbackMenu("Добрый день!Приветствуем вас в нашем акционном боте! Сейчас у нас технические работы.\n".$e->getMessage()."\n".$e->getLine());
+            $this->fallbackMenu("Добрый день!Приветствуем вас в нашем акционном боте! Сейчас у нас технические работы.\n");
         }
     }
 
@@ -233,6 +233,9 @@ class StartDataConversation extends Conversation
     {
         $sender_user = User::where("telegram_chat_id", intval($this->request_user_id))
             ->first();
+
+        $this->bot->reply($this->request_user_id??"empty");
+        $this->bot->reply($sender_user->id??"empty");
 
         if ($this->user->id == $sender_user->id) {
             $this->bot->reply("Вы перешли по собственной ссылке", ["parse_mode" => "Markdown"]);
