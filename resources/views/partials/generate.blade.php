@@ -5,14 +5,8 @@
 
         <div class="col form-group">
             <label for="user_id">Пользователь</label>
-            <select name="user_id" class="form-control" id="user_id">
-                <option value="0">Нет пользователя</option>
-                @foreach($users as $user)
-                    @if(strlen(trim($user->phone))>0)
-                        <option value="{{$user->id}}">{{$user->phone}}</option>
-                    @endif
-                @endforeach
-            </select>
+            <input class="form-control" id="user_id" data-target="#livesearch-3" name="phone">
+            <div id="livesearch-3"></div>
         </div>
 
 
