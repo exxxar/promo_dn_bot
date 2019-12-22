@@ -5,7 +5,7 @@
 
         <div class="col form-group">
             <label for="user_phone_gen">Пользователь</label>
-            <input class="form-control" id="user_phone_gen" data-target="#livesearch-3" name="phone">
+            <input class="form-control" id="user_phone_gen" data-target="#livesearch-3" name="user_phone_gen">
             <div id="livesearch-3"></div>
         </div>
 

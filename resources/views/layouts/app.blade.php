@@ -134,7 +134,7 @@
         $(document).ready(function () {
             $('.phone').mask('+38(000) 000-00-00');
 
-            $('#user_phone, #phone,#user_id').typeahead({
+            $('#user_phone, #phone,#user_phone_gen').typeahead({
                 source: [
                 ],
                 displayField:'phone',

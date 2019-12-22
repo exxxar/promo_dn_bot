@@ -39,8 +39,12 @@ class HomeController extends Controller
 
         if ($request->isMethod("POST")) {
 
+            Log::info($request->get("user_phone_gen"));
+
             $tmp_user = "" . (User::where("phone","=",$request->get("user_phone_gen"))->first())->telegram_chat_id;
             $tmp_promo = "" . $request->get("promotion_id");
+
+            Log::info($tmp_user);
 
             while (strlen($tmp_user) < 10)
                 $tmp_user = "0" . $tmp_user;

@@ -40,7 +40,7 @@
             alert("Test");
             $('.phone').mask('+38(000) 000-00-00');
 
-            $("#phone,#user_phone").keyup(function () {
+            $("#phone,#user_phone,#user_phone_gen").keyup(function () {
                 console.log("Test");
                 var phone = $(this).val();
                 var target = $(this).attr("data-target");
