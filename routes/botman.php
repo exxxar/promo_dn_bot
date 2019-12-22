@@ -162,19 +162,6 @@ $botman->hears("\xF0\x9F\x93\xB2Мои друзья", function ($bot) {
 
 });
 $botman->hears("\xE2\x9D\x93F.A.Q.", function ($bot) {
-    $telegramUser = $bot->getUser();
-
-    $id = $telegramUser->getId();
-
-    $user = \App\User::where("telegram_chat_id", $id)->first();
-
-    if (!$user) {
-        $bot->startConversation(new StartConversation($bot));
-        return;
-    }
-    $tmp_id = "$id";
-    while (strlen($tmp_id) < 10)
-        $tmp_id = "0" . $tmp_id;
 
 
     $keyboard1 = [
@@ -184,42 +171,16 @@ $botman->hears("\xE2\x9D\x93F.A.Q.", function ($bot) {
             ],
             [
                 ['text' => "Условия использования", 'callback_data' => "/about"],
-                ['text' => "Промоутеру", 'callback_data' => "/developers"],
             ],
+            [
+                ['text' => "Промоутеру", 'callback_data' => "/promouter"],
+            ],
+
         ]
     ];
 
 
-    $keyboard2 = [
-        'inline_keyboard' => [
-            [
-                ['text' => "Промоутеру", 'url' => "https://vk.com/it_rest_service"],
-            ],
-            [
-                ['text' => "Telegram", 'callback_data' => "/ref 1"],
-                ['text' => "Vkontakte", 'url' => "https://vk.com/share.php?url=" .
-                    "https://t.me/" . env("APP_BOT_NAME") . "?start=" . base64_encode("004" . $tmp_id . "0000000000").
-                    "&title=Делись ссылкой с друзьями и получай бонусы!"
 
-                ],
-
-            ],
-            [
-                ['text' => "Facebook", 'url' => "http://www.facebook.com/sharer.php?u=" .
-                    "https://t.me/" . env("APP_BOT_NAME") . "?start=" . base64_encode("005" . $tmp_id . "0000000000")
-
-                ],
-                ['text' => "Intagram", 'callback_data' => "/ref 4"],
-
-            ],
-
-            [
-                ['text' => "Статистика активности", 'callback_data' => "/activity_information"],
-            ],
-
-
-        ]
-    ];
 
     $bot->sendRequest("sendMessage",
         [
@@ -228,12 +189,7 @@ $botman->hears("\xE2\x9D\x93F.A.Q.", function ($bot) {
             'reply_markup' => json_encode($keyboard1)
         ]);
 
-    $bot->sendRequest("sendMessage",
-        [
-            "text" => '_Вы хотите быть промоутером? Тогда этот раздел именно для вас! Выбирайте соц. сеть, делитесь ссылкой из сообщения и накапливайте бонусы! Вы также можете просматривать полную статистику по своему аккаунту._',
-            "parse_mode" => "Markdown",
-            'reply_markup' => json_encode($keyboard2)
-        ]);
+
 
 });
 $botman->hears("\xF0\x9F\x92\xB3Мои баллы", function ($bot) {
@@ -1018,7 +974,61 @@ $botman->hears('/about', function ($bot) {
     $bot->reply("https://telegra.ph/Usloviya-obnalichivaniya-bonusov-12-21", ["parse_mode" => "Markdown"]);
 
 });
-$botman->hears('/developers', function ($bot) {
+$botman->hears('/promouter', function ($bot) {
+    $telegramUser = $bot->getUser();
+
+    $id = $telegramUser->getId();
+
+    $user = \App\User::where("telegram_chat_id", $id)->first();
+
+    if (!$user) {
+        $bot->startConversation(new StartConversation($bot));
+        return;
+    }
+    $tmp_id = "$id";
+    while (strlen($tmp_id) < 10)
+        $tmp_id = "0" . $tmp_id;
+
+
+
+    $keyboard2 = [
+        'inline_keyboard' => [
+            [
+                ['text' => "Промоутеру", 'url' => "https://vk.com/it_rest_service"],
+            ],
+            [
+                ['text' => "Telegram", 'callback_data' => "/ref 1"],
+                ['text' => "Vkontakte", 'url' => "https://vk.com/share.php?url=" .
+                    "https://t.me/" . env("APP_BOT_NAME") . "?start=" . base64_encode("004" . $tmp_id . "0000000000").
+                    "&title=Делись ссылкой с друзьями и получай бонусы!"
+
+                ],
+
+            ],
+            [
+                ['text' => "Facebook", 'url' => "http://www.facebook.com/sharer.php?u=" .
+                    "https://t.me/" . env("APP_BOT_NAME") . "?start=" . base64_encode("005" . $tmp_id . "0000000000")
+
+                ],
+                ['text' => "Intagram", 'callback_data' => "/ref 4"],
+
+            ],
+
+            [
+                ['text' => "Статистика активности", 'callback_data' => "/activity_information"],
+            ],
+
+
+        ]
+    ];
+
+    $bot->sendRequest("sendMessage",
+        [
+            "text" => '_Вы хотите быть промоутером? Тогда этот раздел именно для вас! Выбирайте соц. сеть, делитесь ссылкой из сообщения и накапливайте бонусы! Вы также можете просматривать полную статистику по своему аккаунту._',
+            "parse_mode" => "Markdown",
+            'reply_markup' => json_encode($keyboard2)
+        ]);
+
     $bot->reply("https://telegra.ph/Promouteru-12-21", ["parse_mode" => "Markdown"]);
 
 });
