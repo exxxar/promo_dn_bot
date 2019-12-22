@@ -322,8 +322,8 @@ $botman->hears("\xF0\x9F\x94\xA5Акции", function ($bot) {
     $keyboard = [
         'inline_keyboard' => [
             [
-                ['text' => "\xF0\x9F\x94\xA5По категориям", 'callback_data' => '/promo_by_category'],
-                ['text' => "\xF0\x9F\x94\xA5По компаниям", 'callback_data' => '/promo_by_company'],
+                ['text' => "\xF0\x9F\x92\x8EПо категориям", 'callback_data' => '/promo_by_category'],
+                ['text' => "\xF0\x9F\x8F\xA6По компаниям", 'callback_data' => '/promo_by_company'],
             ],
             [
                 ['text' => "\xE2\xAD\x90Достижения", 'callback_data' => "/achievements_panel"],
@@ -336,7 +336,7 @@ $botman->hears("\xF0\x9F\x94\xA5Акции", function ($bot) {
     ];
 
     $bot->sendRequest("sendMessage",
-        ["text" => 'Посмотрите список всех акций на нашем сайте!', 'reply_markup' => json_encode($keyboard)
+        ["text" => 'Самые свежие акции', 'reply_markup' => json_encode($keyboard)
         ]);
 
 
