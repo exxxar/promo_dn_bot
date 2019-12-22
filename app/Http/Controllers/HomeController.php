@@ -43,10 +43,10 @@ class HomeController extends Controller
             $tmp_promo = "" . $request->get("promotion_id");
 
             while (strlen($tmp_user) < 10)
-                $tmp_user .= "0" . $tmp_user;
+                $tmp_user = "0" . $tmp_user;
 
             while (strlen($tmp_promo) < 10)
-                $tmp_promo .= "0" . $tmp_promo;
+                $tmp_promo = "0" . $tmp_promo;
 
             $code = base64_encode("001" . $tmp_user . $tmp_promo);
 
