@@ -994,9 +994,6 @@ $botman->hears('/promouter', function ($bot) {
     $keyboard2 = [
         'inline_keyboard' => [
             [
-                ['text' => "Промоутеру", 'url' => "https://vk.com/it_rest_service"],
-            ],
-            [
                 ['text' => "Telegram", 'callback_data' => "/ref 1"],
                 ['text' => "Vkontakte", 'url' => "https://vk.com/share.php?url=" .
                     "https://t.me/" . env("APP_BOT_NAME") . "?start=" . base64_encode("004" . $tmp_id . "0000000000").
