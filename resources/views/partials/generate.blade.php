@@ -4,8 +4,8 @@
     <div class="form-row">
 
         <div class="col form-group">
-            <label for="user_id">Пользователь</label>
-            <input class="form-control" id="user_id" data-target="#livesearch-3" name="phone">
+            <label for="user_phone_gen">Пользователь</label>
+            <input class="form-control" id="user_phone_gen" data-target="#livesearch-3" name="phone">
             <div id="livesearch-3"></div>
         </div>
 
