@@ -35,6 +35,8 @@
         <div class="col">
             <img src="{!! $qrimage !!}" class="img-thumbnail" style="width:150px;height:150px;"
                  alt="">
+            <p>User chat id:{!! $tmp_user !!}</p>
+            <p>Promo id:{!! $tmp_promo !!}</p>
         </div>
     </div>
 @endisset

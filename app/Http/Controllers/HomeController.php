@@ -52,7 +52,7 @@ class HomeController extends Controller
 
             $qrimage = "https://api.qrserver.com/v1/create-qr-code/?size=150x150&data=https://t.me/" . env("APP_BOT_NAME") . "?start=$code";
 
-            return view('home', compact('users', 'promotions', 'qrimage', 'current_user'));
+            return view('home', compact('users', 'promotions', 'qrimage', 'current_user',"tmp_user","tmp_promo"));
         }
 
         return view('home', compact('users', 'promotions', 'current_user'));
