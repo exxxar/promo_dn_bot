@@ -58,7 +58,8 @@ class HomeController extends Controller
 
                 return view('home', compact('users', 'promotions', 'qrimage', 'current_user', "tmp_user", "tmp_promo"));
             } catch (\Exception $e) {
-                return view('home', compact('users', 'promotions', 'current_user'));
+                return redirect()
+                    ->back();
             }
         }
 
