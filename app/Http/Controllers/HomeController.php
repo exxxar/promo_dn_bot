@@ -40,23 +40,26 @@ class HomeController extends Controller
         if ($request->isMethod("POST")) {
 
             Log::info($request->get("user_phone_gen"));
+            try {
+                $tmp_user = "" . (User::where("phone", "=", $request->get("user_phone_gen"))->first())->telegram_chat_id;
+                $tmp_promo = "" . $request->get("promotion_id");
 
-            $tmp_user = "" . (User::where("phone","=",$request->get("user_phone_gen"))->first())->telegram_chat_id;
-            $tmp_promo = "" . $request->get("promotion_id");
+                Log::info($tmp_user);
 
-            Log::info($tmp_user);
+                while (strlen($tmp_user) < 10)
+                    $tmp_user = "0" . $tmp_user;
 
-            while (strlen($tmp_user) < 10)
-                $tmp_user = "0" . $tmp_user;
+                while (strlen($tmp_promo) < 10)
+                    $tmp_promo = "0" . $tmp_promo;
 
-            while (strlen($tmp_promo) < 10)
-                $tmp_promo = "0" . $tmp_promo;
+                $code = base64_encode("001" . $tmp_user . $tmp_promo);
 
-            $code = base64_encode("001" . $tmp_user . $tmp_promo);
+                $qrimage = "https://api.qrserver.com/v1/create-qr-code/?size=150x150&data=https://t.me/" . env("APP_BOT_NAME") . "?start=$code";
 
-            $qrimage = "https://api.qrserver.com/v1/create-qr-code/?size=150x150&data=https://t.me/" . env("APP_BOT_NAME") . "?start=$code";
-
-            return view('home', compact('users', 'promotions', 'qrimage', 'current_user',"tmp_user","tmp_promo"));
+                return view('home', compact('users', 'promotions', 'qrimage', 'current_user', "tmp_user", "tmp_promo"));
+            } catch (\Exception $e) {
+                return view('home', compact('users', 'promotions', 'current_user'));
+            }
         }
 
         return view('home', compact('users', 'promotions', 'current_user'));
