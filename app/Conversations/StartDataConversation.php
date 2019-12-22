@@ -231,8 +231,11 @@ class StartDataConversation extends Conversation
 
     protected function activateRefferal()
     {
+        $this->bot->reply($this->request_user_id??"request_user_id is null");
         $sender_user = User::where("telegram_chat_id", intval($this->request_user_id))
             ->first();
+
+        $this->bot->reply($this->user->id??"user id is null");
 
         if ($this->user->id == $sender_user->id) {
             $this->bot->reply("Вы перешли по собственной ссылке", ["parse_mode" => "Markdown"]);
