@@ -759,9 +759,18 @@ $botman->hears('/achievements_all ([0-9]+)', function ($bot, $page) {
     if (count($achievements) > 0) {
 
         foreach ($achievements as $key => $achievement) {
-            $message = Question::create("*".($achievement->activated == 0 ? "" : "\xE2\x9C\x85") . ($achievement->title ?? "Без названия [#" . $achievement->id . "]")."*")
-                ->addButtons([Button::create("Подробнее")
-                    ->value("/achievements_description " . $achievement->id)]);
+            $attachment = new Image($achievement->ach_image_url);
+            $message = OutgoingMessage::create()
+                ->withAttachment($attachment);
+
+            $bot->reply($message, ["parse_mode" => "Markdown"]);
+
+            $message = Question::create(($achievement->activated == 0 ? "" : "\xE2\x9C\x85") . ("*" .
+                    $achievement->title . "*\n_" .
+                    $achievement->description . "_\n" . "*"))
+                ->addButtons([
+                    Button::create("Подробнее")->value("/achievements_description " . $achievement->id)
+                ]);
             $bot->reply($message, ["parse_mode" => "Markdown"]);
         }
 
