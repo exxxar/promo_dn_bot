@@ -38,6 +38,7 @@ $botman->hears("\xE2\x9B\x84Мероприятия", function ($bot) {
         ->get();
 
     if (count($events) > 0) {
+        $isActive = false;
         foreach ($events as $key => $event) {
 
             $time_0 = (date_timestamp_get(new DateTime($event->start_at)));
@@ -47,6 +48,7 @@ $botman->hears("\xE2\x9B\x84Мероприятия", function ($bot) {
 
             if ($time_2 >= $time_0 && $time_2 < $time_1) {
 
+                $isActive = true;
 
                 $attachment = new Image($event->event_image_url);
                 $message = OutgoingMessage::create("*" . $event->title . "*\n" . $event->description)
@@ -55,6 +57,9 @@ $botman->hears("\xE2\x9B\x84Мероприятия", function ($bot) {
                 $bot->reply($message, ["parse_mode" => "Markdown"]);
             }
         }
+
+        if (!$isActive)
+            $bot->reply("Мероприятия появтяся в скором времени!", ["parse_mode" => "Markdown"]);
     } else
         $bot->reply("Мероприятия появтяся в скором времени!", ["parse_mode" => "Markdown"]);
 
