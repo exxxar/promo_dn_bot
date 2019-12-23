@@ -122,7 +122,7 @@ class EventsController extends Controller
             'event_image_url'=> 'max:1000',
             'start_at'=> 'required',
             'end_at'=> 'required',
-            'position'=> 'position',
+            'position'=> 'required',
             'company_id'=> 'required|integer',
 
         ]);
