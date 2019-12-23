@@ -11,7 +11,7 @@
                             <h2>Добавление новой акции</h2>
                         </div>
                         <div class="pull-right">
-                            <a class="btn btn-primary" href="{{ route('companies.index') }}"> Назад</a>
+                            <a class="btn btn-primary" href="{{ route('articles.index') }}"> Назад</a>
                         </div>
 
                         @if (count($errors) > 0)
@@ -39,7 +39,7 @@
                         </thead>
                         <tbody>
                         <tr>
-                            <td>Заголовок</td>
+                            <td>Ссылка</td>
                             <td>
                                 <input type="text" class="form-control" name="url" value="" required>
                             </td>
@@ -59,11 +59,11 @@
                             <td>Отображение</td>
                             <td>
 
-                                <input class="form-control" type="radio" name="is_visible" value="0" required id="is_visible_1">
-                                <label for="is_visible_1"><i class="fas fa-eye-slash"></i></label>
+                                <input type="radio" name="is_visible" value="0" required id="is_visible_1">
+                                <label for="is_visible_1">Не отображать</label>
 
-                                <input class="form-control" type="radio" name="is_visible" value="1" required id="is_visible_2">
-                                <label for="is_visible_2"><i class="fas fa-eye"></i></label>
+                                <input  type="radio" name="is_visible" value="1" required id="is_visible_2">
+                                <label for="is_visible_2">Отображать</label>
 
 
                             </td>

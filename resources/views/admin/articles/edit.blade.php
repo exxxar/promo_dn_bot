@@ -65,13 +65,12 @@
                             <td>Отображение</td>
                             <td>
 
-                                <input class="form-control" type="radio" name="is_visible" value="0" required
-                                       id="is_visible_1">
-                                <label for="is_visible_1"><i class="fas fa-eye-slash"></i></label>
 
-                                <input class="form-control" type="radio" name="is_visible" value="1" required
-                                       id="is_visible_2">
-                                <label for="is_visible_2"><i class="fas fa-eye"></i></label>
+                                <input type="radio" name="is_visible" value="0" required id="is_visible_1">
+                                <label for="is_visible_1">Не отображать</label>
+
+                                <input  type="radio" name="is_visible" value="1" required id="is_visible_2">
+                                <label for="is_visible_2">Отображать</label>
 
 
                             </td>
