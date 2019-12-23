@@ -13,4 +13,5 @@ final class Parts extends Enum
     const About_us = 3;
     const About_company = 4;
     const Developers = 5;
+    const How_to_use = 6;
 }

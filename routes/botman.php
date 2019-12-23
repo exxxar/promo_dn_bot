@@ -1,5 +1,6 @@
 <?php
 
+use App\Article;
 use App\CashbackHistory;
 use App\Conversations\StartConversation;
 use App\Drivers\TelegramInlineQueryDriver;
@@ -192,6 +193,9 @@ $botman->hears("\xE2\x9D\x93F.A.Q.", function ($bot) {
             [
                 ['text' => "О нас", 'callback_data' => "/about"],
                 ['text' => "Разработчики", 'callback_data' => "/dev"],
+            ],
+            [
+                ['text' => "Статьи", 'callback_data' => "/articles 0"],
             ],
 
         ]
@@ -833,6 +837,8 @@ $botman->hears('/achievements_all ([0-9]+)', function ($bot, $page) {
 
 
 });
+
+//todo:пагинация не реализована
 $botman->hears('/achievements_my ([0-9]+)', function ($bot, $page) {
     try {
         $telegramUser = $bot->getUser();
@@ -843,7 +849,13 @@ $botman->hears('/achievements_my ([0-9]+)', function ($bot, $page) {
 
 
         if (count($user->achievements) > 0) {
-            foreach ($user->achievements as $key => $achievement) {
+            $achievements = $user->achievements()
+                ->skip($page * 5)
+                ->take(5)
+                ->orderBy('id', 'DESC')
+                ->get();
+
+            foreach ($achievements as $key => $achievement) {
                 $message = Question::create(($achievement->activated == 0 ? "" : "\xE2\x9C\x85") . ($achievement->title ?? "Без названия [#" . $achievement->id . "]"))
                     ->addButtons([Button::create("Подробнее")
                         ->value("/achievements_description " . $achievement->id)]);
@@ -1001,19 +1013,37 @@ $botman->hears('/achievements_get_prize ([0-9]+)', function ($bot, $achievementI
 });
 
 $botman->hears('/help', function ($bot) {
-    $bot->reply("https://telegra.ph/Potrebitelyam-uslug-12-21", ["parse_mode" => "Markdown"]);
+    $articles  = Article::where("part",6)
+        ->where("is_visible",1)
+        ->get();
 
+    foreach ($articles as $article)
+        $bot->reply($article->url, ["parse_mode" => "Markdown"]);
 });
 $botman->hears('/rules', function ($bot) {
-    $bot->reply("https://telegra.ph/Usloviya-obnalichivaniya-bonusov-12-21", ["parse_mode" => "Markdown"]);
+    $articles  = Article::where("part",2)
+        ->where("is_visible",1)
+        ->get();
 
+    foreach ($articles as $article)
+        $bot->reply($article->url, ["parse_mode" => "Markdown"]);
 });
 $botman->hears('/dev', function ($bot) {
-    $bot->reply("Разработчики", ["parse_mode" => "Markdown"]);
+    $articles  = Article::where("part",5)
+        ->where("is_visible",1)
+        ->get();
+
+    foreach ($articles as $article)
+        $bot->reply($article->url, ["parse_mode" => "Markdown"]);
 
 });
 $botman->hears('/about', function ($bot) {
-    $bot->reply("О компании", ["parse_mode" => "Markdown"]);
+    $articles  = Article::where("part",3)
+        ->where("is_visible",1)
+        ->get();
+
+    foreach ($articles as $article)
+        $bot->reply($article->url, ["parse_mode" => "Markdown"]);
 
 });
 $botman->hears('/promouter', function ($bot) {
@@ -1067,7 +1097,12 @@ $botman->hears('/promouter', function ($bot) {
             'reply_markup' => json_encode($keyboard2)
         ]);
 
-    $bot->reply("https://telegra.ph/Promouteru-12-21", ["parse_mode" => "Markdown"]);
+    $articles  = Article::where("part",1)
+        ->where("is_visible",1)
+        ->get();
+
+    foreach ($articles as $article)
+        $bot->reply($article->url, ["parse_mode" => "Markdown"]);
 
 });
 
@@ -1099,6 +1134,58 @@ $botman->hears('/activity_information', function ($bot) {
         $message .= sprintf($stat_types[$stat->stat_type->value], $stat->stat_value);
 
     $bot->reply(count($stats) > 0 ? $message : "Статистика еще не ведется для вашего аккаунта!", ["parse_mode" => "Markdown"]);
+
+});
+
+$botman->hears('/articles ([0-9]+)', function ($bot, $page) {
+
+
+    $articles  = Article::where("part",0)
+        ->where("is_visible",1)
+        ->skip($page * 5)
+        ->take(5)
+        ->orderBy('position', 'ASC')
+        ->get();
+
+    if (count($articles) > 0) {
+        foreach ($articles as $article)
+            $bot->reply($article->url, ["parse_mode" => "Markdown"]);
+    }else
+    $bot->reply("Статьи появтяся в скором времени!", ["parse_mode" => "Markdown"]);
+
+    $inline_keyboard = [];
+    if ($page == 0 && count($articles) == 5)
+        array_push($inline_keyboard, ['text' => "\xE2\x8F\xA9Далее", 'callback_data' => '/articles ' . ($page + 1)]);
+
+    if ($page > 0) {
+        if (count($articles) == 0) {
+            array_push($inline_keyboard, ['text' => "\xE2\x8F\xAAНазад", 'callback_data' => '/articles ' . ($page - 1)]);
+        }
+
+        if (count($articles) == 5) {
+            array_push($inline_keyboard, ['text' => "\xE2\x8F\xAAНазад", 'callback_data' => '/articles ' . ($page - 1)]);
+            array_push($inline_keyboard, ['text' => "\xE2\x8F\xA9Далее", 'callback_data' => '/articles ' . ($page + 1)]);
+        }
+
+        if (count($articles) > 0 && count($articles) < 5) {
+            array_push($inline_keyboard, ['text' => "\xE2\x8F\xAAНазад", 'callback_data' => '/articles ' . ($page - 1)]);
+        }
+    }
+
+
+    $keyboard = [
+        'inline_keyboard' => [
+            $inline_keyboard
+        ]
+    ];
+
+    if (count($inline_keyboard) > 0)
+        $bot->sendRequest("sendMessage",
+            [
+                "text" => "Выберите действие",
+                'reply_markup' => json_encode($keyboard)
+            ]);
+
 
 });
 
