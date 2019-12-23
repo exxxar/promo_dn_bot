@@ -30,6 +30,7 @@
                     </div>
                 </div>
 
+                    <h1>Акции</h1>
                 @isset($promotions)
                     <table class="table mt-2">
 

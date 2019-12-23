@@ -22,6 +22,7 @@
                     </div>
                 @endif
 
+                    <h1>История рефералов</h1>
                 @isset($refferals)
                     <table class="table mt-2">
 

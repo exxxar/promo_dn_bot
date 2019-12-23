@@ -30,6 +30,7 @@
                     </div>
                 </div>
 
+                    <h1>Достижения</h1>
                 @isset($achievements)
                     <table class="table mt-2">
 

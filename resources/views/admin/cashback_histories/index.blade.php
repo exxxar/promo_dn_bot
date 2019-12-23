@@ -24,6 +24,7 @@
                     </div>
                 @endif
 
+                    <h1>История CashBack</h1>
                 @isset($cashbacks)
                     <table class="table mt-2">
 

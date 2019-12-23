@@ -22,7 +22,7 @@
 </head>
 <body>
 <div>
-    <nav class="navbar navbar-expand-md navbar-light bg-white shadow-sm">
+    <nav class="navbar navbar-expand-lg navbar-light bg-white shadow-sm">
         <div class="container">
             <a class="navbar-brand" href="{{ url('/admin/') }}">
                 {{ config('app.name', 'PromoDN') }}

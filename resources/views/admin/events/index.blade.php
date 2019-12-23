@@ -30,6 +30,7 @@
                     </div>
                 </div>
 
+                    <h1>События\мероприятия</h1>
                 @isset($events)
                     <table class="table mt-2">
 

@@ -23,6 +23,8 @@
                     </div>
                 @endif
 
+                    <h1>История оплаты</h1>
+
                 @isset($payments)
                     <table class="table mt-2">
 

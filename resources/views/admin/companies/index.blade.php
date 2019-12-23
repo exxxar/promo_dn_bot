@@ -30,6 +30,7 @@
                     </div>
                 </div>
 
+                    <h1>Компании</h1>
                 @isset($companies)
                     <table class="table mt-2">
 

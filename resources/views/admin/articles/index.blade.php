@@ -30,6 +30,7 @@
                     </div>
                 </div>
 
+                    <h1>Статьи</h1>
                 @isset($articles)
                     <table class="table mt-2">
 

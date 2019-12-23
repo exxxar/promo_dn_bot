@@ -29,6 +29,7 @@
                     </div>
                 </div>
 
+                    <h1>Категории</h1>
                 @isset($categories)
                     <table class="table mt-2">
 
