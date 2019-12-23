@@ -32,9 +32,9 @@
                         </thead>
                         <tbody>
                         <tr>
-                            <td>Заголовок</td>
+                            <td>Ссылка</td>
                             <td>
-                                <h1>{{$article->url}}</h1>
+                                <a href="{{$article->url}}" target="_blank">{{$article->url}}</a>
                             </td>
                         </tr>
                         <tr>
