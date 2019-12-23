@@ -55,7 +55,7 @@
 
                                 </td>
                                 <td>
-{{var_dump($article->part)}}
+                                    {{\App\Enums\Parts::getInstance($article->part)->key}}
 
                                 </td>
                                 <td>
