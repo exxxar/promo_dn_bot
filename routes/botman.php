@@ -1013,37 +1013,49 @@ $botman->hears('/achievements_get_prize ([0-9]+)', function ($bot, $achievementI
 });
 
 $botman->hears('/help', function ($bot) {
-    $articles  = Article::where("part",6)
-        ->where("is_visible",1)
+    $articles = Article::where("part", 6)
+        ->where("is_visible", 1)
         ->get();
 
-    foreach ($articles as $article)
-        $bot->reply($article->url, ["parse_mode" => "Markdown"]);
+    if (count($articles) > 0)
+        foreach ($articles as $article)
+            $bot->reply($article->url, ["parse_mode" => "Markdown"]);
+    else
+        $bot->reply("Статьи не найдены", ["parse_mode" => "Markdown"]);
 });
 $botman->hears('/rules', function ($bot) {
-    $articles  = Article::where("part",2)
-        ->where("is_visible",1)
+    $articles = Article::where("part", 2)
+        ->where("is_visible", 1)
         ->get();
 
-    foreach ($articles as $article)
-        $bot->reply($article->url, ["parse_mode" => "Markdown"]);
+    if (count($articles) > 0)
+        foreach ($articles as $article)
+            $bot->reply($article->url, ["parse_mode" => "Markdown"]);
+    else
+        $bot->reply("Статьи не найдены", ["parse_mode" => "Markdown"]);
 });
 $botman->hears('/dev', function ($bot) {
-    $articles  = Article::where("part",5)
-        ->where("is_visible",1)
+    $articles = Article::where("part", 5)
+        ->where("is_visible", 1)
         ->get();
 
-    foreach ($articles as $article)
-        $bot->reply($article->url, ["parse_mode" => "Markdown"]);
+    if (count($articles) > 0)
+        foreach ($articles as $article)
+            $bot->reply($article->url, ["parse_mode" => "Markdown"]);
+    else
+        $bot->reply("Статьи не найдены", ["parse_mode" => "Markdown"]);
 
 });
 $botman->hears('/about', function ($bot) {
-    $articles  = Article::where("part",3)
-        ->where("is_visible",1)
+    $articles = Article::where("part", 3)
+        ->where("is_visible", 1)
         ->get();
 
-    foreach ($articles as $article)
-        $bot->reply($article->url, ["parse_mode" => "Markdown"]);
+    if (count($articles) > 0)
+        foreach ($articles as $article)
+            $bot->reply($article->url, ["parse_mode" => "Markdown"]);
+    else
+        $bot->reply("Статьи не найдены", ["parse_mode" => "Markdown"]);
 
 });
 $botman->hears('/promouter', function ($bot) {
@@ -1097,8 +1109,8 @@ $botman->hears('/promouter', function ($bot) {
             'reply_markup' => json_encode($keyboard2)
         ]);
 
-    $articles  = Article::where("part",1)
-        ->where("is_visible",1)
+    $articles = Article::where("part", 1)
+        ->where("is_visible", 1)
         ->get();
 
     foreach ($articles as $article)
@@ -1140,18 +1152,18 @@ $botman->hears('/activity_information', function ($bot) {
 $botman->hears('/articles ([0-9]+)', function ($bot, $page) {
 
 
-    $articles  = Article::where("part",0)
-        ->where("is_visible",1)
+    $articles = Article::where("part", 0)
+        ->where("is_visible", 1)
         ->skip($page * 5)
         ->take(5)
-        ->orderBy('position', 'ASC')
+        ->orderBy('id', 'DESC')
         ->get();
 
     if (count($articles) > 0) {
         foreach ($articles as $article)
             $bot->reply($article->url, ["parse_mode" => "Markdown"]);
-    }else
-    $bot->reply("Статьи появтяся в скором времени!", ["parse_mode" => "Markdown"]);
+    } else
+        $bot->reply("Статьи появтяся в скором времени!", ["parse_mode" => "Markdown"]);
 
     $inline_keyboard = [];
     if ($page == 0 && count($articles) == 5)
