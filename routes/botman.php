@@ -40,11 +40,20 @@ $botman->hears("\xE2\x9B\x84Мероприятия", function ($bot) {
     if (count($events) > 0) {
         foreach ($events as $key => $event) {
 
-            $attachment = new Image($event->event_image_url);
-            $message = OutgoingMessage::create("*" . $event->title . "*\n" . $event->description)
-                ->withAttachment($attachment);
+            $time_0 = (date_timestamp_get(new DateTime($event->start_at)));
+            $time_1 = (date_timestamp_get(new DateTime($event->end_at)));
 
-            $bot->reply($message, ["parse_mode" => "Markdown"]);
+            $time_2 = date_timestamp_get(now());
+
+            if ($time_2 >= $time_0 && $time_2 < $time_1) {
+
+
+                $attachment = new Image($event->event_image_url);
+                $message = OutgoingMessage::create("*" . $event->title . "*\n" . $event->description)
+                    ->withAttachment($attachment);
+
+                $bot->reply($message, ["parse_mode" => "Markdown"]);
+            }
         }
     } else
         $bot->reply("Мероприятия появтяся в скором времени!", ["parse_mode" => "Markdown"]);
