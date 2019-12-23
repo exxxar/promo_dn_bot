@@ -56,7 +56,7 @@
                                 </td>
                                 <td>
 {{var_dump($article->part)}}
-                                    {{$article->part->key}}
+
                                 </td>
                                 <td>
                                     {{$article->is_visible==0?`<i class="fas fa-eye-slash"></i>`:`<i class="fas fa-eye"></i>`}}
