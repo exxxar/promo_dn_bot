@@ -86,6 +86,7 @@ Route::prefix('admin')->group(function () {
     Route::post('users/search', 'UsersController@search')->name("users.search");
 
     Route::resources([
+        'articles' => 'ArticleController',
         'users' => 'UsersController',
         'categories' => 'CategoryController',
         'companies' => 'CompanyController',

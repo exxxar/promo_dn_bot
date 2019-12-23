@@ -11,7 +11,7 @@
                             <h2>Изменение акции</h2>
                         </div>
                         <div class="pull-right">
-                            <a class="btn btn-primary" href="{{ route('companies.index') }}"> Назад</a>
+                            <a class="btn btn-primary" href="{{ route('promotions.index') }}"> Назад</a>
                         </div>
 
                         @if (count($errors) > 0)
