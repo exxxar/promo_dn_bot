@@ -185,7 +185,7 @@ $botman->hears("\xE2\x9D\x93F.A.Q.", function ($bot) {
                 ['text' => "Как пользоваться", 'callback_data' => "/help"],
             ],
             [
-                ['text' => "Часто задаваемые вопросы", 'callback_data' => "/rules"],
+                ['text' => "Реализация бонусов", 'callback_data' => "/rules"],
             ],
             [
                 ['text' => "Промоутеру", 'callback_data' => "/promouter"],
