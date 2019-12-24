@@ -50,7 +50,7 @@ class StartConversation extends Conversation
         if ($user == null)
             $user = $this->createUser($telegramUser);
 
-        $this->mainMenu("Добрый день!Приветствуем вас в нашем акционном боте! У нас вы сможете найти самые актуальные акции");
+        $this->mainMenu("Добрый день!Приветствуем вас в нашем акционном боте! Мы рады, что Вы присоединились к нам. Все акции будут активны с 5 января.");
 
         $categories = Category::orderBy('id', 'DESC')
             ->orderBy('position', 'DESC')

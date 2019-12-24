@@ -109,7 +109,7 @@ class StartDataConversation extends Conversation
 
         if ($canBeRefferal) {
             $this->activateRefferal();
-            $this->mainMenu('Добрый день! Приветствуем вас в нашем акционном боте! У нас вы сможете найти самые актуальные акции!');
+            $this->mainMenu('Добрый день! Приветствуем вас в нашем акционном боте! Мы рады, что Вы присоединились к нам. Все акции будут активны с 5 января!');
 
             if (intval($this->promo_id) != 0) {
                 $this->openPromo();
