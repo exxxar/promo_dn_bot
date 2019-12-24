@@ -11,7 +11,7 @@
 
     <!-- Scripts -->
 
-    <link rel="manifest" href="/manifest.json">
+    <link rel="manifest" href="{{url('/manifest.json')}}">
 
     <!-- Fonts -->
     <link rel="dns-prefetch" href="//fonts.gstatic.com">

@@ -185,7 +185,7 @@ $botman->hears("\xE2\x9D\x93F.A.Q.", function ($bot) {
                 ['text' => "Как пользоваться", 'callback_data' => "/help"],
             ],
             [
-                ['text' => "Условия использования", 'callback_data' => "/rules"],
+                ['text' => "ЧаВо", 'callback_data' => "/rules"],
             ],
             [
                 ['text' => "Промоутеру", 'callback_data' => "/promouter"],
@@ -800,7 +800,7 @@ $botman->hears('/achievements_all ([0-9]+)', function ($bot, $page) {
         }
 
     } else
-        $bot->reply("Достижения появтяся в скором времени!", ["parse_mode" => "Markdown"]);
+        $bot->reply("Достижения будут доступны в скором времени!", ["parse_mode" => "Markdown"]);
 
     $inline_keyboard = [];
     if ($page == 0 && count($achievements) == 5)
@@ -838,7 +838,6 @@ $botman->hears('/achievements_all ([0-9]+)', function ($bot, $page) {
 
 });
 
-//todo:пагинация не реализована
 $botman->hears('/achievements_my ([0-9]+)', function ($bot, $page) {
     try {
         $telegramUser = $bot->getUser();
@@ -1121,7 +1120,7 @@ $botman->hears('/promouter', function ($bot) {
 $botman->hears('/activity_information', function ($bot) {
 
     $stat_types = [
-        "\xE2\x96\xAAКоличество активация приза по акции: *%d* раз.\n",
+        "\xE2\x96\xAAКоличество активаций приза по акции: *%d* раз.\n",
         "\xE2\x96\xAAКоличество рефералов:  *%d* человек.\n",
         "\xE2\x96\xAAМаксимальное количество накопленного CashBack: *%d* руб.\n",
         "\xE2\x96\xAAКоличество переходов из ВК: *%d* раз.\n",
