@@ -56,6 +56,7 @@ class UsersTableSeeder extends Seeder
 
         foreach ($users as $user){
             $user->parent_id = $skidobot->id;
+            $user->save();
         }
 
     }
