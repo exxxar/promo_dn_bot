@@ -31,5 +31,32 @@ class UsersTableSeeder extends Seeder
         } catch (Exception $e) {
             Log::info($e);
         }
+
+        try {
+            User::create([
+                'name' => 'Скидоботик',
+                'email' => "skidobot@gmail.com",
+                'password' => bcrypt('skidobotsecret'),
+                'fio_from_telegram' => "Скидоботик",
+                'source' => '000',
+                'telegram_chat_id' => "1234567890",
+                'referrals_count' => 0,
+                'referral_bonus_count' => 0,
+                'cashback_bonus_count' => 0,
+                'is_admin' => true,
+                'activated' => 1
+            ]);
+        } catch (Exception $e) {
+            Log::info($e);
+        }
+
+        $users = User::where("parent_id",null)->get();
+
+        $skidobot = User::where("email", "skidobot@gmail.com")->first();
+
+        foreach ($users as $user){
+            $user->parent_id = $skidobot->id;
+        }
+
     }
 }
