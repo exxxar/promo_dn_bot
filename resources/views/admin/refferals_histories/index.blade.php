@@ -22,7 +22,7 @@
                     </div>
                 @endif
 
-                    <h1>История рефералов</h1>
+                <h1>История рефералов</h1>
                 @isset($refferals)
                     <table class="table mt-2">
 
@@ -51,6 +51,10 @@
                                         <a href="{{ route('users.show',$refferal->recipient->id) }}">
                                             {{$refferal->recipient->phone??$refferal->recipient->name??$refferal->recipient->telegram_chat_id}}</a>
                                     @endisset
+
+                                    @if(!$refferal->recipient)
+                                        <p>Нет пригласившего пользователя</p>
+                                    @endif
                                 </td>
                                 <td>
                                     {{$refferal->activated?"Активирован":"Не активирован"}}
