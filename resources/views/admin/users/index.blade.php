@@ -67,6 +67,8 @@
                                         {{$user->parent->phone??$user->parent->name??$user->parent->telegram_chat_id}}</a>
                                     @endisset
 
+
+
                                 </td>
                                 <td>
                                     {{$user->is_admin?"Администратор":"Пользователь"}}

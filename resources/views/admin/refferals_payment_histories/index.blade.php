@@ -55,6 +55,10 @@
                                         {{$payment->employee->phone??$payment->employee->name??$payment->employee->telegram_chat_id}}
                                     </a>
                                     @endisset
+
+                                        @if(!$payment->employee)
+                                            <p>Сотрудник не указан</p>
+                                        @endif
                                 </td>
 
                                 <td>{{$payment->value}} баллов.</td>
