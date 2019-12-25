@@ -62,9 +62,9 @@
                                 </td>
                                 <td>{{$user->phone}}</td>
                                 <td>
-                                    @isset($refferal->parent)
-                                    <a href="{{ route('users.show',$refferal->parent->id) }}">
-                                        {{$refferal->parent->phone??$refferal->parent->name??$refferal->parent->telegram_chat_id}}</a>
+                                    @isset($user->parent)
+                                    <a href="{{ route('users.show',$user->parent->id) }}">
+                                        {{$user->parent->phone??$user->parent->name??$user->parent->telegram_chat_id}}</a>
                                     @endisset
 
                                 </td>
