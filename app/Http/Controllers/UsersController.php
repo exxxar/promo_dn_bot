@@ -27,7 +27,7 @@ class UsersController extends Controller
      */
     public function index(Request $request)
     {
-        $users = User::orderBy('id', 'DESC')->paginate(15);
+        $users = User::with(["parent"])->orderBy('id', 'DESC')->paginate(15);
 
         return view('admin.users.index', compact('users'))
             ->with('i', ($request->get('page', 1) - 1) * 15);

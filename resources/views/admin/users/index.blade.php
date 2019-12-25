@@ -45,6 +45,7 @@
                             <th scope="col">#</th>
                             <th scope="col">Имя</th>
                             <th scope="col">Телефон</th>
+                            <th scope="col">Root</th>
                             <th scope="col">Администратор</th>
 
                         </tr>
@@ -60,6 +61,13 @@
                                     </a>
                                 </td>
                                 <td>{{$user->phone}}</td>
+                                <td>
+                                    @isset($refferal->parent)
+                                    <a href="{{ route('users.show',$refferal->parent->id) }}">
+                                        {{$refferal->parent->phone??$refferal->parent->name??$refferal->parent->telegram_chat_id}}</a>
+                                    @endisset
+
+                                </td>
                                 <td>
                                     {{$user->is_admin?"Администратор":"Пользователь"}}
                                 </td>
