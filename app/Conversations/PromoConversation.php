@@ -2,6 +2,7 @@
 
 namespace App\Conversations;
 
+use App\Events\ActivateUserEvent;
 use App\Promotion;
 use App\User;
 use App\UserHasPromo;
@@ -279,6 +280,8 @@ class PromoConversation extends Conversation
                 $this->user->promos()->attach($promo->id);
                 $this->user->updated_at = Carbon::now();
                 $this->user->save();
+
+                event(new ActivateUserEvent( $this->user));
 
                 $promo->current_activation_count += 1;
                 $promo->save();

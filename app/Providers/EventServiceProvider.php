@@ -3,11 +3,13 @@
 namespace App\Providers;
 
 use App\Events\AchievementEvent;
+use App\Events\ActivateUserEvent;
 use App\Events\NetworkCashBackEvent;
 use App\Events\NetworkLevelRecounterEvent;
 use App\Listeners\AchievementProcessor;
 use App\Listeners\NetworkCashBackProcessor;
 use App\Listeners\NetworkLevelRecounterProcessor;
+use App\Listeners\UserStatusHandler;
 use Illuminate\Support\Facades\Event;
 use Illuminate\Auth\Events\Registered;
 use Illuminate\Auth\Listeners\SendEmailVerificationNotification;
@@ -34,6 +36,9 @@ class EventServiceProvider extends ServiceProvider
 
         NetworkLevelRecounterEvent::class => [
             NetworkLevelRecounterProcessor::class
+        ],
+        ActivateUserEvent::class => [
+            UserStatusHandler::class
         ],
     ];
 

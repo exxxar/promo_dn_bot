@@ -6,6 +6,7 @@ use App\CashbackHistory;
 use App\Company;
 use App\Enums\AchievementTriggers;
 use App\Events\AchievementEvent;
+use App\Events\ActivateUserEvent;
 use App\Events\NetworkCashBackEvent;
 use App\RefferalsPaymentHistory;
 use App\User;
@@ -105,10 +106,9 @@ class PaymentConversation extends Conversation
                     $recipient_user->cashback_bonus_count -= $module;
                 } else
                     $recipient_user->referral_bonus_count -= intval($nedded_bonus);
-
-                $recipient_user->activated = 1;
-                $recipient_user->updated_at = Carbon::now();
                 $recipient_user->save();
+
+                event(new ActivateUserEvent($recipient_user));
 
                 event(new AchievementEvent(AchievementTriggers::MaxCashBackRemoveBonus, $nedded_bonus, $recipient_user));
 
@@ -175,9 +175,9 @@ class PaymentConversation extends Conversation
 
         $cashBack = round(intval($this->money_in_check) * env("CAHSBAK_PROCENT") / 100);
         $user->cashback_bonus_count += $cashBack;
-        $user->activated = 1;
         $user->save();
 
+        event(new ActivateUserEvent($user));
         event(new NetworkCashBackEvent($user->id,$cashBack));
         event(new AchievementEvent(AchievementTriggers::MaxCashBackCount, $cashBack, $user));
 
