@@ -11,6 +11,7 @@ use BotMan\Drivers\Telegram\TelegramDriver;
 use Carbon\Carbon;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Hash;
 
 class UsersController extends Controller
@@ -27,9 +28,17 @@ class UsersController extends Controller
      */
     public function index(Request $request)
     {
-        $users = User::with(["parent"])->orderBy('id', 'DESC')->paginate(15);
+        $users = User::with(["parent"])
+            ->orderBy('id', 'DESC')
+            ->paginate(15);
 
-        return view('admin.users.index', compact('users'))
+        $count = User::count();
+
+        $dayUsers =  DB::table('users')
+            ->whereDay('created_at',  date('d') )
+            ->count();
+
+        return view('admin.users.index', compact('users', 'count','dayUsers'))
             ->with('i', ($request->get('page', 1) - 1) * 15);
     }
 

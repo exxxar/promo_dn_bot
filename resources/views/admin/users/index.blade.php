@@ -22,7 +22,7 @@
                     </div>
                 @endif
 
-                    <h1>Пользователи</h1>
+                    <h1>Пользователи [Всего {{$count}}][За день {{$dayUsers}}]</h1>
                 @isset($users)
                         <form class="row mb-2" action="{{route("users.search")}}" method="post">
                             @csrf
