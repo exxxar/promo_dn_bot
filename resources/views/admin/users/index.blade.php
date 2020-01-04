@@ -46,8 +46,8 @@
                             <th scope="col">Имя</th>
                             <th scope="col">Телефон</th>
                             <th scope="col">Root</th>
-                            <th scope="col">Текущий CashBack</th>
-                            <th scope="col">Потраченный CashBack</th>
+                            <th scope="col">Текущий\Максимум</th>
+                            <th scope="col">Потраченно</th>
                             <th scope="col">Администратор</th>
 
                         </tr>
