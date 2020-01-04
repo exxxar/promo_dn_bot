@@ -27,7 +27,7 @@ class AchievementProcessor
     /**
      * Handle the event.
      *
-     * @param  object  $event
+     * @param object $event
      * @return void
      */
     public function handle(AchievementEvent $event)
@@ -48,11 +48,11 @@ class AchievementProcessor
             ]);
         }
 
-        $achList = Achievement::where("trigger_type", "=",$event->trigger_type,"and")
+        $achList = Achievement::where("trigger_type", "=", $event->trigger_type, "and")
             ->where("trigger_value", "<=", $stats->stat_value)
             ->get();
 
-        Log::info(print_r($achList,true));
+        Log::info(print_r($achList, true));
 
         $user = User::with(["achievements"])->find($event->user->id);
 
@@ -72,23 +72,33 @@ class AchievementProcessor
 
             if ($find == null) {
                 Log::info("Test");
-             /*   $activated = (UserHasAchievement::where("achievement_id",$ach->id)->first())->activated;
-                if ($activated)
-                    continue;*/
+                /*   $activated = (UserHasAchievement::where("achievement_id",$ach->id)->first())->activated;
+                   if ($activated)
+                       continue;*/
 
                 $user->achievements()->attach($ach->id);
                 //todo: отправляем в телеграм пользователю оповещение о том, что получена ачивка
 
-                $announce_title = $ach->title??'';
-                $announce_message = $ach->description??'';
-                $announce_url = $ach->ach_image_url??'';
+                $announce_title = $ach->title ?? '';
+                $announce_message = $ach->description ?? '';
+                $announce_image_url = $ach->ach_image_url ?? null;
 
-                Telegram::sendMessage([
-                    'chat_id' => $user->telegram_chat_id,
-                    'parse_mode' => 'Markdown',
-                    'text' => "Вы получили достижение:*".$announce_title."*\n_".$announce_message."_",
-                    'disable_notification' => 'false'
-                ]);
+
+                if ($announce_image_url == null)
+                    Telegram::sendMessage([
+                        'chat_id' => $user->telegram_chat_id,
+                        'parse_mode' => 'Markdown',
+                        'text' => "Вы получили достижение:*" . $announce_title . "*\n_" . $announce_message . "_",
+                        'disable_notification' => 'false'
+                    ]);
+                else
+                    Telegram::sendPhoto([
+                        'chat_id' => $user->telegram_chat_id,
+                        'parse_mode' => 'Markdown',
+                        'photo' => $announce_image_url,
+                        'caption' => "Вы получили достижение:*" . $announce_title . "*\n_" . $announce_message . "_",
+                        'disable_notification' => 'false'
+                    ]);
 
 
             }
