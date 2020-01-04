@@ -177,7 +177,7 @@ class StartDataConversation extends Conversation
                     $this->bot->reply('Приз по акции успешно активирован');
 
 
-                    event(new AchievementEvent(AchievementTriggers::MaxReferralBonusCount,1,$remote_user));
+                    event(new AchievementEvent(AchievementTriggers::MaxReferralBonusCount,10,$remote_user));
                     event(new AchievementEvent(AchievementTriggers::PromosActivationSequence,1,$remote_user));
                 }
 

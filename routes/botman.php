@@ -341,6 +341,7 @@ $botman->hears("/promo_by_company", function ($bot) {
 });
 
 $botman->hears("\xF0\x9F\x94\xA5Акции", function ($bot) {
+    
     $keyboard = [
         'inline_keyboard' => [
             [

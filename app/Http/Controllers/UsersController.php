@@ -28,7 +28,7 @@ class UsersController extends Controller
      */
     public function index(Request $request)
     {
-        $users = User::with(["parent"])
+        $users = User::with(["parent","spentCashBack","stats"])
             ->orderBy('id', 'DESC')
             ->paginate(15);
 

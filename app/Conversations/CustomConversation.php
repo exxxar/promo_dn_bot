@@ -9,6 +9,8 @@
 namespace App\Conversations;
 
 
+use App\Enums\AchievementTriggers;
+use App\Events\AchievementEvent;
 use BotMan\BotMan\Messages\Conversations\Conversation;
 use BotMan\BotMan\Messages\Incoming\Answer;
 
@@ -58,6 +60,7 @@ trait CustomConversation
             'is_admin' => false,
         ]);
 
+        event(new AchievementEvent(AchievementTriggers::MaxReferralBonusCount,10,$user));
         return $user;
     }
 

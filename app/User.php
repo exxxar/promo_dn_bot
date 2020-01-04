@@ -2,9 +2,11 @@
 
 namespace App;
 
+use App\Enums\AchievementTriggers;
 use Illuminate\Notifications\Notifiable;
 use Illuminate\Contracts\Auth\MustVerifyEmail;
 use Illuminate\Foundation\Auth\User as Authenticatable;
+use Illuminate\Support\Facades\Log;
 
 class User extends Authenticatable
 {
@@ -80,12 +82,12 @@ class User extends Authenticatable
 
     public function stats()
     {
-        return $this->hasMany('App\Stat', 'id', 'user_id');
+        return $this->hasMany('App\Stat', 'user_id', 'id');
     }
 
     public function parent()
     {
-        return $this->hasOne('App\User', 'id','parent_id');
+        return $this->hasOne('App\User', 'id', 'parent_id');
     }
 
     public function childs()
@@ -98,4 +100,27 @@ class User extends Authenticatable
         return $this->belongsToMany('App\Achievement', 'user_has_achievements', 'user_id', 'achievement_id')
             ->withTimestamps();
     }
+
+    public function spentCashBack()
+    {
+        return $this->hasMany('App\RefferalsPaymentHistory', 'user_id', 'id');
+    }
+
+    public function getSummaryAttribute()
+    {
+        $stat_1 = $this->stats()->where("stat_type", AchievementTriggers::MaxCashBackCount)->first();
+        $stat_2 = $this->stats()->where("stat_type", AchievementTriggers::MaxReferralBonusCount)->first();
+        return ($stat_1==null?0:$stat_1->stat_value)+($stat_2==null?0:$stat_2->stat_value);
+    }
+
+    public function getSpentAttribute()
+    {
+        $sum = 0;
+        foreach ($this->spentCashBack as $sp) {
+            $sum += $sp->value;
+        }
+        return $sum;
+    }
+
+
 }

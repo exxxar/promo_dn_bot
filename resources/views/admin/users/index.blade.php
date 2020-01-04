@@ -22,22 +22,22 @@
                     </div>
                 @endif
 
-                    <h1>Пользователи [Всего {{$count}}][За день {{$dayUsers}}]</h1>
+                <h1>Пользователи [Всего {{$count}}][За день {{$dayUsers}}]</h1>
                 @isset($users)
-                        <form class="row mb-2" action="{{route("users.search")}}" method="post">
-                            @csrf
-                            <div class="form-group col-md-5">
-                                <input type="text" class="form-control pull-right" id="usersSearch"
-                                       name="users-search" placeholder="Поиск по таблице">
-                            </div>
-                            <div class="form-group col-md-1">
-                                <button type="submit" class="btn btn-info btn-pill pull-right">Искать</button>
-                            </div>
+                    <form class="row mb-2" action="{{route("users.search")}}" method="post">
+                        @csrf
+                        <div class="form-group col-md-5">
+                            <input type="text" class="form-control pull-right" id="usersSearch"
+                                   name="users-search" placeholder="Поиск по таблице">
+                        </div>
+                        <div class="form-group col-md-1">
+                            <button type="submit" class="btn btn-info btn-pill pull-right">Искать</button>
+                        </div>
 
 
-                        </form>
+                    </form>
 
-                        <table class="table mt-2">
+                    <table class="table mt-2">
 
                         <thead class="thead-light">
                         <tr>
@@ -46,6 +46,8 @@
                             <th scope="col">Имя</th>
                             <th scope="col">Телефон</th>
                             <th scope="col">Root</th>
+                            <th scope="col">Текущий CashBack</th>
+                            <th scope="col">Потраченный CashBack</th>
                             <th scope="col">Администратор</th>
 
                         </tr>
@@ -63,12 +65,17 @@
                                 <td>{{$user->phone}}</td>
                                 <td>
                                     @isset($user->parent)
-                                    <a href="{{ route('users.show',$user->parent->id) }}">
-                                        {{$user->parent->phone??$user->parent->name??$user->parent->telegram_chat_id}}</a>
+                                        <a href="{{ route('users.show',$user->parent->id) }}">
+                                            {{$user->parent->phone??$user->parent->name??$user->parent->telegram_chat_id}}</a>
                                     @endisset
 
 
-
+                                </td>
+                                <td>
+                                    {{$user->cashback_bonus_count+$user->referral_bonus_count??0}} \ {{$user->summary}}
+                                </td>
+                                <td>
+                                    {{$user->spent}}
                                 </td>
                                 <td>
                                     {{$user->is_admin?"Администратор":"Пользователь"}}
