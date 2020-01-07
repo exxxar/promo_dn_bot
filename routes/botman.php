@@ -200,16 +200,7 @@ $botman->hears("\xE2\x9D\x93F.A.Q.", function ($bot) {
         ]
     ];
 
-    $telegramUser = $bot->getUser();
 
-    $id = $telegramUser->getId();
-
-    $user = \App\User::where("telegram_chat_id", $id)->first();
-
-    if ($user->referrals_count>=100)
-        array_push($keyboard1, [
-            ['text' => "Статьи", 'callback_data' => "/articles 0"],
-        ]);
 
     $bot->sendRequest("sendMessage",
         [
