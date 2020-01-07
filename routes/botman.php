@@ -189,18 +189,27 @@ $botman->hears("\xE2\x9D\x93F.A.Q.", function ($bot) {
             ],
             [
                 ['text' => "Промоутеру", 'callback_data' => "/promouter"],
+                ['text' => "Поставщикам", 'callback_data' => "/suppliers"],
             ],
             [
                 ['text' => "О нас", 'callback_data' => "/about"],
                 ['text' => "Разработчики", 'callback_data' => "/dev"],
             ],
-            [
-                ['text' => "Статьи", 'callback_data' => "/articles 0"],
-            ],
+
 
         ]
     ];
 
+    $telegramUser = $bot->getUser();
+
+    $id = $telegramUser->getId();
+
+    $user = \App\User::where("telegram_chat_id", $id)->first();
+
+    if ($user->referrals_count>=100)
+        array_push($keyboard1, [
+            ['text' => "Статьи", 'callback_data' => "/articles 0"],
+        ]);
 
     $bot->sendRequest("sendMessage",
         [
@@ -1116,6 +1125,18 @@ $botman->hears('/promouter', function ($bot) {
     foreach ($articles as $article)
         $bot->reply($article->url, ["parse_mode" => "Markdown"]);
 
+});
+
+$botman->hears('/suppliers', function ($bot) {
+    $articles = Article::where("part", 7)
+        ->where("is_visible", 1)
+        ->get();
+
+    if (count($articles) > 0)
+        foreach ($articles as $article)
+            $bot->reply($article->url, ["parse_mode" => "Markdown"]);
+    else
+        $bot->reply("Статьи не найдены", ["parse_mode" => "Markdown"]);
 });
 
 $botman->hears('/activity_information', function ($bot) {
