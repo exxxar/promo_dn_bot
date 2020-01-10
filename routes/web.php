@@ -98,6 +98,9 @@ Route::prefix('admin')->group(function () {
         'achievements' => 'AchievementsController',
     ]);
 
+    Route::get("/promotions/copy/{id}","PromotionController@copy")->name("promotions.copy");
+    Route::get("/promotions/channel/{id}","PromotionController@channel")->name("promotions.channel");
+
 });
 
 

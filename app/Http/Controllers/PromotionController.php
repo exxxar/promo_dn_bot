@@ -8,6 +8,8 @@ use App\Promotion;
 use Carbon\Carbon;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Log;
+use Telegram\Bot\FileUpload\InputFile;
+use Telegram\Bot\Laravel\Facades\Telegram;
 
 class PromotionController extends Controller
 {
@@ -187,5 +189,52 @@ class PromotionController extends Controller
         return redirect()
             ->route('promotions.index')
             ->with('success', 'Акция успешно удалена');
+    }
+
+    public function copy($id){
+
+        $promotion = Promotion::find($id);
+
+        $promotion = $promotion->replicate();
+        $promotion->title = "[Копия]".$promotion->title;
+        $promotion->save();
+
+        $companies = Company::all();
+        $categories = Category::all();
+
+        return view('admin.promotions.edit', compact('promotion','categories','companies'));
+
+    }
+
+    public function channel($id){
+        $promotion = Promotion::find($id);
+
+        Telegram::sendPhoto([
+            'chat_id' => "-1001392337757",
+            'parse_mode' => 'Markdown',
+            "photo"=>InputFile::create($promotion->promo_image_url),
+            'disable_notification' => 'true'
+        ]);
+
+        $keyboard = [
+            [
+                ['text' => "\xF0\x9F\x91\x89Дательнее об акции", 'url' => "http://t.me/skidki_dn_bot"],
+            ],
+        ];
+
+        Telegram::sendMessage([
+            'chat_id' => "-1001392337757",
+            'parse_mode' => 'Markdown',
+            "text"=>"*".$promotion->title."*\n_".$promotion->description."_",
+            'disable_notification' => 'true',
+            'reply_markup' => json_encode([
+                'inline_keyboard' =>
+                    $keyboard
+            ])
+        ]);
+
+        return redirect()
+            ->route('promotions.index')
+            ->with('success', 'Акция успешно добавлена в канал');
     }
 }

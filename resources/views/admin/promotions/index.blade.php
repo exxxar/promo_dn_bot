@@ -49,18 +49,29 @@
                                 <td>{{$key + 1}}</td>
                                 <td><a href="{{ route('promotions.show',$promotion->id) }}">
                                         {{$promotion->title}}</a>
-                                    <a class="btn btn-link" href="{{ route('promotions.edit',$promotion->id) }}">
-                                        <i class="fas fa-edit"></i>
-                                    </a>
+
 
                                 </td>
+
+
                                 <td>{{$promotion->description}}</td>
 
                                 <td>
-                                    <form action="{{ route('promotions.destroy', $promotion->id)}}" method="post">
+                                    <a class="btn btn-link" href="{{ route('promotions.edit',$promotion->id) }}" title="Редактировать">
+                                        <i class="fas fa-edit"></i>
+                                    </a>
+
+                                    <a class="btn btn-link" href="{{ route('promotions.copy',$promotion->id) }}" title="Копировать">
+                                        <i class="far fa-copy"></i>
+                                    </a>
+
+                                    <a class="btn btn-link" href="{{ route('promotions.channel',$promotion->id) }}" title="Отправить в канал">
+                                        <i class="fab fa-telegram"></i>
+                                    </a>
+                                    <form action="{{ route('promotions.destroy', $promotion->id)}}" method="post" >
                                         @csrf
                                         @method('DELETE')
-                                        <button class="btn btn-link" type="submit"><i class="fas fa-times"></i></button>
+                                        <button class="btn btn-link" type="submit" title="Удалить безвозвратно"><i class="fas fa-times"></i></button>
                                     </form>
                                 </td>
                             </tr>
