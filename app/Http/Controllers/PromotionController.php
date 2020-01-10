@@ -218,7 +218,7 @@ class PromotionController extends Controller
 
         $keyboard = [
             [
-                ['text' => "\xF0\x9F\x91\x89Дательнее об акции", 'url' => "http://t.me/skidki_dn_bot"],
+                ['text' => "\xF0\x9F\x91\x89Детальнее", 'url' => "http://t.me/skidki_dn_bot"],
             ],
         ];
 
