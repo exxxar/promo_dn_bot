@@ -375,6 +375,7 @@ $botman->hears('/category ([0-9]+)', function ($bot, $category_id) {
 
     $tmp = [];
 
+    $isEmpty = true;
     foreach ($promotions as $promo) {
 
         $telegramUser = $bot->getUser();
@@ -387,22 +388,31 @@ $botman->hears('/category ([0-9]+)', function ($bot, $category_id) {
 
         $time_2 = date_timestamp_get(now());
 
+
+
+
+
+
         if ($on_promo == null && $time_2 >= $time_0 && $time_2 < $time_1) {
-            if ($promo->handler == null)
-                array_push($tmp, Button::create($promo->title)->value("/promotion " . $promo->id));
-            else
-                array_push($tmp, Button::create($promo->title)->value($promo->handler . " " . $promo->id));
+            $isEmpty = false;
+
+            $attachment = new Image($promo->promo_image_url);
+            $message = OutgoingMessage::create()
+                ->withAttachment($attachment);
+            $bot->reply($message,["parse_mode"=>"Markdown"]);
+
+            $message = Question::create("*".$promo->title."*")
+                ->addButtons([
+                    Button::create("\xF0\x9F\x91\x89Подробнее")->value($promo->handler==null?"/promotion " . $promo->id:$promo->handler . " " . $promo->id)
+                ]);
+
+            $bot->reply($message,["parse_mode"=>"Markdown"]);
         }
     }
 
 
-    if (count($tmp) > 0) {
-        $message = Question::create("Акции в категории:")
-            ->addButtons($tmp);
 
-
-        $bot->reply($message);
-    } else
+    if ($isEmpty)
         $bot->reply("Акций в категории не найдено или все акции собраны:(");
 });
 $botman->hears('/company ([0-9]+)', function ($bot, $company_id) {
