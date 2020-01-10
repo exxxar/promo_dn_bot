@@ -432,6 +432,7 @@ $botman->hears('/company ([0-9]+)', function ($bot, $company_id) {
         ->get();
 
     $tmp = [];
+    $isEmpty = false;
 
     foreach ($promotions as $promo) {
 
@@ -446,7 +447,7 @@ $botman->hears('/company ([0-9]+)', function ($bot, $company_id) {
         $time_2 = date_timestamp_get(now());
 
         if ($on_promo == null && $time_2 >= $time_0 && $time_2 < $time_1) {
-            $isEmpty = false;
+
 
             $attachment = new Image($promo->promo_image_url);
             $message = OutgoingMessage::create()
