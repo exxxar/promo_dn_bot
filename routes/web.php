@@ -100,6 +100,7 @@ Route::prefix('admin')->group(function () {
 
     Route::get("/promotions/copy/{id}","PromotionController@copy")->name("promotions.copy");
     Route::get("/promotions/channel/{id}","PromotionController@channel")->name("promotions.channel");
+    Route::get("/events/channel/{id}","EventsController@channel")->name("events.channel");
 
 });
 

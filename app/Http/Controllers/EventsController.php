@@ -4,8 +4,11 @@ namespace App\Http\Controllers;
 
 use App\Company;
 use App\Event;
+use App\Promotion;
 use Carbon\Carbon;
 use Illuminate\Http\Request;
+use Telegram\Bot\FileUpload\InputFile;
+use Telegram\Bot\Laravel\Facades\Telegram;
 
 class EventsController extends Controller
 {
@@ -158,5 +161,49 @@ class EventsController extends Controller
         return redirect()
             ->route('events.index')
             ->with('success', 'Мероприятие успешно удалено');
+    }
+
+    public function channel($id){
+        $event = Event::find($id);
+
+        Telegram::sendPhoto([
+            'chat_id' => "-1001392337757",
+            'parse_mode' => 'Markdown',
+            "photo"=>InputFile::create($event->event_image_url),
+            'disable_notification' => 'true'
+        ]);
+
+
+        $tmp_id = env("DEVELOPER_ID");
+
+        while (strlen($tmp_id) < 10)
+            $tmp_id = "0" . $tmp_id;
+
+        $tmp_event_id = $event->id;
+        while (strlen($tmp_event_id) < 10)
+            $tmp_event_id = "0" . $tmp_event_id;
+
+        $code = base64_encode("100" . $tmp_id . $tmp_event_id);
+
+        $keyboard = [
+            [
+                ['text' => "\xF0\x9F\x91\x89Детальнее", 'url' =>"https://t.me/" . env("APP_BOT_NAME") . "?start=$code"],
+            ],
+        ];
+
+        Telegram::sendMessage([
+            'chat_id' => "-1001392337757",
+            'parse_mode' => 'Markdown',
+            "text"=>"*".$event->title."*\n_".$event->description."_",
+            'disable_notification' => 'true',
+            'reply_markup' => json_encode([
+                'inline_keyboard' =>
+                    $keyboard
+            ])
+        ]);
+
+        return redirect()
+            ->route('events.index')
+            ->with('success', 'Мероприятие успешно добавлено в канал');
     }
 }

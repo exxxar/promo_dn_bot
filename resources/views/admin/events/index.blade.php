@@ -58,6 +58,9 @@
 
 
                                 <td>
+                                    <a class="btn btn-link" href="{{ route('events.channel',$event->id) }}" title="Отправить в канал">
+                                        <i class="fab fa-telegram"></i>
+                                    </a>
                                     <form action="{{ route('events.destroy', $event->id)}}" method="post">
                                         @csrf
                                         @method('DELETE')

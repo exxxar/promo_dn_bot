@@ -5,6 +5,7 @@ namespace App\Conversations;
 use App\Achievement;
 use App\CashbackHistory;
 use App\Enums\AchievementTriggers;
+use App\Event;
 use App\Events\AchievementEvent;
 use App\Events\NetworkLevelRecounterEvent;
 use App\Promotion;
@@ -111,6 +112,10 @@ class StartDataConversation extends Conversation
         if ($canBeRefferal) {
             $this->activateRefferal();
             $this->mainMenu('Добрый день! Приветствуем вас в нашем акционном боте! Мы рады, что Вы присоединились к нам. Все акции будут активны с 5 января!');
+
+            if ($this->code=="100"&&intval($this->promo_id) != 0){
+                $this->openEvent();
+            }
 
             if (intval($this->promo_id) != 0) {
                 $this->openPromo();
@@ -380,6 +385,36 @@ class StartDataConversation extends Conversation
 
         if ($time_2 > $time_1)
             $this->bot->reply('Акция уже подошла к концу!');
+    }
+
+    protected function openEvent()
+    {
+
+        $event_id = $this->promo_id;
+
+        $event = Event::find(intval($event_id));
+
+        $telegramUser = $this->bot->getUser();
+        $id = $telegramUser->getId();
+
+
+        $time_0 = (date_timestamp_get(new DateTime($event->start_at)));
+        $time_1 = (date_timestamp_get(new DateTime($event->end_at)));
+
+        $time_2 = date_timestamp_get(now());
+
+        if ($time_2 >= $time_0 && $time_2 < $time_1) {
+
+
+            $attachment = new Image($event->event_image_url);
+            $message = OutgoingMessage::create("*" . $event->title . "*\n" . $event->description)
+                ->withAttachment($attachment);
+
+            $this->bot->reply($message,["parse_mode"=>"Markdown"]);
+        }
+
+        if ($time_2 > $time_1)
+            $this->bot->reply('Мероприятие уже подошло к концу!');
     }
 }
 
