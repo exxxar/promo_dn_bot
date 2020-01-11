@@ -261,7 +261,7 @@ class UsersController extends Controller
                 ->orderBy('id', "DESC")
                 ->paginate(15);
         }catch (\Exception $e) {
-            $users = User::orderBy('id', 'DESC')->paginate(15);
+            $users = User::All()->orderBy('id', 'DESC')->paginate(15);
         }
 
         return view('admin.users.index', compact('users'))
