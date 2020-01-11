@@ -161,13 +161,13 @@ class PromoConversation extends Conversation
 
             $tmp_phone = str_replace($vowels, "", $tmp_phone);
 
-            if (!strpos($tmp_phone, "+38"))
+            if (strpos($tmp_phone, "+38") === false)
                 $tmp_phone = "+38" . $tmp_phone;
 
 
             $pattern = "/^\+380\d{3}\d{2}\d{2}\d{2}$/";
 
-            if (preg_match($pattern, $tmp_phone) == 0) {
+            if (preg_match($pattern, $tmp_phone) ==0) {
 
                 $this->bot->reply("Номер введен не верно...\n");
                 $this->askPhone();

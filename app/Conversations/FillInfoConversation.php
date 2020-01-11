@@ -66,7 +66,7 @@ class FillInfoConversation extends Conversation
             $tmp_phone = $answer->getText();
             $tmp_phone = str_replace($vowels, "", $tmp_phone);
 
-            if (!strpos($tmp_phone, "+38"))
+            if (strpos($tmp_phone, "+38")=== false)
                 $tmp_phone = "+38" . $tmp_phone;
 
 
