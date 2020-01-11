@@ -195,7 +195,7 @@ class AchievementsController extends Controller
             'chat_id' => "-1001392337757",
             'parse_mode' => 'Markdown',
             "photo"=>InputFile::create($achievement->ach_image_url),
-            "caption"=>"Новое достижение уже доступно для вас!Дерзайте!\n*".$achievement->title."*\n_".$achievement->description."_",
+            "caption"=>"Новое достижение уже доступно для вас! Дерзайте!\n*".$achievement->title."*\n_".$achievement->description."_",
             'disable_notification' => 'true',
             'reply_markup' => json_encode([
                 'inline_keyboard' =>
