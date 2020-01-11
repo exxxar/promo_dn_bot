@@ -32,11 +32,11 @@ class UsersController extends Controller
             ->orderBy('id', 'DESC')
             ->paginate(15);
 
-        $count = User::count();
+        $count = User::count()??0;
 
         $dayUsers =  DB::table('users')
             ->whereDay('created_at',  date('d') )
-            ->count();
+            ->count()??0;
 
         return view('admin.users.index', compact('users', 'count','dayUsers'))
             ->with('i', ($request->get('page', 1) - 1) * 15);
