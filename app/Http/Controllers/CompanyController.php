@@ -55,7 +55,6 @@ class CompanyController extends Controller
             'address' => 'required',
             'description' => 'required',
             'phone' => 'required',
-            'email' => 'required',
             'bailee' => 'required',
             'logo_url' => 'required',
             'position' => 'required',
@@ -122,7 +121,6 @@ class CompanyController extends Controller
             'address' => 'required',
             'description' => 'required',
             'phone' => 'required',
-            'email' => 'required',
             'bailee' => 'required',
             'logo_url' => 'required',
             'position' => 'required',
@@ -167,7 +165,7 @@ class CompanyController extends Controller
 
         $keyboard = [
             [
-                ['text' => "\xF0\x9F\x91\x89Больше информации", 'url' =>"https://t.me/" . env("APP_BOT_NAME")],
+                ['text' => "\xF0\x9F\x91\x89Переход в бота", 'url' =>"https://t.me/" . env("APP_BOT_NAME")],
             ],
         ];
 

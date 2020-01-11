@@ -86,8 +86,7 @@
                         <tr>
                             <td>E-mail</td>
                             <td>
-                                <input type="email" name="email" value="{{$company->email}}" class="form-control"
-                                       required>
+                                <input type="email" name="email" value="{{$company->email}}" class="form-control">
                             </td>
                         </tr>
                         <tr>

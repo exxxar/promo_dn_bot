@@ -169,7 +169,7 @@ class EventsController extends Controller
 
         $keyboard = [
             [
-                ['text' => "\xF0\x9F\x91\x89Больше мероприятий", 'url' =>"https://t.me/" . env("APP_BOT_NAME") ],
+                ['text' => "\xF0\x9F\x91\x89Переход в бота", 'url' =>"https://t.me/" . env("APP_BOT_NAME") ],
             ],
         ];
 
