@@ -59,7 +59,7 @@ Route::prefix('admin')->group(function () {
 
 
     Route::post('/search', 'HomeController@search')
-        ->name('users.search');
+        ->name('users.phone.search');
 
     Route::get('/search_ajax/', 'HomeController@searchAjax')
         ->name('users.ajax.search');
@@ -83,7 +83,7 @@ Route::prefix('admin')->group(function () {
 
     Route::get("/users/cashback/{id}", "UsersController@cashBackPage")->name("users.cashback.index");
 
-    Route::post('users/search', 'UsersController@search')->name("users.search");
+    Route::any('users/search', 'UsersController@search')->name("users.search");
 
     Route::resources([
         'articles' => 'ArticleController',

@@ -1,4 +1,4 @@
-<form action="{{route("users.search")}}" method="post">
+<form action="{{route("users.phone.search")}}" method="post">
     @csrf
     <h2>Поиск пользователя</h2>
     <div class="form-row">
