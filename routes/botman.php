@@ -163,8 +163,8 @@ $botman->hears("\xF0\x9F\x93\xB2Мои друзья", function ($bot) {
 
     $code = base64_encode("001" . $tmp_id . "0000000000");
 
-    //$attachment = new Image(env("QR_URL")."https://t.me/" . env("APP_BOT_NAME") . "?start=$code");
-    $attachment = new Image(env("APP_URL") . "/image/?data=" . base64_encode("https://t.me/" . env("APP_BOT_NAME") . "?start=$code"));
+    $attachment = new Image(env("QR_URL")."https://t.me/" . env("APP_BOT_NAME") . "?start=$code");
+   // $attachment = new Image(env("APP_URL") . "/image/?data=" . base64_encode("https://t.me/" . env("APP_BOT_NAME") . "?start=$code"));
 
     // Build message object
     $message = OutgoingMessage::create('_Ваш реферальный код_')
@@ -270,8 +270,8 @@ $botman->hears("\xF0\x9F\x92\xB3Мои баллы", function ($bot) {
     $code = base64_encode("002" . $tmp_id . "0000000000");
 
 
-    // $attachment = new Image(env("QR_URL")."https://t.me/" . env("APP_BOT_NAME") . "?start=$code");
-    $attachment = new Image(env("APP_URL") . "/image/?data=" . base64_encode("https://t.me/" . env("APP_BOT_NAME") . "?start=$code"));
+     $attachment = new Image(env("QR_URL")."https://t.me/" . env("APP_BOT_NAME") . "?start=$code");
+    //$attachment = new Image(env("APP_URL") . "/image/?data=" . base64_encode("https://t.me/" . env("APP_BOT_NAME") . "?start=$code"));
 
     // Build message object
     $message = OutgoingMessage::create('_Ваш код для оплаты_')
@@ -1013,8 +1013,8 @@ $botman->hears('/achievements_get_prize ([0-9]+)', function ($bot, $achievementI
 
         $code = base64_encode("012" . $tmp_id . $tmp_achievement_id);
 
-        // $attachment = new Image("https://api.qrserver.com/v1/create-qr-code/?size=150x150&data=https://t.me/" . env("APP_BOT_NAME") . "?start=$code");
-        $attachment = new Image(env("APP_URL") . "/image/?data=" . base64_encode("https://t.me/" . env("APP_BOT_NAME") . "?start=$code"));
+        $attachment = new Image(env("QR_URL")."https://t.me/" . env("APP_BOT_NAME") . "?start=$code");
+        //$attachment = new Image(env("APP_URL") . "/image/?data=" . base64_encode("https://t.me/" . env("APP_BOT_NAME") . "?start=$code"));
 
         $message = OutgoingMessage::create('_Код для активации достижения_')
             ->withAttachment($attachment);
