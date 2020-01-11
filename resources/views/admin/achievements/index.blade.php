@@ -58,6 +58,11 @@
 
 
                                 <td>
+
+                                    <a class="btn btn-link" href="{{ route('achievements.channel',$achievement->id) }}" title="Отправить в канал">
+                                        <i class="fab fa-telegram"></i>
+                                    </a>
+
                                     <form action="{{ route('achievements.destroy', $achievement->id)}}" method="post">
                                         @csrf
                                         @method('DELETE')

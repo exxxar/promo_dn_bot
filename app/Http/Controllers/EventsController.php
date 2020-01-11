@@ -167,20 +167,9 @@ class EventsController extends Controller
         $event = Event::find($id);
 
 
-        $tmp_id = env("DEVELOPER_ID");
-
-        while (strlen($tmp_id) < 10)
-            $tmp_id = "0" . $tmp_id;
-
-        $tmp_event_id = $event->id;
-        while (strlen($tmp_event_id) < 10)
-            $tmp_event_id = "0" . $tmp_event_id;
-
-        $code = base64_encode("100" . $tmp_id . $tmp_event_id);
-
         $keyboard = [
             [
-                ['text' => "\xF0\x9F\x91\x89Детальнее", 'url' =>"https://t.me/" . env("APP_BOT_NAME") . "?start=$code"],
+                ['text' => "\xF0\x9F\x91\x89Больше мероприятий", 'url' =>"https://t.me/" . env("APP_BOT_NAME") ],
             ],
         ];
 

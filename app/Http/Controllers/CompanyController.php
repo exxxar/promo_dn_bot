@@ -3,8 +3,11 @@
 namespace App\Http\Controllers;
 
 use App\Company;
+use App\Event;
 use Carbon\Carbon;
 use Illuminate\Http\Request;
+use Telegram\Bot\FileUpload\InputFile;
+use Telegram\Bot\Laravel\Facades\Telegram;
 
 class CompanyController extends Controller
 {
@@ -156,5 +159,32 @@ class CompanyController extends Controller
         return redirect()
             ->route('companies.index')
             ->with('success', 'Компания успешно удалена');
+    }
+
+    public function channel($id){
+        $company = Company::find($id);
+
+
+        $keyboard = [
+            [
+                ['text' => "\xF0\x9F\x91\x89Больше информации", 'url' =>"https://t.me/" . env("APP_BOT_NAME")],
+            ],
+        ];
+
+        Telegram::sendPhoto([
+            'chat_id' => "-1001392337757",
+            'parse_mode' => 'Markdown',
+            "photo"=>InputFile::create($company->logo_url),
+            "caption"=>"К нам присоединилось еще одно заведение!\n*".$company->title."*\n_".$company->description."_",
+            'disable_notification' => 'true',
+            'reply_markup' => json_encode([
+                'inline_keyboard' =>
+                    $keyboard
+            ])
+        ]);
+
+        return redirect()
+            ->route('companies.index')
+            ->with('success', 'Компания успешно добавлена в канал');
     }
 }

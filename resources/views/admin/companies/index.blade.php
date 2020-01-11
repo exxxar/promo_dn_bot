@@ -56,6 +56,9 @@
                                 </td>
                                 <td>{{$company->description}}</td>
                                 <td>
+                                    <a class="btn btn-link" href="{{ route('companies.channel',$company->id) }}" title="Отправить в канал">
+                                        <i class="fab fa-telegram"></i>
+                                    </a>
                                     <form action="{{ route('companies.destroy', $company->id)}}" method="post">
                                         @csrf
                                         @method('DELETE')

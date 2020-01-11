@@ -232,7 +232,7 @@ class PromotionController extends Controller
 
         $keyboard = [
             [
-                ['text' => "\xF0\x9F\x91\x89Детальнее", 'url' =>"https://t.me/" . env("APP_BOT_NAME") . "?start=$code"],
+                ['text' => "\xF0\x9F\x91\x89Подробнее", 'url' =>"https://t.me/" . env("APP_BOT_NAME") . "?start=$code"],
             ],
         ];
 

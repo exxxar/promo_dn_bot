@@ -4,8 +4,11 @@ namespace App\Http\Controllers;
 
 use App\Achievement;
 use App\Enums\AchievementTriggers;
+use App\Event;
 use Carbon\Carbon;
 use Illuminate\Http\Request;
+use Telegram\Bot\FileUpload\InputFile;
+use Telegram\Bot\Laravel\Facades\Telegram;
 
 class AchievementsController extends Controller
 {
@@ -176,5 +179,32 @@ class AchievementsController extends Controller
         return redirect()
             ->route('achievements.index')
             ->with('success', 'Достижение успешно удалено');
+    }
+
+    public function channel($id){
+        $achievement = Achievement::find($id);
+
+
+        $keyboard = [
+            [
+                ['text' => "\xF0\x9F\x91\x89Больше достижений", 'url' =>"https://t.me/" . env("APP_BOT_NAME") ],
+            ],
+        ];
+
+        Telegram::sendPhoto([
+            'chat_id' => "-1001392337757",
+            'parse_mode' => 'Markdown',
+            "photo"=>InputFile::create($achievement->ach_image_url),
+            "caption"=>"*".$achievement->title."*\n_".$achievement->description."_",
+            'disable_notification' => 'true',
+            'reply_markup' => json_encode([
+                'inline_keyboard' =>
+                    $keyboard
+            ])
+        ]);
+
+        return redirect()
+            ->route('events.index')
+            ->with('success', 'Достижение успешно добавлено в канал');
     }
 }
