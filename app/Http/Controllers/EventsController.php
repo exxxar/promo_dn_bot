@@ -166,13 +166,6 @@ class EventsController extends Controller
     public function channel($id){
         $event = Event::find($id);
 
-        Telegram::sendPhoto([
-            'chat_id' => "-1001392337757",
-            'parse_mode' => 'Markdown',
-            "photo"=>InputFile::create($event->event_image_url),
-            'disable_notification' => 'true'
-        ]);
-
 
         $tmp_id = env("DEVELOPER_ID");
 
@@ -191,14 +184,15 @@ class EventsController extends Controller
             ],
         ];
 
-        Telegram::sendMessage([
+        Telegram::sendPhoto([
             'chat_id' => "-1001392337757",
             'parse_mode' => 'Markdown',
-            "text"=>"*".$event->title."*\n_".$event->description."_",
+            "photo"=>InputFile::create($event->event_image_url),
+            "caption"=>"*".$event->title."*\n_".$event->description."_",
             'disable_notification' => 'true',
             'reply_markup' => json_encode([
-                'inline_keyboard' =>
-                    $keyboard
+            'inline_keyboard' =>
+                $keyboard
             ])
         ]);
 
