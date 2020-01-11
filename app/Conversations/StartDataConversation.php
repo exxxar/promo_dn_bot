@@ -15,6 +15,7 @@ use BotMan\BotMan\Messages\Attachments\Image;
 use BotMan\BotMan\Messages\Attachments\Location;
 use BotMan\BotMan\Messages\Outgoing\OutgoingMessage;
 use Carbon\Carbon;
+use DateTime;
 use Illuminate\Foundation\Inspiring;
 use BotMan\BotMan\Messages\Incoming\Answer;
 use BotMan\BotMan\Messages\Outgoing\Question;
@@ -138,6 +139,9 @@ class StartDataConversation extends Conversation
                 $this->bot->reply("Вы не добавлены не в одну компанию и не можете проводить процесс списания.");
         }
 
+
+
+
     }
 
     protected function activatePromo()
@@ -227,6 +231,9 @@ class StartDataConversation extends Conversation
         } catch (\Exception $e) {
             $this->bot->reply($e->getMessage() . " " . $e->getLine());
         }
+
+
+
     }
 
     protected function activateRefferal()
@@ -338,45 +345,41 @@ class StartDataConversation extends Conversation
     protected function openPromo()
     {
 
-        $promo = Promotion::find(intval($this->promo_id));
+        $promo = Promotion::with(["users"])->find(intval($this->promo_id));
 
-        $on_promo = $this->user->promos()
-            ->where("promotion_id", "=", $promo->id)
-            ->first();
+        $telegramUser = $this->bot->getUser();
+        $id = $telegramUser->getId();
+
+        $on_promo = $promo->users()->where('telegram_chat_id', "$id")->first();
+
+        $time_0 = (date_timestamp_get(new DateTime($promo->start_at)));
+        $time_1 = (date_timestamp_get(new DateTime($promo->end_at)));
+
+        $time_2 = date_timestamp_get(now());
+
+        if ($on_promo == null && $time_2 >= $time_0 && $time_2 < $time_1) {
+
+
+            $attachment = new Image($promo->promo_image_url);
+            $message = OutgoingMessage::create()
+                ->withAttachment($attachment);
+            $this->bot->reply($message,["parse_mode"=>"Markdown"]);
+
+            $message = Question::create("*".$promo->title."*")
+                ->addButtons([
+                    Button::create("\xF0\x9F\x91\x89Подробнее")->value($promo->handler==null?"/promotion " . $promo->id:$promo->handler . " " . $promo->id)
+                ]);
+
+            $this->bot->reply($message,["parse_mode"=>"Markdown"]);
+        }
 
         if ($on_promo) {
             $this->bot->reply('Акция уже была пройдена ранее!');
             return;
         }
 
-        $coords = explode(",", $promo->location_coords);
-        $location_attachment = new Location($coords[0], $coords[1], [
-            'custom_payload' => true,
-        ]);
-        $attachment = new Image($promo->promo_image_url);
-
-        $message1 = OutgoingMessage::create("*" . $promo->title . "*\n_" . $promo->description . "_\n*Наш адрес*:" . $promo->location_address . "\n*Координаты акции*:")
-            ->withAttachment($attachment);
-
-        $message2 = OutgoingMessage::create("Акция проходит тут:")
-            ->withAttachment($location_attachment);
-
-        // Reply message object
-        $this->bot->reply($message1, ["parse_mode" => "Markdown"]);
-        $this->bot->reply($message2, ["parse_mode" => "Markdown"]);
-
-        $handler = "/promotion " . $promo->id;
-        if ($promo->handler != null)
-            $handler = $promo->handler . " " . $promo->id;
-
-        $question = Question::create('Так что на счет участия?')
-            ->addButtons([
-                Button::create('Поехали')->value($handler),
-                Button::create('Нет, в другой раз')->value('stop'),
-            ]);
-
-        $this->bot->reply($question);
-
+        if ($time_2 > $time_1)
+            $this->bot->reply('Акция уже подошла к концу!');
     }
 }
 

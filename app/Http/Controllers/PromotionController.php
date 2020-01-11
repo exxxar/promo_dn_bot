@@ -5,6 +5,8 @@ namespace App\Http\Controllers;
 use App\Category;
 use App\Company;
 use App\Promotion;
+use App\User;
+use BotMan\BotMan\Messages\Attachments\Image;
 use Carbon\Carbon;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Log;
@@ -216,9 +218,22 @@ class PromotionController extends Controller
             'disable_notification' => 'true'
         ]);
 
+        $user = User::where("telegram_chat_id",env("DEVELOPER_ID"));
+
+        $tmp_id = $user->telegram_chat_id;
+
+        while (strlen($tmp_id) < 10)
+            $tmp_id = "0" . $tmp_id;
+
+        $tmp_promo_id = $promotion->id;
+        while (strlen($tmp_promo_id) < 10)
+            $tmp_promo_id = "0" . $tmp_promo_id;
+
+        $code = base64_encode("003" . $tmp_id . $tmp_promo_id);
+
         $keyboard = [
             [
-                ['text' => "\xF0\x9F\x91\x89Детальнее", 'url' => "http://t.me/skidki_dn_bot"],
+                ['text' => "\xF0\x9F\x91\x89Детальнее", 'url' =>"https://t.me/" . env("APP_BOT_NAME") . "?start=$code"],
             ],
         ];
 
