@@ -21,6 +21,14 @@ class UsersController extends Controller
         $this->middleware('auth');
     }
 
+    public function statistic(){
+        $count = User::count()??0;
+
+        $dayUsers =  DB::table('users')
+                ->whereDay('created_at',  date('d') )
+                ->count()??0;
+        return ["count"=>$count,"day_users"=>$dayUsers];
+    }
     /**
      * Display a listing of the resource.
      *
@@ -32,11 +40,9 @@ class UsersController extends Controller
             ->orderBy('id', 'DESC')
             ->paginate(15);
 
-        $count = User::count()??0;
+        $count = $this->statistic()["count"];
 
-        $dayUsers =  DB::table('users')
-            ->whereDay('created_at',  date('d') )
-            ->count()??0;
+        $dayUsers =  $this->statistic()["day_users"];
 
         return view('admin.users.index', compact('users', 'count','dayUsers'))
             ->with('i', ($request->get('page', 1) - 1) * 15);
@@ -261,10 +267,14 @@ class UsersController extends Controller
                 ->orderBy('id', "DESC")
                 ->paginate(15);
         }catch (\Exception $e) {
-            $users = User::All()->orderBy('id', 'DESC')->paginate(15);
+            $users = User::orderBy('id', 'DESC')->paginate(15);
         }
 
-        return view('admin.users.index', compact('users'))
+        $count = $this->statistic()["count"];
+
+        $dayUsers =  $this->statistic()["day_users"];
+
+        return view('admin.users.index', compact('users','count','dayUsers'))
             ->with('i', ($request->get('page', 1) - 1) * 15);
     }
 
