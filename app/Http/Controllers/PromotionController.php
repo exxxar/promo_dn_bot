@@ -228,7 +228,7 @@ class PromotionController extends Controller
         while (strlen($tmp_promo_id) < 10)
             $tmp_promo_id = "0" . $tmp_promo_id;
 
-        $code = base64_encode("003" . $tmp_id . $tmp_promo_id);
+        $code = base64_encode("001" . $tmp_id . $tmp_promo_id);
 
         $keyboard = [
             [
