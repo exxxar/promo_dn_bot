@@ -115,6 +115,7 @@ class StartDataConversation extends Conversation
 
             if ($this->code=="100"&&intval($this->promo_id) != 0){
                 $this->openEvent();
+                return;
             }
 
             if (intval($this->promo_id) != 0) {
