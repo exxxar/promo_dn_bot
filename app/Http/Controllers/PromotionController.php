@@ -218,9 +218,8 @@ class PromotionController extends Controller
             'disable_notification' => 'true'
         ]);
 
-        $user = User::where("telegram_chat_id",env("DEVELOPER_ID"));
 
-        $tmp_id = $user->telegram_chat_id;
+        $tmp_id = env("DEVELOPER_ID");
 
         while (strlen($tmp_id) < 10)
             $tmp_id = "0" . $tmp_id;
