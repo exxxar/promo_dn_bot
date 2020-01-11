@@ -114,7 +114,7 @@ Route::get("/image", function (\Illuminate\Http\Request $request) {
     }
 
     try {
-        $pngImage = QrCode::format('jpg')->merge(env("APP_URL") . 'bot.jpg', 0.3, true)
+        $pngImage = QrCode::format('png')->merge(env("APP_URL") . 'bot.png', 0.3, true)
             ->size(500)->errorCorrection('H')
             ->generate($tmp_data);
 
