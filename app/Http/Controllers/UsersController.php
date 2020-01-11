@@ -256,6 +256,12 @@ class UsersController extends Controller
     }
 
     public function search(Request $request){
+        if ($request->get("users-search")==null)
+            return redirect()
+                ->route('users.index')
+                ->with('error', 'Нет данных!');
+
+
         try {
             $user = $request->get("users-search")??'';
             $users = User::where("name", "like", "%$user%")
