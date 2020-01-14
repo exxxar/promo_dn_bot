@@ -39,12 +39,22 @@
                         </thead>
                         <tbody>
                         <tr>
-                            <td>Code</td>
+                            <td>Код</td>
                             <td>
                                 <input type="text" name="code" class="form-control" required>
                             </td>
                         </tr>
 
+                        <tr>
+                            <td>Компания</td>
+                            <td>
+                                <select name="company_id" class="form-control">
+                                    @foreach($companies as $company)
+                                        <option value="{{$company->id}}">{{$company->title}}</option>
+                                        @endforeach
+                                </select>
+                            </td>
+                        </tr>
 
                         <tr>
                             <td></td>

@@ -37,8 +37,11 @@ class CompanyController extends Controller
      */
     public function create()
     {
+
+        $companies = Company::orderBy('position', 'DESC')
+            ->paginate(15);
         //
-        return view('admin.companies.create');
+        return view('admin.companies.create',compact("companies"));
     }
 
     /**
