@@ -38,10 +38,12 @@ class LotteryConversation extends Conversation
 
             if ($code == null) {
                 $this->bot->reply("Такой код не существует!");
+                $this->askReason();
                 return;
             }
             if ($code->activated == true) {
                 $this->bot->reply("Код уже был использован");
+                $this->askReason();
                 return;
             }
             $prizes = json_decode(Prize::where("is_active",1)->where("company_id",$code->company_id)->get(), true);
