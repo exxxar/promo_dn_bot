@@ -11,7 +11,7 @@
                             <h2>Изменение акции</h2>
                         </div>
                         <div class="pull-right">
-                            <a class="btn btn-primary" href="{{ route('ingredients.index') }}"> Назад</a>
+                            <a class="btn btn-primary" href="{{ route('prizes.index') }}"> Назад</a>
                         </div>
 
                         @if (count($errors) > 0)
@@ -30,7 +30,7 @@
                 </div>
 
 
-                <form method="post" action="{{ route('ingredients.update',$prize->id) }}">
+                <form method="post" action="{{ route('prizes.update',$prize->id) }}">
                     @csrf
                     <input name="_method" type="hidden" value="PUT">
 
