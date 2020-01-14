@@ -83,6 +83,8 @@ class LotteryConversation extends Conversation
                             $inline_keyboard
                     ])
                 ]);
+
+            $this->mainMenu("Оставайтесь с нами и получайте больше призов!");
         });
     }
     /**
@@ -91,6 +93,7 @@ class LotteryConversation extends Conversation
     public function run()
     {
         try {
+            $this->conversationMenu("Розыгрыш призов");
             $this->askReason();
         }catch (\Exception $e){
             $this->bot->reply($e->getMessage()." ".$e->getLine());
