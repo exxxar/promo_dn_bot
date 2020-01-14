@@ -134,18 +134,21 @@ $botman->hears('.*Розыгрыш|/start_lottery_test', function ($bot) {
     $telegramUser = $bot->getUser();
     $id = $telegramUser->getId();
 
-    $rules = Article::where("part",8)
-        ->orderBy("id","DESC")
-        ->first() ;
 
-    $keybord = [
-        [
-            ['text' => "Условия розыгрыша и призы", 'url' => $rules==null?'':$rules->url]
-        ],
+    $rules = Article::where("part",\App\Enums\Parts::Lottery)
+        ->orderBy("id","DESC")
+        ->first();
+
+
+    $keyboard = [
         [
             ['text' => "Ввести код и начать", 'callback_data' => "/lottery"]
         ]
     ];
+
+    if ($rules!=null)
+        array_push($keyboard, ['text' => "Условия розыгрыша и призы", 'url' => $rules->url]);
+
     $bot->sendRequest("sendMessage",
         [
             "chat_id" => "$id",
@@ -153,7 +156,7 @@ $botman->hears('.*Розыгрыш|/start_lottery_test', function ($bot) {
             "parse_mode" => "Markdown",
             'reply_markup' => json_encode([
                 'inline_keyboard' =>
-                    $keybord
+                    $keyboard
             ])
         ]);
 });
