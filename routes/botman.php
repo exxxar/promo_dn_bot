@@ -130,7 +130,7 @@ $botman->hears("/ref ([0-9]+)", function ($bot, $refId) {
 
 });
 
-$botman->hears('.*Розыгрыш', function ($bot) {
+$botman->hears('.*Розыгрыш|/start_lottery_test', function ($bot) {
     $telegramUser = $bot->getUser();
     $id = $telegramUser->getId();
 
@@ -226,6 +226,9 @@ $botman->hears("\xE2\x9D\x93F.A.Q.", function ($bot) {
                 ['text' => "О нас", 'callback_data' => "/about"],
                 ['text' => "Разработчики", 'callback_data' => "/dev"],
             ],
+            [
+                ['text'=>'Роззыгрыш','callback_data'=>'/start_lottery_test']
+            ]
 
 
         ]
