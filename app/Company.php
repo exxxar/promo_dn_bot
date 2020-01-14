@@ -23,4 +23,14 @@ class Company extends Model
     {
         return $this->hasMany('App\Promotion');
     }
+
+    public function prizes()
+    {
+        return $this->hasMany('App\Prize',"id","company_id");
+    }
+
+    public function promocodes()
+    {
+        return $this->hasMany('App\Promocode',"id","company_id");
+    }
 }

@@ -7,12 +7,14 @@ use App\Drivers\TelegramInlineQueryDriver;
 use App\Event;
 use App\Http\Controllers\BotManController;
 
+use App\Prize;
 use App\User;
 use BotMan\BotMan\Facades\BotMan;
 use BotMan\BotMan\Messages\Attachments\Image;
 use BotMan\BotMan\Messages\Outgoing\Actions\Button;
 use BotMan\BotMan\Messages\Outgoing\OutgoingMessage;
 use BotMan\BotMan\Messages\Outgoing\Question;
+use Carbon\Carbon;
 use Illuminate\Support\Facades\Log;
 use Telegram\Bot\Laravel\Facades\Telegram;
 
@@ -23,6 +25,8 @@ $botman->hears('Попробовать снова', BotManController::class . '@
 $botman->hears('/start', BotManController::class . '@startConversation');
 
 $botman->hears('Продолжить позже', BotManController::class . '@stopConversation')->stopsConversation();
+
+$botman->hears('/lottery', BotManController::class . '@lotteryConversation');
 
 $botman->hears('/start ([0-9a-zA-Z=]+)', BotManController::class . '@startDataConversation');
 
@@ -126,6 +130,33 @@ $botman->hears("/ref ([0-9]+)", function ($bot, $refId) {
 
 });
 
+$botman->hears('.*Розыгрыш', function ($bot) {
+    $telegramUser = $bot->getUser();
+    $id = $telegramUser->getId();
+
+    $rules = Article::where("part",\App\Enums\Parts::Lottery)
+        ->orderBy("id","DESC")
+        ->first() ?? null;
+
+    $keybord = [
+        [
+            ['text' => "Условия розыгрыша и призы", 'url' => $rules->url??'']
+        ],
+        [
+            ['text' => "Ввести код и начать", 'callback_data' => "/lottery"]
+        ]
+    ];
+    $bot->sendRequest("sendMessage",
+        [
+            "chat_id" => "$id",
+            "text" => "Розыгрыш призов",
+            "parse_mode" => "Markdown",
+            'reply_markup' => json_encode([
+                'inline_keyboard' =>
+                    $keybord
+            ])
+        ]);
+});
 $botman->hears("\xF0\x9F\x93\xB2Мои друзья", function ($bot) {
     $telegramUser = $bot->getUser();
 
@@ -282,7 +313,6 @@ $botman->hears("\xF0\x9F\x92\xB3Мои баллы", function ($bot) {
 
 
 });
-
 $botman->hears("/promo_by_category", function ($bot) {
 
     $telegramUser = $bot->getUser();
@@ -339,7 +369,6 @@ $botman->hears("/promo_by_company", function ($bot) {
 
     $bot->reply($message);
 });
-
 $botman->hears("\xF0\x9F\x94\xA5Акции", function ($bot) {
     
     $keyboard = [
@@ -387,11 +416,6 @@ $botman->hears('/category ([0-9]+)', function ($bot, $category_id) {
         $time_1 = (date_timestamp_get(new DateTime($promo->end_at)));
 
         $time_2 = date_timestamp_get(now());
-
-
-
-
-
 
         if ($on_promo == null && $time_2 >= $time_0 && $time_2 < $time_1) {
             $isEmpty = false;
@@ -774,8 +798,6 @@ $botman->hears('/statistic', function ($bot) {
     $bot->reply($message, ["parse_mode" => "Markdown"]);
 
 });
-
-
 $botman->hears('/achievements_panel', function ($bot) {
     $message = Question::create("Получайте достижения и обменивайте их на крутейшие призы!")
         ->addButtons([
@@ -852,7 +874,6 @@ $botman->hears('/achievements_all ([0-9]+)', function ($bot, $page) {
 
 
 });
-
 $botman->hears('/achievements_my ([0-9]+)', function ($bot, $page) {
     try {
         $telegramUser = $bot->getUser();
@@ -915,7 +936,6 @@ $botman->hears('/achievements_my ([0-9]+)', function ($bot, $page) {
         $bot->reply($e->getMessage() . " " . $e->getLine());
     }
 });
-
 $botman->hears('/achievements_description ([0-9]+)', function ($bot, $achievementId) {
 
     $achievement = \App\Achievement::find($achievementId);
@@ -1025,7 +1045,6 @@ $botman->hears('/achievements_get_prize ([0-9]+)', function ($bot, $achievementI
 
 
 });
-
 $botman->hears('/help', function ($bot) {
     $articles = Article::where("part", 6)
         ->where("is_visible", 1)
@@ -1131,7 +1150,6 @@ $botman->hears('/promouter', function ($bot) {
         $bot->reply($article->url, ["parse_mode" => "Markdown"]);
 
 });
-
 $botman->hears('/suppliers', function ($bot) {
     $articles = Article::where("part", 7)
         ->where("is_visible", 1)
@@ -1143,7 +1161,6 @@ $botman->hears('/suppliers', function ($bot) {
     else
         $bot->reply("Статьи не найдены", ["parse_mode" => "Markdown"]);
 });
-
 $botman->hears('/activity_information', function ($bot) {
 
     $stat_types = [
@@ -1174,7 +1191,6 @@ $botman->hears('/activity_information', function ($bot) {
     $bot->reply(count($stats) > 0 ? $message : "Статистика еще не ведется для вашего аккаунта!", ["parse_mode" => "Markdown"]);
 
 });
-
 $botman->hears('/articles ([0-9]+)', function ($bot, $page) {
 
 
@@ -1225,6 +1241,61 @@ $botman->hears('/articles ([0-9]+)', function ($bot, $page) {
             ]);
 
 
+});
+$botman->hears('/check_lottery_slot ([0-9]+) ([0-9]+)', function ($bot, $slotId,$codeId) {
+    $telegramUser = $bot->getUser();
+    $id = $telegramUser->getId();
+    $prize = Prize::with(["company"])
+        ->where("id",$slotId)
+        ->first()??null;
+
+    if ($prize==null) {
+        $bot->reply("Увы, что-то пошло не так и приза нет:(");
+        return;
+    }
+
+    if ($prize->current_activation_count==$prize->summary_activation_count){
+        $bot->reply("Увы, к данному моменту все призы закончились");
+        return;
+    }
+
+    $message = "*" . $prize->title . "*\n"
+        . "_" . $prize->description . "_\n";
+
+    $prize->current_activation_count++;
+    $prize->updated_at = Carbon::now();
+    $prize->save();
+
+    $code = \App\Promocode::find($codeId);
+    $code->prize_id = $prize->id;
+    $code->updated_at = Carbon::now();
+    $code->save();
+
+    $bot->sendRequest("sendPhoto",
+        [
+            "chat_id" => "$id",
+            "photo" => $prize->image_url,
+            "caption" => $message,
+            "parse_mode" => "Markdown",
+        ]);
+    $user = User::where("telegram_chat_id", $id)->first();
+
+    $companyTitle = $prize->company->title;
+
+    $message = "*Заявка на получение приза*\n$message"
+        . "*Имя*:" . ($user->fio_from_telegram ?? $user->name) . "\n"
+        . "*Телефон*:" . $user->phone . "\n"
+        . "*Дата заказа*:" . (Carbon::now()) . "\n";
+    try {
+        Telegram::sendMessage([
+            'chat_id' => env("CHANNEL_ID"),
+            'parse_mode' => 'Markdown',
+            'text' => $message,
+            'disable_notification' => 'true'
+        ]);
+    } catch (\Exception $e) {
+        Log::info("Ошибка отправки заказа в канал!");
+    }
 });
 
 $botman->fallback(function ($bot) {

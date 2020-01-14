@@ -96,6 +96,8 @@ Route::prefix('admin')->group(function () {
         'payments' => 'RefferalsPaymentHistoryController',
         'events' => 'EventsController',
         'achievements' => 'AchievementsController',
+        'prizes' => 'PrizeController',
+        'promocodes' => 'PromocodeController',
     ]);
 
     Route::get("/promotions/copy/{id}","PromotionController@copy")->name("promotions.copy");
@@ -103,6 +105,9 @@ Route::prefix('admin')->group(function () {
     Route::get("/events/channel/{id}","EventsController@channel")->name("events.channel");
     Route::get("/companies/channel/{id}","CompanyController@channel")->name("companies.channel");
     Route::get("/achievements/channel/{id}","AchievementsController@channel")->name("achievements.channel");
+    Route::get("/prizes/channel/{id}","PrizeController@channel")->name("prizes.channel");
+
+    Route::get("/duplication/channel/{id}","PrizeController@duplication")->name("prizes.duplication");
 
 });
 

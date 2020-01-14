@@ -96,6 +96,14 @@
                                             Статьи
                                         </a>
 
+                                        <a class="dropdown-item" href="{{ route('promocodes.index') }}">
+                                            Промокоды
+                                        </a>
+
+                                        <a class="dropdown-item" href="{{ route('prizes.index') }}">
+                                            Призы
+                                        </a>
+
                                         <a class="dropdown-item" href="{{ route('logout') }}"
                                            onclick="event.preventDefault();
                                                      document.getElementById('logout-form').submit();">
