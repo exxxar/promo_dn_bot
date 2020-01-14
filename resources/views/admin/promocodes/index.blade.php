@@ -80,7 +80,7 @@
 
 
                                     <a class="btn btn-info" href="{{ route('promocodes.changestatus',$promocode->id) }}" title="Обновить статус">
-                                        {{$promocode->prize_has_taken?"Приз получен":"Приз не получен"}}
+                                        {{$promocode->prize_has_taken?"Приз не получен":"Приз получен"}}
                                     </a>
                                 </td>
                                 <td>

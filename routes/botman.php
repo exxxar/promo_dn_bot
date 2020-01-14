@@ -136,6 +136,7 @@ $botman->hears('.*Розыгрыш|/start_lottery_test', function ($bot) {
 
 
     $rules = Article::where("part",\App\Enums\Parts::Lottery)
+        ->where("is_visible", 1)
         ->orderBy("id","DESC")
         ->first();
 
@@ -147,7 +148,7 @@ $botman->hears('.*Розыгрыш|/start_lottery_test', function ($bot) {
     ];
 
     if ($rules!=null)
-        array_push($keyboard, ['text' => "Условия розыгрыша и призы", 'url' => $rules->url]);
+        array_push($keyboard, [['text' => "Условия розыгрыша и призы", 'url' => $rules->url]]);
 
     $bot->sendRequest("sendMessage",
         [
