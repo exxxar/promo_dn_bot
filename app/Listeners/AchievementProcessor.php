@@ -50,7 +50,7 @@ class AchievementProcessor
         }
 
         $achList = Achievement::where("trigger_type", "=", $event->trigger_type, "and")
-            ->where("trigger_value", ">=", $stats->stat_value)
+            ->where("trigger_value", "<=", $stats->stat_value)
             ->get();
 
         Log::info("AchList=>".print_r($achList,true));
