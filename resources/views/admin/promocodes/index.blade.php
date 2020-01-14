@@ -25,22 +25,22 @@
                 @endif
 
                 <div class="row">
-                    <div class="col-sm-4">
+                    <div class="col-md-12">
                         <h5>Добавление нового промокода</h5>
                         <form method="post" action="{{ route('promocodes.store') }}">
                             @csrf
                             <div class="row">
-                                <div class="col form-group">
+                                <div class="col-md-4 form-group">
                                     <input type="text" name="code" class="form-control" required>
                                 </div>
-                                <div class="col-3 form-group">
+                                <div class="col-md-4 form-group">
                                     <select name="company_id" class="form-control">
                                         @foreach($companies as $company)
                                             <option value="{{$company->id}}">{{$company->title}}</option>
                                         @endforeach
                                     </select>
                                 </div>
-                                <div class="col form-group">
+                                <div class="col-md-4 form-group">
                                     <button class="btn btn-primary">Добавить</button>
                                 </div>
                             </div>
