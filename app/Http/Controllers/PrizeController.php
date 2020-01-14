@@ -163,7 +163,7 @@ class PrizeController extends Controller
         ];
 
         Telegram::sendPhoto([
-            'chat_id' => "-1001392337757",
+            'chat_id' => env("CHANNEL_ID"),
             'parse_mode' => 'Markdown',
             "photo" => InputFile::create($prize->image_url),
             "caption" => "Компания $companyTitle добавила новый приз в розыгрыш!\n*" . $prize->title . "*\n_" . $prize->description . "_",

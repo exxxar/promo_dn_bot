@@ -1282,10 +1282,8 @@ $botman->hears('/check_lottery_slot ([0-9]+) ([0-9]+)', function ($bot, $slotId,
 
     $companyTitle = $prize->company->title;
 
-    $message = "*Заявка на получение приза*\n$message"
-        . "*Имя*:" . ($user->fio_from_telegram ?? $user->name) . "\n"
-        . "*Телефон*:" . $user->phone . "\n"
-        . "*Дата заказа*:" . (Carbon::now()) . "\n";
+    $message = "*Пользователь поучаствовал в розыгрыше и выиграл*\n$message"
+        . "*Дата участия*:" . (Carbon::now()) . "\n";
     try {
         Telegram::sendMessage([
             'chat_id' => env("CHANNEL_ID"),
@@ -1294,7 +1292,7 @@ $botman->hears('/check_lottery_slot ([0-9]+) ([0-9]+)', function ($bot, $slotId,
             'disable_notification' => 'true'
         ]);
     } catch (\Exception $e) {
-        Log::info("Ошибка отправки заказа в канал!");
+
     }
 });
 

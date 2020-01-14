@@ -63,7 +63,7 @@
                                     </form>
                                     <div class="row">
                                         <div class="col">
-                                            <span class="badge badge-primary">Pos:{{$prize->company->title}}</span>
+                                            <span class="badge badge-primary">{{$prize->company->title}}</span>
                                         </div>
 
                                     </div>
