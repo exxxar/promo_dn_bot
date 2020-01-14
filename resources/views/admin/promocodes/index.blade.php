@@ -83,7 +83,10 @@
                                         <p>Нет пользователя</p>
                                     @endif
                                 </td>
-
+                                <td>
+                                    <a href="{{ route('companies.show',$promocode->company->id) }}">
+                                        {{$promocode->company->title}}</a>
+                                </td>
                                 <td>
                                     <form action="{{ route('promocodes.destroy', $promocode->id)}}" method="post">
                                         @csrf
