@@ -134,7 +134,7 @@ $botman->hears('.*Розыгрыш|/start_lottery_test', function ($bot) {
     $telegramUser = $bot->getUser();
     $id = $telegramUser->getId();
 
-    $rules = Article::where("part",\App\Enums\Parts::Lottery)
+    $rules = Article::where("part",8)
         ->orderBy("id","DESC")
         ->first() ;
 
