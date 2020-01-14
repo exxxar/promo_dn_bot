@@ -10,6 +10,7 @@ use App\UserHasAchievement;
 use Illuminate\Queue\InteractsWithQueue;
 use Illuminate\Contracts\Queue\ShouldQueue;
 use Illuminate\Support\Facades\Log;
+use Telegram\Bot\FileUpload\InputFile;
 use Telegram\Bot\Laravel\Facades\Telegram;
 
 class AchievementProcessor
@@ -49,7 +50,7 @@ class AchievementProcessor
         }
 
         $achList = Achievement::where("trigger_type", "=", $event->trigger_type, "and")
-            ->where("trigger_value", "=>", $stats->stat_value)
+            ->where("trigger_value", ">=", $stats->stat_value)
             ->get();
 
         Log::info("AchList=>".print_r($achList,true));
@@ -92,7 +93,7 @@ class AchievementProcessor
                     Telegram::sendPhoto([
                         'chat_id' => $user->telegram_chat_id,
                         'parse_mode' => 'Markdown',
-                        'photo' => $announce_image_url,
+                        'photo' => InputFile::create($announce_image_url),
                         'caption' => "Вы получили достижение:*" . $announce_title . "*\n_" . $announce_message . "_",
                         'disable_notification' => 'false'
                     ]);
