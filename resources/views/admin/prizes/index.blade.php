@@ -33,6 +33,14 @@
                 <h1>Призы</h1>
                 @isset($prizes)
                     <div class="row">
+                        <div class="col-md-12">
+                            @sortablelink('company.title', 'Компания')
+                            @sortablelink('title', 'Название приза')
+                            @sortablelink('current_activation_count', 'Количество активаций')
+
+                        </div>
+                    </div>
+                    <div class="row">
 
 
                     @foreach($prizes as $key => $prize)

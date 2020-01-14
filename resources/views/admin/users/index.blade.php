@@ -37,6 +37,7 @@
 
                     </form>
 
+
                     <table class="table mt-2">
 
                         <thead class="thead-light">
@@ -47,7 +48,7 @@
                             <th scope="col">Телефон</th>
                             <th scope="col">Root</th>
                             <th scope="col">Текущий\Максимум</th>
-                            <th scope="col">Потраченно</th>
+                            <th scope="col">Потрачено</th>
                             <th scope="col">Администратор</th>
 
                         </tr>
@@ -55,7 +56,7 @@
                         <tbody>
                         @foreach($users as $key => $user)
                             <tr>
-                                <td>{{$key + 1}}</td>
+                                <td>{{$user->id}}</td>
                                 <td><a href="{{ route('users.show',$user->id) }}">
                                         {{$user->fio_from_telegram??$user->email}}</a>
                                     <a class="btn btn-link" href="{{ route('users.edit',$user->id) }}">

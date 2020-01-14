@@ -37,7 +37,8 @@ class UsersController extends Controller
     public function index(Request $request)
     {
         $users = User::with(["parent","spentCashBack","stats"])
-            ->orderBy('id', 'DESC')
+            ->sortable(['id' => 'desc'])
+            //->orderBy('id', 'DESC')
             ->paginate(15);
 
         $count = $this->statistic()["count"];

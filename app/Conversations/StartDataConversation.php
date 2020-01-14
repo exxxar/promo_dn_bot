@@ -184,7 +184,9 @@ class StartDataConversation extends Conversation
                         "text" => $promo->activation_text
                     ]);
 
-                    $this->bot->reply('Приз по акции успешно активирован');
+                    $promoTitle = $promo->title;
+                    $promoDescription = $promo->description;
+                    $this->bot->reply("Приз по акции `$promoTitle` успешно активирован. Описание:\n$promoDescription");
 
 
                     event(new AchievementEvent(AchievementTriggers::MaxReferralBonusCount,10,$remote_user));
