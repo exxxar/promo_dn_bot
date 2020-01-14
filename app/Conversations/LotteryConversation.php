@@ -62,7 +62,7 @@ class LotteryConversation extends Conversation
             $tmp_menu = [];
             foreach ($prizes as $key => $prize) {
                 $index = $key + 1;
-                array_push($tmp_menu, ["text" => "\xF0\x9F\x80\x84", "callback_data" => "/check_lottery_slot " . $prize["id"]." ".$code->id]);
+                array_push($tmp_menu, ["text" => "\xF0\x9F\x8E\xB4", "callback_data" => "/check_lottery_slot " . $prize["id"]." ".$code->id]);
                 if ($index % 5 == 0 || count($prizes) == $index) {
                     array_push($inline_keyboard, $tmp_menu);
                     $tmp_menu = [];
