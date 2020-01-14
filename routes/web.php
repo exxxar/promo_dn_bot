@@ -13,6 +13,7 @@
 
 use App\Events\NetworkCashBackEvent;
 use App\Events\NetworkLevelRecounterEvent;
+use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Facades\Storage;
 use SimpleSoftwareIO\QrCode\Facades\QrCode;
 
