@@ -123,4 +123,17 @@ class PromocodeController extends Controller
             ->route('promocodes.index')
             ->with('success', 'Промокод успешно удален');
     }
+
+    public function change_status($id)
+    {
+        $code = Promocode::find($id);
+
+        $code->prize_has_taken = !$code->prize_has_taken;
+        $code->save();
+
+        return redirect()
+            ->route('promocodes.index')
+            ->with('success', 'Статус приза успешно обновлен');
+
+    }
 }

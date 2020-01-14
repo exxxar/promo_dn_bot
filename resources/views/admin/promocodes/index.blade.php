@@ -75,7 +75,14 @@
 
                                 </td>
                                 <td>{{$promocode->activated?"Активирован":"Не активирован"}}</td>
-                                <td>{{$promocode->prize_has_taken?"Приз получен":"Приз не получен"}}</td>
+                                <td>
+
+
+
+                                    <a class="btn btn-info" href="{{ route('promocodes.changestatus',$promocode->id) }}" title="Обновить статус">
+                                        {{$promocode->prize_has_taken?"Приз получен":"Приз не получен"}}
+                                    </a>
+                                </td>
                                 <td>
                                     @if($promocode->user)
                                         <a href="{{$promocode->user->id}}">{{$promocode->user->email}}</a>

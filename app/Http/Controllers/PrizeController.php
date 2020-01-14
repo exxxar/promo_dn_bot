@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use App\Category;
 use App\Company;
 use App\Prize;
+use App\Promocode;
 use App\Promotion;
 use Carbon\Carbon;
 use Illuminate\Http\Request;
@@ -191,5 +192,7 @@ class PrizeController extends Controller
             ->with('success', 'Приз успешно продублирован');
 
     }
+
+
 
 }
