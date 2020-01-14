@@ -11,6 +11,8 @@ use BotMan\BotMan\Messages\Outgoing\Question;
 
 class LotteryConversation extends Conversation
 {
+    use CustomConversation;
+
     protected $bot;
     protected $chat_id;
 
@@ -42,7 +44,7 @@ class LotteryConversation extends Conversation
                 $this->bot->reply("Код уже был использован");
                 return;
             }
-            $prizes = json_decode(Prize::where("is_active",true)->get(), true);
+            $prizes = json_decode(Prize::where("is_active",1)->get(), true);
 
             $prizes = array_filter ($prizes, function ($item){
                 return $item->summary_activation_count>$item->current_activation_count;
@@ -85,6 +87,11 @@ class LotteryConversation extends Conversation
      */
     public function run()
     {
-        $this->askReason();
+        try {
+            $this->askReason();
+        }catch (\Exception $e){
+            $this->bot->reply($e->getMessage()." ".$e->getLine());
+            $this->mainMenu("Что-то пошло не так");
+        }
     }
 }

@@ -26,6 +26,8 @@ class PaymentConversation extends Conversation
     protected $request_id;
     protected $company_id;
     protected $bot;
+    protected $check_info;
+    protected $money_in_check;
 
     public function __construct($bot, $request_id, $company_id)
     {
@@ -36,18 +38,26 @@ class PaymentConversation extends Conversation
 
     public function run()
     {
-        $telegramUser = $this->bot->getUser();
-        $id = $telegramUser->getId();
+        try {
+            $telegramUser = $this->bot->getUser();
+            $id = $telegramUser->getId();
 
-        $this->user = \App\User::where("telegram_chat_id", $id)
-            ->first();
+            $this->check_info = "";
+            $this->money_in_check = 0;
+            $this->user = \App\User::where("telegram_chat_id", $id)
+                ->first();
 
-        $this->user->updated_at = Carbon::now();
-        $this->user->save();
+            $this->user->updated_at = Carbon::now();
+            $this->user->save();
 
-        if ($this->user->is_admin == 1) {
-            $this->conversationMenu("Начнем-с...");
-            $this->askForAction();
+            if ($this->user->is_admin == 1) {
+                $this->conversationMenu("Начнем-с...");
+                $this->askForAction();
+            }
+        }
+        catch(\Exception $e ){
+            $this->bot->reply($e->getMessage()." ".$e->getLine());
+            $this->mainMenu("Что-то пошло не так");
         }
 
     }
