@@ -22,7 +22,10 @@ class PromocodeController extends Controller
     {
         $promocodes = Promocode::with(["user","company"])->orderBy('id', 'DESC')
             ->paginate(15);
-        return view('admin.promocodes.index', compact('promocodes'))
+
+        $companies = Company::all();
+
+        return view('admin.promocodes.index', compact('promocodes','companies'))
             ->with('i', ($request->get('page', 1) - 1) * 15);
     }
     /**
