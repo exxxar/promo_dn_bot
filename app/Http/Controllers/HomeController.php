@@ -194,7 +194,7 @@ class HomeController extends Controller
 
             Telegram::sendPhoto([
                 'chat_id' => env("CHANNEL_ID"),
-                'parse_mode' => 'Markdown',
+                'parse_mode' => 'HTML',
                 "photo"=>InputFile::create($announce_url),
                 'disable_notification' => 'true',
 
@@ -202,8 +202,8 @@ class HomeController extends Controller
 
             Telegram::sendMessage([
                 'chat_id' => env("CHANNEL_ID"),
-                'parse_mode' => 'Markdown',
-                "text"=>"*".$announce_title."*\n_".$announce_message."_",
+                'parse_mode' => 'HTML',
+                "text"=>"<b>".$announce_title."</b>\n <em>".$announce_message."</em>",
                 'disable_notification' => 'true',
                 'reply_markup' => json_encode([
                     'inline_keyboard' =>

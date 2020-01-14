@@ -28,7 +28,7 @@ class LotteryConversation extends Conversation
      */
     public function askReason()
     {
-        $question = Question::create("Введите промокод:")
+        $question = Question::create("Начнем розыгрыш с ввода промокода:")
             ->fallback('Упс... что-то пошло не так!')
             ->callbackId('ask_reason');
 
@@ -93,7 +93,7 @@ class LotteryConversation extends Conversation
     public function run()
     {
         try {
-            $this->conversationMenu("Розыгрыш призов");
+            $this->conversationMenu("Получайте удовольствие от использование системы!");
             $this->askReason();
         }catch (\Exception $e){
             $this->bot->reply($e->getMessage()." ".$e->getLine());
