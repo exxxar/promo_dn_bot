@@ -48,7 +48,7 @@
                                     <a href="{{ route('prizes.show',$prize->id) }}" class="btn btn-primary"><i class="fas fa-eye"></i></a>
                                     <a href="{{ route('prizes.edit',$prize->id) }}" class="btn btn-info"><i class="fas fa-edit"></i></a>
 
-                                    <a class="btn btn-link" href="{{ route('prizes.copy',$prize->id) }}" title="Дублировать">
+                                    <a class="btn btn-link" href="{{ route('prizes.duplication',$prize->id) }}" title="Дублировать">
                                         <i class="far fa-copy"></i>
                                     </a>
 
