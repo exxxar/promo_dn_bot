@@ -75,7 +75,6 @@
                                         @else
                                             <option value="{{$company->id}}">{{$company->title}}</option>
                                             @endforeach
-                                            @endforeach
                                 </select>
                             </td>
                         </tr>
