@@ -33,7 +33,7 @@
                                 <div class="col form-group">
                                     <input type="text" name="code" class="form-control" required>
                                 </div>
-                                <div class="col form-group">
+                                <div class="col-3 form-group">
                                     <select name="company_id" class="form-control">
                                         @foreach($companies as $company)
                                             <option value="{{$company->id}}">{{$company->title}}</option>
