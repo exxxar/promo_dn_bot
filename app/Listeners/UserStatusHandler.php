@@ -8,6 +8,7 @@ use App\User;
 use Carbon\Carbon;
 use Illuminate\Queue\InteractsWithQueue;
 use Illuminate\Contracts\Queue\ShouldQueue;
+use Illuminate\Support\Facades\Log;
 
 class UserStatusHandler
 {
@@ -31,14 +32,19 @@ class UserStatusHandler
     {
         //
 
-        $ref = RefferalsHistory::where("user_recipient_id", $userEvent->user->id);
-        $ref->activated = 1;
-        $ref->save();
+        try {
+            $ref = RefferalsHistory::where("user_recipient_id", $userEvent->user->id)->first();
+            $ref->activated = 1;
+            $ref->save();
 
+            $user = User::find($userEvent->user->id);
 
-        $userEvent->user->activated = 1;
-        $userEvent->user->updated_at = Carbon::now();
-        $userEvent->user->save();
+            $user->activated = 1;
+            $user->updated_at = Carbon::now();
+            $user->save();
+        }catch (\Exception $e){
+            Log::info($e->getMessage()." ".$e->getLine());
+        }
 
 
     }

@@ -56,7 +56,6 @@ class PaymentConversation extends Conversation
             }
         }
         catch(\Exception $e ){
-            $this->bot->reply($e->getMessage()." ".$e->getLine());
             $this->mainMenu("Что-то пошло не так");
         }
 
@@ -93,6 +92,11 @@ class PaymentConversation extends Conversation
 
         $this->ask($question, function (Answer $answer) {
             $nedded_bonus = $answer->getText();
+
+            if (strlen(trim($nedded_bonus))==0||!is_numeric($nedded_bonus)) {
+                $this->askForPay();
+                return;
+            }
 
             $recipient_user = User::where("telegram_chat_id", intval($this->request_id))->first();
             if (!$recipient_user) {
@@ -155,6 +159,11 @@ class PaymentConversation extends Conversation
 
         $this->ask($question, function (Answer $answer) {
             $this->money_in_check = $answer->getText();
+            if (strlen(trim($this->money_in_check))==0||!is_numeric($this->money_in_check)) {
+                $this->askForCashback();
+                return;
+            }
+
             $this->askForCheckInfo();
         });
     }
@@ -166,7 +175,9 @@ class PaymentConversation extends Conversation
 
         $this->ask($question, function (Answer $answer) {
             $this->check_info = $answer->getText();
-
+            if (strlen(trim( $this->check_info))==0) {
+                $this->askForCheckInfo();
+            }
             $this->saveCashBack();
         });
     }
@@ -175,21 +186,21 @@ class PaymentConversation extends Conversation
     {
 
 
-        $user = User::where("telegram_chat_id", intval($this->request_id))->first();
+        //$user = User::where("telegram_chat_id", intval($this->request_id))->first();
 
-        if (!$user) {
+        if ($this->user==null) {
             $this->mainMenu("Что-то пошло не так и пользователь не найден");
             return;
         }
 
 
         $cashBack = round(intval($this->money_in_check) * env("CAHSBAK_PROCENT") / 100);
-        $user->cashback_bonus_count += $cashBack;
-        $user->save();
+        $this->user->cashback_bonus_count += $cashBack;
+        $this->user->save();
 
-        event(new ActivateUserEvent($user));
-        event(new NetworkCashBackEvent($user->id,$cashBack));
-        event(new AchievementEvent(AchievementTriggers::MaxCashBackCount, $cashBack, $user));
+        event(new ActivateUserEvent($this->user));
+        event(new NetworkCashBackEvent($this->user->id,$cashBack));
+        event(new AchievementEvent(AchievementTriggers::MaxCashBackCount, $cashBack, $this->user));
 
         CashbackHistory::create([
             'money_in_check' => $this->money_in_check,
@@ -198,18 +209,18 @@ class PaymentConversation extends Conversation
             'company_id' => $this->company_id,
             'check_info' => $this->check_info,
             'user_phone' => $this->phone ?? null,
-            'user_id' => $user->id,
+            'user_id' => $this->user->id,
         ]);
 
         $companyName = Company::find($this->company_id)->title??"Неизвестная компания";
 
         Telegram::sendMessage([
-            'chat_id' => $user->telegram_chat_id,
+            'chat_id' => $this->user->telegram_chat_id,
             'parse_mode' => 'Markdown',
             'text' => "Сумма в чеке *$this->money_in_check* руб.\nВам начислен *CashBack* в размере *$cashBack* руб от компании *$companyName*",
             'disable_notification' => 'false'
         ]);
-        $this->mainMenu("Отлично! CashBack начислен пользователю " . ($user->phone ?? $user->fio_from_telegram ?? $user->name ?? $user->email));
+        $this->mainMenu("Отлично! CashBack начислен пользователю " . ($user->phone ?? $user->fio_from_telegram ?? $user->name ?? $this->user->email));
 
 
     }

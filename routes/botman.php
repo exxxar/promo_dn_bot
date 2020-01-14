@@ -1251,6 +1251,18 @@ $botman->hears('/articles ([0-9]+)', function ($bot, $page) {
 $botman->hears('/check_lottery_slot ([0-9]+) ([0-9]+)', function ($bot, $slotId,$codeId) {
     $telegramUser = $bot->getUser();
     $id = $telegramUser->getId();
+
+    $code = \App\Promocode::find($codeId);
+    if ($code==null) {
+        $bot->reply("Увы, что-то пошло не так и код более не действителен:(");
+        return;
+    }
+
+    if ($code->prize_id!=null){
+        $bot->reply("Приз по данному коду уже был выбран ранее!");
+        return;
+    }
+
     $prize = Prize::with(["company"])
         ->where("id",$slotId)
         ->first()??null;
@@ -1272,7 +1284,6 @@ $botman->hears('/check_lottery_slot ([0-9]+) ([0-9]+)', function ($bot, $slotId,
     $prize->updated_at = Carbon::now();
     $prize->save();
 
-    $code = \App\Promocode::find($codeId);
     $code->prize_id = $prize->id;
     $code->updated_at = Carbon::now();
     $code->save();
@@ -1288,13 +1299,14 @@ $botman->hears('/check_lottery_slot ([0-9]+) ([0-9]+)', function ($bot, $slotId,
 
     $companyTitle = $prize->company->title;
 
-    $message = "*Пользователь поучаствовал в розыгрыше и выиграл*\n$message"
+    $message = "*Пользователь поучаствовал в розыгрыше от компании $companyTitle и выиграл:*\n$message"
         . "*Дата участия*:" . (Carbon::now()) . "\n";
     try {
-        Telegram::sendMessage([
+        Telegram::sendPhoto([
             'chat_id' => env("CHANNEL_ID"),
             'parse_mode' => 'Markdown',
-            'text' => $message,
+            'caption' => $message,
+            'photo' =>\Telegram\Bot\FileUpload\InputFile::create($prize->image_url),
             'disable_notification' => 'true'
         ]);
     } catch (\Exception $e) {

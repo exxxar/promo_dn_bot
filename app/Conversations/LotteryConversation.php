@@ -47,7 +47,8 @@ class LotteryConversation extends Conversation
             $prizes = json_decode(Prize::where("is_active",1)->get(), true);
 
             $prizes = array_filter ($prizes, function ($item){
-                return $item->summary_activation_count>$item->current_activation_count;
+                return $item["summary_activation_count"]>$item["current_activation_count"];
+
             });
 
             if (count($prizes) == 0) {

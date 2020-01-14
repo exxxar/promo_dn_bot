@@ -49,20 +49,16 @@ class AchievementProcessor
         }
 
         $achList = Achievement::where("trigger_type", "=", $event->trigger_type, "and")
-            ->where("trigger_value", "<=", $stats->stat_value)
+            ->where("trigger_value", "=>", $stats->stat_value)
             ->get();
 
-        Log::info(print_r($achList, true));
+        Log::info("AchList=>".print_r($achList,true));
 
         $user = User::with(["achievements"])->find($event->user->id);
 
-        $userAchList = $user
-            ->achievements()
-            ->where("trigger_type", $event->trigger_type)
-            ->get();
+//        Log::info("UsersAchList=>".print_r($user->achievements()->all(),true));
 
 
-        Log::info("user ach list count " . count($userAchList));
 
         foreach ($achList as $ach) {
             $find = $user
@@ -70,6 +66,7 @@ class AchievementProcessor
                 ->where("achievement_id", $ach->id)
                 ->first();
 
+            Log::info("ach=>$find");
             if ($find == null) {
                 Log::info("Test");
                 /*   $activated = (UserHasAchievement::where("achievement_id",$ach->id)->first())->activated;
