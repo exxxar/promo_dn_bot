@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\CashbackHistory;
+use App\Company;
 use App\Promotion;
 use App\User;
 use Carbon\Carbon;
@@ -167,6 +168,8 @@ class HomeController extends Controller
 
     }
 
+
+
     public function announce(Request $request)
     {
 
@@ -181,6 +184,28 @@ class HomeController extends Controller
             return back()
                 ->with("success", "Заголовок или сообщение не заполнены!");
 
+        if ($send_to_type==3){
+
+            $keyboard = [
+                [
+                    ['text' => "\xF0\x9F\x91\x89Переход в бота", 'url' =>"https://t.me/" . env("APP_BOT_NAME")],
+                ],
+            ];
+
+            Telegram::sendPhoto([
+                'chat_id' => env("CHANNEL_ID"),
+                'parse_mode' => 'Markdown',
+                "photo"=>InputFile::create($announce_url),
+                "caption"=>"*".$announce_title."*\n_".$announce_message."_",
+                'disable_notification' => 'true',
+                'reply_markup' => json_encode([
+                    'inline_keyboard' =>
+                        $keyboard
+                ])
+            ]);
+
+            return;
+        }
 
         foreach ($users as $user) {
 

@@ -25,9 +25,10 @@
         <div class="col form-group">
             <label for="send_to_type">Кому отправить</label>
             <select class="form-control" id="send_to_type" name="send_to_type">
-                <option value="0">Всем</option>
-                <option value="1">Активным</option>
-                <option value="2">Не активным</option>
+                <option value="0">Всем в боте</option>
+                <option value="1">Активным в боте</option>
+                <option value="2">Не активным в боте</option>
+                <option value="3">Отправить в канал (Всем)</option>
             </select>
         </div>
     </div>

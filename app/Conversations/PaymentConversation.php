@@ -186,21 +186,21 @@ class PaymentConversation extends Conversation
     {
 
 
-        //$user = User::where("telegram_chat_id", intval($this->request_id))->first();
+        $user = User::where("telegram_chat_id", intval($this->request_id))->first();
 
-        if ($this->user==null) {
+        if ($user==null) {
             $this->mainMenu("Что-то пошло не так и пользователь не найден");
             return;
         }
 
 
         $cashBack = round(intval($this->money_in_check) * env("CAHSBAK_PROCENT") / 100);
-        $this->user->cashback_bonus_count += $cashBack;
-        $this->user->save();
+        $user->cashback_bonus_count += $cashBack;
+        $user->save();
 
-        event(new ActivateUserEvent($this->user));
-        event(new NetworkCashBackEvent($this->user->id,$cashBack));
-        event(new AchievementEvent(AchievementTriggers::MaxCashBackCount, $cashBack, $this->user));
+        event(new ActivateUserEvent($user));
+        event(new NetworkCashBackEvent($user->id,$cashBack));
+        event(new AchievementEvent(AchievementTriggers::MaxCashBackCount, $cashBack, $user));
 
         CashbackHistory::create([
             'money_in_check' => $this->money_in_check,
@@ -209,18 +209,18 @@ class PaymentConversation extends Conversation
             'company_id' => $this->company_id,
             'check_info' => $this->check_info,
             'user_phone' => $this->phone ?? null,
-            'user_id' => $this->user->id,
+            'user_id' => $user->id,
         ]);
 
         $companyName = Company::find($this->company_id)->title??"Неизвестная компания";
 
         Telegram::sendMessage([
-            'chat_id' => $this->user->telegram_chat_id,
+            'chat_id' => $user->telegram_chat_id,
             'parse_mode' => 'Markdown',
             'text' => "Сумма в чеке *$this->money_in_check* руб.\nВам начислен *CashBack* в размере *$cashBack* руб от компании *$companyName*",
             'disable_notification' => 'false'
         ]);
-        $this->mainMenu("Отлично! CashBack начислен пользователю " . ($user->phone ?? $user->fio_from_telegram ?? $user->name ?? $this->user->email));
+        $this->mainMenu("Отлично! CashBack начислен пользователю " . ($user->phone ?? $user->fio_from_telegram ?? $user->name ?? $user->email));
 
 
     }

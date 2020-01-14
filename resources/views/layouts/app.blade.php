@@ -18,6 +18,7 @@
     <link href="https://fonts.googleapis.com/css?family=Nunito" rel="stylesheet">
     <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.11.2/css/all.css" rel="stylesheet">
 
+
     <!-- Styles -->
     <link href="{{ asset('css/app.css') }}" rel="stylesheet">
 </head>
@@ -55,18 +56,32 @@
                         <li class="nav-item">
                             <a class="nav-link" href="{{ route('users.index') }}">Пользователи</a>
                         </li>
-                        <li class="nav-item">
-                            <a class="nav-link" href="{{ route('cashback.index') }}">История кэшбэка</a>
-                        </li>
-                        <li class="nav-item">
-                            <a class="nav-link" href="{{ route('refferals.index') }}">История рефералов</a>
-                        </li>
-                        <li class="nav-item">
-                            <a class="nav-link" href="{{ route('payments.index') }}">История оплаты баллами</a>
-                        </li>
 
                         <li class="nav-item">
                             <a class="nav-link" href="{{ route('achievements.index') }}">Достижения</a>
+                        </li>
+
+                        <li class="nav-item dropdown">
+                            <a id="navbarDropdown" class="nav-link dropdown-toggle" href="#" role="button"
+                               data-toggle="dropdown" aria-haspopup="true" aria-expanded="false" v-pre>
+                               История <span class="caret"></span>
+                            </a>
+
+                            <div class="dropdown-menu dropdown-menu-right" aria-labelledby="navbarDropdown">
+                                <a class="dropdown-item" href="{{ route('cashback.index') }}">
+                                    История кэшбэка
+                                </a>
+
+                                <a class="dropdown-item" href="{{ route('refferals.index') }}">
+                                    История рефералов
+                                </a>
+
+                                <a class="dropdown-item" href="{{ route('payments.index') }}">
+                                    История оплаты баллами
+                                </a>
+
+
+                            </div>
                         </li>
 
                     </ul>
