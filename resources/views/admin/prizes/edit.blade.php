@@ -74,7 +74,8 @@
                                             <option value="{{$company->id}}" selected>{{$company->title}}</option>
                                         @else
                                             <option value="{{$company->id}}">{{$company->title}}</option>
-                                            @endforeach
+                                        @endif
+                                    @endforeach
                                 </select>
                             </td>
                         </tr>
@@ -83,7 +84,8 @@
                             <td>Количество доступных призов</td>
                             <td>
 
-                                <input type="number" min="0" class="form-control" name="summary_activation_count" value="{{$prize->summary_activation_count}}" required>
+                                <input type="number" min="0" class="form-control" name="summary_activation_count"
+                                       value="{{$prize->summary_activation_count}}" required>
                             </td>
                         </tr>
 
@@ -91,7 +93,8 @@
                         <tr>
                             <td>Доступность приза</td>
                             <td>
-                                <input type="checkbox" name="is_active" class="form-control" {{$prize->is_active?"checked":""}}>
+                                <input type="checkbox" name="is_active"
+                                       class="form-control" {{$prize->is_active?"checked":""}}>
                             </td>
                         </tr>
 
