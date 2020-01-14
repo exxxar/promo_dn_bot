@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Conversations\FillInfoConversation;
+use App\Conversations\LotteryConversation;
 use App\Conversations\LotusProfileConversation;
 use App\Conversations\PaymentConversation;
 use App\Conversations\PromoConversation;
@@ -73,5 +74,10 @@ class BotManController extends Controller
     public function paymentConversation(BotMan $bot, $request_id, $company_id)
     {
         $bot->startConversation(new PaymentConversation($bot, $request_id, $company_id));
+    }
+
+    public function lotteryConversation(BotMan $bot)
+    {
+        $bot->startConversation(new LotteryConversation($bot));
     }
 }
