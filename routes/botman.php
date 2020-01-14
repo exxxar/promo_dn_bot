@@ -136,11 +136,11 @@ $botman->hears('.*Розыгрыш|/start_lottery_test', function ($bot) {
 
     $rules = Article::where("part",\App\Enums\Parts::Lottery)
         ->orderBy("id","DESC")
-        ->first() ?? null;
+        ->first() ;
 
     $keybord = [
         [
-            ['text' => "Условия розыгрыша и призы", 'url' => $rules->url??'']
+            ['text' => "Условия розыгрыша и призы", 'url' => $rules==null?'':$rules->url]
         ],
         [
             ['text' => "Ввести код и начать", 'callback_data' => "/lottery"]
@@ -227,7 +227,7 @@ $botman->hears("\xE2\x9D\x93F.A.Q.", function ($bot) {
                 ['text' => "Разработчики", 'callback_data' => "/dev"],
             ],
             [
-                ['text'=>'Роззыгрыш','callback_data'=>'/start_lottery_test']
+                ['text'=>'Розыгрыш','callback_data'=>'/start_lottery_test']
             ]
 
 
