@@ -44,7 +44,7 @@ class LotteryConversation extends Conversation
                 $this->bot->reply("Код уже был использован");
                 return;
             }
-            $prizes = json_decode(Prize::where("is_active",1)->get(), true);
+            $prizes = json_decode(Prize::where("is_active",1)->where("company_id",$code->company_id)->get(), true);
 
             $prizes = array_filter ($prizes, function ($item){
                 return $item["summary_activation_count"]>$item["current_activation_count"];
