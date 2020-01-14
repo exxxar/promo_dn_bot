@@ -1,5 +1,6 @@
 <?php
 
+use Carbon\Carbon;
 use Illuminate\Database\Seeder;
 
 class PrizesTableSeeder extends Seeder
@@ -20,10 +21,13 @@ class PrizesTableSeeder extends Seeder
                     'description' => "Test description $i",
                     'image_url' => "https://sun9-22.userapi.com/c854220/v854220254/1c23c4/JzYJ7foFtBw.jpg",
                     'company_id' => $company->id,
-                    'summary_activation_count' => 10000,
-                    'current_activation_count' > 0,
+                    'summary_activation_count' => "10000",
+                    'current_activation_count' > "0",
 
-                    'is_active' => true
+                    'is_active' => 1,
+
+                    'created_at'=>Carbon::now(),
+                    'updated_at'=>Carbon::now(),
 
                 ]);
             }

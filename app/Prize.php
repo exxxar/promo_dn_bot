@@ -16,6 +16,8 @@ class Prize extends Model
         'current_activation_count',
 
         'is_active',
+        'updated_at',
+        'created_at',
     ];
 
     public function company()

@@ -57,7 +57,6 @@ class PrizeController extends Controller
             'image_url' => 'required',
             'company_id' => 'required',
             'summary_activation_count' => 'required',
-            'current_activation_count' => 'required',
             'is_active' => 'required',
         ]);
         $prize = Prize::create([
@@ -67,7 +66,6 @@ class PrizeController extends Controller
             'company_id' => $request->get('company_id') ?? '',
 
             'summary_activation_count' =>$request->get('summary_activation_count') ?? '',
-            'current_activation_count' =>$request->get('current_activation_count') ?? '',
 
             'is_active' =>$request->get('is_active') ?? '',
 
@@ -119,7 +117,7 @@ class PrizeController extends Controller
             'image_url' => 'required',
             'company_id' => 'required',
             'summary_activation_count' => 'required',
-            'current_activation_count' => 'required',
+
             'is_active' => 'required',
 
         ]);
@@ -128,7 +126,6 @@ class PrizeController extends Controller
         $prize->description = $request->get("description");
         $prize->image_url = $request->get("image_url");
         $prize->summary_activation_count = $request->get("summary_activation_count");
-        $prize->current_activation_count = $request->get("current_activation_count");
         $prize->is_active = $request->get("is_active");
         $prize->updated_at = Carbon::now();
         $prize->save();

@@ -13,7 +13,7 @@ class DatabaseSeeder extends Seeder
      */
     public function run()
     {
-        //$this->call(UsersTableSeeder::class);
+        $this->call(PrizesTableSeeder::class);
 
       /*  $users = \App\User::all();
         foreach ($users as $u)

@@ -23,7 +23,7 @@ class CreatePrizesTable extends Migration
             $table->integer('summary_activation_count')->default(0);
             $table->integer('current_activation_count')->default(0);
 
-            $table->boolean('is_active')->default(0);
+            $table->boolean('is_active')->default(false);
 
             $table->unsignedInteger("company_id" );
 
