@@ -1315,7 +1315,6 @@ $botman->hears('/check_lottery_slot ([0-9]+) ([0-9]+)', function ($bot, $slotId,
     }
 });
 
-$botman->hears('/test_controller', 'BotController@test');
 
 $botman->fallback(function ($bot) {
     $bot->loadDriver(TelegramInlineQueryDriver::DRIVER_NAME);
