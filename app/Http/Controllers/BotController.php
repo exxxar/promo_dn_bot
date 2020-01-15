@@ -8,4 +8,7 @@ use Illuminate\Http\Request;
 class BotController extends Controller
 {
 
+    public function test($bot){
+        $bot->reply("test");
+    }
 }
