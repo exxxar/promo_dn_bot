@@ -62,6 +62,14 @@
                                        required>
                             </td>
                         </tr>
+
+                        <tr>
+                            <td>Ссылка на бота</td>
+                            <td>
+                                <input type="url" name="telegram_bot_url" class="form-control" value="{{$company->telegram_bot_url}}">
+                            </td>
+                        </tr>
+
                         <tr>
                             <td>Процент CashBack</td>
                             <td>

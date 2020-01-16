@@ -59,6 +59,12 @@
                             </td>
                         </tr>
                         <tr>
+                            <td>Ссылка на бота</td>
+                            <td>
+                                <input type="url" name="telegram_bot_url" class="form-control" value="">
+                            </td>
+                        </tr>
+                        <tr>
                             <td>Процент CashBack</td>
                             <td>
                                 <input type="number" min="0" max="100" name="cashback" value="" class="form-control"

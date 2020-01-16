@@ -135,9 +135,9 @@ $botman->hears('.*Розыгрыш|/start_lottery_test', function ($bot) {
     $id = $telegramUser->getId();
 
 
-    $rules = Article::where("part",\App\Enums\Parts::Lottery)
+    $rules = Article::where("part", \App\Enums\Parts::Lottery)
         ->where("is_visible", 1)
-        ->orderBy("id","DESC")
+        ->orderBy("id", "DESC")
         ->first();
 
 
@@ -147,7 +147,7 @@ $botman->hears('.*Розыгрыш|/start_lottery_test', function ($bot) {
         ]
     ];
 
-    if ($rules!=null)
+    if ($rules != null)
         array_push($keyboard, [['text' => "Условия розыгрыша и призы", 'url' => $rules->url]]);
 
     $bot->sendRequest("sendMessage",
@@ -198,8 +198,8 @@ $botman->hears("\xF0\x9F\x93\xB2Мои друзья", function ($bot) {
 
     $code = base64_encode("001" . $tmp_id . "0000000000");
 
-    $attachment = new Image(env("QR_URL")."https://t.me/" . env("APP_BOT_NAME") . "?start=$code");
-   // $attachment = new Image(env("APP_URL") . "/image/?data=" . base64_encode("https://t.me/" . env("APP_BOT_NAME") . "?start=$code"));
+    $attachment = new Image(env("QR_URL") . "https://t.me/" . env("APP_BOT_NAME") . "?start=$code");
+    // $attachment = new Image(env("APP_URL") . "/image/?data=" . base64_encode("https://t.me/" . env("APP_BOT_NAME") . "?start=$code"));
 
     // Build message object
     $message = OutgoingMessage::create('_Ваш реферальный код_')
@@ -231,13 +231,12 @@ $botman->hears("\xE2\x9D\x93F.A.Q.", function ($bot) {
                 ['text' => "Разработчики", 'callback_data' => "/dev"],
             ],
             [
-                ['text'=>'Розыгрыш','callback_data'=>'/start_lottery_test']
+                ['text' => 'Розыгрыш', 'callback_data' => '/start_lottery_test']
             ]
 
 
         ]
     ];
-
 
 
     $bot->sendRequest("sendMessage",
@@ -308,7 +307,7 @@ $botman->hears("\xF0\x9F\x92\xB3Мои баллы", function ($bot) {
     $code = base64_encode("002" . $tmp_id . "0000000000");
 
 
-     $attachment = new Image(env("QR_URL")."https://t.me/" . env("APP_BOT_NAME") . "?start=$code");
+    $attachment = new Image(env("QR_URL") . "https://t.me/" . env("APP_BOT_NAME") . "?start=$code");
     //$attachment = new Image(env("APP_URL") . "/image/?data=" . base64_encode("https://t.me/" . env("APP_BOT_NAME") . "?start=$code"));
 
     // Build message object
@@ -377,7 +376,7 @@ $botman->hears("/promo_by_company", function ($bot) {
     $bot->reply($message);
 });
 $botman->hears("\xF0\x9F\x94\xA5Акции", function ($bot) {
-    
+
     $keyboard = [
         'inline_keyboard' => [
             [
@@ -430,17 +429,16 @@ $botman->hears('/category ([0-9]+)', function ($bot, $category_id) {
             $attachment = new Image($promo->promo_image_url);
             $message = OutgoingMessage::create()
                 ->withAttachment($attachment);
-            $bot->reply($message,["parse_mode"=>"Markdown"]);
+            $bot->reply($message, ["parse_mode" => "Markdown"]);
 
-            $message = Question::create("*".$promo->title."*")
+            $message = Question::create("*" . $promo->title . "*")
                 ->addButtons([
-                    Button::create("\xF0\x9F\x91\x89Подробнее")->value($promo->handler==null?"/promotion " . $promo->id:$promo->handler . " " . $promo->id)
+                    Button::create("\xF0\x9F\x91\x89Подробнее")->value($promo->handler == null ? "/promotion " . $promo->id : $promo->handler . " " . $promo->id)
                 ]);
 
-            $bot->reply($message,["parse_mode"=>"Markdown"]);
+            $bot->reply($message, ["parse_mode" => "Markdown"]);
         }
     }
-
 
 
     if ($isEmpty)
@@ -448,16 +446,31 @@ $botman->hears('/category ([0-9]+)', function ($bot, $category_id) {
 });
 $botman->hears('/company ([0-9]+)', function ($bot, $company_id) {
 
+    $telegramUser = $bot->getUser();
+    $id = $telegramUser->getId();
+
     $company = \App\Company::find($company_id);
 
-    $attachment = new Image($company->logo_url);
 
-    // Build message object
-    $message = OutgoingMessage::create($company->title . "\n_" . $company->description . "_")
-        ->withAttachment($attachment);
+    $keyboard = [];
 
-    // Reply message object
-    $bot->reply($message, ["parse_mode" => "Markdown"]);
+    if (strlen(trim($company->telegram_bot_url)) > 0)
+        array_push($tmp_keyboards, [
+            ['text' => "\xF0\x9F\x91\x89Перейти в бота", 'url' => $company->telegram_bot_url],
+        ]);
+
+    $bot->sendRequest("sendMessage",
+        [
+            "chat_id" => "$id",
+            "photo"=>$company->logo_url,
+            "caption" => $company->title . "\n_" . $company->description . "_",
+            "parse_mode" => "Markdown",
+            'reply_markup' => json_encode([
+                'inline_keyboard' =>
+                    $keyboard
+            ])
+        ]);
+
 
     $promotions = \App\Promotion::with(["users"])->where("company_id", "=", $company_id)
         ->get();
@@ -466,9 +479,6 @@ $botman->hears('/company ([0-9]+)', function ($bot, $company_id) {
     $isEmpty = false;
 
     foreach ($promotions as $promo) {
-
-        $telegramUser = $bot->getUser();
-        $id = $telegramUser->getId();
 
         $on_promo = $promo->users()->where('telegram_chat_id', "$id")->first();
 
@@ -479,18 +489,27 @@ $botman->hears('/company ([0-9]+)', function ($bot, $company_id) {
 
         if ($on_promo == null && $time_2 >= $time_0 && $time_2 < $time_1) {
 
+            $keyboard = [
+                [
+                    ['text' => "\xF0\x9F\x91\x89Подробнее", 'callback_data' => $promo->handler == null ? "/promotion " . $promo->id : $promo->handler . " " . $promo->id],
+                ],
+            ];
 
-            $attachment = new Image($promo->promo_image_url);
-            $message = OutgoingMessage::create()
-                ->withAttachment($attachment);
-            $bot->reply($message,["parse_mode"=>"Markdown"]);
-
-            $message = Question::create("*".$promo->title."*")
-                ->addButtons([
-                    Button::create("\xF0\x9F\x91\x89Подробнее")->value($promo->handler==null?"/promotion " . $promo->id:$promo->handler . " " . $promo->id)
+            $bot->sendRequest("sendMessage",
+                [
+                    "chat_id" => "$id",
+                    "caption" => "*" . $promo->title . "*",
+                    "photo" => $promo->promo_image_url,
+                    "parse_mode" => "Markdown",
+                    'reply_markup' => json_encode([
+                        'inline_keyboard' =>
+                            $keyboard
+                    ])
                 ]);
 
-            $bot->reply($message,["parse_mode"=>"Markdown"]);
+
+            //telegram_bot_url
+            $bot->reply($message, ["parse_mode" => "Markdown"]);
         }
     }
 
@@ -1040,7 +1059,7 @@ $botman->hears('/achievements_get_prize ([0-9]+)', function ($bot, $achievementI
 
         $code = base64_encode("012" . $tmp_id . $tmp_achievement_id);
 
-        $attachment = new Image(env("QR_URL")."https://t.me/" . env("APP_BOT_NAME") . "?start=$code");
+        $attachment = new Image(env("QR_URL") . "https://t.me/" . env("APP_BOT_NAME") . "?start=$code");
         //$attachment = new Image(env("APP_URL") . "/image/?data=" . base64_encode("https://t.me/" . env("APP_BOT_NAME") . "?start=$code"));
 
         $message = OutgoingMessage::create('_Код для активации достижения_')
@@ -1249,31 +1268,31 @@ $botman->hears('/articles ([0-9]+)', function ($bot, $page) {
 
 
 });
-$botman->hears('/check_lottery_slot ([0-9]+) ([0-9]+)', function ($bot, $slotId,$codeId) {
+$botman->hears('/check_lottery_slot ([0-9]+) ([0-9]+)', function ($bot, $slotId, $codeId) {
     $telegramUser = $bot->getUser();
     $id = $telegramUser->getId();
 
     $code = \App\Promocode::find($codeId);
-    if ($code==null) {
+    if ($code == null) {
         $bot->reply("Увы, что-то пошло не так и код более не действителен:(");
         return;
     }
 
-    if ($code->prize_id!=null){
+    if ($code->prize_id != null) {
         $bot->reply("Приз по данному коду уже был выбран ранее!");
         return;
     }
 
     $prize = Prize::with(["company"])
-        ->where("id",$slotId)
-        ->first()??null;
+            ->where("id", $slotId)
+            ->first() ?? null;
 
-    if ($prize==null) {
+    if ($prize == null) {
         $bot->reply("Увы, что-то пошло не так и приза нет:(");
         return;
     }
 
-    if ($prize->current_activation_count==$prize->summary_activation_count){
+    if ($prize->current_activation_count == $prize->summary_activation_count) {
         $bot->reply("Увы, к данному моменту все призы закончились");
         return;
     }
@@ -1307,7 +1326,7 @@ $botman->hears('/check_lottery_slot ([0-9]+) ([0-9]+)', function ($bot, $slotId,
             'chat_id' => env("CHANNEL_ID"),
             'parse_mode' => 'Markdown',
             'caption' => $message,
-            'photo' =>\Telegram\Bot\FileUpload\InputFile::create($prize->image_url),
+            'photo' => \Telegram\Bot\FileUpload\InputFile::create($prize->image_url),
             'disable_notification' => 'true'
         ]);
     } catch (\Exception $e) {

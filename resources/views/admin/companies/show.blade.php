@@ -59,6 +59,12 @@
                         </td>
                     </tr>
                     <tr>
+                        <td>Ссылка на бота</td>
+                        <td>
+                            <a href="{{$company->telegram_bot_url}}" target="_blank" class="btn btn-link">{{$company->telegram_bot_url}}</a>
+                        </td>
+                    </tr>
+                    <tr>
                         <td>Процент CashBack</td>
                         <td>
                             <p>{{$company->cashback}}</p>

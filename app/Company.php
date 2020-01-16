@@ -16,7 +16,8 @@ class Company extends Model
         'bailee',
         'cashback',//добавить в бд
         'logo_url',
-        'position'
+        'position',
+        'telegram_bot_url'
     ];
 
     public function promotions()

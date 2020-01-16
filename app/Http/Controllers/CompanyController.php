@@ -73,6 +73,7 @@ class CompanyController extends Controller
             'bailee' => $request->get('bailee') ?? '',
             'logo_url' => $request->get('logo_url') ?? '',
             'position' => $request->get('position') ?? 0,
+            'telegram_bot_url' => $request->get('telegram_bot_url') ?? '',
             'created_at' => Carbon::now(),
             'updated_at' => Carbon::now(),
         ]);
@@ -139,6 +140,7 @@ class CompanyController extends Controller
         $company->bailee = $request->get('bailee') ?? '';
         $company->logo_url = $request->get('logo_url') ?? '';
         $company->position = $request->get('position') ?? 0;
+        $company->telegram_bot_url = $request->get('telegram_bot_url') ?? '';
         $company->save();
 
         return redirect()
@@ -171,6 +173,12 @@ class CompanyController extends Controller
                 ['text' => "\xF0\x9F\x91\x89Переход в бота", 'url' =>"https://t.me/" . env("APP_BOT_NAME")],
             ],
         ];
+
+        if (strlen(trim($company->telegram_bot_url)) > 0)
+            array_push($tmp_keyboards, [
+                ['text' => "\xF0\x9F\x91\x89Перейти в бота", 'url' => $company->telegram_bot_url],
+            ]);
+
 
         Telegram::sendPhoto([
             'chat_id' => "-1001392337757",
