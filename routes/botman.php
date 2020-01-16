@@ -508,8 +508,7 @@ $botman->hears('/company ([0-9]+)', function ($bot, $company_id) {
                 ]);
 
 
-            //telegram_bot_url
-            $bot->reply($message, ["parse_mode" => "Markdown"]);
+
         }
     }
 
