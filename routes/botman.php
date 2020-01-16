@@ -459,7 +459,7 @@ $botman->hears('/company ([0-9]+)', function ($bot, $company_id) {
             ['text' => "\xF0\x9F\x91\x89Перейти в бота", 'url' => $company->telegram_bot_url],
         ]);
 
-    $bot->sendRequest("sendMessage",
+    $bot->sendRequest("sendPhoto",
         [
             "chat_id" => "$id",
             "photo"=>$company->logo_url,
@@ -495,7 +495,7 @@ $botman->hears('/company ([0-9]+)', function ($bot, $company_id) {
                 ],
             ];
 
-            $bot->sendRequest("sendMessage",
+            $bot->sendRequest("sendPhoto",
                 [
                     "chat_id" => "$id",
                     "caption" => "*" . $promo->title . "*",
