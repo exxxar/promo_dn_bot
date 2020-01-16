@@ -455,7 +455,7 @@ $botman->hears('/company ([0-9]+)', function ($bot, $company_id) {
     $keyboard = [];
 
     if (strlen(trim($company->telegram_bot_url)) > 0)
-        array_push($tmp_keyboards, [
+        array_push($keyboard, [
             ['text' => "\xF0\x9F\x91\x89Перейти в бота", 'url' => $company->telegram_bot_url],
         ]);
 
