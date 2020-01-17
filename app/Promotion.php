@@ -2,6 +2,7 @@
 
 namespace App;
 
+use DateTime;
 use Illuminate\Database\Eloquent\Model;
 
 class Promotion extends Model
@@ -46,5 +47,15 @@ class Promotion extends Model
         return $this->belongsTo('App\Company',"company_id","id");
     }
 
+    public function isNotActiveByUser($chatId)
+    {
+        $on_promo = $this->users()->where('telegram_chat_id', "$chatId")->first();
+
+        $time_0 = (date_timestamp_get(new DateTime($this->start_at)));
+        $time_1 = (date_timestamp_get(new DateTime($this->end_at)));
+        $time_2 = date_timestamp_get(now());
+
+        return ($on_promo == null && $time_2 >= $time_0 && $time_2 < $time_1);
+    }
 
 }

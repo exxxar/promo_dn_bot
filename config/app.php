@@ -164,6 +164,7 @@ return [
         App\Providers\EventServiceProvider::class,
         App\Providers\RouteServiceProvider::class,
         App\Providers\BotMan\DriverServiceProvider::class,
+        App\Providers\SkidkiDNServiceProvider::class
     ],
 
     /*
@@ -214,6 +215,7 @@ return [
         'View' => Illuminate\Support\Facades\View::class,
         'QrCode' => SimpleSoftwareIO\QrCode\Facades\QrCode::class,
         'Telegram' => Telegram\Bot\Laravel\Facades\Telegram::class,
+        'SkidkiDNBot' => App\Helpers\Facades\SkidkiDNBot::class
 
     ],
 

@@ -22,16 +22,23 @@ class Company extends Model
 
     public function promotions()
     {
-        return $this->hasMany('App\Promotion');
+        return $this->hasMany('App\Promotion',"id", "company_id");
     }
 
     public function prizes()
     {
-        return $this->hasMany('App\Prize',"id","company_id");
+        return $this->hasMany('App\Prize', "id", "company_id");
     }
 
     public function promocodes()
     {
-        return $this->hasMany('App\Promocode',"id","company_id");
+        return $this->hasMany('App\Promocode', "id", "company_id");
+    }
+
+    public function getActivePromotions($chatId)
+    {
+        return array_filter($this->promotions()->get(), function ($item) use ($chatId) {
+            return $item->isNotActiveByUser($chatId);
+        });
     }
 }

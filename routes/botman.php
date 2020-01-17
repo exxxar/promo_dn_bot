@@ -5,6 +5,7 @@ use App\CashbackHistory;
 use App\Conversations\StartConversation;
 use App\Drivers\TelegramInlineQueryDriver;
 use App\Event;
+use App\Http\Controllers\BotController;
 use App\Http\Controllers\BotManController;
 
 use App\Prize;
@@ -21,6 +22,7 @@ use Telegram\Bot\Laravel\Facades\Telegram;
 
 $botman = resolve('botman');
 
+
 $botman->hears('Попробовать снова', BotManController::class . '@startConversation');
 $botman->hears('/start', BotManController::class . '@startConversation');
 
@@ -36,6 +38,7 @@ $botman->hears('/lotusprofile ([0-9]+)', BotManController::class . '@lotusprofil
 $botman->hears('/fillinfo', BotManController::class . '@fillInfoConversation');
 $botman->hears('/payment ([0-9]{1,10}) ([0-9]{1,10})', BotManController::class . '@paymentConversation');
 
+/*//перенес
 $botman->hears("\xE2\x9B\x84Мероприятия", function ($bot) {
     $events = Event::skip(0)
         ->take(5)
@@ -80,9 +83,10 @@ $botman->hears("\xE2\x9B\x84Мероприятия", function ($bot) {
                     ]
                 ])
             ]);
-});
+});*/
 
 $botman->hears("/ref ([0-9]+)", function ($bot, $refId) {
+
     $telegramUser = $bot->getUser();
     $id = $telegramUser->getId();
 
@@ -130,7 +134,7 @@ $botman->hears("/ref ([0-9]+)", function ($bot, $refId) {
 
 });
 
-$botman->hears('.*Розыгрыш|/start_lottery_test', function ($bot) {
+/*$botman->hears('.*Розыгрыш|/start_lottery_test', function ($bot) {
     $telegramUser = $bot->getUser();
     $id = $telegramUser->getId();
 
@@ -160,8 +164,8 @@ $botman->hears('.*Розыгрыш|/start_lottery_test', function ($bot) {
                     $keyboard
             ])
         ]);
-});
-$botman->hears("\xF0\x9F\x93\xB2Мои друзья", function ($bot) {
+});//перенёс*/
+/*$botman->hears("\xF0\x9F\x93\xB2Мои друзья", function ($bot) {
     $telegramUser = $bot->getUser();
 
     $id = $telegramUser->getId();
@@ -210,7 +214,8 @@ $botman->hears("\xF0\x9F\x93\xB2Мои друзья", function ($bot) {
     $bot->reply($message, ["parse_mode" => "Markdown"]);
 
 
-});
+});*/
+/*//перенес
 $botman->hears("\xE2\x9D\x93F.A.Q.", function ($bot) {
 
 
@@ -247,8 +252,8 @@ $botman->hears("\xE2\x9D\x93F.A.Q.", function ($bot) {
         ]);
 
 
-});
-$botman->hears("\xF0\x9F\x92\xB3Мои баллы", function ($bot) {
+});*/
+/*$botman->hears("\xF0\x9F\x92\xB3Мои баллы", function ($bot) {
     $telegramUser = $bot->getUser();
 
     $id = $telegramUser->getId();
@@ -318,8 +323,8 @@ $botman->hears("\xF0\x9F\x92\xB3Мои баллы", function ($bot) {
     $bot->reply($message, ["parse_mode" => "Markdown"]);
 
 
-});
-$botman->hears("/promo_by_category", function ($bot) {
+});*/
+/*$botman->hears("/promo_by_category", function ($bot) {
 
     $telegramUser = $bot->getUser();
 
@@ -346,8 +351,8 @@ $botman->hears("/promo_by_category", function ($bot) {
 
 
     $bot->reply($message);
-});
-$botman->hears("/promo_by_company", function ($bot) {
+});//перенес*/
+/*$botman->hears("/promo_by_company", function ($bot) {
 
     $telegramUser = $bot->getUser();
 
@@ -374,8 +379,8 @@ $botman->hears("/promo_by_company", function ($bot) {
 
 
     $bot->reply($message);
-});
-$botman->hears("\xF0\x9F\x94\xA5Акции", function ($bot) {
+});*/
+/*$botman->hears("\xF0\x9F\x94\xA5Акции", function ($bot) {
 
     $keyboard = [
         'inline_keyboard' => [
@@ -398,10 +403,11 @@ $botman->hears("\xF0\x9F\x94\xA5Акции", function ($bot) {
         ]);
 
 
-});
+});//перенес*/
 $botman->hears('stop', function ($bot) {
     $bot->reply('Хорошо, продолжим позже!)');
 })->stopsConversation();
+
 $botman->hears('/category ([0-9]+)', function ($bot, $category_id) {
 
     $promotions = \App\Promotion::with(["users"])->where("category_id", "=", $category_id)
@@ -462,7 +468,7 @@ $botman->hears('/company ([0-9]+)', function ($bot, $company_id) {
     $bot->sendRequest("sendPhoto",
         [
             "chat_id" => "$id",
-            "photo"=>$company->logo_url,
+            "photo" => $company->logo_url,
             "caption" => $company->title . "\n_" . $company->description . "_",
             "parse_mode" => "Markdown",
             'reply_markup' => json_encode([
@@ -508,7 +514,6 @@ $botman->hears('/company ([0-9]+)', function ($bot, $company_id) {
                 ]);
 
 
-
         }
     }
 
@@ -516,7 +521,7 @@ $botman->hears('/company ([0-9]+)', function ($bot, $company_id) {
     if ($isEmpty)
         $bot->reply("Акций в категории не найдено или все акции собраны:(");
 });
-$botman->hears('/friends ([0-9]+)', function ($bot, $page) {
+/*$botman->hears('/friends ([0-9]+)', function ($bot, $page) {
 
 
     $telegramUser = $bot->getUser();
@@ -594,8 +599,8 @@ $botman->hears('/friends ([0-9]+)', function ($bot, $page) {
         ]);
 
 
-});
-$botman->hears('/payments ([0-9]+)', function ($bot, $page) {
+});*/
+/*$botman->hears('/payments ([0-9]+)', function ($bot, $page) {
 
     $telegramUser = $bot->getUser();
 
@@ -661,8 +666,8 @@ $botman->hears('/payments ([0-9]+)', function ($bot, $page) {
         ]);
 
 
-});
-$botman->hears('/cashbacks ([0-9]+)', function ($bot, $page) {
+});//перенесено*/
+/*$botman->hears('/cashbacks ([0-9]+)', function ($bot, $page) {
 
     $telegramUser = $bot->getUser();
 
@@ -727,7 +732,7 @@ $botman->hears('/cashbacks ([0-9]+)', function ($bot, $page) {
         ]);
 
 
-});
+});//перенесено
 $botman->hears('/events ([0-9]+)', function ($bot, $page) {
 
 
@@ -782,8 +787,8 @@ $botman->hears('/events ([0-9]+)', function ($bot, $page) {
             ]);
 
 
-});
-$botman->hears('/cashback_get', function ($bot) {
+});//перенёс*/
+/*$botman->hears('/cashback_get', function ($bot) {
     $telegramUser = $bot->getUser();
 
     $id = $telegramUser->getId();
@@ -813,8 +818,8 @@ $botman->hears('/cashback_get', function ($bot) {
     }
 
 
-});
-$botman->hears('/statistic', function ($bot) {
+});*/
+/*$botman->hears('/statistic', function ($bot) {
     $message = Question::create("Вы можете отслеживать начисления CashBack бонусов и их списание")
         ->addButtons([
             Button::create("Начисления")->value("/cashbacks 0"),
@@ -822,8 +827,8 @@ $botman->hears('/statistic', function ($bot) {
         ]);
     $bot->reply($message, ["parse_mode" => "Markdown"]);
 
-});
-$botman->hears('/achievements_panel', function ($bot) {
+});//перенёс*/
+/*$botman->hears('/achievements_panel', function ($bot) {
     $message = Question::create("Получайте достижения и обменивайте их на крутейшие призы!")
         ->addButtons([
             Button::create("\xF0\x9F\x8D\x80Все достижения")->value("/achievements_all 0"),
@@ -831,8 +836,8 @@ $botman->hears('/achievements_panel', function ($bot) {
         ]);
     $bot->reply($message, ["parse_mode" => "Markdown"]);
 
-});
-$botman->hears('/achievements_all ([0-9]+)', function ($bot, $page) {
+});*/
+/*$botman->hears('/achievements_all ([0-9]+)', function ($bot, $page) {
 
     $achievements = \App\Achievement::where("is_active", 1)
         ->skip($page * 5)
@@ -898,8 +903,8 @@ $botman->hears('/achievements_all ([0-9]+)', function ($bot, $page) {
             ]);
 
 
-});
-$botman->hears('/achievements_my ([0-9]+)', function ($bot, $page) {
+});*/
+/*$botman->hears('/achievements_my ([0-9]+)', function ($bot, $page) {
     try {
         $telegramUser = $bot->getUser();
 
@@ -960,8 +965,8 @@ $botman->hears('/achievements_my ([0-9]+)', function ($bot, $page) {
     } catch (Exception $e) {
         $bot->reply($e->getMessage() . " " . $e->getLine());
     }
-});
-$botman->hears('/achievements_description ([0-9]+)', function ($bot, $achievementId) {
+});*/
+/*$botman->hears('/achievements_description ([0-9]+)', function ($bot, $achievementId) {
 
     $achievement = \App\Achievement::find($achievementId);
 
@@ -1025,8 +1030,8 @@ $botman->hears('/achievements_description ([0-9]+)', function ($bot, $achievemen
     $bot->reply($message, ["parse_mode" => "Markdown"]);
 
 
-});
-$botman->hears('/achievements_get_prize ([0-9]+)', function ($bot, $achievementId) {
+});*/
+/*$botman->hears('/achievements_get_prize ([0-9]+)', function ($bot, $achievementId) {
     $achievement = \App\Achievement::find($achievementId);
     $telegramUser = $bot->getUser();
     $id = $telegramUser->getId();
@@ -1069,8 +1074,8 @@ $botman->hears('/achievements_get_prize ([0-9]+)', function ($bot, $achievementI
         $bot->reply("Вы не можете получить приз за данное достижение", ["parse_mode" => "Markdown"]);
 
 
-});
-$botman->hears('/help', function ($bot) {
+});*/
+/*$botman->hears('/help', function ($bot) {
     $articles = Article::where("part", 6)
         ->where("is_visible", 1)
         ->get();
@@ -1080,7 +1085,7 @@ $botman->hears('/help', function ($bot) {
             $bot->reply($article->url, ["parse_mode" => "Markdown"]);
     else
         $bot->reply("Статьи не найдены", ["parse_mode" => "Markdown"]);
-});
+});//перенёс
 $botman->hears('/rules', function ($bot) {
     $articles = Article::where("part", 2)
         ->where("is_visible", 1)
@@ -1091,7 +1096,7 @@ $botman->hears('/rules', function ($bot) {
             $bot->reply($article->url, ["parse_mode" => "Markdown"]);
     else
         $bot->reply("Статьи не найдены", ["parse_mode" => "Markdown"]);
-});
+});//перенёс
 $botman->hears('/dev', function ($bot) {
     $articles = Article::where("part", 5)
         ->where("is_visible", 1)
@@ -1103,7 +1108,7 @@ $botman->hears('/dev', function ($bot) {
     else
         $bot->reply("Статьи не найдены", ["parse_mode" => "Markdown"]);
 
-});
+});//перенёс
 $botman->hears('/about', function ($bot) {
     $articles = Article::where("part", 3)
         ->where("is_visible", 1)
@@ -1115,8 +1120,8 @@ $botman->hears('/about', function ($bot) {
     else
         $bot->reply("Статьи не найдены", ["parse_mode" => "Markdown"]);
 
-});
-$botman->hears('/promouter', function ($bot) {
+}); //перенёс*/
+/*$botman->hears('/promouter', function ($bot) {
     $telegramUser = $bot->getUser();
 
     $id = $telegramUser->getId();
@@ -1174,8 +1179,8 @@ $botman->hears('/promouter', function ($bot) {
     foreach ($articles as $article)
         $bot->reply($article->url, ["parse_mode" => "Markdown"]);
 
-});
-$botman->hears('/suppliers', function ($bot) {
+});*/
+/*$botman->hears('/suppliers', function ($bot) {
     $articles = Article::where("part", 7)
         ->where("is_visible", 1)
         ->get();
@@ -1185,8 +1190,8 @@ $botman->hears('/suppliers', function ($bot) {
             $bot->reply($article->url, ["parse_mode" => "Markdown"]);
     else
         $bot->reply("Статьи не найдены", ["parse_mode" => "Markdown"]);
-});
-$botman->hears('/activity_information', function ($bot) {
+});*/
+/*$botman->hears('/activity_information', function ($bot) {
 
     $stat_types = [
         "\xE2\x96\xAAКоличество активаций приза по акции: *%d* раз.\n",
@@ -1215,8 +1220,8 @@ $botman->hears('/activity_information', function ($bot) {
 
     $bot->reply(count($stats) > 0 ? $message : "Статистика еще не ведется для вашего аккаунта!", ["parse_mode" => "Markdown"]);
 
-});
-$botman->hears('/articles ([0-9]+)', function ($bot, $page) {
+}); //перенес*/
+/*$botman->hears('/articles ([0-9]+)', function ($bot, $page) {
 
 
     $articles = Article::where("part", 0)
@@ -1266,8 +1271,8 @@ $botman->hears('/articles ([0-9]+)', function ($bot, $page) {
             ]);
 
 
-});
-$botman->hears('/check_lottery_slot ([0-9]+) ([0-9]+)', function ($bot, $slotId, $codeId) {
+}); //перенёс*/
+/*$botman->hears('/check_lottery_slot ([0-9]+) ([0-9]+)', function ($bot, $slotId, $codeId) {
     $telegramUser = $bot->getUser();
     $id = $telegramUser->getId();
 
@@ -1331,9 +1336,37 @@ $botman->hears('/check_lottery_slot ([0-9]+) ([0-9]+)', function ($bot, $slotId,
     } catch (\Exception $e) {
 
     }
-});
+});*/
 
-$botman->hears('/test_controller', 'App\Http\Controllers\BotController@test');
+
+$botman->hears('/friends ([0-9]+)', BotController::class . '@getFriends');
+$botman->hears('/achievements_my ([0-9]+)', BotController::class . '@getAchievementsMy');
+$botman->hears('/achievements_description ([0-9]+)', BotController::class . '@getAchievementDescriptionById');
+$botman->hears('/achievements_get_prize ([0-9]+)', BotController::class . '@getAchievementPrizeById');
+$botman->hears('/check_lottery_slot ([0-9]+) ([0-9]+)', BotController::class . '@getLotterySlot');
+$botman->hears('/cashback_get', BotController::class . '@getLatestCashBack'); //перенёс
+$botman->hears('.*Розыгрыш|/start_lottery_test', BotController::class . '@getLotteryMenu'); //перенёс
+$botman->hears('/achievements_all ([0-9]+)', BotController::class . '@getAchievementsAll'); //перенёс
+$botman->hears('/achievements_panel', BotController::class . '@getAchievementMenu'); //перенёс
+$botman->hears('/activity_information', BotController::class . '@getActivityInformation'); //перенёс
+$botman->hears("\xF0\x9F\x93\xB2Мои друзья", BotController::class . '@getMyFriends'); //перенёс
+$botman->hears("\xF0\x9F\x92\xB3Мои баллы", BotController::class . '@getMyMoney'); //перенёс
+$botman->hears("\xE2\x9B\x84Мероприятия", BotController::class . '@getEventsMenu'); //перенёс
+$botman->hears("\xE2\x9D\x93F.A.Q.", BotController::class . '@getFAQMenu'); //перенёс
+$botman->hears("\xF0\x9F\x94\xA5Акции", BotController::class . '@getPromotionMenu'); //перенёс
+$botman->hears('/promo_by_company ([0-9]+)', BotController::class . '@getPromoByCompanies'); //перенёс
+$botman->hears('/promo_by_category ([0-9]+)', BotController::class . '@getPromoByCategories'); //перенёс
+$botman->hears('/payments ([0-9]+)', BotController::class . '@getPayments'); //перенёс
+$botman->hears('/cashbacks ([0-9]+)', BotController::class . '@getCashbacks'); //перенёс
+$botman->hears('/events ([0-9]+)', BotController::class . '@getEvents'); //перенёс
+$botman->hears('/articles ([0-9]+)', BotController::class . '@getArticlesByPage'); //перенёс
+$botman->hears('/help', BotController::class . '@getHelp'); //перенёс
+$botman->hears('/rules', BotController::class . '@getRules'); //перенёс
+$botman->hears('/dev', BotController::class . '@getDev'); //перенёс
+$botman->hears('/about', BotController::class . '@getAbout'); //перенёс
+$botman->hears('/statistic', BotController::class . '@getStatistic'); //перенёс
+$botman->hears('/promouter', BotController::class . '@getPromouterInfo'); //перенёс
+$botman->hears('/suppliers', BotController::class . '@getSuppliers'); //перенёс
 
 $botman->fallback(function ($bot) {
     $bot->loadDriver(TelegramInlineQueryDriver::DRIVER_NAME);

@@ -3,6 +3,7 @@
 namespace App;
 
 use App\Enums\AchievementTriggers;
+use DateTime;
 use Illuminate\Notifications\Notifiable;
 use Illuminate\Contracts\Auth\MustVerifyEmail;
 use Illuminate\Foundation\Auth\User as Authenticatable;
@@ -11,7 +12,7 @@ use Kyslik\ColumnSortable\Sortable;
 
 class User extends Authenticatable
 {
-    use Notifiable,Sortable;
+    use Notifiable, Sortable;
 
     public $sortable = ['id'];
 
@@ -113,7 +114,7 @@ class User extends Authenticatable
     {
         $stat_1 = $this->stats()->where("stat_type", AchievementTriggers::MaxCashBackCount)->first();
         $stat_2 = $this->stats()->where("stat_type", AchievementTriggers::MaxReferralBonusCount)->first();
-        return ($stat_1==null?0:$stat_1->stat_value)+($stat_2==null?0:$stat_2->stat_value);
+        return ($stat_1 == null ? 0 : $stat_1->stat_value) + ($stat_2 == null ? 0 : $stat_2->stat_value);
     }
 
     public function getSpentAttribute()
@@ -125,5 +126,82 @@ class User extends Authenticatable
         return $sum;
     }
 
+    public function isActive()
+    {
+        $time_0 = (date_timestamp_get(new DateTime($this->start_at)));
+        $time_1 = (date_timestamp_get(new DateTime($this->end_at)));
+        $time_2 = date_timestamp_get(now());
+        return ($time_2 >= $time_0 && $time_2 < $time_1);
+    }
 
+    public function hasPhone()
+    {
+        return $this->phone != null;
+    }
+
+    public function onRefferal()
+    {
+        return RefferalsHistory::where("user_recipient_id", $this->id)->first() != null;
+    }
+
+    public function getFriends($page)
+    {
+        return RefferalsHistory::with(["recipient"])
+            ->where("user_sender_id", $this->id)
+            ->skip($page * config("bot.results_per_page"))
+            ->take(config("bot.results_per_page"))
+            ->orderBy('id', 'DESC')
+            ->get();
+    }
+
+    public function getPayments($page)
+    {
+        return RefferalsPaymentHistory::with(["company"])
+            ->where("user_id", $this->id)
+            ->skip($page * config("bot.results_per_page"))
+            ->take(config("bot.results_per_page"))
+            ->orderBy('id', 'DESC')
+            ->get();
+    }
+
+    public function getCashBacksByUserId($page)
+    {
+        return CashbackHistory::where("user_id", $this->id)
+            ->skip($page * config("bot.results_per_page"))
+            ->take(config("bot.results_per_page"))
+            ->orderBy('id', 'DESC')
+            ->get();
+    }
+
+    public function getLatestCashBack()
+    {
+        return CashbackHistory::where("user_phone", $this->phone)
+            ->where("activated", false)
+            ->get();
+    }
+
+    public function getCashBacksByPhone($page)
+    {
+        return CashbackHistory::where("user_phone", $this->phone)
+            ->skip($page * config("bot.results_per_page"))
+            ->take(config("bot.results_per_page"))
+            ->orderBy('id', 'DESC')
+            ->get();
+    }
+
+    public function getAchievements($page)
+    {
+        return $this->achievements()
+                ->skip($page * config("bot.results_per_page"))
+                ->take(config("bot.results_per_page"))
+                ->orderBy('id', 'DESC')
+                ->get() ?? null;
+    }
+
+    public function getStats()
+    {
+        return Stat::where("user_id", $this->id)
+            ->get();
+
+    }
 }

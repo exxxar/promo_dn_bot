@@ -1,0 +1,652 @@
+<?php
+
+
+namespace App\Classes;
+
+
+use App\Achievement;
+use App\Article;
+use App\Category;
+use App\Company;
+use App\Enums\Parts;
+use App\Event;
+use App\Prize;
+use App\Promocode;
+use BotMan\BotMan\BotMan;
+use Carbon\Carbon;
+use Illuminate\Support\Facades\Log;
+
+class SkidkiDNBot extends Bot implements iSkidkiDNBot
+{
+
+    public function getEventsAll($page)
+    {
+        $events = Event::skip($page * config("bot.results_per_page"))
+            ->take(config("bot.results_per_page"))
+            ->orderBy('position', 'DESC')
+            ->get();
+
+        $found = false;
+
+        if (count($events) > 0) {
+
+            foreach ($events as $key => $event) {
+
+                if (!$event->isActive())
+                    continue;
+
+                $found = true;
+                $this->sendPhoto(
+                    "*" . $event->title . "*\n" . $event->description,
+                    $event->event_image_url);
+
+            }
+
+        }
+
+        if (count($events) == 0 || !$found)
+            $this->reply("Мероприятия появтяся в скором времени!");
+
+        $this->pagination("/events $page", $events, "Выберите действие");
+
+    }
+
+    public function getFriendsAll($page)
+    {
+
+    }
+
+    public function getPaymentsAll($page)
+    {
+        if (!$this->getUser()->hasPhone()) {
+            $keyboard = [
+                [
+                    ["text" => "Заполнить", "callback_data" => "/fillinfo"],
+                ]
+            ];
+
+            $this->sendMessage("У вас не заполнена личная информация и вы не можете просматривать историю оплаты.", $keyboard);
+            return;
+        }
+
+        $refs = $this->getUser()->getPayments($page);
+
+        $tmp = "";
+
+        foreach ($refs as $key => $ref)
+            $tmp .= printf("_%s_ в %s потрачено *%s* бонусов\n",
+                $ref->created_at,
+                ($ref->company->title ?? $ref->company->id),
+                $ref->value
+            );
+
+        $this->pagination("/payments", $refs, $page, (strlen($tmp) > 0 ? $tmp : "Вы не потратили свои бонусы."));
+    }
+
+    public function getCashBacksAll($page)
+    {
+        if (!$this->getUser()->hasPhone()) {
+            $keyboard = [
+                [
+                    ["text" => "Заполнить", "callback_data" => "/fillinfo"],
+                ]
+            ];
+
+            $this->sendMessage("У вас не заполнена личная информация и вы не можете просматривать историю оплаты.", $keyboard);
+            return;
+        }
+
+        $cashbacks = $this->getUser()->getCashBacks($page);
+
+        $tmp = "";
+
+        foreach ($cashbacks as $key => $cash)
+            $tmp .= printf("Заведение *%s* _%s_ чек №%s принес вам *%s* руб. CashBack\n",
+                $cash->company->title,
+                $cash->created_at,
+                $cash->check_info,
+                round(intval($cash->money_in_check) * env("CAHSBAK_PROCENT") / 100)
+            );
+
+        $this->pagination("/cashbacks", $cashbacks, $page, strlen($tmp) > 0 ? $tmp : "Вам не начислялся CashBack.");
+    }
+
+    public function getAchievementsAll($page)
+    {
+        $achievements = Achievement::where("is_active", 1)
+                ->skip($page * config("bot.results_per_page"))
+                ->take(config("bot.results_per_page"))
+                ->orderBy('position', 'ASC')
+                ->get() ?? null;
+
+        if (count($achievements) == 0 || $achievements == null) {
+            $this->reply("Достижения будут доступны в скором времени!");
+            return;
+        }
+
+        foreach ($achievements as $key => $achievement) {
+
+            $keyboard = [
+                [
+                    ["text" => "Подробнее", "callback_data" => "/achievements_description " . $achievement->id]
+                ]
+            ];
+            $message = printf("%s *%s*\n_%s_",
+                ($achievement->activated == 0 ? "" : "\xE2\x9C\x85"),
+                ($achievement->title ?? "Без названия [#" . $achievement->id . "]"),
+                $achievement->description
+            );
+            $this->sendPhoto($message, $achievement->ach_image_url, $keyboard);
+        }
+
+        $this->pagination("/achievements_all", $achievements, $page, "Выберите действие");
+
+    }
+
+    public function getAchievementsMy($page)
+    {
+
+        $achievements = $this->getUser()->getAchievements($page);
+
+        if (count($achievements) == 0 || $achievements == null) {
+            $this->reply("У вас еще активированных нет достижений!");
+            return;
+        }
+
+        foreach ($achievements as $key => $achievement) {
+
+            $keyboard = [
+                [
+                    ["text" => "Подробнее", "callback_data" => "/achievements_description " . $achievement->id]
+                ]
+            ];
+            $message = printf("%s *%s*\n_%s_",
+                ($achievement->activated == 0 ? "" : "\xE2\x9C\x85"),
+                ($achievement->title ?? "Без названия [#" . $achievement->id . "]"),
+                $achievement->description
+            );
+            $this->sendPhoto($message, $achievement->ach_image_url, $keyboard);
+        }
+
+        $this->pagination("/achievements_my", $achievements, $page, "Выберите действие");
+    }
+
+    public function getAchievementsInfo($id)
+    {
+
+        $achievement = Achievement::find($id);
+
+        $stat = $this->getUser(["stats"])
+                ->stats()
+                ->where("stat_type", "=", $achievement->trigger_type->value)
+                ->first() ?? null;
+
+        if ($achievement == null) {
+            $this->reply("Достижение не найдено!");
+            return;
+        }
+
+
+        $currentVal = ($stat == null ? 0 : $stat->stat_value);
+
+        $progress = ($currentVal >= $achievement->trigger_value ?
+            "\n*Успешно выполнено!*" :
+            "Прогресс:*" . $currentVal . "* из *" . $achievement->trigger_value . "*");
+
+        $message = printf("*%s*\n_%s_\n%s",
+            $achievement->title,
+            $achievement->description,
+            $progress
+        );
+
+        $this->sendPhoto($message, $achievement->ach_image_url);
+
+        $message = printf("*\xF0\x9F\x91\x86Ваш приз:*\n_%s_",
+            $achievement->prize_description
+        );
+
+        $this->sendPhoto($message, $achievement->prize_image_url);
+
+
+        $on_ach_activated = $this->getUser(["achievements"])
+            ->achievements()
+            ->where("achievement_id", $id)
+            ->first();
+
+
+        $keyboard = [];
+
+        if ($on_ach_activated)
+            if ($on_ach_activated->activated == false)
+                array_push($keyboard, [
+                    ["text" => "\xF0\x9F\x8E\x81Получить приз", "callback_data" => "/achievements_get_prize $id"]
+                ]);
+
+        array_push($keyboard, [
+            ["text" => "\xE2\x8F\xAAВернуться назад", "callback_data" => "/achievements_panel"]
+        ]);
+
+        $this->sendMessage("Дальнейшие действие", $keyboard);
+    }
+
+    public function getAchievementsPrize($id)
+    {
+        $achievement = $this->getUser(["achievements"])
+            ->achievements()
+            ->where("achievement_id", $id)
+            ->first();
+
+
+        if ($achievement->activated == true) {
+            $this->reply("Вы уже получили приз за данное достижение!");
+            return;
+        }
+
+        $stat = $this->getUser(["stats"])
+                ->stats()
+                ->where("stat_type", "=", $achievement->trigger_type->value)
+                ->first() ?? null;
+
+        $currentVal = $stat == null ? 0 : $stat->stat_value;
+
+        if ($currentVal <= $achievement->trigger_value) {
+            $this->reply("Вы не можете получить приз за данное достижение");
+            return;
+        }
+
+        $tmp_id = (string)$this->getChatId();
+        while (strlen($tmp_id) < 10)
+            $tmp_id = "0" . $tmp_id;
+
+        $tmp_achievement_id = (string)$achievement->id;
+        while (strlen($tmp_achievement_id) < 10)
+            $tmp_achievement_id = "0" . $tmp_achievement_id;
+
+        $code = base64_encode("012" . $tmp_id . $tmp_achievement_id);
+
+        $qr_url = env("QR_URL") . "https://t.me/" . env("APP_BOT_NAME") . "?start=$code";
+
+        $this->sendPhoto('_Код для активации достижения_', $qr_url);
+
+    }
+
+    public function getRefLink()
+    {
+        // TODO: Implement getRefLink() method.
+    }
+
+    public function getFAQMenu()
+    {
+
+        $keyboard = [
+            [
+                ['text' => "Как пользоваться", 'callback_data' => "/help"],
+            ],
+            [
+                ['text' => "Реализация бонусов", 'callback_data' => "/rules"],
+            ],
+            [
+                ['text' => "Промоутеру", 'callback_data' => "/promouter"],
+                ['text' => "Поставщикам", 'callback_data' => "/suppliers"],
+            ],
+            [
+                ['text' => "О нас", 'callback_data' => "/about"],
+                ['text' => "Разработчики", 'callback_data' => "/dev"],
+            ],
+            [
+                ['text' => 'Розыгрыш', 'callback_data' => '/start_lottery_test']
+            ]
+
+
+        ];
+
+        $this->sendMessage("*F.A.Q.*\n_Не знаете как начать пользоваться? - Почитайте наше описание! Узнайте больше о приложении, компании и разработчике!_", $keyboard);
+
+    }
+
+    public function getPromotionsMenu()
+    {
+        $keyboard = [
+            [
+                ['text' => "\xF0\x9F\x92\x8EПо категориям", 'callback_data' => '/promo_by_category 0'],
+                ['text' => "\xF0\x9F\x8F\xA6По компаниям", 'callback_data' => '/promo_by_company 0'],
+            ],
+            [
+                ['text' => "\xE2\xAD\x90Достижения", 'callback_data' => "/achievements_panel"],
+            ],
+            [
+                ['text' => "\xE2\x9A\xA1Акции и призы на сайте", 'url' => env("APP_PROMO_LINK")],
+            ],
+
+        ];
+
+        $this->sendMessage("Самые свежие акции", $keyboard);
+    }
+
+    public function getFriends($page)
+    {
+
+        $refs = $this->getUser()->getFriends($page);
+
+        $sender = $this->getUser(["parent"])
+            ->parent();
+
+        $tmp = "";
+
+        if ($sender != null) {
+            if ($sender->sender != null) {
+                $userSenderName = $sender->sender->fio_from_telegram ??
+                    $sender->sender->fio_from_request ??
+                    $sender->sender->telegram_chat_id ??
+                    'Неизвестный пользователь';
+
+                $tmp = "\xF0\x9F\x91\x91 $userSenderName - пригласил вас.\n";
+            }
+        }
+
+        if ($refs != null)
+            foreach ($refs as $key => $ref) {
+                if ($ref->recipient != null) {
+                    $userName = $ref->recipient->fio_from_telegram ??
+                        $ref->recipient->fio_from_request ??
+                        $ref->recipient->telegram_chat_id ??
+                        'Неизвестный пользователь';
+                    $tmp .= ($key + 1) . ". " . $userName . ($ref->activated == 0 ? "\xE2\x9D\x8E" : "\xE2\x9C\x85") . "\n";
+                }
+            }
+
+        $this->reply(strlen($tmp) > 0 ? $tmp : "У вас нет друзей:(");
+        $this->pagination('/friends', $refs, $page, "Ваши действия");
+    }
+
+    public function getPaymentMenu()
+    {
+        // TODO: Implement getPaymentMenu() method.
+    }
+
+    public function getStatisticMenu()
+    {
+        $keyboard = [
+            [
+                ["text" => "Начисления", "callback_data" => "/cashbacks 0"],
+                ["text" => "Списания", "callback_data" => "/payments 0"],
+            ]
+        ];
+        $this->sendMessage("Вы можете отслеживать начисления CashBack бонусов и их списание!", $keyboard);
+    }
+
+    public function getAchievementsMenu()
+    {
+        $keyboard = [
+            [
+                ["text" => "\xF0\x9F\x8D\x80Все достижения", "callback_data" => "/achievements_all 0"],
+                ["text" => "\xE2\xAD\x90Мои достижения", "callback_data" => "/achievements_my 0"],
+            ]
+        ];
+        $this->sendMessage("Получайте достижения и обменивайте их на крутейшие призы!", $keyboard);
+    }
+
+    public function getPromouterMenu()
+    {
+        // TODO: Implement getPromouterMenu() method.
+    }
+
+    public function getPromotionsByCategory($page)
+    {
+        $companies = Company::orderBy('position', 'DESC')
+            ->get();
+
+        $keyboard = [];
+
+        foreach ($companies as $company) {
+            array_push($keyboard,
+                [
+                    ["text" => $company->title, "callback_data" => "/company " . $company->id]
+                ]);
+        }
+
+        $this->sendMessage("Акции по компаниям:", $keyboard);
+    }
+
+    public function getPromotionsByCompany($page)
+    {
+
+        $categories = Category::orderBy('position', 'DESC')
+            ->get();
+
+        $keyboard = [];
+
+        foreach ($categories as $cat)
+            array_push($keyboard, [
+                ["text" => $cat->title, "callback_data" => "/category " . $cat->id]
+            ]);
+
+
+        $this->sendMessage("Акции по категориям:", $keyboard);
+    }
+
+    public function getCategoryById($id)
+    {
+        // TODO: Implement getCategoryById() method.
+    }
+
+    public function getCompanyById($id)
+    {
+        // TODO: Implement getCompanyById() method.
+    }
+
+    public function getArticlesByPartId($partId, $page = 0)
+    {
+        $articles = Article::where("part", $partId)
+            ->where("is_visible", 1)
+            ->skip($page * config("bot.results_per_page"))
+            ->take(config("bot.results_per_page"))
+            ->orderBy('id', 'DESC')
+            ->get();
+
+        if (count($articles) > 0) {
+            foreach ($articles as $article)
+                $this->reply($article->url, ["parse_mode" => "Markdown"]);
+        } else
+            $this->reply("Статьи появтяся в скором времени!", ["parse_mode" => "Markdown"]);
+
+        $this->pagination("/articles $partId", $articles, $page, "Ваши действия");
+    }
+
+    public function getLotterySlot($slotId, $codeId)
+    {
+        $code = Promocode::find($codeId);
+        if ($code == null) {
+            $this->reply("Увы, что-то пошло не так и код более не действителен:(");
+            return;
+        }
+        if ($code->prize_id != null) {
+            $this->reply("Приз по данному коду уже был выбран ранее!");
+            return;
+        }
+        $prize = Prize::with(["company"])
+                ->where("id", $slotId)
+                ->first() ?? null;
+
+        if ($prize == null) {
+            $this->reply("Увы, что-то пошло не так и приза нет:(");
+            return;
+        }
+        if ($prize->current_activation_count == $prize->summary_activation_count) {
+            $this->reply("Увы, к данному моменту все призы закончились");
+            return;
+        }
+
+        $message = "*" . $prize->title . "*\n"
+            . "_" . $prize->description . "_\n";
+        $prize->current_activation_count++;
+        $prize->updated_at = Carbon::now();
+        $prize->save();
+
+        $code->prize_id = $prize->id;
+        $code->updated_at = Carbon::now();
+        $code->save();
+
+        $this->sendPhoto($message, $prize->image_url);
+
+        $companyTitle = $prize->company->title;
+        $message = "*Пользователь поучаствовал в розыгрыше от компании $companyTitle и выиграл:*\n$message"
+            . "*Дата участия*:" . (Carbon::now()) . "\n";
+
+        $this->sendPhotoToChanel($message, $prize->image_url);
+    }
+
+    public function getActivityInformation()
+    {
+        $stat_types = [
+            "\xE2\x96\xAAКоличество активаций приза по акции: *%d* раз.\n",
+            "\xE2\x96\xAAКоличество рефералов:  *%d* человек.\n",
+            "\xE2\x96\xAAМаксимальное количество накопленного CashBack: *%d* руб.\n",
+            "\xE2\x96\xAAКоличество переходов из ВК: *%d* раз.\n",
+            "\xE2\x96\xAAКоличество переходов из Facebook: *%d* раз.\n",
+            "\xE2\x96\xAAКоличество переходов из Instagram: *%d* раз.\n",
+            "\xE2\x96\xAAКоличество переходов из других источников: *%d* раз.\n",
+            "\xE2\x96\xAAМасимальный реферальный бонус: *%d* руб.\n",
+            "\xE2\x96\xAAКоличество активированных достижений: *%d* ед.\n",
+            "\xE2\x96\xAAМаксимальное количество списанного CashBack: *%d* руб.\n",
+        ];
+
+        $stats = $this->getUser()->getStats();
+
+        $message = "";
+
+        foreach ($stats as $stat)
+            $message .= sprintf($stat_types[$stat->stat_type->value], $stat->stat_value);
+
+        $this->reply(count($stats) > 0 ? $message : "Статистика еще не ведется для вашего аккаунта!");
+    }
+
+    public function getMyFriends()
+    {
+
+        $ref = $this->getUser()->referrals_count;
+
+        $network = $this->getUser()->network_friends_count + $ref;
+
+        $network_tmp = $this->getUser()->current_network_level > 0 ? "Сеть друзей *$network* чел.!\n" : "";
+
+        $message = "Вы пригласили *$ref* друзей!\n" . $network_tmp . "_Делитесь Вашим QR-кодом и накапливайте баллы!_\n";
+
+        $keyboard = [
+            [
+                ["text" => "Посмотреть друзей", "callback_data" => "/friends 0"]
+            ]
+        ];
+
+        if ($ref > 0)
+            $this->sendMessage($message, $keyboard);
+        else
+            $this->reply($message);
+
+
+        $tmp_id = (string)$this->getChatId();
+        while (strlen($tmp_id) < 10)
+            $tmp_id = "0" . $tmp_id;
+
+        $code = base64_encode("001" . $tmp_id . "0000000000");
+
+        $qr_url = env("QR_URL") . "https://t.me/" . env("APP_BOT_NAME") . "?start=$code";
+
+        $this->sendPhoto("_Ваш реферальный код_\n$message", $qr_url, $keyboard);
+
+    }
+
+    public function getMyMoney()
+    {
+
+        $summary = $this->getUser()->referral_bonus_count +
+            $this->getUser()->cashback_bonus_count +
+            $this->getUser()->network_cashback_bonus_count;
+
+        $cashback = $this->getUser()->cashback_bonus_count;
+
+        $tmp_network = $this->getUser()->network_friends_count >= config("bot.step_one_friends") ?
+            "Сетевой бонус *" . $this->getUser()->network_cashback_bonus_count . "*\n" : '';
+
+        $message = "У вас *$summary* баллов, из них *$cashback* - бонус CashBack!\n" .
+            $tmp_network . "_Для оплаты дайте отсканировать данный QR-код сотруднику!_\n";
+
+
+        $keyboard = [
+            [
+                ["text" => "Мой бюджет", "callback_data" => "/statistic"]
+            ]
+        ];
+
+
+        $cashback_history = $this->getUser()->getCashBacksByPhone();
+
+        if (count($cashback_history) > 0) {
+            $tmp_money = 0;
+            foreach ($cashback_history as $ch)
+                if ($ch->activated == 0)
+                    $tmp_money += round(intval($ch->money_in_check) * env("CAHSBAK_PROCENT") / 100);
+
+            if ($tmp_money > 0)
+                array_push($keyboard, [
+                    ["text" => "Зачислить мне $tmp_money руб. CashBack", "callback_data" => "/cashback_get"]
+                ]);
+
+        }
+
+        //$this->sendMessage($message,$keyboard);
+
+        $tmp_id = (string)$this->getChatId();
+        while (strlen($tmp_id) < 10)
+            $tmp_id = "0" . $tmp_id;
+
+        $code = base64_encode("002" . $tmp_id . "0000000000");
+
+        $qr_url = env("QR_URL") . "https://t.me/" . env("APP_BOT_NAME") . "?start=$code";
+
+        $this->sendPhoto("_Ваш код для оплаты_\n$message", $qr_url, $keyboard);
+    }
+
+    public function getLotteryMenu()
+    {
+
+        $rules = Article::where("part", Parts::Lottery)
+            ->where("is_visible", 1)
+            ->orderBy("id", "DESC")
+            ->first();
+
+        $keyboard = [
+            [
+                ['text' => "Ввести код и начать", 'callback_data' => "/lottery"]
+            ]
+        ];
+
+        if ($rules != null)
+            array_push($keyboard, [['text' => "Условия розыгрыша и призы", 'url' => $rules->url]]);
+
+        $this->sendMessage("Розыгрыш призов", $keyboard);
+    }
+
+    public function getLatestCashBack()
+    {
+        if ($this->getUser()->hasPhone())
+            return;
+
+        $cashback_history = $this->getUser()->getLatestCashBack();
+
+        if (count($cashback_history) > 0) {
+            foreach ($cashback_history as $ch) {
+                $ch->activated = 1;
+                $ch->user_id = $this->getUser()->id;
+                $ch->save();
+
+                $user = $this->getUser();
+                $user->cashback_bonus_count += round(intval($ch->money_in_check) * env("CAHSBAK_PROCENT") / 100);
+                $user->save();
+
+            }
+            $this->reply("CashBack успешно зачислен!");
+        }
+
+    }
+}
