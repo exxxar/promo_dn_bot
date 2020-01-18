@@ -17,10 +17,10 @@ interface iSkidkiDNBot
     public function getAchievementsPrize($id);
 
 
-    public function getMyFriends($page);
+    public function getMyFriends();
     public function getMyMoney();
 
-    public function getRefLink();
+    public function getRefLink($id);
 
     public function getFAQMenu();
     public function getPromotionsMenu();

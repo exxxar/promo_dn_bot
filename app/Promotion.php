@@ -36,26 +36,27 @@ class Promotion extends Model
     }
 
 
-
     public function category()
     {
-        return $this->belongsTo('App\Category',"category_id","id");
+        return $this->belongsTo('App\Category', "category_id", "id");
     }
 
     public function company()
     {
-        return $this->belongsTo('App\Company',"company_id","id");
+        return $this->belongsTo('App\Company', "company_id", "id");
     }
 
-    public function isNotActiveByUser($chatId)
+    public function onPromo($chatId)
     {
         $on_promo = $this->users()->where('telegram_chat_id', "$chatId")->first();
+        return ($on_promo != null);
+    }
 
+    public function isActive()
+    {
         $time_0 = (date_timestamp_get(new DateTime($this->start_at)));
         $time_1 = (date_timestamp_get(new DateTime($this->end_at)));
         $time_2 = date_timestamp_get(now());
-
-        return ($on_promo == null && $time_2 >= $time_0 && $time_2 < $time_1);
+        return $time_2 >= $time_0 && $time_2 < $time_1;
     }
-
 }

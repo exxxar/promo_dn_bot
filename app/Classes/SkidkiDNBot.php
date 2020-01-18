@@ -47,7 +47,7 @@ class SkidkiDNBot extends Bot implements iSkidkiDNBot
         if (count($events) == 0 || !$found)
             $this->reply("Мероприятия появтяся в скором времени!");
 
-        $this->pagination("/events $page", $events, "Выберите действие");
+        $this->pagination("/events $page", $events, $page, "Выберите действие");
 
     }
 
@@ -74,12 +74,13 @@ class SkidkiDNBot extends Bot implements iSkidkiDNBot
         $tmp = "";
 
         foreach ($refs as $key => $ref)
-            $tmp .= printf("_%s_ в %s потрачено *%s* бонусов\n",
+            $tmp .= sprintf("_%s_ в %s потрачено *%s* бонусов\n",
                 $ref->created_at,
                 ($ref->company->title ?? $ref->company->id),
                 $ref->value
             );
 
+        $this->reply(strlen($tmp) > 0 ? $tmp : "Вы не оплачивали через систему CashBack.");
         $this->pagination("/payments", $refs, $page, (strlen($tmp) > 0 ? $tmp : "Вы не потратили свои бонусы."));
     }
 
@@ -96,19 +97,20 @@ class SkidkiDNBot extends Bot implements iSkidkiDNBot
             return;
         }
 
-        $cashbacks = $this->getUser()->getCashBacks($page);
+        $cashbacks = $this->getUser()->getCashBacksByUserId($page);
 
         $tmp = "";
 
         foreach ($cashbacks as $key => $cash)
-            $tmp .= printf("Заведение *%s* _%s_ чек №%s принес вам *%s* руб. CashBack\n",
+            $tmp .= sprintf("Заведение *%s* _%s_ чек №%s принес вам *%s* руб. CashBack\n",
                 $cash->company->title,
                 $cash->created_at,
                 $cash->check_info,
                 round(intval($cash->money_in_check) * env("CAHSBAK_PROCENT") / 100)
             );
 
-        $this->pagination("/cashbacks", $cashbacks, $page, strlen($tmp) > 0 ? $tmp : "Вам не начислялся CashBack.");
+        $this->reply(strlen($tmp) > 0 ? $tmp : "Вам не начислялся CashBack.");
+        $this->pagination("/cashbacks", $cashbacks, $page, "Ващи дальнейшие действия");
     }
 
     public function getAchievementsAll($page)
@@ -131,7 +133,7 @@ class SkidkiDNBot extends Bot implements iSkidkiDNBot
                     ["text" => "Подробнее", "callback_data" => "/achievements_description " . $achievement->id]
                 ]
             ];
-            $message = printf("%s *%s*\n_%s_",
+            $message = sprintf("%s *%s*\n_%s_",
                 ($achievement->activated == 0 ? "" : "\xE2\x9C\x85"),
                 ($achievement->title ?? "Без названия [#" . $achievement->id . "]"),
                 $achievement->description
@@ -160,7 +162,7 @@ class SkidkiDNBot extends Bot implements iSkidkiDNBot
                     ["text" => "Подробнее", "callback_data" => "/achievements_description " . $achievement->id]
                 ]
             ];
-            $message = printf("%s *%s*\n_%s_",
+            $message = sprintf("%s *%s*\n_%s_",
                 ($achievement->activated == 0 ? "" : "\xE2\x9C\x85"),
                 ($achievement->title ?? "Без названия [#" . $achievement->id . "]"),
                 $achievement->description
@@ -193,7 +195,7 @@ class SkidkiDNBot extends Bot implements iSkidkiDNBot
             "\n*Успешно выполнено!*" :
             "Прогресс:*" . $currentVal . "* из *" . $achievement->trigger_value . "*");
 
-        $message = printf("*%s*\n_%s_\n%s",
+        $message = sprintf("*%s*\n_%s_\n%s",
             $achievement->title,
             $achievement->description,
             $progress
@@ -201,7 +203,7 @@ class SkidkiDNBot extends Bot implements iSkidkiDNBot
 
         $this->sendPhoto($message, $achievement->ach_image_url);
 
-        $message = printf("*\xF0\x9F\x91\x86Ваш приз:*\n_%s_",
+        $message = sprintf("*\xF0\x9F\x91\x86Ваш приз:*\n_%s_",
             $achievement->prize_description
         );
 
@@ -270,9 +272,45 @@ class SkidkiDNBot extends Bot implements iSkidkiDNBot
 
     }
 
-    public function getRefLink()
+    public function getRefLink($id)
     {
-        // TODO: Implement getRefLink() method.
+
+        if (!$this->getUser()->hasPhone()) {
+            $keyboard = [
+                [
+                    ["text" => "Заполнить", "callback_data" => "/fillinfo"]
+                ]
+            ];
+
+            $this->sendMessage("У вас не заполнена личная информация! Заполняй и делись ссылкой:)", $keyboard);
+            return;
+        }
+
+        $tmp_id = (string)$this->getChatId();
+        while (strlen($tmp_id) < 10)
+            $tmp_id = "0" . $tmp_id;
+
+        switch ($id) {
+            default:
+            case 1:
+                $comand_code = "001";
+                break;
+            case 2:
+                $comand_code = "004";
+                break;
+            case 3:
+                $comand_code = "005";
+                break;
+            case 4:
+                $comand_code = "006";
+                break;
+        }
+
+        $code = base64_encode($comand_code . $tmp_id . "0000000000");
+        $url_link = "https://t.me/" . env("APP_BOT_NAME") . "?start=$code";
+        $href_url_link = "<a href='" . $url_link . "'>Пересылай сообщение друзьям и получай больше баллов!</a>";
+        $this->reply("Делись ссылкой с друзьями:\n" . ($id == 1 ? $href_url_link : $url_link));
+
     }
 
     public function getFAQMenu()
@@ -391,48 +429,129 @@ class SkidkiDNBot extends Bot implements iSkidkiDNBot
         // TODO: Implement getPromouterMenu() method.
     }
 
-    public function getPromotionsByCategory($page)
+    public function getPromotionsByCompany($page)
     {
         $companies = Company::orderBy('position', 'DESC')
+            ->take(config("bot.results_per_page"))
+            ->skip($page*config("bot.results_per_page"))
             ->get();
 
-        $keyboard = [];
 
         foreach ($companies as $company) {
-            array_push($keyboard,
+            $keyboard = [
                 [
-                    ["text" => $company->title, "callback_data" => "/company " . $company->id]
-                ]);
+                    ["text" => "Посмотреть акции", "callback_data" => "/promo_by_company " . $company->id]
+                ]
+            ];
+
+
+            $this->sendPhoto('*' . $company->title . "*", $company->logo_url, $keyboard);
         }
 
-        $this->sendMessage("Акции по компаниям:", $keyboard);
+        $this->pagination("/company",$companies,$page,"Выберите действие");
+
     }
 
-    public function getPromotionsByCompany($page)
+    public function getPromotionsByCategory($page)
     {
 
         $categories = Category::orderBy('position', 'DESC')
+            ->take(config("bot.results_per_page"))
+            ->skip($page*config("bot.results_per_page"))
             ->get();
 
-        $keyboard = [];
 
-        foreach ($categories as $cat)
-            array_push($keyboard, [
-                ["text" => $cat->title, "callback_data" => "/category " . $cat->id]
-            ]);
+        foreach ($categories as $cat) {
 
+            $keyboard = [
+                [
+                    ["text" => $cat->title, "callback_data" => "/promo_by_category " . $cat->id]
+                ]
+            ];
 
-        $this->sendMessage("Акции по категориям:", $keyboard);
+            $this->sendPhoto("", $cat->image_url, $keyboard);
+        }
+
+        $this->pagination("/category",$categories,$page,"Выберите действие");
     }
 
     public function getCategoryById($id)
     {
-        // TODO: Implement getCategoryById() method.
+
+        $promotions = (Category::with(["promotions"])
+            ->where("id", $id)
+            ->get())
+            ->promotions()
+            ->get();
+
+        $isEmpty = true;
+        foreach ($promotions as $promo) {
+
+            $on_promo = $promo->onPromo($this->getChatId());
+            $isActive = $promo->isActive();
+
+            if (!$on_promo && $isActive) {
+
+                $isEmpty = false;
+
+                $keyboard = [
+                    [
+                        ["text" => "\xF0\x9F\x91\x89Подробнее", 'callback_data' => $promo->handler == null ? "/promotion " . $promo->id : $promo->handler . " " . $promo->id]
+                    ]
+                ];
+
+                $this->sendPhoto('', $promo->promo_image_url, $keyboard);
+            }
+        }
+
+        if ($isEmpty)
+            $this->reply("Акций в категории не найдено или все акции собраны:(");
     }
 
     public function getCompanyById($id)
     {
-        // TODO: Implement getCompanyById() method.
+
+        $company = \App\Company::with(["promotions", "promotions.users"])->where("id", $id)->get();
+
+        $keyboard = [];
+
+        if (strlen(trim($company->telegram_bot_url)) > 0)
+            array_push($keyboard, [
+                ['text' => "\xF0\x9F\x91\x89Перейти в бота", 'url' => $company->telegram_bot_url],
+            ]);
+
+        $message = sprintf("%s\n_%s_",
+            $company->title,
+            $company->description
+        );
+
+        $this->sendPhoto($message, $company->logo_url, $keyboard);
+
+        $promotions = $company->promotions()->get();
+
+        $isEmpty = false;
+
+        foreach ($promotions as $promo) {
+
+            $on_promo = $promo->onPromo($this->getChatId());
+            $isActive = $promo->isActive();
+
+
+            if (!$on_promo && $isActive) {
+
+                $keyboard = [
+                    [
+                        ['text' => "\xF0\x9F\x91\x89Подробнее", 'callback_data' => $promo->handler == null ? "/promotion " . $promo->id : $promo->handler . " " . $promo->id],
+                    ],
+                ];
+
+                $this->sendPhoto("*" . $promo->title . "*", $promo->promo_image_url, $keyboard);
+
+            }
+        }
+
+        if ($isEmpty)
+            $this->reply("Акций в категории не найдено или все акции собраны:(");
     }
 
     public function getArticlesByPartId($partId, $page = 0)
@@ -579,7 +698,7 @@ class SkidkiDNBot extends Bot implements iSkidkiDNBot
         ];
 
 
-        $cashback_history = $this->getUser()->getCashBacksByPhone();
+        $cashback_history = $this->getUser()->getCashBacksByPhone(0);
 
         if (count($cashback_history) > 0) {
             $tmp_money = 0;

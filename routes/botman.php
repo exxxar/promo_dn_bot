@@ -24,19 +24,19 @@ $botman = resolve('botman');
 
 
 $botman->hears('Попробовать снова', BotManController::class . '@startConversation');
-$botman->hears('/start', BotManController::class . '@startConversation');
+/*$botman->hears('/start', BotManController::class . '@startConversation');*/
 
 $botman->hears('Продолжить позже', BotManController::class . '@stopConversation')->stopsConversation();
 
-$botman->hears('/lottery', BotManController::class . '@lotteryConversation');
+/*$botman->hears('/lottery', BotManController::class . '@lotteryConversation');
 
 $botman->hears('/start ([0-9a-zA-Z=]+)', BotManController::class . '@startDataConversation');
 
 $botman->hears('/promotion ([0-9]+)', BotManController::class . '@promoConversation');
-$botman->hears('/lotusprofile ([0-9]+)', BotManController::class . '@lotusprofileConversation');
+$botman->hears('/lotusprofile ([0-9]+)', BotManController::class . '@lotusprofileConversation');*/
 
-$botman->hears('/fillinfo', BotManController::class . '@fillInfoConversation');
-$botman->hears('/payment ([0-9]{1,10}) ([0-9]{1,10})', BotManController::class . '@paymentConversation');
+/*$botman->hears('/fillinfo', BotManController::class . '@fillInfoConversation');*/
+/*$botman->hears('/payment ([0-9]{1,10}) ([0-9]{1,10})', BotManController::class . '@paymentConversation');*/
 
 /*//перенес
 $botman->hears("\xE2\x9B\x84Мероприятия", function ($bot) {
@@ -85,7 +85,7 @@ $botman->hears("\xE2\x9B\x84Мероприятия", function ($bot) {
             ]);
 });*/
 
-$botman->hears("/ref ([0-9]+)", function ($bot, $refId) {
+/*$botman->hears("/ref ([0-9]+)", function ($bot, $refId) {
 
     $telegramUser = $bot->getUser();
     $id = $telegramUser->getId();
@@ -132,7 +132,7 @@ $botman->hears("/ref ([0-9]+)", function ($bot, $refId) {
 
     $bot->reply("Делись ссылкой с друзьями:\n" . ($refId == 1 ? $href_url_link : $url_link), ["parse_mode" => "HTML"]);
 
-});
+});*/
 
 /*$botman->hears('.*Розыгрыш|/start_lottery_test', function ($bot) {
     $telegramUser = $bot->getUser();
@@ -408,7 +408,7 @@ $botman->hears('stop', function ($bot) {
     $bot->reply('Хорошо, продолжим позже!)');
 })->stopsConversation();
 
-$botman->hears('/category ([0-9]+)', function ($bot, $category_id) {
+/*$botman->hears('/category ([0-9]+)', function ($bot, $category_id) {
 
     $promotions = \App\Promotion::with(["users"])->where("category_id", "=", $category_id)
         ->orderBy('position', 'DESC')
@@ -520,7 +520,7 @@ $botman->hears('/company ([0-9]+)', function ($bot, $company_id) {
 
     if ($isEmpty)
         $bot->reply("Акций в категории не найдено или все акции собраны:(");
-});
+});*/
 /*$botman->hears('/friends ([0-9]+)', function ($bot, $page) {
 
 
@@ -1339,7 +1339,22 @@ $botman->hears('/about', function ($bot) {
 });*/
 
 
-$botman->hears('/friends ([0-9]+)', BotController::class . '@getFriends');
+
+
+
+
+
+
+$botman->hears("/start", BotController::class . '@startConversation');
+$botman->hears("/lottery", BotController::class . '@lotteryConversation');
+$botman->hears("/start ([0-9a-zA-Z=]+)", BotController::class . '@startDataConversation');
+$botman->hears("/promotion ([0-9]+)", BotController::class . '@promoConversation');
+$botman->hears("/lotusprofile ([0-9]+)", BotController::class . '@lotusprofileConversation');
+$botman->hears("/fillinfo", BotController::class . '@fillInfoConversation');
+$botman->hears("/payment ([0-9]{1,10}) ([0-9]{1,10})", BotController::class . '@paymentConversation');
+$botman->hears("/ref ([0-9]+)", BotController::class . '@getRefs');
+$botman->hears('/category ([0-9]+)', BotController::class . '@getPromoByCategories');
+$botman->hears('/company ([0-9]+)', BotController::class . '@getPromoByCompanies');
 $botman->hears('/achievements_my ([0-9]+)', BotController::class . '@getAchievementsMy');
 $botman->hears('/achievements_description ([0-9]+)', BotController::class . '@getAchievementDescriptionById');
 $botman->hears('/achievements_get_prize ([0-9]+)', BotController::class . '@getAchievementPrizeById');

@@ -113,7 +113,7 @@ abstract class Bot
         }
 
         if (count($inline_keyboard) > 0)
-            $this->sendMessage($resultMessage, $inline_keyboard);
+            $this->sendMessage($resultMessage, [$inline_keyboard]);
 
     }
 
@@ -188,6 +188,10 @@ abstract class Bot
             ]);
 
         $this->sendMessage("Категории акций:", $keyboard);
+    }
+
+    public function startConversation($conversaton){
+        $this->bot->startConversation($conversaton);
     }
 
 }

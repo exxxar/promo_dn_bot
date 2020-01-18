@@ -4,6 +4,13 @@ namespace App\Http\Controllers;
 
 
 use App\Classes\SkidkiDNBot;
+use App\Conversations\FillInfoConversation;
+use App\Conversations\LotteryConversation;
+use App\Conversations\LotusProfileConversation;
+use App\Conversations\PaymentConversation;
+use App\Conversations\PromoConversation;
+use App\Conversations\StartConversation;
+use App\Conversations\StopConversation;
 use App\Enums\Parts;
 use BotMan\BotMan\Facades\BotMan;
 use Illuminate\Http\Request;
@@ -215,5 +222,54 @@ class BotController extends Controller
         $this->sdnbot
             ->setBot($bot)
             ->getFriends($page);
+    }
+
+    public function getRefs($bot, $id)
+    {
+        $this->sdnbot
+            ->setBot($bot)
+            ->getRefLink($id);
+    }
+
+    public function paymentConversation($bot,$arg1,$arg2){
+        $this->sdnbot
+            ->setBot($bot)
+            ->startConversation(new PaymentConversation($bot,$arg1,$arg2));
+    }
+
+    public function fillInfoConversation($bot){
+        $this->sdnbot
+            ->setBot($bot)
+            ->startConversation(new FillInfoConversation($bot));
+    }
+
+    public function startConversation($bot){
+        $this->sdnbot
+            ->setBot($bot)
+            ->startConversation(new StartConversation($bot));
+    }
+
+    public function lotteryConversation($bot){
+        $this->sdnbot
+            ->setBot($bot)
+            ->startConversation(new LotteryConversation($bot));
+    }
+
+    public function startDataConversation($bot,$data){
+        $this->sdnbot
+            ->setBot($bot)
+            ->startConversation(new StopConversation($bot,$data));
+    }
+
+    public function promoConversation($bot,$data){
+        $this->sdnbot
+            ->setBot($bot)
+            ->startConversation(new PromoConversation($bot,$data));
+    }
+
+    public function lotusprofileConversation($bot,$data){
+        $this->sdnbot
+            ->setBot($bot)
+            ->startConversation(new LotusProfileConversation($bot,$data));
     }
 }
