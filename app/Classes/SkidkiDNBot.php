@@ -408,6 +408,9 @@ class SkidkiDNBot extends Bot implements iSkidkiDNBot
             [
                 ["text" => "Начисления", "callback_data" => "/cashbacks 0"],
                 ["text" => "Списания", "callback_data" => "/payments 0"],
+            ],
+            [
+                ["text" => "Благотворительность", "callback_data" => "/charity"]
             ]
         ];
         $this->sendMessage("Вы можете отслеживать начисления CashBack бонусов и их списание!", $keyboard);
@@ -433,7 +436,7 @@ class SkidkiDNBot extends Bot implements iSkidkiDNBot
     {
         $companies = Company::orderBy('position', 'DESC')
             ->take(config("bot.results_per_page"))
-            ->skip($page*config("bot.results_per_page"))
+            ->skip($page * config("bot.results_per_page"))
             ->get();
 
 
@@ -448,7 +451,7 @@ class SkidkiDNBot extends Bot implements iSkidkiDNBot
             $this->sendPhoto('*' . $company->title . "*", $company->logo_url, $keyboard);
         }
 
-        $this->pagination("/company",$companies,$page,"Выберите действие");
+        $this->pagination("/promo_by_company", $companies, $page, "Выберите действие");
 
     }
 
@@ -457,7 +460,7 @@ class SkidkiDNBot extends Bot implements iSkidkiDNBot
 
         $categories = Category::orderBy('position', 'DESC')
             ->take(config("bot.results_per_page"))
-            ->skip($page*config("bot.results_per_page"))
+            ->skip($page * config("bot.results_per_page"))
             ->get();
 
 
@@ -472,7 +475,7 @@ class SkidkiDNBot extends Bot implements iSkidkiDNBot
             $this->sendPhoto("", $cat->image_url, $keyboard);
         }
 
-        $this->pagination("/category",$categories,$page,"Выберите действие");
+        $this->pagination("/category", $categories, $page, "Выберите действие");
     }
 
     public function getCategoryById($id)
@@ -657,10 +660,10 @@ class SkidkiDNBot extends Bot implements iSkidkiDNBot
             ]
         ];
 
-/*        if ($ref > 0)
-            $this->sendMessage($message, $keyboard);
-        else
-            $this->reply($message);*/
+        /*        if ($ref > 0)
+                    $this->sendMessage($message, $keyboard);
+                else
+                    $this->reply($message);*/
 
 
         $tmp_id = (string)$this->getChatId();
@@ -671,7 +674,7 @@ class SkidkiDNBot extends Bot implements iSkidkiDNBot
 
         $qr_url = env("QR_URL") . "https://t.me/" . env("APP_BOT_NAME") . "?start=$code";
 
-        $this->sendPhoto("_Ваш реферальный код_\n$message", $qr_url, ($ref > 0?$keyboard:[]));
+        $this->sendPhoto("_Ваш реферальный код_\n$message", $qr_url, ($ref > 0 ? $keyboard : []));
 
     }
 
