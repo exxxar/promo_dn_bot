@@ -1353,6 +1353,7 @@ $botman->hears("/lotusprofile ([0-9]+)", BotController::class . '@lotusprofileCo
 $botman->hears("/fillinfo", BotController::class . '@fillInfoConversation');
 $botman->hears("/payment ([0-9]{1,10}) ([0-9]{1,10})", BotController::class . '@paymentConversation');
 $botman->hears("/ref ([0-9]+)", BotController::class . '@getRefs');
+$botman->hears('/friends ([0-9]+)', BotController::class . '@getFriends');
 $botman->hears('/category ([0-9]+)', BotController::class . '@getPromoByCategories');
 $botman->hears('/company ([0-9]+)', BotController::class . '@getPromoByCompanies');
 $botman->hears('/achievements_my ([0-9]+)', BotController::class . '@getAchievementsMy');
