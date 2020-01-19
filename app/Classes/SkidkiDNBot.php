@@ -771,7 +771,7 @@ class SkidkiDNBot extends Bot implements iSkidkiDNBot
 
 
             $promotions = strlen(trim($query)) > 0 ? Promotion::where("title", "like", "%$query%")
-                ->where("description", "like", "%$query%")
+                ->orWhere("description", "like", "%$query%")
                 ->get() :
                 Promotion::all();
 
