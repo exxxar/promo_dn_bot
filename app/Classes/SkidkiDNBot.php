@@ -763,6 +763,7 @@ class SkidkiDNBot extends Bot implements iSkidkiDNBot
 
         if ($queryObject) {
 
+            Log::info(print_r($queryObject,true));
             $id = $queryObject->from->id;
 
             $promotions = \App\Promotion::all();
@@ -800,7 +801,7 @@ class SkidkiDNBot extends Bot implements iSkidkiDNBot
                                     ['text' => "Ссылка на акцию", "url" => "$url_link"],
                                 ],
                                 [
-                                    ['text' => "Отправить другу", "switch_inline_query" => ""],
+                                    ['text' => "Отправить другу", "switch_inline_query" => "@skidki_dn_bot"],
                                 ]
                             ]
                         ],
