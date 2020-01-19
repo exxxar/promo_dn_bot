@@ -777,13 +777,8 @@ class SkidkiDNBot extends Bot implements iSkidkiDNBot
 
             $button_list = [];
             foreach ($promotions as $promo) {
-
-
-                $on_promo = $promo->onPromo($this->getChatId());
                 $isActive = $promo->isActive();
-
-
-                if (!$on_promo && $isActive) {
+                if ($isActive) {
 
                     $tmp_id = (string)$id;
                     while (strlen($tmp_id) < 10)
