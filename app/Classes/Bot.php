@@ -26,7 +26,7 @@ abstract class Bot
     public function setBot($bot)
     {
         $this->bot = $bot;
-        //$this->createNewUser();
+        $this->createNewUser();
         return $this;
     }
 
