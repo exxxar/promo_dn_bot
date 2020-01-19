@@ -33,10 +33,13 @@ abstract class Bot
     protected function createNewUser()
     {
 
-        $id = $this->bot->getUser()->getId();
+        $id = $this->bot->getUser()->getId()??null;
         $username = $this->bot->getUser()->getUsername();
         $lastName = $this->bot->getUser()->getLastName();
         $firstName = $this->bot->getUser()->getFirstName();
+
+        if ($id==null)
+            return false;
 
         if ($this->getUser() == null) {
             $user = User::create([
@@ -52,7 +55,6 @@ abstract class Bot
                 'is_admin' => false,
             ]);
 
-            $this->
             event(new AchievementEvent(AchievementTriggers::MaxReferralBonusCount, 10, $user));
             return true;
 
