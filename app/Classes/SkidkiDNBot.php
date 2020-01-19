@@ -764,7 +764,6 @@ class SkidkiDNBot extends Bot implements iSkidkiDNBot
 
         if ($queryObject) {
 
-            Log::info(print_r($queryObject, true));
             $id = $queryObject->from->id;
 
             $query = $queryObject->query;
