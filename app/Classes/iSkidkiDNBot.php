@@ -7,10 +7,10 @@ namespace App\Classes;
 interface iSkidkiDNBot
 {
     public function getEventsAll($page);
-    public function getFriendsAll($page);
     public function getPaymentsAll($page);
     public function getCashBacksAll($page);
 
+    public function getAchievements($page, $isAll = true);
     public function getAchievementsAll($page);
     public function getAchievementsMy($page);
     public function getAchievementsInfo($id);
@@ -46,5 +46,7 @@ interface iSkidkiDNBot
     public function getActivityInformation();
 
     public function getLotterySlot($slotId,$codeId);
+
+    public function getFallback();
 
 }

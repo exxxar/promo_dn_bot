@@ -272,4 +272,10 @@ class BotController extends Controller
             ->setBot($bot)
             ->startConversation(new LotusProfileConversation($bot,$data));
     }
+
+    public function fallback($bot){
+        $this->sdnbot
+            ->setBot($bot)
+            ->getFallback();
+    }
 }

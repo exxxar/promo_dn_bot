@@ -8,6 +8,7 @@ use App\Achievement;
 use App\Article;
 use App\Category;
 use App\Company;
+use App\Drivers\TelegramInlineQueryDriver;
 use App\Enums\Parts;
 use App\Event;
 use App\Prize;
@@ -48,11 +49,6 @@ class SkidkiDNBot extends Bot implements iSkidkiDNBot
             $this->reply("Мероприятия появтяся в скором времени!");
 
         $this->pagination("/events $page", $events, $page, "Выберите действие");
-
-    }
-
-    public function getFriendsAll($page)
-    {
 
     }
 
@@ -113,13 +109,16 @@ class SkidkiDNBot extends Bot implements iSkidkiDNBot
         $this->pagination("/cashbacks", $cashbacks, $page, "Ващи дальнейшие действия");
     }
 
-    public function getAchievementsAll($page)
+    public function getAchievements($page, $isAll = true)
     {
-        $achievements = Achievement::where("is_active", 1)
-                ->skip($page * config("bot.results_per_page"))
-                ->take(config("bot.results_per_page"))
-                ->orderBy('position', 'ASC')
-                ->get() ?? null;
+        if ($isAll)
+            $achievements = Achievement::where("is_active", 1)
+                    ->skip($page * config("bot.results_per_page"))
+                    ->take(config("bot.results_per_page"))
+                    ->orderBy('position', 'ASC')
+                    ->get() ?? null;
+        else
+            $achievements = $this->getUser()->getAchievements($page);
 
         if (count($achievements) == 0 || $achievements == null) {
             $this->reply("Достижения будут доступны в скором времени!");
@@ -141,36 +140,19 @@ class SkidkiDNBot extends Bot implements iSkidkiDNBot
             $this->sendPhoto($message, $achievement->ach_image_url, $keyboard);
         }
 
-        $this->pagination("/achievements_all", $achievements, $page, "Выберите действие");
 
+        $this->pagination($isAll?"/achievements_all":"/achievements_my", $achievements, $page, "Выберите действие");
+
+    }
+
+    public function getAchievementsAll($page)
+    {
+      $this->getAchievements($page,true);
     }
 
     public function getAchievementsMy($page)
     {
-
-        $achievements = $this->getUser()->getAchievements($page);
-
-        if (count($achievements) == 0 || $achievements == null) {
-            $this->reply("У вас еще активированных нет достижений!");
-            return;
-        }
-
-        foreach ($achievements as $key => $achievement) {
-
-            $keyboard = [
-                [
-                    ["text" => "Подробнее", "callback_data" => "/achievements_description " . $achievement->id]
-                ]
-            ];
-            $message = sprintf("%s *%s*\n_%s_",
-                ($achievement->activated == 0 ? "" : "\xE2\x9C\x85"),
-                ($achievement->title ?? "Без названия [#" . $achievement->id . "]"),
-                $achievement->description
-            );
-            $this->sendPhoto($message, $achievement->ach_image_url, $keyboard);
-        }
-
-        $this->pagination("/achievements_my", $achievements, $page, "Выберите действие");
+        $this->getAchievements($page, false);
     }
 
     public function getAchievementsInfo($id)
@@ -367,19 +349,19 @@ class SkidkiDNBot extends Bot implements iSkidkiDNBot
         $refs = $this->getUser()->getFriends($page);
 
         $sender = $this->getUser(["parent"])
-            ->parent();
+            ->parent;
 
         $tmp = "";
 
         if ($sender != null) {
-            if ($sender->sender != null) {
-                $userSenderName = $sender->sender->fio_from_telegram ??
-                    $sender->sender->fio_from_request ??
-                    $sender->sender->telegram_chat_id ??
-                    'Неизвестный пользователь';
 
-                $tmp = "\xF0\x9F\x91\x91 $userSenderName - пригласил вас.\n";
-            }
+            $userSenderName = $sender->fio_from_telegram ??
+                $sender->fio_from_request ??
+                $sender->telegram_chat_id ??
+                'Неизвестный пользователь';
+
+            $tmp = "Вас пригласил - \xF0\x9F\x91\x91*$userSenderName*\n";
+
         }
 
         if ($refs != null)
@@ -409,9 +391,9 @@ class SkidkiDNBot extends Bot implements iSkidkiDNBot
                 ["text" => "Начисления", "callback_data" => "/cashbacks 0"],
                 ["text" => "Списания", "callback_data" => "/payments 0"],
             ],
-            [
-                ["text" => "Благотворительность", "callback_data" => "/charity"]
-            ]
+            /*  [
+                  ["text" => "Благотворительность", "callback_data" => "/charity"]
+              ]*/
         ];
         $this->sendMessage("Вы можете отслеживать начисления CashBack бонусов и их списание!", $keyboard);
     }
@@ -770,5 +752,75 @@ class SkidkiDNBot extends Bot implements iSkidkiDNBot
             $this->reply("CashBack успешно зачислен!");
         }
 
+    }
+
+    public function getFallback()
+    {
+        $this->bot->loadDriver(TelegramInlineQueryDriver::DRIVER_NAME);
+
+
+        $queryObject = json_decode($this->bot->getDriver()->getEvent());
+
+        if ($queryObject) {
+
+            $id = $queryObject->from->id;
+
+            $promotions = \App\Promotion::all();
+            $button_list = [];
+            foreach ($promotions as $promo) {
+
+
+                $on_promo = $promo->onPromo($this->getChatId());
+                $isActive = $promo->isActive();
+
+
+                if (!$on_promo&&$isActive) {
+
+                    $tmp_id = (string)$this->getChatId();
+                    while (strlen($tmp_id) < 10)
+                        $tmp_id = "0" . $tmp_id;
+
+                    $tmp_promo_id = (string)$promo->id;
+                    while (strlen($tmp_promo_id) < 10)
+                        $tmp_promo_id = "0" . $tmp_promo_id;
+
+                    $code = base64_encode("001" . $tmp_id . $tmp_promo_id);
+                    $url_link = "https://t.me/" . env("APP_BOT_NAME") . "?start=$code";
+
+                    $tmp_button = [
+                        'type' => 'article',
+                        'id' => uniqid(),
+                        'title' => $promo->title,
+                        'input_message_content' => [
+                            'message_text' => $promo->description . "\n" . $promo->promo_image_url,
+                        ],
+                        'reply_markup' => [
+                            'inline_keyboard' => [
+                                [
+                                    ['text' => "Ссылка на акцию", "url" => "$url_link"],
+                                ],
+                                [
+                                    ['text' => "Отправить другу", "switch_inline_query" => ""],
+                                ]
+                            ]
+                        ],
+                        'thumb_url' => $promo->promo_image_url,
+                        'url' => "https://vk.com/lotus",
+                        'description' => $promo->description,
+                        'hide_url' => true
+                    ];
+
+                    array_push($button_list, $tmp_button);
+
+
+                }
+            }
+            return $this->bot->sendRequest("answerInlineQuery",
+                [
+                    'cache_time' => 0,
+                    "inline_query_id" => json_decode($this->bot->getEvent())->id,
+                    "results" => json_encode($button_list)
+                ]);
+        }
     }
 }

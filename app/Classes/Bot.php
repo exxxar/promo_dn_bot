@@ -76,7 +76,6 @@ abstract class Bot
 
     public function getUser(array $params = [])
     {
-
         return (count($params) == 0 ?
                 User::where("telegram_chat_id", $this->getChatId())->first() :
                 User::with($params)->where("telegram_chat_id", $this->getChatId())->first()) ?? null;
@@ -139,7 +138,7 @@ abstract class Bot
                 "caption" => $message,
                 'parse_mode' => $parseMode,
                 'reply_markup' => json_encode([
-                    'inline_keyboard' => $keyboard
+                    'inline_keyboard' => $keyboard,
                 ])
             ]);
     }
