@@ -13,6 +13,7 @@ use App\Enums\Parts;
 use App\Event;
 use App\Prize;
 use App\Promocode;
+use App\Promotion;
 use BotMan\BotMan\BotMan;
 use Carbon\Carbon;
 use Illuminate\Support\Facades\Log;
@@ -141,13 +142,13 @@ class SkidkiDNBot extends Bot implements iSkidkiDNBot
         }
 
 
-        $this->pagination($isAll?"/achievements_all":"/achievements_my", $achievements, $page, "Выберите действие");
+        $this->pagination($isAll ? "/achievements_all" : "/achievements_my", $achievements, $page, "Выберите действие");
 
     }
 
     public function getAchievementsAll($page)
     {
-      $this->getAchievements($page,true);
+        $this->getAchievements($page, true);
     }
 
     public function getAchievementsMy($page)
@@ -763,10 +764,18 @@ class SkidkiDNBot extends Bot implements iSkidkiDNBot
 
         if ($queryObject) {
 
-            Log::info(print_r($queryObject,true));
+            Log::info(print_r($queryObject, true));
             $id = $queryObject->from->id;
 
-            $promotions = \App\Promotion::all();
+            $query = $queryObject->query;
+
+
+            $promotions = strlen(trim($query)) > 0 ? Promotion::where("title", "like", "%$query%")
+                ->where("description", "like", "%$query%")
+                ->get() :
+                Promotion::all();
+
+
             $button_list = [];
             foreach ($promotions as $promo) {
 
@@ -775,7 +784,7 @@ class SkidkiDNBot extends Bot implements iSkidkiDNBot
                 $isActive = $promo->isActive();
 
 
-                if (!$on_promo&&$isActive) {
+                if (!$on_promo && $isActive) {
 
                     $tmp_id = (string)$id;
                     while (strlen($tmp_id) < 10)
