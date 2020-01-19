@@ -810,7 +810,7 @@ class SkidkiDNBot extends Bot implements iSkidkiDNBot
                                     ['text' => "Ссылка на акцию", "url" => "$url_link"],
                                 ],
                                 [
-                                    ['text' => "Отправить другу", "switch_inline_query" => "@skidki_dn_bot"],
+                                    ['text' => "Отправить другу", "switch_inline_query" => ""],
                                 ]
                             ]
                         ],
