@@ -26,7 +26,8 @@
         "kyslik/column-sortable": "^6.2",
         "laravel/framework": "5.8.*",
         "laravel/tinker": "^1.0",
-        "simplesoftwareio/simple-qrcode": "^2.0"
+        "simplesoftwareio/simple-qrcode": "^2.0",
+        "spatie/laravel-db-snapshots": "^1.4"
     },
     "require-dev": {
         "beyondcode/laravel-dump-server": "^1.0",
