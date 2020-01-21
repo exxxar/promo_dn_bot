@@ -24,18 +24,14 @@ class Company extends Model
     public function uniqCategories()
     {
         $tmp = "";
-        try {
 
+        $promos = $this->promotions()->get()->unique("category_id");
 
-            $promos = $this->promotions()->get()->unique("category_id");
-
-            foreach ($promos as $promo) {
-                $tmp .= "#" . $promo->category->title . ",";
-            }
-            $tmp = substr($tmp, 0, strlen($tmp) - 1);
-        } catch (\Exception $e) {
-
+        foreach ($promos as $promo) {
+            $tmp .= "#" . ($promo->category()->first()->title ?? '') . ",";
         }
+        $tmp = substr($tmp, 0, strlen($tmp) - 1);
+
         return $tmp;
     }
 
