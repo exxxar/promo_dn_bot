@@ -212,9 +212,11 @@ class UsersController extends Controller
     public function cashBackPage($id)
     {
 
-        $user = User::with(["companies"])->where("id", $id)->first();
+        $user = User::where("id", $id)->first();
 
-        return view('admin.users.cashback', compact('user'));
+        $companies = Company::all();
+
+        return view('admin.users.cashback', compact('user','companies'));
     }
 
     public function addCashBack(Request $request)

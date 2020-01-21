@@ -20,12 +20,12 @@ class PromocodeController extends Controller
      */
     public function index(Request $request)
     {
-        $promocodes = Promocode::with(["user","company"])->orderBy('id', 'DESC')
+        $promocodes = Promocode::with(["user","company","user.companies"])->orderBy('id', 'DESC')
             ->paginate(15);
 
-        $companies = Company::all();
+        //$companies = Company::all();
 
-        return view('admin.promocodes.index', compact('promocodes','companies'))
+        return view('admin.promocodes.index', compact('promocodes'))
             ->with('i', ($request->get('page', 1) - 1) * 15);
     }
     /**
