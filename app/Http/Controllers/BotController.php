@@ -125,6 +125,20 @@ class BotController extends Controller
             ->getPromotionsByCompany($page);
     }
 
+    public function getCategoryById($bot, $categoryId,$page)
+    {
+        $this->sdnbot
+            ->setBot($bot)
+            ->getCategoryById($categoryId,$page);
+    }
+
+    public function getCompanyById($bot, $companyId,$page)
+    {
+        $this->sdnbot
+            ->setBot($bot)
+            ->getCompanyById($companyId,$page);
+    }
+
     public function getPromotionMenu($bot)
     {
         $this->sdnbot

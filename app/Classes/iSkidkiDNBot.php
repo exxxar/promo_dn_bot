@@ -38,8 +38,8 @@ interface iSkidkiDNBot
     public function getPromotionsByCategory($page);
     public function getPromotionsByCompany($page);
 
-    public function getCategoryById($id);
-    public function getCompanyById($id);
+    public function getCategoryById($id,$page);
+    public function getCompanyById($id,$page);
 
     public function getArticlesByPartId($partId);
 

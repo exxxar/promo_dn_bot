@@ -426,7 +426,7 @@ class SkidkiDNBot extends Bot implements iSkidkiDNBot
         foreach ($companies as $company) {
             $keyboard = [
                 [
-                    ["text" => "Посмотреть акции", "callback_data" => "/promo_by_company " . $company->id]
+                    ["text" => "Посмотреть акции", "callback_data" => "/company " . $company->id]
                 ]
             ];
 
@@ -451,23 +451,25 @@ class SkidkiDNBot extends Bot implements iSkidkiDNBot
 
             $keyboard = [
                 [
-                    ["text" => $cat->title, "callback_data" => "/promo_by_category " . $cat->id]
+                    ["text" => $cat->title, "callback_data" => "/category " . $cat->id]
                 ]
             ];
 
             $this->sendPhoto("", $cat->image_url, $keyboard);
         }
 
-        $this->pagination("/category", $categories, $page, "Выберите действие");
+        $this->pagination("/promo_by_category", $categories, $page, "Выберите действие");
     }
 
-    public function getCategoryById($id)
+    public function getCategoryById($id,$page)
     {
 
         $promotions = (Category::with(["promotions"])
             ->where("id", $id)
             ->get())
             ->promotions()
+            ->take(config("bot.results_per_page"))
+            ->skip($page * config("bot.results_per_page"))
             ->get();
 
         $isEmpty = true;
@@ -492,9 +494,11 @@ class SkidkiDNBot extends Bot implements iSkidkiDNBot
 
         if ($isEmpty)
             $this->reply("Акций в категории не найдено или все акции собраны:(");
+
+        $this->pagination("/category $id", $promotions, $page, "Выберите действие");
     }
 
-    public function getCompanyById($id)
+    public function getCompanyById($id,$page)
     {
 
         $company = \App\Company::with(["promotions", "promotions.users"])->where("id", $id)->get();
@@ -513,7 +517,10 @@ class SkidkiDNBot extends Bot implements iSkidkiDNBot
 
         $this->sendPhoto($message, $company->logo_url, $keyboard);
 
-        $promotions = $company->promotions()->get();
+        $promotions = $company->promotions()
+            ->take(config("bot.results_per_page"))
+            ->skip($page * config("bot.results_per_page"))
+            ->get();
 
         $isEmpty = false;
 
@@ -538,6 +545,8 @@ class SkidkiDNBot extends Bot implements iSkidkiDNBot
 
         if ($isEmpty)
             $this->reply("Акций в категории не найдено или все акции собраны:(");
+
+        $this->pagination("/company $id", $promotions, $page, "Выберите действие");
     }
 
     public function getArticlesByPartId($partId, $page = 0)
