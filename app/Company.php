@@ -21,19 +21,27 @@ class Company extends Model
         'telegram_bot_url'
     ];
 
-    public function uniqCategories(){
-        $promos = $this->promotions()->get()->unique("category_id");
+    public function uniqCategories()
+    {
         $tmp = "";
-        foreach ($promos as $promo){
-            $tmp .="#".$promo["category"]["title"].",";
+        try {
+
+
+            $promos = $this->promotions()->get()->unique("category_id");
+
+            foreach ($promos as $promo) {
+                $tmp .= "#" . $promo["category"]["title"] . ",";
+            }
+            $tmp = substr($tmp, 0, strlen($tmp) - 1);
+        } catch (\Exception $e) {
+
         }
-        $tmp = substr($tmp,0,strlen($tmp)-1);
         return $tmp;
     }
 
     public function promotions()
     {
-        return $this->hasMany('App\Promotion',"company_id", "id");
+        return $this->hasMany('App\Promotion', "company_id", "id");
     }
 
     public function prizes()
