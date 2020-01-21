@@ -30,7 +30,7 @@ class Company extends Model
             $promos = $this->promotions()->get()->unique("category_id");
 
             foreach ($promos as $promo) {
-                $tmp .= "#" . $promo["category"]["title"] . ",";
+                $tmp .= "#" . $promo->category->title . ",";
             }
             $tmp = substr($tmp, 0, strlen($tmp) - 1);
         } catch (\Exception $e) {
