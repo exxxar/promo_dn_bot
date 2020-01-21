@@ -426,7 +426,7 @@ class SkidkiDNBot extends Bot implements iSkidkiDNBot
         foreach ($companies as $company) {
             $keyboard = [
                 [
-                    ["text" => "Посмотреть акции", "callback_data" => "/company " . $company->id]
+                    ["text" => "Посмотреть акции", "callback_data" => "/company " . $company->id . " 0"]
                 ]
             ];
 
@@ -451,22 +451,22 @@ class SkidkiDNBot extends Bot implements iSkidkiDNBot
 
             $keyboard = [
                 [
-                    ["text" => $cat->title, "callback_data" => "/category " . $cat->id]
+                    ["text" => "Посмотреть акции", "callback_data" => "/category " . $cat->id . " 0"]
                 ]
             ];
 
-            $this->sendPhoto("", $cat->image_url, $keyboard);
+            $this->sendPhoto("*$cat->title*", $cat->image_url, $keyboard);
         }
 
         $this->pagination("/promo_by_category", $categories, $page, "Выберите действие");
     }
 
-    public function getCategoryById($id,$page)
+    public function getCategoryById($id, $page)
     {
 
         $promotions = (Category::with(["promotions"])
             ->where("id", $id)
-            ->get())
+            ->first())
             ->promotions()
             ->take(config("bot.results_per_page"))
             ->skip($page * config("bot.results_per_page"))
@@ -498,10 +498,10 @@ class SkidkiDNBot extends Bot implements iSkidkiDNBot
         $this->pagination("/category $id", $promotions, $page, "Выберите действие");
     }
 
-    public function getCompanyById($id,$page)
+    public function getCompanyById($id, $page)
     {
 
-        $company = \App\Company::with(["promotions", "promotions.users"])->where("id", $id)->get();
+         $company = \App\Company::with(["promotions", "promotions.users"])->where("id", $id)->first();
 
         $keyboard = [];
 
