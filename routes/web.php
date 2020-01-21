@@ -41,7 +41,9 @@ Route::get('/test_get_updates', 'BotManController@testGetUpdates');
 
 
 Route::get('/', function (Request $request) {
-    return view('welcome');
+    $companies = \App\Company::with(["promotions","promotions.category"])->get();
+
+    return view('welcome',compact("companies"));
 });
 
 

@@ -3,6 +3,7 @@
 namespace App;
 
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Support\Facades\Log;
 
 class Company extends Model
 {
@@ -20,19 +21,29 @@ class Company extends Model
         'telegram_bot_url'
     ];
 
+    public function uniqCategories(){
+        $promos = $this->promotions()->get()->unique("category_id");
+        $tmp = "";
+        foreach ($promos as $promo){
+            $tmp .="#".$promo["category"]["title"].",";
+        }
+        $tmp = substr($tmp,0,strlen($tmp)-1);
+        return $tmp;
+    }
+
     public function promotions()
     {
-        return $this->hasMany('App\Promotion',"id", "company_id");
+        return $this->hasMany('App\Promotion',"company_id", "id");
     }
 
     public function prizes()
     {
-        return $this->hasMany('App\Prize', "id", "company_id");
+        return $this->hasMany('App\Prize', "company_id", "id");
     }
 
     public function promocodes()
     {
-        return $this->hasMany('App\Promocode', "id", "company_id");
+        return $this->hasMany('App\Promocode', "company_id", "id");
     }
 
     public function getActivePromotions($chatId)

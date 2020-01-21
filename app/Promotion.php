@@ -35,6 +35,18 @@ class Promotion extends Model
             ->withTimestamps();
     }
 
+    public function getPromoUrl(){
+        $skidobotik = User::where("email","skidobot@gmail.com")->first();
+        $tmp_user_id = (string)$skidobotik->telegram_chat_id;
+        $tmp_promo_id = (string)$this->id;
+
+        while (strlen($tmp_promo_id) < 10)
+            $tmp_promo_id = "0" . $tmp_promo_id;
+        $code = base64_encode("001" . $tmp_user_id . $tmp_promo_id);
+
+        return  "https://t.me/" . env("APP_BOT_NAME") . "?start=$code";
+
+    }
 
     public function category()
     {

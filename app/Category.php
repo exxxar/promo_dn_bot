@@ -18,7 +18,7 @@ class Category extends Model
 
     public function promotions()
     {
-        return $this->hasMany('App\Promotion',"id", "company_id");
+        return $this->hasMany('App\Promotion',"category_id", "id");
     }
 
     public function getActivePromotions($chatId)
