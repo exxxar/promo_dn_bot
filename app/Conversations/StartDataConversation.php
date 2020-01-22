@@ -246,7 +246,7 @@ class StartDataConversation extends Conversation
             return;
         }
 
-        $on_refferal = RefferalsHistory::where("user_recipient_id", $this->user->id)->first();
+        $on_refferal = RefferalsHistory::where("user_recipient_id", $this->getUser()->id)->first();
 
         if ($sender_user && !$on_refferal) {
             $sender_user->referrals_count += 1;
