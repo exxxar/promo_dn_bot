@@ -87,23 +87,28 @@ class LotusProfileConversation extends Conversation
                 Button::create(__("messages.promo_btn_3"))->value('no'),
             ]);
 
+        Log::info("1 test data=".$this->data);
 
         $this->ask($question, function (Answer $answer) {
             if ($answer->isInteractiveMessageReply()) {
                 $selectedValue = $answer->getValue();
 
                 if ($selectedValue == "promo_info") {
+                    Log::info("test data=")
                     $this->promoInfo();
+                    return;
                 }
 
                 if ($selectedValue == "yes") {
                     $this->conversationMenu(__("messages.menu_title_2"));
                     $this->askFirstname();
+                    return;
 
                 }
 
                 if ($selectedValue == "no") {
                     $this->reply(__("messages.message_1"));
+                    return;
                 }
             }
         });
@@ -112,7 +117,7 @@ class LotusProfileConversation extends Conversation
     public function promoInfo()
     {
 
-        Log::info("LOTUS PROM " . $this->data);
+        Log::info("2 test data=".$this->data);
         $promo = Promotion::find($this->data);
         if ($promo) {
             $coords = explode(",", $promo->location_coords);
