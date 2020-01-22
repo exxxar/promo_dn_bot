@@ -561,9 +561,9 @@ class SkidkiDNBot extends Bot implements iSkidkiDNBot
 
         if (count($articles) > 0) {
             foreach ($articles as $article)
-                $this->reply($article->url, ["parse_mode" => "Markdown"]);
+                $this->reply($article->url);
         } else
-            $this->reply("Статьи появятся в скором времени!", ["parse_mode" => "Markdown"]);
+            $this->reply("Статьи появятся в скором времени!");
 
         $this->pagination("/articles $partId", $articles, $page, "Ваши действия");
     }
