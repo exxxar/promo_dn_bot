@@ -18,19 +18,19 @@ class LotusProfileConversation extends Conversation
 {
     use CustomBotMenu;
 
-    private $about;
-    private $model_name;
-    private $height;
-    private $weight;
-    private $breast_volume;
-    private $sex;
-    private $waist;
-    private $hips;
-    private $model_school_education;
-    private $hobby;
-    private $education;
-    private $wish_learn;
-    private $data;
+    protected $about;
+    protected $model_name;
+    protected $height;
+    protected $weight;
+    protected $breast_volume;
+    protected $sex;
+    protected $waist;
+    protected $hips;
+    protected $model_school_education;
+    protected $hobby;
+    protected $education;
+    protected $wish_learn;
+    protected $data;
 
     public function __construct($bot, $data)
     {
