@@ -103,7 +103,7 @@ class StartDataConversation extends Conversation
 
         if ($canBeRefferal) {
             $this->activateRefferal();
-            $this->mainMenu('Добрый день! Приветствуем вас в нашем акционном боте! Мы рады, что Вы присоединились к нам. Все акции будут активны с 5 января!');
+            $this->mainMenu('Добрый день! Приветствуем вас в нашем акционном боте! Мы рады, что Вы присоединились к нам. Все акции будут активны с 1 февраля!');
 
             if ($this->code == "100" && intval($this->promo_id) != 0) {
                 $this->openEvent();
@@ -351,6 +351,7 @@ class StartDataConversation extends Conversation
 
         $promo = Promotion::with(["users"])->find(intval($this->promo_id));
 
+
         $on_promo = $promo->onPromo($this->getChatId());
 
         if ($on_promo) {
@@ -366,7 +367,7 @@ class StartDataConversation extends Conversation
         $attachment = new Image($promo->promo_image_url);
         $message = OutgoingMessage::create()
             ->withAttachment($attachment);
-        $this->reply($message, ["parse_mode" => "Markdown"]);
+        $this->reply($message);
 
         $message = Question::create("*" . $promo->title . "*")
             ->addButtons([
