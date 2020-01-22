@@ -22,20 +22,20 @@ class LotteryConversation extends Conversation
 
     public function askPromocode()
     {
-        $question = Question::create(__("ask_promocode"))
-            ->fallback(__("ask_fallback"));
+        $question = Question::create(__("messages.ask_promocode"))
+            ->fallback(__("messages.ask_fallback"));
 
         return $this->ask($question, function (Answer $answer) {
             $code = Promocode::where("code", $answer->getText())
                 ->first();
 
             if ($code == null) {
-                $this->reply(__("ask_promocode_error_1"));
+                $this->reply(__("messages.ask_promocode_error_1"));
                 $this->askPromocode();
                 return;
             }
             if ($code->activated == true) {
-                $this->reply(__("ask_promocode_error_2"));
+                $this->reply(__("messages.ask_promocode_error_2"));
                 $this->askPromocode();
                 return;
             }
@@ -49,7 +49,7 @@ class LotteryConversation extends Conversation
             });
 
             if (count($prizes) == 0) {
-                $this->reply(__("ask_promocode_error_3"));
+                $this->reply(__("messages.ask_promocode_error_3"));
                 return;
             }
             $code->activated = true;
@@ -69,8 +69,8 @@ class LotteryConversation extends Conversation
                 }
             }
 
-            $this->sendMessage(__("ask_promocode_success_1"), $inline_keyboard);
-            $this->mainMenu(__("menu_title_5"));
+            $this->sendMessage(__("messages.ask_promocode_success_1"), $inline_keyboard);
+            $this->mainMenu(__("messages.menu_title_5"));
         });
     }
 
@@ -80,11 +80,11 @@ class LotteryConversation extends Conversation
     public function run()
     {
         try {
-            $this->conversationMenu(__("menu_title_3"));
+            $this->conversationMenu(__("messages.menu_title_3"));
             $this->askPromocode();
         } catch (\Exception $e) {
             Log::error(get_class($this));
-            $this->mainMenu(__("menu_title_1"));
+            $this->mainMenu(__("messages.menu_title_1"));
         }
     }
 }

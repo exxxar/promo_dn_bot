@@ -23,7 +23,7 @@ class StopConversation extends Conversation
      */
     public function run()
     {
-        $this->mainMenu(__("menu_title_1"));
+        $this->mainMenu(__("messages.menu_title_1"));
     }
 
 

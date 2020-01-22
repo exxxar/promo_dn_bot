@@ -43,22 +43,22 @@ class PaymentConversation extends Conversation
             $this->money_in_check = 0;
 
             if ($this->getUser()->is_admin == 1) {
-                $this->conversationMenu(__("menu_title_2"));
+                $this->conversationMenu(__("messages.menu_title_2"));
                 $this->askForAction();
             }
         } catch (\Exception $e) {
             Log::error(get_class($this));
-            $this->mainMenu(__("menu_title_1"));
+            $this->mainMenu(__("messages.menu_title_1"));
         }
 
     }
 
     public function askForAction()
     {
-        $question = Question::create(__("ask_action"))
+        $question = Question::create(__("messages.ask_action"))
             ->addButtons([
-                Button::create(__("ask_action_btn_1"))->value('askpay'),
-                Button::create(__("ask_action_btn_2"))->value('getcashabck'),
+                Button::create(__("messages.ask_action_btn_1"))->value('askpay'),
+                Button::create(__("messages.ask_action_btn_2"))->value('getcashabck'),
             ]);
 
         $this->ask($question, function (Answer $answer) {
@@ -78,8 +78,8 @@ class PaymentConversation extends Conversation
 
     public function askForPay()
     {
-        $question = Question::create(__("ask_for_pay"))
-            ->fallback(__("ask_fallback"));
+        $question = Question::create(__("messages.ask_for_pay"))
+            ->fallback(__("messages.ask_fallback"));
 
         $this->ask($question, function (Answer $answer) {
             $nedded_bonus = $answer->getText();
@@ -91,7 +91,7 @@ class PaymentConversation extends Conversation
 
             $recipient_user = User::where("telegram_chat_id", intval($this->request_id))->first();
             if (!$recipient_user) {
-                $this->mainMenu(__("menu_title_6"));
+                $this->mainMenu(__("messages.menu_title_6"));
                 return;
             }
 
@@ -145,8 +145,8 @@ class PaymentConversation extends Conversation
 
     public function askForCashback()
     {
-        $question = Question::create(__("ask_for_cashback"))
-            ->fallback(__("ask_fallback"));
+        $question = Question::create(__("messages.ask_for_cashback"))
+            ->fallback(__("messages.ask_fallback"));
 
         $this->ask($question, function (Answer $answer) {
             $this->money_in_check = $answer->getText();
@@ -161,8 +161,8 @@ class PaymentConversation extends Conversation
 
     public function askForCheckInfo()
     {
-        $question = Question::create(__("ask_for_check_info"))
-            ->fallback(__("ask_fallback"));
+        $question = Question::create(__("messages.ask_for_check_info"))
+            ->fallback(__("messages.ask_fallback"));
 
         $this->ask($question, function (Answer $answer) {
             $this->check_info = $answer->getText();
@@ -179,7 +179,7 @@ class PaymentConversation extends Conversation
         $user = User::where("telegram_chat_id", intval($this->request_id))->first();
 
         if ($user == null) {
-            $this->mainMenu(__("menu_title_6"));
+            $this->mainMenu(__("messages.menu_title_6"));
             return;
         }
 

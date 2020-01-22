@@ -46,7 +46,7 @@ class PromoConversation extends Conversation
             $this->askForStartPromo();
         } catch (\Exception $e) {
             Log::error(get_class($this));
-            $this->mainMenu(__("menu_title_1"));
+            $this->mainMenu(__("messages.menu_title_1"));
         }
 
     }
@@ -266,7 +266,7 @@ class PromoConversation extends Conversation
     public function saveData()
     {
 
-        $this->mainMenu(__("menu_title_4"));
+        $this->mainMenu(__("messages.menu_title_4"));
 
         $promo = Promotion::find(intval($this->data));
 

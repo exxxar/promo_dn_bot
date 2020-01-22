@@ -145,8 +145,8 @@ class FillInfoConversation extends Conversation
             return;
         }
 
-        $question = Question::create(__("ask_city"))
-            ->fallback(__("ask_fallback"));
+        $question = Question::create(__("messages.ask_city"))
+            ->fallback(__("messages.ask_fallback"));
 
         $this->ask($question, function (Answer $answer) {
             $user = $this->getUser();
@@ -159,7 +159,7 @@ class FillInfoConversation extends Conversation
 
     public function saveData()
     {
-        $this->mainMenu(__("menu_title_4"));
+        $this->mainMenu(__("messages.menu_title_4"));
     }
 
 
