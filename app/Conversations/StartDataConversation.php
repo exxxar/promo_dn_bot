@@ -46,7 +46,7 @@ class StartDataConversation extends Conversation
         try {
             $this->startWithData();
         } catch (\Exception $e) {
-            Log::error(get_class($this)." ".$e->getMessage()." ".$e->getLine());
+            Log::error(get_class($this) . " " . $e->getMessage() . " " . $e->getLine());
             $this->fallbackMenu("Добрый день!Приветствуем вас в нашем акционном боте! Сейчас у нас технические работы.\n");
         }
     }
@@ -351,9 +351,8 @@ class StartDataConversation extends Conversation
 
         $promo = Promotion::with(["users"])->find(intval($this->promo_id));
 
-        Log::info("попытка открыть промо: id=".$this->getChatId());
         $on_promo = $promo->onPromo($this->getChatId());
-        Log::info("попытка открыть промо: on=".($on_promo?"true":"false"));
+
         if ($on_promo) {
             $this->reply('Акция уже была пройдена ранее!');
             return;
@@ -363,23 +362,13 @@ class StartDataConversation extends Conversation
             $this->reply('Акция уже подошла к концу!');
             return;
         }
-        Log::info("test0");
 
-        $attachment = new Image($promo->promo_image_url);
-        $message = OutgoingMessage::create()
-            ->withAttachment($attachment);
-        $this->reply($message);
-
-        Log::info("test1");
-
-        $message = Question::create("*" . $promo->title . "*")
-            ->addButtons([
-                Button::create("\xF0\x9F\x91\x89Подробнее")->value($promo->handler == null ? "/promotion " . $promo->id : $promo->handler . " " . $promo->id)
-            ]);
-
-        Log::info("test2");
-        $this->reply($message);
-
+        $keyboard = [
+            [
+                ["text" => "\xF0\x9F\x91\x89Подробнее", "callback_data" => $promo->handler == null ? "/promotion " . $promo->id : $promo->handler . " " . $promo->id]
+            ]
+        ];
+        $this->sendPhoto("*" . $promo->title . "*", $promo->promo_image_url, $keyboard);
     }
 
     protected function openEvent()
