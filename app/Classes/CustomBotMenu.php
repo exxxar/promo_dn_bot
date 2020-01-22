@@ -94,16 +94,11 @@ trait CustomBotMenu
 
     public function getUser(array $params = [])
     {
-        $user =  (count($params) == 0 ?
+        return  (count($params) == 0 ?
                 User::where("telegram_chat_id", $this->getChatId())->first() :
                 User::with($params)->where("telegram_chat_id", $this->getChatId())->first()) ?? null;
 
-        if ($user!=null){
-            $user->updated_at = Carbon::now();
-            $user->save();
-        }
 
-        return $user;
     }
 
     public function reply($message)
