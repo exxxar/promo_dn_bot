@@ -45,9 +45,6 @@ class StartConversation extends Conversation
 
         $user = $this->getUser();
 
-        Log::info("user_chat_id->".$this->getChatId());
-        Log::info("user_id->".$user->id);
-
         $on_refferal = RefferalsHistory::where("user_recipient_id", $user->id)->first();
 
         if (!$on_refferal) {

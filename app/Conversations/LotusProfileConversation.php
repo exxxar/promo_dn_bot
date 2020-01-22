@@ -112,20 +112,9 @@ class LotusProfileConversation extends Conversation
 
         $promo = Promotion::find($this->data);
         $coords = explode(",", $promo->location_coords);
-        $location_attachment = new Location($coords[0], $coords[1], [
-            'custom_payload' => true,
-        ]);
-        $attachment = new Image($promo->promo_image_url);
+        $this->sendPhoto("*" . $promo->title . "*\n_" . $promo->description . "_\n*Наш адрес*:" . $promo->location_address . "\n*Координаты акции*:",$promo->promo_image_url);
+        $this->sendLocation($coords[0],$coords[1]);
 
-        $message1 = OutgoingMessage::create("*" . $promo->title . "*\n_" . $promo->description . "_\n*Наш адрес*:" . $promo->location_address . "\n*Координаты акции*:")
-            ->withAttachment($attachment);
-
-        $message2 = OutgoingMessage::create("Мы находимся тут:")
-            ->withAttachment($location_attachment);
-
-        // Reply message object
-        $this->reply($message1);
-        $this->reply($message2);
 
         $question = Question::create(__("messages.ask_lotus_profile"))
             ->addButtons([

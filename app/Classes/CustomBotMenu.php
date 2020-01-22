@@ -163,6 +163,19 @@ trait CustomBotMenu
             ]);
     }
 
+    protected function sendLocation( $latitude,$longitude, array $keyboard = [])
+    {
+        $this->bot->sendRequest("sendLocation",
+            [
+                "chat_id" => $this->getChatId(),
+                "latitude" => $latitude,
+                "longitude" => $longitude,
+                'reply_markup' => json_encode([
+                    'inline_keyboard' => $keyboard,
+                ])
+            ]);
+    }
+
     protected function sendMenu($message, $keyboard)
     {
         $this->bot->sendRequest("sendMessage", [

@@ -123,23 +123,21 @@ class StartDataConversation extends Conversation
         if ($this->getUser()->is_admin == 0)
             return;
 
-        $tmp = [];
+        $keyboard = [];
 
         $companies = $this->getUser(["companies", "promos"])->companies;
 
         foreach ($companies as $company)
-            array_push($tmp, Button::create($company->title)->value("/payment " . $this->request_user_id . " " . $company->id));
+            array_push($keyboard, [
+                ["text" => $company->title, "callback_data" => "/payment " . $this->request_user_id . " " . $company->id]
+            ]);
 
-        if (count($tmp) == 0) {
-
+        if (count($keyboard) == 0) {
             $this->reply("Вы не добавлены не в одну компанию и не можете проводить процесс списания.");
             return;
         }
 
-        $message = Question::create("Диалог управления средствами\nВыберите вашу компанию:")
-            ->addButtons($tmp);
-
-        $this->reply($message);
+        $this->sendMessage("Диалог управления средствами\nВыберите вашу компанию:", $keyboard);
 
 
     }
@@ -383,12 +381,7 @@ class StartDataConversation extends Conversation
             return;
         }
 
-
-        $attachment = new Image($event->event_image_url);
-        $message = OutgoingMessage::create("*" . $event->title . "*\n" . $event->description)
-            ->withAttachment($attachment);
-
-        $this->reply($message);
+        $this->sendPhoto("*" . $event->title . "*\n" . $event->description, $event->event_image_url);
 
     }
 }
