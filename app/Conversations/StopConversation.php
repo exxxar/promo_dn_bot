@@ -23,7 +23,6 @@ class StopConversation extends Conversation
      */
     public function run()
     {
-        Log::info(get_class($this));
         $this->mainMenu(__("menu_title_1"));
     }
 
