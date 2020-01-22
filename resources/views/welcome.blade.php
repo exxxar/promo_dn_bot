@@ -46,13 +46,13 @@
         <div class="collapse navbar-collapse" id="navbarResponsive">
             <ul class="navbar-nav ml-auto">
                 <li class="nav-item">
-                    <a class="nav-link js-scroll-trigger" href="#download">Download</a>
+                    <a class="nav-link js-scroll-trigger" href="#download">Как начать?</a>
                 </li>
                 <li class="nav-item">
-                    <a class="nav-link js-scroll-trigger" href="#features">Features</a>
+                    <a class="nav-link js-scroll-trigger" href="#features">Наши возможности</a>
                 </li>
                 <li class="nav-item">
-                    <a class="nav-link js-scroll-trigger" href="#contact">Contact</a>
+                    <a class="nav-link js-scroll-trigger" href="#contact">Связь с нами</a>
                 </li>
             </ul>
         </div>
@@ -64,9 +64,8 @@
         <div class="row h-100">
             <div class="col-lg-7 my-auto">
                 <div class="header-content mx-auto">
-                    <h1 class="mb-5">New Age is an app landing page that will help you beautifully showcase your new
-                        mobile app, or anything else!</h1>
-                    <a href="#download" class="btn btn-outline btn-xl js-scroll-trigger">Start Now for Free!</a>
+                    <h1 class="mb-5">Новая уникальная система лояльности города Донецка! Самые уникальные акции, скидки, мероприятия и многое другое уже внутри. Поспеши стать участником уникального проекта и получи бонусыне деньги на свои покупки!</h1>
+                    <a href="#download" class="btn btn-outline btn-xl js-scroll-trigger">Начни уже сейчас</a>
                 </div>
             </div>
             <div class="col-lg-5 my-auto">

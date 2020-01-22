@@ -2,18 +2,18 @@
 
 namespace App\Conversations;
 
+use App\Classes\CustomBotMenu;
 use BotMan\BotMan\Messages\Conversations\Conversation;
+use Illuminate\Support\Facades\Log;
 
 class StopConversation extends Conversation
 {
 
-    use CustomConversation;
-
-    protected $bot;
+    use CustomBotMenu;
 
     public function __construct($bot)
     {
-        $this->bot = $bot;
+        $this->setBot($bot);
     }
 
     /**
@@ -23,7 +23,8 @@ class StopConversation extends Conversation
      */
     public function run()
     {
-        $this->mainMenu("Хорошего дня!");
+        Log::info(get_class($this));
+        $this->mainMenu(__("menu_title_1"));
     }
 
 

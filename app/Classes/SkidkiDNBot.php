@@ -47,7 +47,7 @@ class SkidkiDNBot extends Bot implements iSkidkiDNBot
         }
 
         if (count($events) == 0 || !$found)
-            $this->reply("Мероприятия появтяся в скором времени!");
+            $this->reply("Мероприятия появятся в скором времени!");
 
         $this->pagination("/events $page", $events, $page, "Выберите действие");
 
@@ -301,7 +301,8 @@ class SkidkiDNBot extends Bot implements iSkidkiDNBot
 
         $keyboard = [
             [
-                ['text' => "Как пользоваться", 'callback_data' => "/help"],
+                ['text' => "Навигация по боту", 'callback_data' => "/help"],
+                ['text' => "Для потребителей", 'callback_data' => "/for_users"],
             ],
             [
                 ['text' => "Реализация бонусов", 'callback_data' => "/rules"],
@@ -562,7 +563,7 @@ class SkidkiDNBot extends Bot implements iSkidkiDNBot
             foreach ($articles as $article)
                 $this->reply($article->url, ["parse_mode" => "Markdown"]);
         } else
-            $this->reply("Статьи появтяся в скором времени!", ["parse_mode" => "Markdown"]);
+            $this->reply("Статьи появятся в скором времени!", ["parse_mode" => "Markdown"]);
 
         $this->pagination("/articles $partId", $articles, $page, "Ваши действия");
     }

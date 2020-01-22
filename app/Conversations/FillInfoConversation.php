@@ -2,6 +2,7 @@
 
 namespace App\Conversations;
 
+use App\Classes\CustomBotMenu;
 use App\User;
 use BotMan\BotMan\Messages\Conversations\Conversation;
 use BotMan\BotMan\Messages\Incoming\Answer;
@@ -11,70 +12,66 @@ use Illuminate\Support\Facades\Log;
 
 class FillInfoConversation extends Conversation
 {
-    use CustomConversation;
+    use CustomBotMenu;
 
-    protected $bot;
 
     public function __construct($bot)
     {
-        $this->bot = $bot;
+        $this->setBot($bot);
     }
 
     public function run()
     {
-        $telegramUser = $this->bot->getUser();
-        $id = $telegramUser->getId();
-
-        $this->user = User::where("telegram_chat_id", $id)
-            ->first();
-
-        $this->conversationMenu("Начнем-с...");
-        $this->askFirstname();
+        try {
+            $this->conversationMenu(__('menu_title_2'));
+            $this->askFirstname();
+        } catch (\Exception $e) {
+            Log::error(get_class($this));
+            $this->mainMenu(__('menu_title_1'));
+        }
     }
 
 
     public function askFirstname()
     {
-        if ($this->user->fio_from_request != "") {
-            $this->askPhone1();
+        if (strlen(trim($this->getUser()->fio_from_request)) > 0) {
+            $this->askPhone();
             return;
         }
-        $question = Question::create('Как тебя зовут?')
-            ->fallback('Спасибо что пообщался со мной:)!');
+        $question = Question::create(__("ask_name"))
+            ->fallback(__("ask_fallback"));
 
         $this->ask($question, function (Answer $answer) {
-            $this->user->fio_from_request = $answer->getText();
-            $this->user->save();
-
+            $user = $this->getUser();
+            $user->fio_from_request = $answer->getText();
+            $user->save();
             $this->askPhone();
         });
     }
 
     public function askPhone()
     {
-        if ($this->user->phone != null) {
+        if ($this->getUser()->phone != null) {
             $this->askSex();
             return;
         }
 
-        $question = Question::create('Скажие мне свой телефонный номер')
-            ->fallback('Спасибо что пообщался со мной:)!');
+        $question = Question::create(__("ask_phone"))
+            ->fallback(__("ask_fallback"));
 
         $this->ask($question, function (Answer $answer) {
 
             $vowels = array("(", ")", "-", " ");
-            $tmp_phone = $answer->getText();
-            $tmp_phone = str_replace($vowels, "", $tmp_phone);
-
-            if (strpos($tmp_phone, "+38")=== false)
-                $tmp_phone = "+38" . $tmp_phone;
-
+            $tmp_phone = str_replace($vowels, "", $answer->getText());
+            $tmp_phone = strpos($tmp_phone, "+38") === false ?
+                "+38" . $tmp_phone :
+                $tmp_phone;
 
             $pattern = "/^\+380\d{3}\d{2}\d{2}\d{2}$/";
 
             if (preg_match($pattern, $tmp_phone) == 0) {
 
-                $this->bot->reply("Номер введен не верно...\n");
+                $this->reply(__("ask_phone_error_1"));
                 $this->askPhone();
                 return;
             } else {
@@ -82,19 +79,15 @@ class FillInfoConversation extends Conversation
                 $tmp_user = User::where("phone", $tmp_phone)->first();
 
                 if ($tmp_user == null) {
-
-                    $this->user->phone = $tmp_phone;
-                    $this->user->save();
-
-
+                    $user = $this->getUser();
+                    $user->phone = $tmp_phone;
+                    $user->save();
                 } else {
-                    $this->bot->reply("Пользователь с таким номером уже и так наш друг:)\n");
+                    $this->reply(__("ask_phone_error_2"));
                     $this->askPhone();
                     return;
                 }
-
             }
-
             $this->askSex();
         });
 
@@ -103,25 +96,23 @@ class FillInfoConversation extends Conversation
 
     public function askSex()
     {
-        if ($this->user->sex != null) {
+        if ($this->getUser()->sex != null) {
             $this->askBirthday();
             return;
         }
 
-        $question = Question::create('А какого ты пола?')
-            ->fallback('Спасибо что пообщался со мной:)!')
+        $question = Question::create(__('ask_sex'))
+            ->fallback(__('ask_fallback'))
             ->addButtons([
-                Button::create("\xF0\x9F\x91\xA6Парень")->value('man'),
-                Button::create("\xF0\x9F\x91\xA7Девушка")->value('woman'),
+                Button::create(__("ask_sex_btn_1"))->value('man'),
+                Button::create(__("ask_sex_btn_2"))->value('woman'),
             ]);
 
         $this->ask($question, function (Answer $answer) {
-            // Detect if button was clicked:
             if ($answer->isInteractiveMessageReply()) {
-
-                $this->user->sex = $answer->getValue() == "man" ? 0 : 1;
-                $this->user->save();
-
+                $user = $this->getUser();
+                $user->sex = $answer->getValue() == "man" ? 0 : 1;
+                $user->save();
                 $this->askBirthday();
             }
         });
@@ -131,36 +122,36 @@ class FillInfoConversation extends Conversation
 
     public function askBirthday()
     {
-        if ($this->user->birthday != null) {
+        if ($this->getUser()->birthday != null) {
             $this->askCity();
             return;
         }
 
-        $question = Question::create('Следующий вопрос - дата твоего рождения:')
-            ->fallback('Спасибо что пообщался со мной:)!');
+        $question = Question::create(__("ask_birthday"))
+            ->fallback(__("ask_fallback"));
 
         $this->ask($question, function (Answer $answer) {
-            $this->user->birthday = $answer->getText();
-            $this->user->save();
+            $user = $this->getUser();
+            $user->birthday = $answer->getText();
+            $user->save();
             $this->askCity();
-
         });
     }
 
     public function askCity()
     {
-        if ($this->user->address != null) {
+        if ($this->getUser()->address != null) {
             $this->saveData();
             return;
         }
 
-        $question = Question::create('Из какого ты города?')
-            ->fallback('Спасибо что пообщался со мной:)!');
+        $question = Question::create(__("ask_city"))
+            ->fallback(__("ask_fallback"));
 
         $this->ask($question, function (Answer $answer) {
-            $this->user->address = $answer->getText();
-            $this->user->save();
-
+            $user = $this->getUser();
+            $user->address = $answer->getText();
+            $user->save();
             $this->saveData();
         });
 
@@ -168,7 +159,7 @@ class FillInfoConversation extends Conversation
 
     public function saveData()
     {
-        $this->mainMenu("Отлично! Вы справились!");
+        $this->mainMenu(__("menu_title_4"));
     }
 
 

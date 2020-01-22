@@ -645,7 +645,7 @@ footer ul li a:hover, footer ul li a:focus, footer ul li a:active, footer ul li 
   display: flex;
   justify-content: center;
   align-items: center;
-  font-size: 72px;
+  font-size: 120px;
 
   background: linear-gradient(45deg, #820000 33%, #f86200 66%, #eb0019);
 

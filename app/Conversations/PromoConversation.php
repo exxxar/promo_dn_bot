@@ -2,6 +2,7 @@
 
 namespace App\Conversations;
 
+use App\Classes\CustomBotMenu;
 use App\Events\ActivateUserEvent;
 use App\Promotion;
 use App\User;
@@ -18,35 +19,35 @@ use Illuminate\Support\Facades\Log;
 
 class PromoConversation extends Conversation
 {
-    use CustomConversation;
+    use CustomBotMenu;
 
     protected $data;
-    protected $bot;
+
 
     public function __construct($bot, $data)
     {
-        $this->bot = $bot;
+        $this->setBot($bot);
         $this->data = $data;
     }
 
     public function run()
     {
-        $telegramUser = $this->bot->getUser();
-        $id = $telegramUser->getId();
 
-        $this->user = \App\User::with(["promos"])->where("telegram_chat_id", $id)
-            ->first();
-
-        $on_promo = $this->user->promos()
+        $on_promo = $this->getUser(["promos"])->promos()
             ->where("promotion_id", "=", intval($this->data))
             ->first();
 
         if ($on_promo) {
-            $this->bot->reply('Акция уже была пройдена ранее!');
+            $this->reply('Акция уже была пройдена ранее!');
             return;
         }
 
-        $this->askForStartPromo();
+        try {
+            $this->askForStartPromo();
+        } catch (\Exception $e) {
+            Log::error(get_class($this));
+            $this->mainMenu(__("menu_title_1"));
+        }
 
     }
 
@@ -98,8 +99,8 @@ class PromoConversation extends Conversation
             ->withAttachment($location_attachment);
 
         // Reply message object
-        $this->bot->reply($message1, ["parse_mode" => "Markdown"]);
-        $this->bot->reply($message2, ["parse_mode" => "Markdown"]);
+        $this->reply($message1);
+        $this->reply($message2);
 
         $question = Question::create('Так что на счет участия?')
             ->addButtons([
@@ -117,7 +118,7 @@ class PromoConversation extends Conversation
                 }
 
                 if ($selectedValue == "no") {
-                    $this->say("Хорошего дня!");
+                    $this->reply("Хорошего дня!");
                 }
             }
         });
@@ -126,7 +127,7 @@ class PromoConversation extends Conversation
 
     public function askFirstname()
     {
-        if ($this->user->fio_from_request != "") {
+        if ($this->getUser()->fio_from_request != "") {
             $this->askPhone();
             return;
         }
@@ -134,8 +135,9 @@ class PromoConversation extends Conversation
             ->fallback('Спасибо что пообщался со мной:)!');
 
         $this->ask($question, function (Answer $answer) {
-            $this->user->fio_from_request = $answer->getText();
-            $this->user->save();
+            $user = $this->getUser();
+            $user->fio_from_request = $answer->getText();
+            $user->save();
 
             $this->askPhone();
         });
@@ -144,7 +146,7 @@ class PromoConversation extends Conversation
 
     public function askPhone()
     {
-        if ($this->user->phone != null) {
+        if ($this->getUser()->phone != null) {
             $this->askSex();
             return;
         }
@@ -155,21 +157,18 @@ class PromoConversation extends Conversation
         $this->ask($question, function (Answer $answer) {
 
             $vowels = array("(", ")", "-", " ");
-            $tmp_phone = $answer->getText();
 
-            Log::info($tmp_phone);
+            $tmp_phone = str_replace($vowels, "", $answer->getText());
 
-            $tmp_phone = str_replace($vowels, "", $tmp_phone);
-
-            if (strpos($tmp_phone, "+38") === false)
-                $tmp_phone = "+38" . $tmp_phone;
-
+            $tmp_phone = strpos($tmp_phone, "+38") === false ?
+                "+38" . $tmp_phone :
+                $tmp_phone;
 
             $pattern = "/^\+380\d{3}\d{2}\d{2}\d{2}$/";
 
-            if (preg_match($pattern, $tmp_phone) ==0) {
+            if (preg_match($pattern, $tmp_phone) == 0) {
 
-                $this->bot->reply("Номер введен не верно...\n");
+                $this->reply("Номер введен не верно...\n");
                 $this->askPhone();
                 return;
             } else {
@@ -177,13 +176,12 @@ class PromoConversation extends Conversation
                 $tmp_user = User::where("phone", $tmp_phone)->first();
 
                 if ($tmp_user == null) {
-
-                    $this->user->phone = $tmp_phone;
-                    $this->user->save();
-
+                    $user = $this->getUser();
+                    $user->phone = $tmp_phone;
+                    $user->save();
 
                 } else {
-                    $this->bot->reply("Пользователь с таким номером уже и так наш друг:)\n");
+                    $this->reply("Пользователь с таким номером уже и так наш друг:)\n");
                     $this->askPhone();
                     return;
                 }
@@ -198,7 +196,7 @@ class PromoConversation extends Conversation
 
     public function askSex()
     {
-        if ($this->user->sex != null) {
+        if ($this->getUser()->sex != null) {
             $this->askBirthday();
             return;
         }
@@ -213,9 +211,9 @@ class PromoConversation extends Conversation
         $this->ask($question, function (Answer $answer) {
             // Detect if button was clicked:
             if ($answer->isInteractiveMessageReply()) {
-
-                $this->user->sex = $answer->getValue() == "man" ? 0 : 1;
-                $this->user->save();
+                $user = $this->getUser();
+                $user->sex = $answer->getValue() == "man" ? 0 : 1;
+                $user->save();
 
                 $this->askBirthday();
             }
@@ -226,7 +224,7 @@ class PromoConversation extends Conversation
 
     public function askBirthday()
     {
-        if ($this->user->birthday != null) {
+        if ($this->getUser()->birthday != null) {
             $this->askCity();
             return;
         }
@@ -235,8 +233,9 @@ class PromoConversation extends Conversation
             ->fallback('Спасибо что пообщались со мной:)!');
 
         $this->ask($question, function (Answer $answer) {
-            $this->user->birthday = $answer->getText();
-            $this->user->save();
+            $user = $this->getUser();
+            $user->birthday = $answer->getText();
+            $user->save();
             $this->askCity();
 
         });
@@ -246,7 +245,7 @@ class PromoConversation extends Conversation
 
     public function askCity()
     {
-        if ($this->user->address != null) {
+        if ($this->getUser()->address != null) {
             $this->saveData();
             return;
         }
@@ -255,8 +254,9 @@ class PromoConversation extends Conversation
             ->fallback('Спасибо что пообщались со мной:)!');
 
         $this->ask($question, function (Answer $answer) {
-            $this->user->address = $answer->getText();
-            $this->user->save();
+            $user = $this->getUser();
+            $user->address = $answer->getText();
+            $user->save();
 
             $this->saveData();
         });
@@ -266,22 +266,22 @@ class PromoConversation extends Conversation
     public function saveData()
     {
 
-
-        $this->mainMenu("Отлично! Вы справились!");
+        $this->mainMenu(__("menu_title_4"));
 
         $promo = Promotion::find(intval($this->data));
 
         if ($promo->current_activation_count < $promo->activation_count) {
 
             if ($promo->immediately_activate == 1) {
-                $this->user->referral_bonus_count += $promo->refferal_bonus;
-                $this->bot->reply($promo->activation_text);
+                $user = $this->getUser();
+                $user->referral_bonus_count += $promo->refferal_bonus;
+                $this->reply($promo->activation_text);
 
-                $this->user->promos()->attach($promo->id);
-                $this->user->updated_at = Carbon::now();
-                $this->user->save();
+                $user->promos()->attach($promo->id);
+                $user->updated_at = Carbon::now();
+                $user->save();
 
-                event(new ActivateUserEvent( $this->user));
+                event(new ActivateUserEvent($user));
 
                 $promo->current_activation_count += 1;
                 $promo->save();
@@ -290,13 +290,10 @@ class PromoConversation extends Conversation
         }
 
 
-        $this->user->save();
-
-
         if ($promo->immediately_activate == 0) {
-            $this->bot->reply("Спасибо! Получите свои бонусы у нашего сотрудника по этому QR-коду.");
+            $this->reply("Спасибо! Получите свои бонусы у нашего сотрудника по этому QR-коду.");
 
-            $tmp_id = $this->user->telegram_chat_id;
+            $tmp_id = $this->getUser()->telegram_chat_id;
             while (strlen($tmp_id) < 10)
                 $tmp_id = "0" . $tmp_id;
 
@@ -306,15 +303,9 @@ class PromoConversation extends Conversation
 
             $code = base64_encode("003" . $tmp_id . $tmp_promo_id);
 
-            $attachment = new Image(env("QR_URL")."https://t.me/" . env("APP_BOT_NAME") . "?start=$code");
-           // $attachment = new Image(env("APP_URL")."/image/?data=".base64_encode("https://t.me/" . env("APP_BOT_NAME") . "?start=$code"));
+            $this->sendPhoto('_Код для получения приза по акции_',
+                env("QR_URL") . "https://t.me/" . env("APP_BOT_NAME") . "?start=$code");
 
-            // Build message object
-            $message = OutgoingMessage::create('_Код для получения приза по акции_')
-                ->withAttachment($attachment);
-
-            // Reply message object
-            $this->bot->reply($message, ["parse_mode" => "Markdown"]);
         }
 
     }

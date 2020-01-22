@@ -37,6 +37,7 @@ $botman->hears('/events ([0-9]+)', BotController::class . '@getEvents');
 $botman->hears('/articles ([0-9]+)', BotController::class . '@getArticlesByPage');
 $botman->hears('/help', BotController::class . '@getHelp');
 $botman->hears('/rules', BotController::class . '@getRules');
+$botman->hears('/for_users', BotController::class . '@getForUsers');
 $botman->hears('/dev', BotController::class . '@getDev');
 $botman->hears('/about', BotController::class . '@getAbout');
 $botman->hears('/statistic', BotController::class . '@getStatistic');

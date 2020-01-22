@@ -16,4 +16,5 @@ final class Parts extends Enum
     const How_to_use = 6;
     const Suppliers = 7;
     const Lottery = 8;
+    const ForUsers = 9;
 }

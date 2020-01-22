@@ -3,6 +3,7 @@
 namespace App\Conversations;
 
 use App\CashbackHistory;
+use App\Classes\CustomBotMenu;
 use App\Company;
 use App\Enums\AchievementTriggers;
 use App\Events\AchievementEvent;
@@ -16,22 +17,21 @@ use BotMan\BotMan\Messages\Outgoing\Actions\Button;
 use BotMan\BotMan\Messages\Outgoing\Question;
 use Carbon\Carbon;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\Log;
 use Telegram\Bot\Laravel\Facades\Telegram;
 
 class PaymentConversation extends Conversation
 {
-    use CustomConversation;
-
+    use CustomBotMenu;
 
     protected $request_id;
     protected $company_id;
-    protected $bot;
     protected $check_info;
     protected $money_in_check;
 
     public function __construct($bot, $request_id, $company_id)
     {
-        $this->bot = $bot;
+        $this->setBot($bot);
         $this->request_id = $request_id;
         $this->company_id = $company_id;
     }
@@ -39,38 +39,29 @@ class PaymentConversation extends Conversation
     public function run()
     {
         try {
-            $telegramUser = $this->bot->getUser();
-            $id = $telegramUser->getId();
-
             $this->check_info = "";
             $this->money_in_check = 0;
-            $this->user = \App\User::where("telegram_chat_id", $id)
-                ->first();
 
-            $this->user->updated_at = Carbon::now();
-            $this->user->save();
-
-            if ($this->user->is_admin == 1) {
-                $this->conversationMenu("Начнем-с...");
+            if ($this->getUser()->is_admin == 1) {
+                $this->conversationMenu(__("menu_title_2"));
                 $this->askForAction();
             }
-        }
-        catch(\Exception $e ){
-            $this->mainMenu("Что-то пошло не так");
+        } catch (\Exception $e) {
+            Log::error(get_class($this));
+            $this->mainMenu(__("menu_title_1"));
         }
 
     }
 
     public function askForAction()
     {
-        $question = Question::create('Выберите действие')
+        $question = Question::create(__("ask_action"))
             ->addButtons([
-                Button::create('Списать средства')->value('askpay'),
-                Button::create('Начислить CashBack')->value('getcashabck'),
+                Button::create(__("ask_action_btn_1"))->value('askpay'),
+                Button::create(__("ask_action_btn_2"))->value('getcashabck'),
             ]);
 
         $this->ask($question, function (Answer $answer) {
-            // Detect if button was clicked:
             if ($answer->isInteractiveMessageReply()) {
                 $selectedValue = $answer->getValue();
 
@@ -87,20 +78,20 @@ class PaymentConversation extends Conversation
 
     public function askForPay()
     {
-        $question = Question::create('Введите желаемую для списания сумму')
-            ->fallback('Ничего страшного, в следующий раз получится!');
+        $question = Question::create(__("ask_for_pay"))
+            ->fallback(__("ask_fallback"));
 
         $this->ask($question, function (Answer $answer) {
             $nedded_bonus = $answer->getText();
 
-            if (strlen(trim($nedded_bonus))==0||!is_numeric($nedded_bonus)) {
+            if (strlen(trim($nedded_bonus)) == 0 || !is_numeric($nedded_bonus)) {
                 $this->askForPay();
                 return;
             }
 
             $recipient_user = User::where("telegram_chat_id", intval($this->request_id))->first();
             if (!$recipient_user) {
-                $this->mainMenu("Что-то пошло не так и пользователь не найден");
+                $this->mainMenu(__("menu_title_6"));
                 return;
             }
 
@@ -110,7 +101,7 @@ class PaymentConversation extends Conversation
                 RefferalsPaymentHistory::create([
                     'user_id' => $recipient_user->id,
                     'company_id' => $this->company_id,
-                    'employee_id' => $this->user->id,
+                    'employee_id' => $this->getUser()->id,
                     'value' => intval($nedded_bonus),
                 ]);
 
@@ -144,7 +135,7 @@ class PaymentConversation extends Conversation
                     'disable_notification' => 'false'
                 ]);
 
-                $this->bot->reply("У пользователя недостаточно боунсных баллов! В наличии $money руб.");
+                $this->reply("У пользователя недостаточно боунсных баллов! В наличии $money руб.");
 
                 $this->askForAction();
             }
@@ -154,12 +145,12 @@ class PaymentConversation extends Conversation
 
     public function askForCashback()
     {
-        $question = Question::create('Введите сумму из чека')
-            ->fallback('Спасибо что пообщался со мной:)!');
+        $question = Question::create(__("ask_for_cashback"))
+            ->fallback(__("ask_fallback"));
 
         $this->ask($question, function (Answer $answer) {
             $this->money_in_check = $answer->getText();
-            if (strlen(trim($this->money_in_check))==0||!is_numeric($this->money_in_check)) {
+            if (strlen(trim($this->money_in_check)) == 0 || !is_numeric($this->money_in_check)) {
                 $this->askForCashback();
                 return;
             }
@@ -170,12 +161,12 @@ class PaymentConversation extends Conversation
 
     public function askForCheckInfo()
     {
-        $question = Question::create('Введите номер чека')
-            ->fallback('Спасибо что пообщался со мной:)!');
+        $question = Question::create(__("ask_for_check_info"))
+            ->fallback(__("ask_fallback"));
 
         $this->ask($question, function (Answer $answer) {
             $this->check_info = $answer->getText();
-            if (strlen(trim( $this->check_info))==0) {
+            if (strlen(trim($this->check_info)) == 0) {
                 $this->askForCheckInfo();
             }
             $this->saveCashBack();
@@ -185,21 +176,19 @@ class PaymentConversation extends Conversation
     public function saveCashBack()
     {
 
-
         $user = User::where("telegram_chat_id", intval($this->request_id))->first();
 
-        if ($user==null) {
-            $this->mainMenu("Что-то пошло не так и пользователь не найден");
+        if ($user == null) {
+            $this->mainMenu(__("menu_title_6"));
             return;
         }
-
 
         $cashBack = round(intval($this->money_in_check) * env("CAHSBAK_PROCENT") / 100);
         $user->cashback_bonus_count += $cashBack;
         $user->save();
 
         event(new ActivateUserEvent($user));
-        event(new NetworkCashBackEvent($user->id,$cashBack));
+        event(new NetworkCashBackEvent($user->id, $cashBack));
         event(new AchievementEvent(AchievementTriggers::MaxCashBackCount, $cashBack, $user));
 
         CashbackHistory::create([
@@ -212,7 +201,7 @@ class PaymentConversation extends Conversation
             'user_id' => $user->id,
         ]);
 
-        $companyName = Company::find($this->company_id)->title??"Неизвестная компания";
+        $companyName = Company::find($this->company_id)->title ?? "Неизвестная компания";
 
         Telegram::sendMessage([
             'chat_id' => $user->telegram_chat_id,
