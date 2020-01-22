@@ -351,9 +351,9 @@ class StartDataConversation extends Conversation
 
         $promo = Promotion::with(["users"])->find(intval($this->promo_id));
 
-
+        Log::info("попытка открыть промо: id=".$this->getChatId());
         $on_promo = $promo->onPromo($this->getChatId());
-
+        Log::info("попытка открыть промо: on=".$on_promo);
         if ($on_promo) {
             $this->reply('Акция уже была пройдена ранее!');
             return;
