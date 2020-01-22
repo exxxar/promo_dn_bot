@@ -255,41 +255,49 @@ class BotController extends Controller
 
     public function paymentConversation($bot,$arg1,$arg2){
         $this->sdnbot
+            ->setBot($bot)
             ->startConversation(new PaymentConversation($bot,$arg1,$arg2));
     }
 
     public function fillInfoConversation($bot){
         $this->sdnbot
+            ->setBot($bot)
             ->startConversation(new FillInfoConversation($bot));
     }
 
     public function startConversation($bot){
         $this->sdnbot
+            ->setBot($bot)
             ->startConversation(new StartConversation($bot));
     }
 
     public function lotteryConversation($bot){
         $this->sdnbot
+            ->setBot($bot)
             ->startConversation(new LotteryConversation($bot));
     }
 
     public function startDataConversation($bot,$data){
         $this->sdnbot
+            ->setBot($bot)
             ->startConversation(new StartDataConversation($bot,$data));
     }
 
     public function stopConversation($bot){
         $this->sdnbot
+            ->setBot($bot)
             ->startConversation(new StopConversation($bot));
     }
 
     public function promoConversation($bot,$data){
         $this->sdnbot
+            ->setBot($bot)
             ->startConversation(new PromoConversation($bot,$data));
     }
 
     public function lotusprofileConversation($bot,$data){
         $this->sdnbot
+            ->setBot($bot)
             ->startConversation(new LotusProfileConversation($bot,$data));
     }
 
