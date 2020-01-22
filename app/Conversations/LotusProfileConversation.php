@@ -7,12 +7,8 @@ use BotMan\BotMan\Messages\Conversations\Conversation;
 
 use App\Promotion;
 use App\User;
-use App\UserHasPromo;
-use BotMan\BotMan\Messages\Attachments\Image;
-use BotMan\BotMan\Messages\Attachments\Location;
 use BotMan\BotMan\Messages\Incoming\Answer;
 use BotMan\BotMan\Messages\Outgoing\Actions\Button;
-use BotMan\BotMan\Messages\Outgoing\OutgoingMessage;
 use BotMan\BotMan\Messages\Outgoing\Question;
 use Carbon\Carbon;
 use Illuminate\Support\Facades\Log;
@@ -94,7 +90,6 @@ class LotusProfileConversation extends Conversation
                 $selectedValue = $answer->getValue();
 
                 if ($selectedValue == "promo_info") {
-                    Log::info("test data=")
                     $this->promoInfo();
                     return;
                 }
