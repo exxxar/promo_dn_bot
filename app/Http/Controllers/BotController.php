@@ -10,6 +10,7 @@ use App\Conversations\LotusProfileConversation;
 use App\Conversations\PaymentConversation;
 use App\Conversations\PromoConversation;
 use App\Conversations\StartConversation;
+use App\Conversations\StartDataConversation;
 use App\Conversations\StopConversation;
 use App\Enums\Parts;
 use BotMan\BotMan\Facades\BotMan;
@@ -272,7 +273,13 @@ class BotController extends Controller
     public function startDataConversation($bot,$data){
         $this->sdnbot
             ->setBot($bot)
-            ->startConversation(new StopConversation($bot,$data));
+            ->startConversation(new StartDataConversation($bot,$data));
+    }
+
+    public function stopConversation($bot){
+        $this->sdnbot
+            ->setBot($bot)
+            ->startConversation(new StopConversation($bot));
     }
 
     public function promoConversation($bot,$data){

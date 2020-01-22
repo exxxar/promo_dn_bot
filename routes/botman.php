@@ -4,12 +4,7 @@ use App\Http\Controllers\BotManController;
 
 $botman = resolve('botman');
 
-$botman->hears('Попробовать снова', BotManController::class . '@startConversation');
-$botman->hears('Продолжить позже', BotManController::class . '@stopConversation')->stopsConversation();
-$botman->hears('stop', function ($bot) {
-    $bot->reply('Хорошо, продолжим позже!)');
-})->stopsConversation();
-$botman->hears("/start", BotController::class . '@startConversation');
+
 $botman->hears("/lottery", BotController::class . '@lotteryConversation');
 $botman->hears("/start ([0-9a-zA-Z=]+)", BotController::class . '@startDataConversation');
 $botman->hears("/promotion ([0-9]+)", BotController::class . '@promoConversation');
@@ -47,5 +42,9 @@ $botman->hears('/about', BotController::class . '@getAbout');
 $botman->hears('/statistic', BotController::class . '@getStatistic');
 $botman->hears('/promouter', BotController::class . '@getPromouterInfo');
 $botman->hears('/suppliers', BotController::class . '@getSuppliers');
+
+$botman->hears('Продолжить позже|stop', BotManController::class . '@stopConversation')->stopsConversation();
+$botman->hears("Попробовать снова|/start", BotController::class . '@startConversation');
+
 $botman->fallback(BotController::class . "@fallback");
 
