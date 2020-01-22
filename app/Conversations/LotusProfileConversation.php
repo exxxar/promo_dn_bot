@@ -110,11 +110,13 @@ class LotusProfileConversation extends Conversation
     public function promoInfo()
     {
 
+        Log::info("LOTUS PROM " . $this->data);
         $promo = Promotion::find($this->data);
-        $coords = explode(",", $promo->location_coords);
-        $this->sendPhoto("*" . $promo->title . "*\n_" . $promo->description . "_\n*Наш адрес*:" . $promo->location_address . "\n*Координаты акции*:",$promo->promo_image_url);
-        $this->sendLocation($coords[0],$coords[1]);
-
+        if ($promo) {
+            $coords = explode(",", $promo->location_coords);
+            $this->sendPhoto("*" . $promo->title . "*\n_" . $promo->description . "_\n*Наш адрес*:" . $promo->location_address . "\n*Координаты акции*:", $promo->promo_image_url);
+            $this->sendLocation($coords[0], $coords[1]);
+        }
 
         $question = Question::create(__("messages.ask_lotus_profile"))
             ->addButtons([

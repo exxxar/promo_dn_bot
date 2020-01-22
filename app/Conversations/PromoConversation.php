@@ -86,21 +86,12 @@ class PromoConversation extends Conversation
     {
 
         $promo = Promotion::find($this->data);
-        $coords = explode(",", $promo->location_coords);
-        $location_attachment = new Location($coords[0], $coords[1], [
-            'custom_payload' => true,
-        ]);
-        $attachment = new Image($promo->promo_image_url);
 
-        $message1 = OutgoingMessage::create("*" . $promo->title . "*\n_" . $promo->description . "_\n*Наш адрес*:" . $promo->location_address . "\n*Координаты акции*:")
-            ->withAttachment($attachment);
-
-        $message2 = OutgoingMessage::create("Акция проходит тут:")
-            ->withAttachment($location_attachment);
-
-        // Reply message object
-        $this->reply($message1);
-        $this->reply($message2);
+        if ($promo) {
+            $coords = explode(",", $promo->location_coords);
+            $this->sendPhoto("*" . $promo->title . "*\n_" . $promo->description . "_\n*Наш адрес*:" . $promo->location_address . "\n*Координаты акции*:", $promo->promo_image_url);
+            $this->sendLocation($coords[0], $coords[1]);
+        }
 
         $question = Question::create('Так что на счет участия?')
             ->addButtons([
