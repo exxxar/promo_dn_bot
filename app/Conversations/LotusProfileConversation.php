@@ -40,6 +40,7 @@ class LotusProfileConversation extends Conversation
     {
         $this->setBot($bot);
         $this->data = $data;
+        Log::info("test data=$data");
     }
 
     public function run()
@@ -56,6 +57,7 @@ class LotusProfileConversation extends Conversation
         $this->hobby = null;
         $this->education = null;
         $this->wish_learn = null;
+
 
         $on_promo = $this->getUser(["promos"])->promos()
             ->where("promotion_id", "=", intval($this->data))
