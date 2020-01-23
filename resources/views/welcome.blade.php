@@ -64,7 +64,9 @@
         <div class="row h-100">
             <div class="col-lg-7 my-auto">
                 <div class="header-content mx-auto">
-                    <h1 class="mb-5">Новая уникальная система лояльности города Донецка! Самые уникальные акции, скидки, мероприятия и многое другое уже внутри. Поспеши стать участником уникального проекта и получи бонусыне деньги на свои покупки!</h1>
+                    <h1 class="mb-5">Новая уникальная система лояльности города Донецка! Самые уникальные акции, скидки,
+                        мероприятия и многое другое уже внутри. Поспеши стать участником уникального проекта и получи
+                        бонусыне деньги на свои покупки!</h1>
                     <a href="#download" class="btn btn-outline btn-xl js-scroll-trigger">Начни уже сейчас</a>
                 </div>
             </div>
@@ -105,7 +107,8 @@
                         <div class="offset-md-1 col-md-5 col-sm-5">
                             <div class="review">
                                 <h1>Система достижений</h1>
-                               Используя системы вы получаете всевозможные достижения, которые можно обменять на вкунсые призы!
+                                Используя системы вы получаете всевозможные достижения, которые можно обменять на
+                                вкунсые призы!
                             </div>
                         </div>
                     </div>
@@ -113,10 +116,11 @@
                 <div class="carousel-item">
                     <div class="row">
                         <div class="offset-sm-2 col-sm-3 col-md-2 review-logo"><i class="fas fa-piggy-bank"></i></div>
-                         <div class="offset-md-1 col-md-5 col-sm-5">
+                        <div class="offset-md-1 col-md-5 col-sm-5">
                             <div class="review">
                                 <h1>Система CashBack</h1>
-                               Пользователи могут накапливать и использовать CashBack в разных заведения в системе SKIDKA SERVICE!
+                                Пользователи могут накапливать и использовать CashBack в разных заведения в системе
+                                SKIDKA SERVICE!
                             </div>
                         </div>
                     </div>
@@ -124,10 +128,11 @@
                 <div class="carousel-item">
                     <div class="row">
                         <div class="offset-sm-2 col-sm-3 col-md-2 review-logo"><i class="fas fa-users"></i></div>
-                          <div class="offset-md-1 col-md-5 col-sm-5">
+                        <div class="offset-md-1 col-md-5 col-sm-5">
                             <div class="review">
                                 <h1>Система рефералов</h1>
-                              Приглашая друзей пользователь накапливает реферальные баллы, которые можно обменять на акционную продукцию!
+                                Приглашая друзей пользователь накапливает реферальные баллы, которые можно обменять на
+                                акционную продукцию!
                             </div>
                         </div>
                     </div>
@@ -138,7 +143,8 @@
                         <div class="offset-md-1 col-md-5 col-sm-5">
                             <div class="review">
                                 <h1>Система промокодов</h1>
-                              Совершая крупные покупки вы получаете уникальную возможность 100% выиграть еще больше призов по индивидуальному промокоду!
+                                Совершая крупные покупки вы получаете уникальную возможность 100% выиграть еще больше
+                                призов по индивидуальному промокоду!
                             </div>
                         </div>
                     </div>
@@ -163,7 +169,9 @@
                 <h2 class="section-heading">Узнайте, о чем идет речь!</h2>
                 <p>Наше приложение в Telegram! Скачай клиент и перейди по ссылке!</p>
                 <div class="badges">
-                    <a class="badge-link" href="https://play.google.com/store/apps/details?id=org.telegram.messenger"><img src="/img/google-play-badge.svg" alt=""></a>
+                    <a class="badge-link"
+                       href="https://play.google.com/store/apps/details?id=org.telegram.messenger"><img
+                                src="/img/google-play-badge.svg" alt=""></a>
                     <a class="badge-link" href="https://t.me/skidki_dn_bot"><img src="/img/telegram.png" alt=""></a>
                 </div>
             </div>
@@ -201,14 +209,16 @@
                             <div class="feature-item">
                                 <i class="icon-screen-smartphone text-primary"></i>
                                 <h3>Удобство и простота использования</h3>
-                                <p class="text-muted">Простой и понятный интерфейс в любимом и общедоступном мессенджере Telegram</p>
+                                <p class="text-muted">Простой и понятный интерфейс в любимом и общедоступном мессенджере
+                                    Telegram</p>
                             </div>
                         </div>
                         <div class="col-lg-6">
                             <div class="feature-item">
                                 <i class="icon-camera text-primary"></i>
                                 <h3>Самые выгодные скидки</h3>
-                                <p class="text-muted">Регулярные акции с предоставлением скидочных предложений от лучших заведений региона</p>
+                                <p class="text-muted">Регулярные акции с предоставлением скидочных предложений от лучших
+                                    заведений региона</p>
                             </div>
                         </div>
                     </div>
@@ -217,14 +227,16 @@
                             <div class="feature-item">
                                 <i class="icon-present text-primary"></i>
                                 <h3>Уникальная система лояльности</h3>
-                                <p class="text-muted">Начисление CashBack за каждую покупку, бонусы за приглашенных друзей и конкурсы с ценными призами</p>
+                                <p class="text-muted">Начисление CashBack за каждую покупку, бонусы за приглашенных
+                                    друзей и конкурсы с ценными призами</p>
                             </div>
                         </div>
                         <div class="col-lg-6">
                             <div class="feature-item">
                                 <i class="icon-lock text-primary"></i>
                                 <h3>Всегда свежие акции и мероприятия</h3>
-                                <p class="text-muted">Интересные и познавательные мероприятия от разных компаний со всего города!</p>
+                                <p class="text-muted">Интересные и познавательные мероприятия от разных компаний со
+                                    всего города!</p>
                             </div>
                         </div>
                     </div>
@@ -481,6 +493,8 @@
     </div>
 </footer>
 
+<a class="send-message-modal" data-toggle="modal" href="#callbackMessage"><i class="far fa-envelope"></i></a>
+
 @isset($companies)
     <!-- Portfolio Modals -->
     @foreach($companies as $company)
@@ -546,9 +560,8 @@
     @endforeach
 @endisset
 
-<!-- Modal 2 -->
-<div class="portfolio-modal modal fade" id="portfolioModal2" tabindex="-1" role="dialog" aria-hidden="true">
-    <div class="modal-dialog">
+<div class="portfolio-modal modal" id="quiz" tabindex="-1" role="dialog" aria-hidden="true">
+    <div class="modal-dialog modal-xl">
         <div class="modal-content">
             <div class="close-modal" data-dismiss="modal">
                 <div class="lr">
@@ -557,25 +570,12 @@
             </div>
             <div class="container">
                 <div class="row">
-                    <div class="col-lg-8 mx-auto">
+                    <div class="col-lg-12 mx-auto">
                         <div class="modal-body">
-                            <!-- Project Details Go Here -->
-                            <h2 class="text-uppercase">Project Name</h2>
-                            <p class="item-intro text-muted">Lorem ipsum dolor sit amet consectetur.</p>
-                            <img class="img-fluid d-block mx-auto" src="img/portfolio/02-full.jpg" alt="">
-                            <p>Use this area to describe your project. Lorem ipsum dolor sit amet, consectetur
-                                adipisicing elit. Est blanditiis dolorem culpa incidunt minus dignissimos deserunt
-                                repellat aperiam quasi sunt officia expedita beatae cupiditate, maiores repudiandae,
-                                nostrum, reiciendis facere nemo!</p>
-                            <ul class="list-inline">
-                                <li>Date: January 2017</li>
-                                <li>Client: Explore</li>
-                                <li>Category: Graphic Design</li>
-                            </ul>
-                            <button class="btn btn-primary" data-dismiss="modal" type="button">
-                                <i class="fas fa-times"></i>
-                                Close Project
-                            </button>
+                            <iframe src="https://mrqz.me/5e29b17d3e851d004431a587" frameborder="0" style="width:100%;min-height:600px;"></iframe>
+                      
+
+
                         </div>
                     </div>
                 </div>
@@ -584,46 +584,10 @@
     </div>
 </div>
 
-<!-- Modal 3 -->
-<div class="portfolio-modal modal fade" id="portfolioModal3" tabindex="-1" role="dialog" aria-hidden="true">
-    <div class="modal-dialog">
-        <div class="modal-content">
-            <div class="close-modal" data-dismiss="modal">
-                <div class="lr">
-                    <div class="rl"></div>
-                </div>
-            </div>
-            <div class="container">
-                <div class="row">
-                    <div class="col-lg-8 mx-auto">
-                        <div class="modal-body">
-                            <!-- Project Details Go Here -->
-                            <h2 class="text-uppercase">Project Name</h2>
-                            <p class="item-intro text-muted">Lorem ipsum dolor sit amet consectetur.</p>
-                            <img class="img-fluid d-block mx-auto" src="img/portfolio/03-full.jpg" alt="">
-                            <p>Use this area to describe your project. Lorem ipsum dolor sit amet, consectetur
-                                adipisicing elit. Est blanditiis dolorem culpa incidunt minus dignissimos deserunt
-                                repellat aperiam quasi sunt officia expedita beatae cupiditate, maiores repudiandae,
-                                nostrum, reiciendis facere nemo!</p>
-                            <ul class="list-inline">
-                                <li>Date: January 2017</li>
-                                <li>Client: Finish</li>
-                                <li>Category: Identity</li>
-                            </ul>
-                            <button class="btn btn-primary" data-dismiss="modal" type="button">
-                                <i class="fas fa-times"></i>
-                                Close Project
-                            </button>
-                        </div>
-                    </div>
-                </div>
-            </div>
-        </div>
-    </div>
-</div>
 
-<!-- Modal 4 -->
-<div class="portfolio-modal modal fade" id="portfolioModal4" tabindex="-1" role="dialog" aria-hidden="true">
+<!-- Modal Messages -->
+<div class="portfolio-modal modal fade callback-modal" id="callbackMessage" tabindex="-1" role="dialog"
+     aria-hidden="true">
     <div class="modal-dialog">
         <div class="modal-content">
             <div class="close-modal" data-dismiss="modal">
@@ -636,98 +600,78 @@
                     <div class="col-lg-8 mx-auto">
                         <div class="modal-body">
                             <!-- Project Details Go Here -->
-                            <h2 class="text-uppercase">Project Name</h2>
-                            <p class="item-intro text-muted">Lorem ipsum dolor sit amet consectetur.</p>
-                            <img class="img-fluid d-block mx-auto" src="img/portfolio/04-full.jpg" alt="">
-                            <p>Use this area to describe your project. Lorem ipsum dolor sit amet, consectetur
-                                adipisicing elit. Est blanditiis dolorem culpa incidunt minus dignissimos deserunt
-                                repellat aperiam quasi sunt officia expedita beatae cupiditate, maiores repudiandae,
-                                nostrum, reiciendis facere nemo!</p>
-                            <ul class="list-inline">
-                                <li>Date: January 2017</li>
-                                <li>Client: Lines</li>
-                                <li>Category: Branding</li>
-                            </ul>
-                            <button class="btn btn-primary" data-dismiss="modal" type="button">
-                                <i class="fas fa-times"></i>
-                                Close Project
-                            </button>
-                        </div>
-                    </div>
-                </div>
-            </div>
-        </div>
-    </div>
-</div>
+                            <h2 class="text-uppercase">Помогите нам стать лучше</h2>
+                            <p class="item-intro text-muted">Принимаем ваши пожелания и сообщения о неточностях или
+                                ошибках</p>
+                            <form id="feedbackForm" action="{{route("send.callback")}}" method="post">
+                                {{csrf_field()}}
+                                <div class="form-row">
+                                    <div class="col-sm-6">
+                                        <!-- Имя пользователя -->
+                                        <div class="form-group">
+                                            <label for="name" class="control-label">Имя</label>
+                                            <input id="name" type="text" name="name" class="form-control" value=""
+                                                   placeholder="Имя" minlength="2" maxlength="30" required="required">
+                                            <div class="invalid-feedback"></div>
+                                        </div>
+                                    </div>
+                                    <div class="col-sm-6">
+                                        <!-- Email пользователя -->
+                                        <div class="form-group">
+                                            <label for="phone" class="control-label">Телефон для обратной связи</label>
+                                            <input id="phone" type="text" minlength="10" name="phone"
+                                                   required="required"
+                                                   class="form-control" value="" placeholder="Номер телефона">
+                                            <div class="invalid-feedback"></div>
+                                        </div>
+                                    </div>
+                                </div>
+                                <!-- Сообщение пользователя -->
+                                <div class="form-group">
+                                    <label for="message" class="control-label">Сообщение (не менее 20 символов)</label>
+                                    <textarea id="message" name="message" class="form-control" rows="3"
+                                              placeholder="Сообщение (не менее 20 символов)" minlength="20"
+                                              maxlength="500" required="required"></textarea>
+                                    <div class="invalid-feedback"></div>
+                                </div>
+                                <!-- Капча -->
+                            {{--    <div class="form-group captcha">
+                                    <img class="img-captcha" src="/feedback/captcha/captcha.php"
+                                         data-src="/feedback/captcha/captcha.php">
+                                    <div class="btn btn-light position-relative refresh-captcha">Обновить</div>
+                                    <div class="form-group">
+                                        <label for="captcha" class="control-label">Код, показанный на
+                                            изображении</label>
+                                        <input type="text" name="captcha" maxlength="6" required="required" id="captcha"
+                                               class="form-control captcha" placeholder="******"
+                                               autocomplete="off" value="">
+                                        <div class="invalid-feedback"></div>
+                                    </div>
+                                </div>--}}
+                            <!-- Пользовательское солашение -->
+                                <div class="form-group agreement">
+                                    <div class="custom-control custom-checkbox">
+                                        <input type="checkbox" name="agree" class="custom-control-input"
+                                               id="customCheck" required>
+                                        <label class="custom-control-label" for="customCheck">Нажимая кнопку, я принимаю
+                                            условия <a href="{{$url}}" target="_blank">Пользовательского соглашения</a>
+                                            и даю своё согласие на
+                                            обработку моих персональных данных.</label>
+                                    </div>
+                                </div>
+                                <!-- Сообщение при ошибке -->
+                                <div class="alert alert-danger form-error d-none">
+                                    Исправьте данные и отправьте форму ещё раз.
+                                </div>
+                                <!-- Кнопка для отправки формы -->
+                                <div class="submit">
+                                    <button type="submit" class="btn btn-primary position-relative">
+                                        Отправить сообщение
+                                    </button>
+                                </div>
+                            </form>
 
-<!-- Modal 5 -->
-<div class="portfolio-modal modal fade" id="portfolioModal5" tabindex="-1" role="dialog" aria-hidden="true">
-    <div class="modal-dialog">
-        <div class="modal-content">
-            <div class="close-modal" data-dismiss="modal">
-                <div class="lr">
-                    <div class="rl"></div>
-                </div>
-            </div>
-            <div class="container">
-                <div class="row">
-                    <div class="col-lg-8 mx-auto">
-                        <div class="modal-body">
-                            <!-- Project Details Go Here -->
-                            <h2 class="text-uppercase">Project Name</h2>
-                            <p class="item-intro text-muted">Lorem ipsum dolor sit amet consectetur.</p>
-                            <img class="img-fluid d-block mx-auto" src="img/portfolio/05-full.jpg" alt="">
-                            <p>Use this area to describe your project. Lorem ipsum dolor sit amet, consectetur
-                                adipisicing elit. Est blanditiis dolorem culpa incidunt minus dignissimos deserunt
-                                repellat aperiam quasi sunt officia expedita beatae cupiditate, maiores repudiandae,
-                                nostrum, reiciendis facere nemo!</p>
-                            <ul class="list-inline">
-                                <li>Date: January 2017</li>
-                                <li>Client: Southwest</li>
-                                <li>Category: Website Design</li>
-                            </ul>
-                            <button class="btn btn-primary" data-dismiss="modal" type="button">
-                                <i class="fas fa-times"></i>
-                                Close Project
-                            </button>
-                        </div>
-                    </div>
-                </div>
-            </div>
-        </div>
-    </div>
-</div>
 
-<!-- Modal 6 -->
-<div class="portfolio-modal modal fade" id="portfolioModal6" tabindex="-1" role="dialog" aria-hidden="true">
-    <div class="modal-dialog">
-        <div class="modal-content">
-            <div class="close-modal" data-dismiss="modal">
-                <div class="lr">
-                    <div class="rl"></div>
-                </div>
-            </div>
-            <div class="container">
-                <div class="row">
-                    <div class="col-lg-8 mx-auto">
-                        <div class="modal-body">
-                            <!-- Project Details Go Here -->
-                            <h2 class="text-uppercase">Project Name</h2>
-                            <p class="item-intro text-muted">Lorem ipsum dolor sit amet consectetur.</p>
-                            <img class="img-fluid d-block mx-auto" src="img/portfolio/06-full.jpg" alt="">
-                            <p>Use this area to describe your project. Lorem ipsum dolor sit amet, consectetur
-                                adipisicing elit. Est blanditiis dolorem culpa incidunt minus dignissimos deserunt
-                                repellat aperiam quasi sunt officia expedita beatae cupiditate, maiores repudiandae,
-                                nostrum, reiciendis facere nemo!</p>
-                            <ul class="list-inline">
-                                <li>Date: January 2017</li>
-                                <li>Client: Window</li>
-                                <li>Category: Photography</li>
-                            </ul>
-                            <button class="btn btn-primary" data-dismiss="modal" type="button">
-                                <i class="fas fa-times"></i>
-                                Close Project
-                            </button>
                         </div>
                     </div>
                 </div>
@@ -746,15 +690,30 @@
 <!-- Custom scripts for this template -->
 <script src="/js/new-age.min.js"></script>
 
+<!-- Marquiz script start -->
+<script src="//script.marquiz.ru/v1.js" type="application/javascript"></script>
 <script>
-    /*!
- * Start Bootstrap - Agency v5.2.2 (https://startbootstrap.com/template-overviews/agency)
- * Copyright 2013-2019 Start Bootstrap
- * Licensed under MIT (https://github.com/BlackrockDigital/startbootstrap-agency/blob/master/LICENSE)
- */
+    document.addEventListener("DOMContentLoaded", function() {
+        Marquiz.init({
+            id: '5e29b17d3e851d004431a587',
+            autoOpen: true,
+            autoOpenFreq: 'once',
+            openOnExit: false
+        });
+    });
+</script>
+<!-- Marquiz script end -->
+
+
+<script>
+
+    //$('#quiz').modal('show');
 
     !function (e) {
         "use strict";
+
+
+
         e('a.js-scroll-trigger[href*="#"]:not([href="#"])').click(function () {
             if (location.pathname.replace(/^\//, "") == this.pathname.replace(/^\//, "") && location.hostname == this.hostname) {
                 var a = e(this.hash);

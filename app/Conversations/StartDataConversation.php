@@ -174,11 +174,8 @@ class StartDataConversation extends Conversation
             $remote_user->updated_at = Carbon::now();
             $remote_user->save();
 
-
-            $this->bot->sendRequest("sendMessage", [
-                "chat_id" => $remote_user->telegram_chat_id,
-                "text" => $promo->activation_text
-            ]);
+            $this->sendMessageToChat($remote_user->telegram_chat_id,
+                $promo->activation_text);
 
             $promoTitle = $promo->title;
             $promoDescription = $promo->description;
@@ -192,10 +189,8 @@ class StartDataConversation extends Conversation
 
         if ($promo->current_activation_count == $promo->activation_count) {
             $this->reply('Больше нет призов по акции, нет возможности выдать приз пользователю!');
-            $this->bot->sendRequest("sendMessage", [
-                "chat_id" => $remote_user->telegram_chat_id,
-                "text" => "Больше нет призов по акции, вы не успели("
-            ]);
+            $this->sendMessageToChat($remote_user->telegram_chat_id,
+                "Больше нет призов по акции, вы не успели(");
         }
 
         $remote_user->activated = 1;
@@ -222,11 +217,8 @@ class StartDataConversation extends Conversation
         event(new AchievementEvent(AchievementTriggers::ReferralCount, 1, $sender_user));
         event(new AchievementEvent(AchievementTriggers::MaxReferralBonusCount, 1, $sender_user));
 
-
-        $this->bot->sendRequest("sendMessage", [
-            "chat_id" => $sender_user->telegram_chat_id,
-            "text" => "Вам начислено " . env("REFERRAL_BONUS") . " бонусов."
-        ]);
+        $this->sendMessageToChat($remote_user->telegram_chat_id,
+            "Вам начислено " . env("REFERRAL_BONUS") . " бонусов.");
 
 
     }
@@ -317,12 +309,12 @@ class StartDataConversation extends Conversation
             ->first();
 
         if ($on_ach == null) {
-            $this->reply('Достижение не найдено');
+            $this->reply(__("messages.ask_achievement_error_1"));
             return;
         }
 
         if ($on_ach->activated == 1) {
-            $this->reply('Приз за достижение уже был активирован ранее');
+            $this->reply(__("messages.ask_achievement_error_2"));
             return;
         }
 
@@ -336,11 +328,8 @@ class StartDataConversation extends Conversation
 
         event(new AchievementEvent(AchievementTriggers::AchievementActivatedCount, 1, $remote_user));
 
-        $this->bot->sendRequest("sendMessage", [
-            "chat_id" => $remote_user->telegram_chat_id,
-            "text" => "Достижение " . $on_ach->achievement->title . " успешно активировано!"
-        ]);
-
+        $this->sendMessageToChat($remote_user->telegram_chat_id,
+            "Достижение " . $on_ach->achievement->title . " успешно активировано!");
 
     }
 
@@ -352,18 +341,18 @@ class StartDataConversation extends Conversation
         $on_promo = $promo->onPromo($this->getChatId());
 
         if ($on_promo) {
-            $this->reply('Акция уже была пройдена ранее!');
+            $this->reply(__("messages.ask_promotions_error_1"));
             return;
         }
 
         if (!$promo->isActive()) {
-            $this->reply('Акция уже подошла к концу!');
+            $this->reply(__("messages.ask_promotions_error_2"));
             return;
         }
 
         $keyboard = [
             [
-                ["text" => "\xF0\x9F\x91\x89Подробнее", "callback_data" => $promo->handler == null ? "/promotion " . $promo->id : $promo->handler . " " . $promo->id]
+                ["text" => __("messages.start_con_btn_2"), "callback_data" => $promo->handler == null ? "/promotion " . $promo->id : $promo->handler . " " . $promo->id]
             ]
         ];
         $this->sendPhoto("*" . $promo->title . "*", $promo->promo_image_url, $keyboard);
@@ -377,7 +366,7 @@ class StartDataConversation extends Conversation
         $event = Event::find(intval($event_id));
 
         if (!$event->isActive()) {
-            $this->reply('Мероприятие уже подошло к концу!');
+            $this->reply(__("messages.ask_event_error_1"));
             return;
         }
 

@@ -38,7 +38,7 @@ class PromoConversation extends Conversation
             ->first();
 
         if ($on_promo) {
-            $this->reply('Акция уже была пройдена ранее!');
+            $this->reply(__("messages.ask_promotions_error_1"));
             return;
         }
 
@@ -53,12 +53,12 @@ class PromoConversation extends Conversation
 
     public function askForStartPromo()
     {
-        $question = Question::create('Желаете поучаствовать в акции?')
-            ->fallback('Ничего страшного, в следующий раз получится!')
+        $question = Question::create(__("messages.ask_for_start_promo"))
+            ->fallback(__("messages.ask_fallback"))
             ->addButtons([
-                Button::create('Детали акции')->value('promo_info'),
-                Button::create('Участвовать в акции')->value('yes'),
-                Button::create('Нет, в другой раз')->value('no'),
+                Button::create(__("messages.promo_btn_1"))->value('promo_info'),
+                Button::create(__("messages.promo_btn_2"))->value('yes'),
+                Button::create(__("messages.promo_btn_3"))->value('no'),
             ]);
 
 
@@ -71,12 +71,12 @@ class PromoConversation extends Conversation
                 }
 
                 if ($selectedValue == "yes") {
-                    $this->conversationMenu("Начнем-с...");
+                    $this->conversationMenu(__("messages.menu_title_2"));
                     $this->askFirstname();
                 }
 
                 if ($selectedValue == "no") {
-                    $this->say("Хорошего дня!");
+                    $this->say(__("messages.message_1"));
                 }
             }
         });
@@ -93,14 +93,13 @@ class PromoConversation extends Conversation
             $this->sendLocation($coords[0], $coords[1]);
         }
 
-        $question = Question::create('Так что на счет участия?')
+        $question = Question::create(__('messages.ask_promo_profile'))
             ->addButtons([
-                Button::create('Поехали')->value('yes'),
-                Button::create('Нет, в другой раз')->value('no'),
+                Button::create(__("messages.ask_promo_btn_1"))->value('yes'),
+                Button::create(__("messages.ask_promo_btn_2"))->value('no'),
             ]);
 
         $this->ask($question, function (Answer $answer) {
-            // Detect if button was clicked:
             if ($answer->isInteractiveMessageReply()) {
                 $selectedValue = $answer->getValue();
 
@@ -109,7 +108,7 @@ class PromoConversation extends Conversation
                 }
 
                 if ($selectedValue == "no") {
-                    $this->reply("Хорошего дня!");
+                    $this->reply(__("messages.message_1"));
                 }
             }
         });
@@ -122,8 +121,8 @@ class PromoConversation extends Conversation
             $this->askPhone();
             return;
         }
-        $question = Question::create('Как тебя зовут?')
-            ->fallback('Спасибо что пообщался со мной:)!');
+        $question = Question::create(__("messages.ask_name"))
+            ->fallback(__("messages.ask_fallback"));
 
         $this->ask($question, function (Answer $answer) {
             $user = $this->getUser();
@@ -142,8 +141,8 @@ class PromoConversation extends Conversation
             return;
         }
 
-        $question = Question::create('Скажие мне свой номер телефона')
-            ->fallback('Спасибо что пообщались со мной:)!');
+        $question = Question::create(__("messages.ask_phone"))
+            ->fallback(__("messages.ask_fallback"));
 
         $this->ask($question, function (Answer $answer) {
 
@@ -159,7 +158,7 @@ class PromoConversation extends Conversation
 
             if (preg_match($pattern, $tmp_phone) == 0) {
 
-                $this->reply("Номер введен не верно...\n");
+                $this->reply(__("messages.ask_phone_error_1"));
                 $this->askPhone();
                 return;
             } else {
@@ -172,7 +171,7 @@ class PromoConversation extends Conversation
                     $user->save();
 
                 } else {
-                    $this->reply("Пользователь с таким номером уже и так наш друг:)\n");
+                    $this->reply(__("messages.ask_phone_error_2"));
                     $this->askPhone();
                     return;
                 }
@@ -192,11 +191,11 @@ class PromoConversation extends Conversation
             return;
         }
 
-        $question = Question::create('А какого вы пола?')
-            ->fallback('Спасибо что пообщались со мной:)!')
+        $question = Question::create(__("messages.ask_sex"))
+            ->fallback(__("messages.ask_fallback"))
             ->addButtons([
-                Button::create("\xF0\x9F\x91\xA6Мужской")->value('man'),
-                Button::create("\xF0\x9F\x91\xA7Женский")->value('woman'),
+                Button::create(__("messages.ask_sex_btn_1"))->value('man'),
+                Button::create(__("messages.ask_sex_btn_2"))->value('woman'),
             ]);
 
         $this->ask($question, function (Answer $answer) {
@@ -220,8 +219,8 @@ class PromoConversation extends Conversation
             return;
         }
 
-        $question = Question::create('Следующий вопрос - дата вашего рождения:')
-            ->fallback('Спасибо что пообщались со мной:)!');
+        $question = Question::create(__("messages.ask_birthday"))
+            ->fallback(__("messages.ask_fallback"));
 
         $this->ask($question, function (Answer $answer) {
             $user = $this->getUser();
@@ -241,8 +240,8 @@ class PromoConversation extends Conversation
             return;
         }
 
-        $question = Question::create('Из какого вы города?')
-            ->fallback('Спасибо что пообщались со мной:)!');
+        $question = Question::create(__("messages.ask_city"))
+            ->fallback(__("messages.ask_fallback"));
 
         $this->ask($question, function (Answer $answer) {
             $user = $this->getUser();
@@ -282,7 +281,7 @@ class PromoConversation extends Conversation
 
 
         if ($promo->immediately_activate == 0) {
-            $this->reply("Спасибо! Получите свои бонусы у нашего сотрудника по этому QR-коду.");
+            $this->reply(__("messages.message_2"));
 
             $tmp_id = $this->getUser()->telegram_chat_id;
             while (strlen($tmp_id) < 10)
@@ -294,7 +293,7 @@ class PromoConversation extends Conversation
 
             $code = base64_encode("003" . $tmp_id . $tmp_promo_id);
 
-            $this->sendPhoto('_Код для получения приза по акции_',
+            $this->sendPhoto(__("messages.message_3"),
                 env("QR_URL") . "https://t.me/" . env("APP_BOT_NAME") . "?start=$code");
 
         }

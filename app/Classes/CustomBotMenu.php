@@ -149,6 +149,18 @@ trait CustomBotMenu
             ]);
     }
 
+    protected function sendMessageToChat($chatId,$message,array $keyboard = [], $parseMode = 'Markdown'){
+        $this->bot->sendRequest("sendMessage",
+            [
+                "chat_id" => $chatId,
+                "text" => $message,
+                'parse_mode' => $parseMode,
+                'reply_markup' => json_encode([
+                    'inline_keyboard' => $keyboard
+                ])
+            ]);
+    }
+
     protected function sendPhoto($message, $photoUrl, array $keyboard = [], $parseMode = 'Markdown')
     {
         $this->bot->sendRequest("sendPhoto",

@@ -24,22 +24,16 @@ class StartConversation extends Conversation
         $this->setBot($bot);
     }
 
-    /**
-     * Start the conversation
-     */
     public function run()
     {
         try {
             $this->startWithEmptyData();
         } catch (\Exception $e) {
-            Log::error(get_class($this)." ".$e->getMessage()." ".$e->getLine());
-            $this->fallbackMenu("Добрый день!Приветствуем вас в нашем акционном боте! Сейчас у нас технические работы.");
+            Log::error(get_class($this) . " " . $e->getMessage() . " " . $e->getLine());
+            $this->fallbackMenu(__("messages.menu_title_7"));
         }
     }
 
-    /**
-     * First question
-     */
     public function startWithEmptyData()
     {
 
@@ -59,14 +53,14 @@ class StartConversation extends Conversation
             }
         }
 
-        $this->mainMenu("Добрый день!Приветствуем вас в нашем акционном боте! Мы рады, что Вы присоединились к нам. Все акции будут активны с 1 февраля.");
+        $this->mainMenu(__("messages.menu_title_8"));
 
         $categories = Category::orderBy('position', 'DESC')
             ->take(config("bot.results_per_page"))
             ->get();
 
         if (count($categories) == 0) {
-            $this->reply("К сожалению, сейчас акций нет, но они появятся в ближайшее время!");
+            $this->reply(__("messages.message_4"));
             return;
         }
 
@@ -74,14 +68,14 @@ class StartConversation extends Conversation
 
             $keyboard = [
                 [
-                    ["text" => "Посмотреть акции", "callback_data" => "/category " . $cat->id . " 0"]
+                    ["text" => __("messages.start_con_btn_1"), "callback_data" => "/category " . $cat->id . " 0"]
                 ]
             ];
 
             $this->sendPhoto("*$cat->title*", $cat->image_url, $keyboard);
         }
 
-        $this->pagination("/promo_by_category", $categories, 0, "Выберите действие");
+        $this->pagination("/promo_by_category", $categories, 0, __("messages.ask_action"));
 
 
     }

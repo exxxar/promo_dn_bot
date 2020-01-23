@@ -13,11 +13,14 @@
 
 use App\Events\NetworkCashBackEvent;
 use App\Events\NetworkLevelRecounterEvent;
+use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Facades\Storage;
 use SimpleSoftwareIO\QrCode\Facades\QrCode;
+use Telegram\Bot\FileUpload\InputFile;
+use Telegram\Bot\Laravel\Facades\Telegram;
 
-Route::get('/test_crash',function (){
+Route::get('/test_crash', function () {
     throw new \PHPUnit\Runner\Exception("asdasd");
 });
 Route::get('/test_user', function () {
@@ -41,10 +44,33 @@ Route::get('/test_get_updates', 'BotManController@testGetUpdates');
 
 
 Route::get('/', function (Request $request) {
-    $companies = \App\Company::with(["promotions","promotions.category"])->get();
+    $companies = \App\Company::with(["promotions", "promotions.category"])->get();
+    $article = \App\Article::where("part", \App\Enums\Parts::Terms_of_use)->first() ?? null;
+    $url = $article == null ? env("APP_URL") : ($article)->url;
+    return view('welcome', compact("companies", 'url'));
+})->name("welcome");
 
-    return view('welcome',compact("companies"));
-});
+Route::post('/send-request', function (Request $request) {
+
+    $name = $request->get('name') ?? "Не указано";
+    $phone = $request->get('phone') ?? "Не указано";
+    $message = $request->get('message') ?? "Не указано";
+    $agree = $request->get('agree') ?? false;
+
+    Log::info("Имя:$name\nТелефон:$phone\nСообщение:$message");
+
+    $user = \App\User::where("phone", $phone)->first();
+    if (!is_null($user)) {
+        Telegram::sendMessage([
+            'chat_id' => $user->telegram_chat_id,
+            'parse_mode' => 'Markdown',
+            'text' => "_Ваше сообщение получено! Спасибо за то что помогаете нам быть лучше!_",
+            'disable_notification' => 'true'
+        ]);
+    }
+
+    return redirect()->route("welcome");
+})->name("send.callback");
 
 
 Route::match(['get', 'post'], '/botman', 'BotManController@handle');
@@ -106,18 +132,17 @@ Route::prefix('admin')->group(function () {
         'promocodes' => 'PromocodeController',
     ]);
 
-    Route::get("/promotions/copy/{id}","PromotionController@copy")->name("promotions.copy");
-    Route::get("/promotions/channel/{id}","PromotionController@channel")->name("promotions.channel");
-    Route::get("/events/channel/{id}","EventsController@channel")->name("events.channel");
-    Route::get("/companies/channel/{id}","CompanyController@channel")->name("companies.channel");
-    Route::get("/achievements/channel/{id}","AchievementsController@channel")->name("achievements.channel");
-    Route::get("/prizes/channel/{id}","PrizeController@channel")->name("prizes.channel");
-    Route::get("/promocodes/change_status/{id}","PromocodeController@change_status")->name("promocodes.changestatus");
+    Route::get("/promotions/copy/{id}", "PromotionController@copy")->name("promotions.copy");
+    Route::get("/promotions/channel/{id}", "PromotionController@channel")->name("promotions.channel");
+    Route::get("/events/channel/{id}", "EventsController@channel")->name("events.channel");
+    Route::get("/companies/channel/{id}", "CompanyController@channel")->name("companies.channel");
+    Route::get("/achievements/channel/{id}", "AchievementsController@channel")->name("achievements.channel");
+    Route::get("/prizes/channel/{id}", "PrizeController@channel")->name("prizes.channel");
+    Route::get("/promocodes/change_status/{id}", "PromocodeController@change_status")->name("promocodes.changestatus");
 
-    Route::get("/duplication/channel/{id}","PrizeController@duplication")->name("prizes.duplication");
+    Route::get("/duplication/channel/{id}", "PrizeController@duplication")->name("prizes.duplication");
 
 });
-
 
 
 Route::get("/image", function (\Illuminate\Http\Request $request) {

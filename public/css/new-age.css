@@ -686,3 +686,32 @@ footer ul li a:hover, footer ul li a:focus, footer ul li a:active, footer ul li 
     padding-right: 20px;
   }
 }
+
+.send-message-modal {
+  position: fixed;
+  bottom: 50px;
+  right: 50px;
+  z-index: 100;
+  padding: 20px;
+  width: 70px;
+  height: 70px;
+  border-radius: 50%;
+  box-shadow: 1px 1px 5px 0px black;
+  background: red;
+  color: white;
+  font-size: 34px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.send-message-modal:hover {
+  text-decoration: none;
+}
+
+.callback-modal label {
+  width: 100%;
+  text-align: left;
+  font-size: 12px;
+  margin-bottom: 0px;
+}
