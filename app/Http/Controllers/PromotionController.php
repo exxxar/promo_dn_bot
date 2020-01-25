@@ -158,8 +158,8 @@ class PromotionController extends Controller
         $promotion->title = $request->get("title");
         $promotion->description = $request->get("description");
         $promotion->promo_image_url = $request->get("promo_image_url");
-        $promotion->start_at = $request->get("start_at");
-        $promotion->end_at = $request->get("end_at");
+        $promotion->start_at = \Carbon\Carbon::parse( $request->get('start_at')??Carbon::now());
+        $promotion->end_at = \Carbon\Carbon::parse( $request->get('end_at')??Carbon::now());
         $promotion->immediately_activate = $request->get("immediately_activate")??false;
         $promotion->handler = $request->get("handler")??null;
         $promotion->activation_count = $request->get("activation_count");
