@@ -489,7 +489,7 @@ class SkidkiDNBot extends Bot implements iSkidkiDNBot
         $isEmpty = true;
         foreach ($promotions as $promo) {
 
-            if (!$promo->company()->is_active)
+            if (!$promo->company->is_active)
                 continue;
 
             $on_promo = $promo->onPromo($this->getChatId());
