@@ -546,7 +546,7 @@ class SkidkiDNBot extends Bot implements iSkidkiDNBot
             ->skip($page * config("bot.results_per_page"))
             ->get();
 
-        $isEmpty = false;
+        $isEmpty = true;
 
         foreach ($promotions as $promo) {
 
@@ -555,6 +555,8 @@ class SkidkiDNBot extends Bot implements iSkidkiDNBot
 
 
             if (!$on_promo && $isActive) {
+
+                $isEmpty = false;
 
                 $keyboard = [
                     [
