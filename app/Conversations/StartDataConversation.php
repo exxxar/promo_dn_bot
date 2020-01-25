@@ -269,17 +269,21 @@ class StartDataConversation extends Conversation
             }
 
 
-            Telegram::sendMessage([
-                'chat_id' => $sender_user->telegram_chat_id,
-                'parse_mode' => 'Markdown',
-                'text' => "Пользователь " . (
-                        $user->name ??
-                        $user->fio_from_telegram ??
-                        $user->email ??
-                        $user->telegram_chat_id
-                    ) . " перешел по вашей реферальной ссылке!",
-                'disable_notification' => 'false'
-            ]);
+            try {
+                Telegram::sendMessage([
+                    'chat_id' => $sender_user->telegram_chat_id,
+                    'parse_mode' => 'Markdown',
+                    'text' => "Пользователь " . (
+                            $user->name ??
+                            $user->fio_from_telegram ??
+                            $user->email ??
+                            $user->telegram_chat_id
+                        ) . " перешел по вашей реферальной ссылке!",
+                    'disable_notification' => 'false'
+                ]);
+            } catch (\Exception $e) {
+
+            }
 
             RefferalsHistory::create([
                 'user_sender_id' => $sender_user->id,
