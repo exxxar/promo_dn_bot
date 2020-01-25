@@ -23,11 +23,11 @@ class FillInfoConversation extends Conversation
     public function run()
     {
         try {
-            $this->conversationMenu(__('menu_title_2'));
+            $this->conversationMenu(__('messages.menu_title_2'));
             $this->askFirstname();
         } catch (\Exception $e) {
             Log::error(get_class($this));
-            $this->mainMenu(__('menu_title_1'));
+            $this->mainMenu(__('messages.menu_title_1'));
         }
     }
 
