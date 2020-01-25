@@ -489,13 +489,12 @@ class SkidkiDNBot extends Bot implements iSkidkiDNBot
         $isEmpty = true;
         foreach ($promotions as $promo) {
 
-            if (!$promo->company()->isActive())
-                continue;
+            $company = Company::find($promo->company_id);
 
             $on_promo = $promo->onPromo($this->getChatId());
             $isActive = $promo->isActive();
 
-            if (!$on_promo && $isActive) {
+            if (!$on_promo && $isActive && $company->is_active) {
 
                 $isEmpty = false;
 
@@ -505,7 +504,7 @@ class SkidkiDNBot extends Bot implements iSkidkiDNBot
                     ]
                 ];
 
-                $this->sendPhoto('', $promo->promo_image_url, $keyboard);
+                $this->sendPhoto("*".$promo->title."*", $promo->promo_image_url, $keyboard);
             }
         }
 
