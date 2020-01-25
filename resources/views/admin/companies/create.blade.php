@@ -59,6 +59,12 @@
                             </td>
                         </tr>
                         <tr>
+                            <td>Компания отображается</td>
+                            <td>
+                                <input type="checkbox" name="is_active" class="form-control">
+                            </td>
+                        </tr>
+                        <tr>
                             <td>Ссылка на бота</td>
                             <td>
                                 <input type="url" name="telegram_bot_url" class="form-control" value="">

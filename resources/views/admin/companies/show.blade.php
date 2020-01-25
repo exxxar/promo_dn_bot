@@ -58,6 +58,17 @@
                             <p>{{$company->position}}</p>
                         </td>
                     </tr>
+
+                    <tr>
+                        <td>Компания отображается</td>
+                        <td>
+                            @if($company->is_active)
+                                <i class="fas fa-eye"></i>
+                            @else
+                                <i class="fas fa-eye-slash"></i>
+                            @endif
+                        </td>
+                    </tr>
                     <tr>
                         <td>Ссылка на бота</td>
                         <td>
