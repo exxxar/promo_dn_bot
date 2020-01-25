@@ -570,7 +570,7 @@ class SkidkiDNBot extends Bot implements iSkidkiDNBot
         }
 
         if ($isEmpty)
-            $this->reply("Акций в категории не найдено или все акции собраны:(");
+            $this->reply("Акций у этой компании не найдено или все акции уже прошли:(");
 
         $this->pagination("/company $id", $promotions, $page, "Выберите действие");
     }

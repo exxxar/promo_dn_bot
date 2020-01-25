@@ -44,7 +44,7 @@ Route::get('/test_get_updates', 'BotManController@testGetUpdates');
 
 
 Route::get('/', function (Request $request) {
-    $companies = \App\Company::with(["promotions", "promotions.category"])->get();
+    $companies = \App\Company::with(["promotions", "promotions.category"])->where("is_active",true)->get();
     $article = \App\Article::where("part", \App\Enums\Parts::Terms_of_use)->first() ?? null;
     $url = $article == null ? env("APP_URL") : ($article)->url;
     return view('welcome', compact("companies", 'url'));
