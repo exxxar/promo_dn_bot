@@ -111,7 +111,7 @@ class FillInfoConversation extends Conversation
         $this->ask($question, function (Answer $answer) {
             if ($answer->isInteractiveMessageReply()) {
                 $user = $this->getUser();
-                $user->sex = $answer->getValue() == "man" ? 0 : 1;
+                $user->sex = ($answer->getValue() == "man" ? 0 : 1)??0;
                 $user->save();
                 $this->askBirthday();
             }
