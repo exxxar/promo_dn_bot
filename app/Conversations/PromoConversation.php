@@ -56,9 +56,9 @@ class PromoConversation extends Conversation
         $question = Question::create(__("messages.ask_for_start_promo"))
             ->fallback(__("messages.ask_fallback"))
             ->addButtons([
-                Button::create(__("messages.promo_btn_1"))->value('promo_info'),
-                Button::create(__("messages.promo_btn_2"))->value('yes'),
-                Button::create(__("messages.promo_btn_3"))->value('no'),
+                Button::create(__("messages.start_promo_btn_1"))->value('promo_info'),
+                Button::create(__("messages.start_promo_btn_2"))->value('yes'),
+                Button::create(__("messages.start_promo_btn_3"))->value('no'),
             ]);
 
 
