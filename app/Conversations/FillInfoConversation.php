@@ -101,8 +101,8 @@ class FillInfoConversation extends Conversation
             return;
         }
 
-        $question = Question::create(__('ask_sex'))
-            ->fallback(__('ask_fallback'))
+        $question = Question::create(__('messages.ask_sex'))
+            ->fallback(__('messages.ask_fallback'))
             ->addButtons([
                 Button::create(__("messages.ask_sex_btn_1"))->value('man'),
                 Button::create(__("messages.ask_sex_btn_2"))->value('woman'),
