@@ -339,6 +339,9 @@ class SkidkiDNBot extends Bot implements iSkidkiDNBot
             [
                 ['text' => "\xE2\x9A\xA1Акции и призы на сайте", 'url' => env("APP_PROMO_LINK")],
             ],
+            [
+                ['text' => "\xF0\x9F\x8C\xBBБольше информации в нашем канале", 'url' => env("CHANNEL_LINK")],
+            ],
 
         ];
 

@@ -112,7 +112,6 @@ class LotusProfileConversation extends Conversation
     public function promoInfo()
     {
 
-        Log::info("2 test data=".$this->data);
         $promo = Promotion::find($this->data);
         if ($promo) {
             $coords = explode(",", $promo->location_coords);
@@ -319,7 +318,7 @@ class LotusProfileConversation extends Conversation
             $this->askHips();
             return;
         }
-        $question = Question::create('Ваш объем талии:')
+        $question = Question::create(__("messages.ask_waist"))
             ->fallback(__("messages.ask_fallback"));
 
         $this->ask($question, function (Answer $answer) {
@@ -433,7 +432,7 @@ class LotusProfileConversation extends Conversation
             ->fallback(__("messages.ask_fallback"))
             ->addButtons([
                 Button::create(__("messages.ask_wish_learn_btn_1"))->value('yes'),
-                Button::create(__('ask_wish_learn_btn_2'))->value('no'),
+                Button::create(__('messages.ask_wish_learn_btn_2'))->value('no'),
             ]);
 
         $this->ask($question, function (Answer $answer) {
@@ -457,8 +456,8 @@ class LotusProfileConversation extends Conversation
             'parse_mode' => 'Markdown',
             'text' => "Новая анкета:\n"
                 . "*Ф.И.О.*:" . ($this->model_name ?? __("messages.empty_data")) . "\n"
-                . "*Возраст:*" . ($this->user->age ?? __("messages.empty_data")) . "\n"
-                . "*Телефон:*" . ($this->user->phone ?? __("messages.empty_data")) . "\n"
+                . "*Возраст:*" . ($this->getUser()->age ?? __("messages.empty_data")) . "\n"
+                . "*Телефон:*" . ($this->getUser()->phone ?? __("messages.empty_data")) . "\n"
                 . "*Пол:*" . ($this->sex == 0 ?
                     __("messages.ask_sex_btn_1") :
                     __("messages.ask_sex_btn_2")) . "\n"

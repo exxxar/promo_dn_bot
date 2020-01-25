@@ -38,8 +38,8 @@ class FillInfoConversation extends Conversation
             $this->askPhone();
             return;
         }
-        $question = Question::create(__("ask_name"))
-            ->fallback(__("ask_fallback"));
+        $question = Question::create(__("messages.ask_name"))
+            ->fallback(__("messages.ask_fallback"));
 
         $this->ask($question, function (Answer $answer) {
             $user = $this->getUser();
@@ -56,8 +56,8 @@ class FillInfoConversation extends Conversation
             return;
         }
 
-        $question = Question::create(__("ask_phone"))
-            ->fallback(__("ask_fallback"));
+        $question = Question::create(__("messages.ask_phone"))
+            ->fallback(__("messages.ask_fallback"));
 
         $this->ask($question, function (Answer $answer) {
 
@@ -71,7 +71,7 @@ class FillInfoConversation extends Conversation
 
             if (preg_match($pattern, $tmp_phone) == 0) {
 
-                $this->reply(__("ask_phone_error_1"));
+                $this->reply(__("messages.ask_phone_error_1"));
                 $this->askPhone();
                 return;
             } else {
@@ -83,7 +83,7 @@ class FillInfoConversation extends Conversation
                     $user->phone = $tmp_phone;
                     $user->save();
                 } else {
-                    $this->reply(__("ask_phone_error_2"));
+                    $this->reply(__("messages.ask_phone_error_2"));
                     $this->askPhone();
                     return;
                 }
@@ -104,8 +104,8 @@ class FillInfoConversation extends Conversation
         $question = Question::create(__('ask_sex'))
             ->fallback(__('ask_fallback'))
             ->addButtons([
-                Button::create(__("ask_sex_btn_1"))->value('man'),
-                Button::create(__("ask_sex_btn_2"))->value('woman'),
+                Button::create(__("messages.ask_sex_btn_1"))->value('man'),
+                Button::create(__("messages.ask_sex_btn_2"))->value('woman'),
             ]);
 
         $this->ask($question, function (Answer $answer) {
@@ -127,8 +127,8 @@ class FillInfoConversation extends Conversation
             return;
         }
 
-        $question = Question::create(__("ask_birthday"))
-            ->fallback(__("ask_fallback"));
+        $question = Question::create(__("messages.ask_birthday"))
+            ->fallback(__("messages.ask_fallback"));
 
         $this->ask($question, function (Answer $answer) {
             $user = $this->getUser();
@@ -145,8 +145,8 @@ class FillInfoConversation extends Conversation
             return;
         }
 
-        $question = Question::create(__("messages.ask_city"))
-            ->fallback(__("messages.ask_fallback"));
+        $question = Question::create(__("messages.messages.ask_city"))
+            ->fallback(__("messages.messages.ask_fallback"));
 
         $this->ask($question, function (Answer $answer) {
             $user = $this->getUser();
@@ -159,7 +159,7 @@ class FillInfoConversation extends Conversation
 
     public function saveData()
     {
-        $this->mainMenu(__("messages.menu_title_4"));
+        $this->mainMenu(__("messages.messages.menu_title_4"));
     }
 
 
