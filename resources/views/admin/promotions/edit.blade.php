@@ -75,7 +75,7 @@
                         <tr>
                             <td>Дата и время начала акции</td>
                             <td>
-                                <input type="datetime-local" value="{{$promotion->start_at->format("yyyy-MM-dd'T'HH:mm:ss")}}" name="start_at"
+                                <input type="datetime-local" value="{{$promotion->start_at->format("Y-m-d").'T'.$promotion->start_at->format("H:m:s")}}" name="start_at"
                                        class="form-control"
                                        required>
                             </td>
@@ -83,7 +83,7 @@
                         <tr>
                             <td>Дата и время окончания акции</td>
                             <td>
-                                <input type="datetime-local" value="{{$promotion->end_at->format("yyyy-MM-dd'T'HH:mm:ss")}}" name="end_at"
+                                <input type="datetime-local" value="{{$promotion->end_at->format("Y-m-d").'T'.$promotion->end_at->format("H:m:s")}}" name="end_at"
                                        class="form-control"
                                        required>
                             </td>
