@@ -57,4 +57,9 @@ class Company extends Model
             return $item->isNotActiveByUser($chatId);
         });
     }
+
+    public function isActive()
+    {
+        return $this->is_active;
+    }
 }
