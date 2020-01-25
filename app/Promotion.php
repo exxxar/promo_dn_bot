@@ -50,12 +50,12 @@ class Promotion extends Model
 
     public function category()
     {
-        return $this->belongsTo('App\Category', "category_id", "id");
+        return $this->belongsTo('App\Category', "id", "category_id");
     }
 
     public function company()
     {
-        return $this->belongsTo('App\Company', "company_id", "id");
+        return $this->belongsTo('App\Company', "id", "company_id");
     }
 
     public function onPromo($chatId)
