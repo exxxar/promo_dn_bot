@@ -78,9 +78,9 @@ class LotusProfileConversation extends Conversation
         $question = Question::create(__("messages.lotus_model_profile"))
             ->fallback(__("messages.ask_fallback"))
             ->addButtons([
-                Button::create(__("messages.promo_btn_1"))->value('promo_info'),
-                Button::create(__("messages.promo_btn_2"))->value('yes'),
-                Button::create(__("messages.promo_btn_3"))->value('no'),
+                Button::create(__("messages.start_promo_btn_1"))->value('promo_info'),
+                Button::create(__("messages.start_promo_btn_2"))->value('yes'),
+                Button::create(__("messages.start_promo_btn_3"))->value('no'),
             ]);
 
         Log::info("1 test data=".$this->data);
@@ -121,8 +121,8 @@ class LotusProfileConversation extends Conversation
 
         $question = Question::create(__("messages.ask_lotus_profile"))
             ->addButtons([
-                Button::create(__("messages.promo_btn_1"))->value('yes'),
-                Button::create(__("messages.promo_btn_2"))->value('no'),
+                Button::create(__("messages.ask_promo_btn_1"))->value('yes'),
+                Button::create(__("messages.ask_promo_btn_2"))->value('no'),
             ]);
 
         $this->ask($question, function (Answer $answer) {
