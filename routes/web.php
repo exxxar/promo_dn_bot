@@ -136,6 +136,7 @@ Route::prefix('admin')->group(function () {
     Route::get("/promotions/channel/{id}", "PromotionController@channel")->name("promotions.channel");
     Route::get("/events/channel/{id}", "EventsController@channel")->name("events.channel");
     Route::get("/companies/channel/{id}", "CompanyController@channel")->name("companies.channel");
+    Route::get("/companies/hide/{id}", "CompanyController@hide")->name("companies.hide");
     Route::get("/achievements/channel/{id}", "AchievementsController@channel")->name("achievements.channel");
     Route::get("/prizes/channel/{id}", "PrizeController@channel")->name("prizes.channel");
     Route::get("/promocodes/change_status/{id}", "PromocodeController@change_status")->name("promocodes.changestatus");

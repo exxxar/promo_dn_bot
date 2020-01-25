@@ -18,7 +18,8 @@ class Company extends Model
         'cashback',//добавить в бд
         'logo_url',
         'position',
-        'telegram_bot_url'
+        'telegram_bot_url',
+        'is_active'
     ];
 
     public function uniqCategories()

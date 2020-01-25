@@ -23,7 +23,8 @@ class SkidkiDNBot extends Bot implements iSkidkiDNBot
 
     public function getEventsAll($page)
     {
-        $events = Event::skip($page * config("bot.results_per_page"))
+        $events = Event::with(['company'])
+            ->skip($page * config("bot.results_per_page"))
             ->take(config("bot.results_per_page"))
             ->orderBy('position', 'DESC')
             ->get();
@@ -34,7 +35,7 @@ class SkidkiDNBot extends Bot implements iSkidkiDNBot
 
             foreach ($events as $key => $event) {
 
-                if (!$event->isActive())
+                if (!$event->isActive()||!$event->company()->is_active)
                     continue;
 
                 $found = true;
@@ -421,7 +422,8 @@ class SkidkiDNBot extends Bot implements iSkidkiDNBot
 
     public function getPromotionsByCompany($page)
     {
-        $companies = Company::orderBy('position', 'DESC')
+        $companies = Company::where("is_active",true)
+            ->orderBy('position', 'DESC')
             ->take(config("bot.results_per_page"))
             ->skip($page * config("bot.results_per_page"))
             ->get();
@@ -476,7 +478,7 @@ class SkidkiDNBot extends Bot implements iSkidkiDNBot
     public function getCategoryById($id, $page)
     {
 
-        $promotions = (Category::with(["promotions"])
+        $promotions = (Category::with(["promotions","promotions.company"])
             ->where("id", $id)
             ->first())
             ->promotions()
@@ -486,6 +488,9 @@ class SkidkiDNBot extends Bot implements iSkidkiDNBot
 
         $isEmpty = true;
         foreach ($promotions as $promo) {
+
+            if (!$promo->company()->is_active)
+                continue;
 
             $on_promo = $promo->onPromo($this->getChatId());
             $isActive = $promo->isActive();
@@ -513,7 +518,14 @@ class SkidkiDNBot extends Bot implements iSkidkiDNBot
     public function getCompanyById($id, $page)
     {
 
-         $company = \App\Company::with(["promotions", "promotions.users"])->where("id", $id)->first();
+         $company = \App\Company::with(["promotions", "promotions.users"])
+             ->where("id", $id)
+             ->first();
+
+         if (!$company->is_active){
+             $this->reply("Акции этой компании временно недоступны!");
+             return;
+         }
 
         $keyboard = [];
 

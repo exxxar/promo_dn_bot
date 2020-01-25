@@ -61,6 +61,7 @@ class CompanyController extends Controller
             'bailee' => 'required',
             'logo_url' => 'required',
             'position' => 'required',
+            'is_active' => 'required',
         ]);
 
 
@@ -73,6 +74,7 @@ class CompanyController extends Controller
             'bailee' => $request->get('bailee') ?? '',
             'logo_url' => $request->get('logo_url') ?? '',
             'position' => $request->get('position') ?? 0,
+            'is_active' => $request->get('is_active') ?? false,
             'telegram_bot_url' => $request->get('telegram_bot_url') ?? '',
             'created_at' => Carbon::now(),
             'updated_at' => Carbon::now(),
@@ -128,6 +130,7 @@ class CompanyController extends Controller
             'bailee' => 'required',
             'logo_url' => 'required',
             'position' => 'required',
+            'is_active' => 'required',
         ]);
 
 
@@ -140,6 +143,7 @@ class CompanyController extends Controller
         $company->bailee = $request->get('bailee') ?? '';
         $company->logo_url = $request->get('logo_url') ?? '';
         $company->position = $request->get('position') ?? 0;
+        $company->is_active = $request->get('is_active') ?? false;
         $company->telegram_bot_url = $request->get('telegram_bot_url') ?? '';
         $company->save();
 
@@ -195,5 +199,15 @@ class CompanyController extends Controller
         return redirect()
             ->route('companies.index')
             ->with('success', 'Компания успешно добавлена в канал');
+    }
+
+    public function hide(Request $request,$id){
+        $company = Company::find($id);
+        $company->is_active = !$company->is_active;
+        $company->save();
+
+        return redirect()
+            ->route('companies.index')
+            ->with('success', 'Статус компании изменен!');
     }
 }

@@ -29,11 +29,6 @@ class CreatePromotionsTable extends Migration
             $table->string('location_address')->default('')->nullable();
             $table->string('location_coords')->default('')->nullable();
 
-            $table->string('category')->default('');
-            $table->string('subcategory')->default('');
-
-
-
             $table->boolean('immediately_activate')->default(false);
             $table->string('activation_text', 1000)->default('');
 

@@ -30,7 +30,7 @@
                     </div>
                 </div>
 
-                    <h1>Компании</h1>
+                <h1>Компании</h1>
                 @isset($companies)
                     <table class="table mt-2">
 
@@ -56,8 +56,17 @@
                                 </td>
                                 <td>{{$company->description}}</td>
                                 <td>
-                                    <a class="btn btn-link" href="{{ route('companies.channel',$company->id) }}" title="Отправить в канал">
+                                    <a class="btn btn-link" href="{{ route('companies.channel',$company->id) }}"
+                                       title="Отправить в канал">
                                         <i class="fab fa-telegram"></i>
+                                    </a>
+                                    <a class="btn btn-link" href="{{ route('companies.hide',$company->id) }}"
+                                       title="Скрыть компанию, акции и мероприятия!">
+                                        @if($company->is_active)
+                                            <i class="fas fa-eye"></i>
+                                        @else
+                                            <i class="fas fa-eye-slash"></i>
+                                        @endif
                                     </a>
                                     <form action="{{ route('companies.destroy', $company->id)}}" method="post">
                                         @csrf

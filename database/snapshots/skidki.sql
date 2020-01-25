@@ -985,7 +985,8 @@ INSERT INTO categories VALUES (2, 'Эстетика и образование', 
 -- Data for Name: companies; Type: TABLE DATA; Schema: public; Owner: vrawpxxujbruhc
 --
 
-INSERT INTO companies VALUES (1, 'Ресторан "Большой Джон"', '50-летия СССР вулиця, 144/3, Донецк', 'Заведение самой вкусной городской пиццы. 
+
+INSERT INTO companies VALUES (1, 'Ресторан "Большой Джон"', '50-летия СССР вулиця, 144/3, Донецк', 'Заведение самой вкусной городской пиццы.
 
 "Big John" получила свое название в честь основателя Донецка - Джона Юза, мы уважаем нашу историю и требования заказчика!
 
@@ -1000,7 +1001,7 @@ INSERT INTO companies VALUES (6, 'Школа Бизнеса | Донецк', 'Д
 
 
 
-Наш адрес: Донецк, ул.Университетская 36а 
+Наш адрес: Донецк, ул.Университетская 36а
 
 Телефон: 0714990371', '+38(071) 499-03-71', '', 'Елена', 'https://sun1-26.userapi.com/dwtbpJt83giwVqfO4UPB9EsTM0P6JQQBUT5owA/DfAVAvUUNnI.jpg', '2020-01-17 17:36:19', '2020-01-17 17:36:19', 10, 5, '');
 INSERT INTO companies VALUES (4, 'PIROGI DONETSK', 'Донецк, пл. Конституции, 1', 'Прекрасное заведение, в котором Вас порадуют вкуснейшими осетинскими пирогами и изысканными блюдами грузинской кухни!
@@ -1051,7 +1052,6 @@ INSERT INTO companies VALUES (3, 'Lotus Model Agency', 'ул. Артема, 100,
 Контактный номер: +38(071) 363-12-79, +38(071) 330-55-55
 
 Адрес: Донецк, ул.Артема, 100 Д', '+38(071) 363-12-79', 'test@gmail.com', 'Виктория', 'https://sun1-26.userapi.com/JnTfKeKgeHYrEAxXDG6ABPQfqLULTvet_gRcMg/7mtke6u8g1o.jpg', '2019-11-30 19:26:25', '2020-01-17 08:45:06', 5, 5, 'https://t.me/lotus_model_bot');
-
 
 --
 -- Data for Name: events; Type: TABLE DATA; Schema: public; Owner: vrawpxxujbruhc
