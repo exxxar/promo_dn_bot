@@ -426,7 +426,7 @@ class SkidkiDNBot extends Bot implements iSkidkiDNBot
             ->skip($page * config("bot.results_per_page"))
             ->get();
 
-        if (count($companies)){
+        if (count($companies)==0){
             $this->reply("К сожалению, нет добавленных компаний:(");
             return;
         }
@@ -454,7 +454,7 @@ class SkidkiDNBot extends Bot implements iSkidkiDNBot
             ->skip($page * config("bot.results_per_page"))
             ->get();
 
-        if (count($categories)){
+        if (count($categories)==0){
             $this->reply("К сожалению, нет добавленных категорий:(");
             return;
         }
