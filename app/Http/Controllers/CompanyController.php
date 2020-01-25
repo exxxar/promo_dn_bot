@@ -61,7 +61,6 @@ class CompanyController extends Controller
             'bailee' => 'required',
             'logo_url' => 'required',
             'position' => 'required',
-            'is_active' => 'required',
         ]);
 
 
@@ -130,7 +129,6 @@ class CompanyController extends Controller
             'bailee' => 'required',
             'logo_url' => 'required',
             'position' => 'required',
-            'is_active' => 'required',
         ]);
 
 
