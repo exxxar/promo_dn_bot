@@ -426,6 +426,10 @@ class SkidkiDNBot extends Bot implements iSkidkiDNBot
             ->skip($page * config("bot.results_per_page"))
             ->get();
 
+        if (count($companies)){
+            $this->reply("К сожалению, нет добавленных компаний:(");
+            return;
+        }
 
         foreach ($companies as $company) {
             $keyboard = [
@@ -450,6 +454,10 @@ class SkidkiDNBot extends Bot implements iSkidkiDNBot
             ->skip($page * config("bot.results_per_page"))
             ->get();
 
+        if (count($categories)){
+            $this->reply("К сожалению, нет добавленных категорий:(");
+            return;
+        }
 
         foreach ($categories as $cat) {
 
