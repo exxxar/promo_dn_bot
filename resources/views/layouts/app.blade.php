@@ -145,8 +145,6 @@
 
     <script src="{{asset('/js/app.js')}}"></script>
 
-    <script src='https://cdn.jsdelivr.net/npm/botman-web-widget@0/build/js/widget.js'></script>
-
     <script src="{{asset('/js/jquery.mask.min.js')}}"></script>
     <script src="{{asset('/js/bootstrap-typeahead.min.js')}}"></script>
     <script>
