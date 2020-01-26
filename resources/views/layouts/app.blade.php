@@ -145,15 +145,6 @@
 
     <script src="{{asset('/js/app.js')}}"></script>
 
-    <script>
-        var botmanWidget = {
-            title: 'SkidkiDN - веб-версия',
-            introMessage: 'Спасибо что используете Веб-версию нашего бота. Полноценный набор функций доступен в боте telegram',
-            mainColor: '#ff9800',
-            chatServer: 'https://promodnbot.herokuapp.com/public/botman'
-        };
-
-    </script>
     <script src='https://cdn.jsdelivr.net/npm/botman-web-widget@0/build/js/widget.js'></script>
 
     <script src="{{asset('/js/jquery.mask.min.js')}}"></script>
