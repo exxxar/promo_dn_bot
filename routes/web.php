@@ -19,6 +19,7 @@ use Illuminate\Support\Facades\Storage;
 use SimpleSoftwareIO\QrCode\Facades\QrCode;
 use Telegram\Bot\FileUpload\InputFile;
 use Telegram\Bot\Laravel\Facades\Telegram;
+use Vinkla\Instagram\Instagram;
 
 Route::get('/test_crash', function () {
     throw new \PHPUnit\Runner\Exception("asdasd");
@@ -42,9 +43,41 @@ Route::get('/cabinet', 'HomeController@cabinet');
 
 Route::get('/test_get_updates', 'BotManController@testGetUpdates');
 
+Route::get("/insta", function (Request $request) {
+    //$instagram = new Instagram(env("INSTAGRAM_TOKEN"));
+    $code = $request->get("code") ?? null;
+    // dd($instagram->self());
+    if (!is_null($code)) {
+
+
+        try {
+
+            $query = "client_id=160196558729808&client_secret=fbcbf311468e7464ac3b521284265810&grant_type=authorization_code&redirect_uri=https://skidka-service.ru/insta&code=$code";
+            $context = stream_context_create(array(
+                'http' => array(
+                    'method' => 'POST',
+                    'header' => 'Content-Type: application/x-www-form-urlencoded' . PHP_EOL,
+                    'content' => $query
+                ),
+            ));
+
+            ini_set('max_execution_time', 1000000);
+            $content = file_get_contents(
+                $file = ' https://api.instagram.com/oauth/access_token',
+                $use_include_path = false,
+                $context);
+            ini_set('max_execution_time', 60);
+
+            dd(json_decode($content));
+
+        } catch (ErrorException $e) {
+            $content = [];
+        }
+    }
+});
 
 Route::get('/', function (Request $request) {
-    $companies = \App\Company::with(["promotions", "promotions.category"])->where("is_active",true)->get();
+    $companies = \App\Company::with(["promotions", "promotions.category"])->where("is_active", true)->get();
     $article = \App\Article::where("part", \App\Enums\Parts::Terms_of_use)->first() ?? null;
     $url = $article == null ? env("APP_URL") : ($article)->url;
     return view('welcome', compact("companies", 'url'));
