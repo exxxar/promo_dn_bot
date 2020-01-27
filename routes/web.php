@@ -45,10 +45,12 @@ Route::get('/test_get_updates', 'BotManController@testGetUpdates');
 
 Route::get("/insta", function (Request $request) {
     //$instagram = new Instagram(env("INSTAGRAM_TOKEN"));
-    $code = $request->get("code") ?? null;
-    // dd($instagram->self());
-    if (!is_null($code)) {
 
+
+    // dd($instagram->self());
+    if ($request->has("code")) {
+        Log::info($request->get("code"));
+        $code = $request->get("code") ?? null;
 
         try {
 
@@ -72,8 +74,11 @@ Route::get("/insta", function (Request $request) {
 
         } catch (ErrorException $e) {
             $content = [];
+            Log::info($e->getMessage()." ".$e->getLine());
         }
     }
+
+
 });
 
 Route::get('/', function (Request $request) {
