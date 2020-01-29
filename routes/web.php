@@ -220,7 +220,7 @@ Route::get("/insta", function (Request $request) {
     echo '<h1>Make a batch request</h1>' . "\n\n";
 
     try {
-        $responses = $fb->sendBatchRequest($batch);
+        $responses = $fb->sendBatchRequest($batch,$accessToken);
     } catch(Facebook\Exceptions\FacebookResponseException $e) {
         // When Graph returns an error
         echo 'Graph returned an error: ' . $e->getMessage();
