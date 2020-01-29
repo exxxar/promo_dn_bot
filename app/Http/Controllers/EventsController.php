@@ -69,8 +69,8 @@ class EventsController extends Controller
             'title'=>$request->get('title')??'',
             'description'=> $request->get('description')??'',
             'event_image_url'=> $request->get('event_image_url')??'',
-            'start_at'=> $request->get('start_at')??'',
-            'end_at'=> $request->get('end_at')??'',
+            'start_at'=> \Carbon\Carbon::parse( $request->get('start_at')??Carbon::now()),
+            'end_at'=> \Carbon\Carbon::parse( $request->get('end_at')??Carbon::now()),
 
             'company_id'=> $request->get('company_id'),
             'promo_id'=> $request->get('promo_id')??null,
@@ -142,8 +142,8 @@ class EventsController extends Controller
         $promotion->title = $request->get("title");
         $promotion->description = $request->get("description");
         $promotion->event_image_url = $request->get("event_image_url");
-        $promotion->start_at = $request->get("start_at");
-        $promotion->end_at = $request->get("end_at");
+        $promotion->start_at = \Carbon\Carbon::parse( $request->get('start_at')??Carbon::now());
+        $promotion->end_at = \Carbon\Carbon::parse( $request->get('end_at')??Carbon::now());
         $promotion->position = $request->get("position")??0;
 
         $promotion->company_id = $request->get("company_id");
