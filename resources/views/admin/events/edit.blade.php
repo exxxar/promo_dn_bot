@@ -81,8 +81,10 @@
                         <tr>
                             <td>Дата и время начала мероприятия</td>
                             <td>
-                                <p>Старая дата: {{$event->start_at}}</p>
-                                <input type="datetime-local" value="{{$event->start_at}}" name="start_at"
+
+                                <input type="datetime-local"
+                                       value="{{$event->start_at->format("Y-m-d").'T'.$event->start_at->format("H:m:s")}}"
+                                       name="start_at"
                                        class="form-control"
                                        required>
                             </td>
@@ -90,8 +92,10 @@
                         <tr>
                             <td>Дата и время окончания мероприятия</td>
                             <td>
-                                <p>Старая дата: {{$event->end_at}}</p>
-                                <input type="datetime-local" value="{{$event->end_at}}" name="end_at"
+
+                                <input type="datetime-local"
+                                       value="{{$event->end_at->format("Y-m-d").'T'.$event->end_at->format("H:m:s")}}"
+                                       name="end_at"
                                        class="form-control"
                                        required>
                             </td>
@@ -116,12 +120,16 @@
                             <td>Прикрепить акцию (не обязательно)</td>
                             <td>
                                 <select name="promo_id" class="form-control">
+                                    <option value="">Не выбрано</option>
+
                                     @foreach($promotions as $promotion)
-                                        <option value="">Не выбрано</option>
+
                                         @if($event->promo_id==$promotion->id)
                                             <option value="{{$promotion->id}}" selected>{{$promotion->title}}</option>
                                         @else
-                                            <option value="{{$promotion->id}}">{{$promotion->title}}</option>
+                                            @if(!$promotion->company()->is_active)
+                                                <option value="{{$promotion->id}}">{{$promotion->title}}</option>
+                                            @endif
                                         @endif
                                     @endforeach
                                 </select>
