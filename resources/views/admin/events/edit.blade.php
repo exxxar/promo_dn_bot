@@ -105,11 +105,13 @@
                             <td>Выбрать компанию</td>
                             <td>
                                 <select name="company_id" class="form-control" required>
-                                    @foreach($companies as $compay)
-                                        @if($event->company_id==$compay->id)
-                                            <option value="{{$compay->id}}" selected>{{$compay->title}}</option>
+                                    @foreach($companies as $company)
+                                        @if($event->company_id==$company->id)
+                                            <option value="{{$company->id}}" selected>{{$company->title}}</option>
                                         @else
-                                            <option value="{{$compay->id}}">{{$compay->title}}</option>
+                                            @if($company->is_active)
+                                                <option value="{{$company->id}}">{{$company->title}}</option>
+                                            @endif
                                         @endif
                                     @endforeach
                                 </select>
