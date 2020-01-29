@@ -35,7 +35,7 @@ class SkidkiDNBot extends Bot implements iSkidkiDNBot
 
             foreach ($events as $key => $event) {
 
-                if (!$event->isActive() || !$event->company()->is_active)
+                if (!$event->isActive() || !$event->company->is_active)
                     continue;
 
                 $keyboard = [];
