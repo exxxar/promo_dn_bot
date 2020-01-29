@@ -20,6 +20,7 @@
         "botman/studio-addons": "~1.3",
         "botman/tinker": "~1.0",
         "doctrine/dbal": "^2.10",
+        "facebook/graph-sdk": "^5.7",
         "fideloper/proxy": "^4.0",
         "grkamil/laravel-telegram-logging": "^1.1",
         "irazasyed/telegram-bot-sdk": "^3.0",

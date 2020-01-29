@@ -43,7 +43,7 @@ Route::get('/cabinet', 'HomeController@cabinet');
 
 Route::get('/test_get_updates', 'BotManController@testGetUpdates');
 
-Route::get("/insta", function (Request $request) {
+Route::get("/insta_test", function (Request $request) {
     //$instagram = new Instagram(env("INSTAGRAM_TOKEN"));
 
 
@@ -65,12 +65,14 @@ Route::get("/insta", function (Request $request) {
 
             ini_set('max_execution_time', 1000000);
             $content = file_get_contents(
-                $file = ' https://api.instagram.com/oauth/access_token',
+                $file = 'https://api.instagram.com/oauth/access_token',
                 $use_include_path = false,
                 $context);
             ini_set('max_execution_time', 60);
 
-            dd(json_decode($content));
+            $content = json_decode($content);
+            Log::info($content->access_token);
+            dd($content);
 
         } catch (ErrorException $e) {
             $content = [];
@@ -79,6 +81,107 @@ Route::get("/insta", function (Request $request) {
     }
 
 
+});
+
+Route::get("/fbtest_start",function (){
+    $fb = new Facebook\Facebook([
+        'app_id' => '489970145264352', // Replace {app-id} with your app id
+        'app_secret' => 'c841f98459b2fd386a03ed9c0ac63b04',
+        'default_graph_version' => 'v3.2',
+    ]);
+
+    $helper = $fb->getRedirectLoginHelper();
+
+
+    $permissions = [ 'manage_pages',
+        'pages_show_list',
+        'publish_pages',
+        'business_management',
+        'instagram_basic',
+        'public_profile',
+        'instagram_manage_insights',
+        'instagram_manage_comments',
+        'ads_management'];
+    $loginUrl = $helper->getLoginUrl('https://skidka-service.ru/insta', $permissions);
+
+    echo '<a href="' . htmlspecialchars($loginUrl) . '">Log in with Facebook!</a>';
+});
+
+Route::get("/insta", function (Request $request) {
+    $fb = new Facebook\Facebook([
+        'app_id' => '489970145264352', // Replace {app-id} with your app id
+        'app_secret' => 'c841f98459b2fd386a03ed9c0ac63b04',
+        'default_graph_version' => 'v3.2',
+    ]);
+
+    $helper = $fb->getRedirectLoginHelper();
+
+    try {
+        $accessToken = $helper->getAccessToken();
+    } catch(Facebook\Exceptions\FacebookResponseException $e) {
+        // When Graph returns an error
+        echo 'Graph returned an error: ' . $e->getMessage();
+        exit;
+    } catch(Facebook\Exceptions\FacebookSDKException $e) {
+        // When validation fails or other local issues
+        echo 'Facebook SDK returned an error: ' . $e->getMessage();
+        exit;
+    }
+
+    if (! isset($accessToken)) {
+        if ($helper->getError()) {
+            header('HTTP/1.0 401 Unauthorized');
+            echo "Error: " . $helper->getError() . "\n";
+            echo "Error Code: " . $helper->getErrorCode() . "\n";
+            echo "Error Reason: " . $helper->getErrorReason() . "\n";
+            echo "Error Description: " . $helper->getErrorDescription() . "\n";
+        } else {
+            header('HTTP/1.0 400 Bad Request');
+            echo 'Bad request';
+        }
+        exit;
+    }
+
+// Logged in
+    echo '<h3>Access Token</h3>';
+    var_dump($accessToken->getValue());
+
+// The OAuth 2.0 client handler helps us manage access tokens
+    $oAuth2Client = $fb->getOAuth2Client();
+
+// Get the access token metadata from /debug_token
+    $tokenMetadata = $oAuth2Client->debugToken($accessToken);
+    echo '<h3>Metadata</h3>';
+    var_dump($tokenMetadata);
+
+// Validation (these will throw FacebookSDKException's when they fail)
+    $tokenMetadata->validateAppId('{app-id}'); // Replace {app-id} with your app id
+// If you know the user ID this access token belongs to, you can validate it here
+//$tokenMetadata->validateUserId('123');
+    $tokenMetadata->validateExpiration();
+
+    if (! $accessToken->isLongLived()) {
+        // Exchanges a short-lived access token for a long-lived one
+        try {
+            $accessToken = $oAuth2Client->getLongLivedAccessToken($accessToken);
+        } catch (Facebook\Exceptions\FacebookSDKException $e) {
+            echo "<p>Error getting long-lived access token: " . $e->getMessage() . "</p>\n\n";
+            exit;
+        }
+
+        echo '<h3>Long-lived</h3>';
+        var_dump($accessToken->getValue());
+    }
+
+    $_SESSION['fb_access_token'] = (string) $accessToken;
+
+    ////ig_hashtag_search?user_id=17841407882850175&q=альпинадонну - находим хэштег
+    ////17913566134265893/top_media?user_id=17841407882850175&fields=caption,media_type,media_url
+    ////17913566134265893/top_media?user_id=17841407882850175
+    ////17913566134265893/recent_media?fields=caption,media_type,media_url,like_count,id,permalink&user_id=17841407882850175 - находим недавние медиа объекты с хэштегом
+    //
+    ////17841407882850175?fields=mentioned_media.media_id(18040865266238470){caption,media_type,username}   - получаем инфу о пользователе по идентификации медиа-объекта
+    //
 });
 
 Route::get('/', function (Request $request) {

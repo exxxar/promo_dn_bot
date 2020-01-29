@@ -691,7 +691,7 @@
 <script src="/js/new-age.min.js"></script>
 
 <!-- Marquiz script start -->
-<script src="//script.marquiz.ru/v1.js" type="application/javascript"></script>
+{{--<script src="//script.marquiz.ru/v1.js" type="application/javascript"></script>
 <script>
     document.addEventListener("DOMContentLoaded", function() {
         Marquiz.init({
@@ -701,7 +701,7 @@
             openOnExit: false
         });
     });
-</script>
+</script>--}}
 <!-- Marquiz script end -->
 
 
