@@ -94,6 +94,18 @@
                         </tr>
 
                         <tr>
+                            <td>Прикрепить акцию (не обязательно)</td>
+                            <td>
+                                <select name="promo_id" class="form-control">
+                                    @foreach($promotions as $promotion)
+                                        <option value="{{$promotion->id}}">{{$promotion->title}}</option>
+                                    @endforeach
+                                </select>
+                            </td>
+                        </tr>
+
+
+                        <tr>
                             <td></td>
                             <td>
                                 <button class="btn btn-primary">Добавить</button>

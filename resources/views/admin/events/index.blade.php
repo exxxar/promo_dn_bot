@@ -61,6 +61,12 @@
                                     <a class="btn btn-link" href="{{ route('events.channel',$event->id) }}" title="Отправить в канал">
                                         <i class="fab fa-telegram"></i>
                                     </a>
+
+                                    @if($event->promo_id!=null)
+                                        <a class="btn btn-link" href="{{ route('promotions.index',$event->promo_id) }}" title="Связано с акцией">
+                                            <i class="fas fa-link"></i>
+                                        </a>
+                                        @endif
                                     <form action="{{ route('events.destroy', $event->id)}}" method="post">
                                         @csrf
                                         @method('DELETE')

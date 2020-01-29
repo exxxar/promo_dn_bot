@@ -41,7 +41,10 @@ class EventsController extends Controller
         //
         $companies = Company::all();
 
-        return view('admin.events.create',compact("companies"));
+        $promotions = Promotion::orderBy('id','DESC')
+            ->get();
+
+        return view('admin.events.create',compact("companies","promotions"));
     }
 
     /**
@@ -70,6 +73,7 @@ class EventsController extends Controller
             'end_at'=> $request->get('end_at')??'',
 
             'company_id'=> $request->get('company_id'),
+            'promo_id'=> $request->get('promo_id')??null,
             'category_id'=> $request->get('category_id'),
             'position'=> $request->get('position')??0,
 
@@ -90,7 +94,7 @@ class EventsController extends Controller
      */
     public function show($id)
     {
-        $event = Event::with(["company"])->find($id);
+        $event = Event::with(["company","promotion"])->find($id);
 
         return view('admin.events.show', compact('event'));
     }
@@ -103,11 +107,14 @@ class EventsController extends Controller
      */
     public function edit($id)
     {
-        $event = Event::find($id);
+        $event = Event::with(["promotion","company"])->find($id);
 
         $companies = Company::all();
 
-        return view('admin.events.edit', compact('event','companies'));
+        $promotions = Promotion::orderBy('id','DESC')
+            ->get();
+
+        return view('admin.events.edit', compact('event','companies','promotions'));
     }
 
     /**
@@ -140,6 +147,8 @@ class EventsController extends Controller
         $promotion->position = $request->get("position")??0;
 
         $promotion->company_id = $request->get("company_id");
+
+        $promotion->promo_id = $request->get("promo_id")??null;
 
         $promotion->save();
 

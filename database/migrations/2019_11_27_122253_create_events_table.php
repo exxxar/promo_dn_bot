@@ -25,11 +25,13 @@ class CreateEventsTable extends Migration
             $table->boolean('is_active')->default(false);
 
             $table->unsignedInteger('company_id')->nullable();
+            $table->unsignedInteger('promo_id')->nullable();
 
             $table->integer('position')->default(0);
 
             if (env("DB_CONNECTION") == 'mysql') {
                 $table->foreign('company_id')->references('id')->on('companies');
+                $table->foreign('promo_id')->references('id')->on('promotions');
             }
 
             $table->timestamps();

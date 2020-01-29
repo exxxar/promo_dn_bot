@@ -76,24 +76,29 @@ Route::get("/insta_test", function (Request $request) {
 
         } catch (ErrorException $e) {
             $content = [];
-            Log::info($e->getMessage()." ".$e->getLine());
+            Log::info($e->getMessage() . " " . $e->getLine());
         }
     }
 
 
 });
 
-Route::get("/fbtest_start",function (){
+Route::get("/fbtest_start", function () {
+    if (!session_id()) {
+        session_start();
+    }
+
     $fb = new Facebook\Facebook([
         'app_id' => '489970145264352', // Replace {app-id} with your app id
         'app_secret' => 'c841f98459b2fd386a03ed9c0ac63b04',
         'default_graph_version' => 'v3.2',
+        'persistent_data_handler' => 'session'
     ]);
 
     $helper = $fb->getRedirectLoginHelper();
 
 
-    $permissions = [ 'manage_pages',
+    $permissions = ['manage_pages',
         'pages_show_list',
         'publish_pages',
         'business_management',
@@ -108,27 +113,31 @@ Route::get("/fbtest_start",function (){
 });
 
 Route::get("/insta", function (Request $request) {
+    if (!session_id()) {
+        session_start();
+    }
     $fb = new Facebook\Facebook([
         'app_id' => '489970145264352', // Replace {app-id} with your app id
         'app_secret' => 'c841f98459b2fd386a03ed9c0ac63b04',
         'default_graph_version' => 'v3.2',
+        'persistent_data_handler' => 'session'
     ]);
 
     $helper = $fb->getRedirectLoginHelper();
 
     try {
         $accessToken = $helper->getAccessToken();
-    } catch(Facebook\Exceptions\FacebookResponseException $e) {
+    } catch (Facebook\Exceptions\FacebookResponseException $e) {
         // When Graph returns an error
         echo 'Graph returned an error: ' . $e->getMessage();
         exit;
-    } catch(Facebook\Exceptions\FacebookSDKException $e) {
+    } catch (Facebook\Exceptions\FacebookSDKException $e) {
         // When validation fails or other local issues
         echo 'Facebook SDK returned an error: ' . $e->getMessage();
         exit;
     }
 
-    if (! isset($accessToken)) {
+    if (!isset($accessToken)) {
         if ($helper->getError()) {
             header('HTTP/1.0 401 Unauthorized');
             echo "Error: " . $helper->getError() . "\n";
@@ -155,12 +164,12 @@ Route::get("/insta", function (Request $request) {
     var_dump($tokenMetadata);
 
 // Validation (these will throw FacebookSDKException's when they fail)
-    $tokenMetadata->validateAppId('{app-id}'); // Replace {app-id} with your app id
+    $tokenMetadata->validateAppId('489970145264352'); // Replace {app-id} with your app id
 // If you know the user ID this access token belongs to, you can validate it here
 //$tokenMetadata->validateUserId('123');
     $tokenMetadata->validateExpiration();
 
-    if (! $accessToken->isLongLived()) {
+    if (!$accessToken->isLongLived()) {
         // Exchanges a short-lived access token for a long-lived one
         try {
             $accessToken = $oAuth2Client->getLongLivedAccessToken($accessToken);
@@ -173,7 +182,7 @@ Route::get("/insta", function (Request $request) {
         var_dump($accessToken->getValue());
     }
 
-    $_SESSION['fb_access_token'] = (string) $accessToken;
+    $_SESSION['fb_access_token'] = (string)$accessToken;
 
     ////ig_hashtag_search?user_id=17841407882850175&q=альпинадонну - находим хэштег
     ////17913566134265893/top_media?user_id=17841407882850175&fields=caption,media_type,media_url
@@ -182,6 +191,8 @@ Route::get("/insta", function (Request $request) {
     //
     ////17841407882850175?fields=mentioned_media.media_id(18040865266238470){caption,media_type,username}   - получаем инфу о пользователе по идентификации медиа-объекта
     //
+
+
 });
 
 Route::get('/', function (Request $request) {

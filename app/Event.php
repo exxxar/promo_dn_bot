@@ -24,6 +24,11 @@ class Event extends Model
         return $this->belongsTo('App\Company', "company_id", "id");
     }
 
+    public function promotion()
+    {
+        return $this->belongsTo('App\Promotion', "promo_id", "id");
+    }
+
     public function isActive()
     {
         $time_0 = (date_timestamp_get(new DateTime($this->start_at)));

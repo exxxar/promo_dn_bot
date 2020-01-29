@@ -35,13 +35,22 @@ class SkidkiDNBot extends Bot implements iSkidkiDNBot
 
             foreach ($events as $key => $event) {
 
-                if (!$event->isActive()||!$event->company()->is_active)
+                if (!$event->isActive() || !$event->company()->is_active)
                     continue;
 
+                $keyboard = [];
+
+                if (!is_null($event->promo_id)) {
+                    $keyboard = [
+                        [
+                            ["text"=>"\xF0\x9F\x91\x89Перейти к описанию акции","callback_data"=>"/promotion ".$event->promo_id]
+                        ]
+                    ];
+                }
                 $found = true;
                 $this->sendPhoto(
                     "*" . $event->title . "*\n" . $event->description,
-                    $event->event_image_url);
+                    $event->event_image_url, $keyboard);
 
             }
 
@@ -422,13 +431,13 @@ class SkidkiDNBot extends Bot implements iSkidkiDNBot
 
     public function getPromotionsByCompany($page)
     {
-        $companies = Company::where("is_active",true)
+        $companies = Company::where("is_active", true)
             ->orderBy('position', 'DESC')
             ->take(config("bot.results_per_page"))
             ->skip($page * config("bot.results_per_page"))
             ->get();
 
-        if (count($companies)==0){
+        if (count($companies) == 0) {
             $this->reply("К сожалению, нет добавленных компаний:(");
             return;
         }
@@ -456,7 +465,7 @@ class SkidkiDNBot extends Bot implements iSkidkiDNBot
             ->skip($page * config("bot.results_per_page"))
             ->get();
 
-        if (count($categories)==0){
+        if (count($categories) == 0) {
             $this->reply("К сожалению, нет добавленных категорий:(");
             return;
         }
@@ -478,7 +487,7 @@ class SkidkiDNBot extends Bot implements iSkidkiDNBot
     public function getCategoryById($id, $page)
     {
 
-        $promotions = (Category::with(["promotions","promotions.company"])
+        $promotions = (Category::with(["promotions", "promotions.company"])
             ->where("id", $id)
             ->first())
             ->promotions()
@@ -504,7 +513,7 @@ class SkidkiDNBot extends Bot implements iSkidkiDNBot
                     ]
                 ];
 
-                $this->sendPhoto("*".$promo->title."*", $promo->promo_image_url, $keyboard);
+                $this->sendPhoto("*" . $promo->title . "*", $promo->promo_image_url, $keyboard);
             }
         }
 
@@ -517,14 +526,14 @@ class SkidkiDNBot extends Bot implements iSkidkiDNBot
     public function getCompanyById($id, $page)
     {
 
-         $company = \App\Company::with(["promotions", "promotions.users"])
-             ->where("id", $id)
-             ->first();
+        $company = \App\Company::with(["promotions", "promotions.users"])
+            ->where("id", $id)
+            ->first();
 
-         if (!$company->is_active){
-             $this->reply("Акции этой компании временно недоступны!");
-             return;
-         }
+        if (!$company->is_active) {
+            $this->reply("Акции этой компании временно недоступны!");
+            return;
+        }
 
         $keyboard = [];
 

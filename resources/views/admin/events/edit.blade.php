@@ -81,7 +81,7 @@
                         <tr>
                             <td>Дата и время начала мероприятия</td>
                             <td>
-                               <p>Старая дата: {{$event->start_at}}</p>
+                                <p>Старая дата: {{$event->start_at}}</p>
                                 <input type="datetime-local" value="{{$event->start_at}}" name="start_at"
                                        class="form-control"
                                        required>
@@ -106,6 +106,22 @@
                                             <option value="{{$compay->id}}" selected>{{$compay->title}}</option>
                                         @else
                                             <option value="{{$compay->id}}">{{$compay->title}}</option>
+                                        @endif
+                                    @endforeach
+                                </select>
+                            </td>
+                        </tr>
+
+                        <tr>
+                            <td>Прикрепить акцию (не обязательно)</td>
+                            <td>
+                                <select name="promo_id" class="form-control">
+                                    @foreach($promotions as $promotion)
+                                        <option value="">Не выбрано</option>
+                                        @if($event->promo_id==$promotion->id)
+                                            <option value="{{$promotion->id}}" selected>{{$promotion->title}}</option>
+                                        @else
+                                            <option value="{{$promotion->id}}">{{$promotion->title}}</option>
                                         @endif
                                     @endforeach
                                 </select>
