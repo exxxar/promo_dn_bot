@@ -127,7 +127,7 @@
                                         @if($event->promo_id==$promotion->id)
                                             <option value="{{$promotion->id}}" selected>{{$promotion->title}}</option>
                                         @else
-                                            @if(!$promotion->company()->is_active)
+                                            @if(!$promotion->company->is_active)
                                                 <option value="{{$promotion->id}}">{{$promotion->title}}</option>
                                             @endif
                                         @endif
