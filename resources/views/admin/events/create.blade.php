@@ -101,7 +101,7 @@
                                 <select name="promo_id" class="form-control">
                                     <option value="">Не выбрана</option>
                                     @foreach($promotions as $promotion)
-                                        @if(!$promotion->company->is_active)
+                                        @if($promotion->company->is_active)
                                             <option value="{{$promotion->id}}">{{$promotion->title}}</option>
                                         @endif
                                     @endforeach
