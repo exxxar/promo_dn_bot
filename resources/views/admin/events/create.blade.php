@@ -86,8 +86,10 @@
                             <td>Выбрать компанию</td>
                             <td>
                                 <select name="company_id" class="form-control" required>
-                                    @foreach($companies as $compay)
-                                        <option value="{{$compay->id}}">{{$compay->title}}</option>
+                                    @foreach($companies as $company)
+                                        @if ($company->is_active)
+                                            <option value="{{$company->id}}">{{$company->title}}</option>
+                                        @endif
                                     @endforeach
                                 </select>
                             </td>
@@ -97,8 +99,11 @@
                             <td>Прикрепить акцию (не обязательно)</td>
                             <td>
                                 <select name="promo_id" class="form-control">
+                                    <option value="">Не выбрана</option>
                                     @foreach($promotions as $promotion)
-                                        <option value="{{$promotion->id}}">{{$promotion->title}}</option>
+                                        @if(!$promotion->company()->is_active)
+                                            <option value="{{$promotion->id}}">{{$promotion->title}}</option>
+                                        @endif
                                     @endforeach
                                 </select>
                             </td>
