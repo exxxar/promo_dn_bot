@@ -121,6 +121,13 @@
                         </tr>
 
                         <tr>
+                            <td>Акционное меню (в виде статьи)</td>
+                            <td>
+                                <input type="url" name="menu_url"  value="{{$company->menu_url}}" class="form-control">
+                            </td>
+                        </tr>
+
+                        <tr>
                             <td></td>
                             <td>
                                 <button class="btn btn-primary">Изменить</button>

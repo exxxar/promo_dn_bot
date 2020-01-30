@@ -17,7 +17,7 @@ class CreatePrizesTable extends Migration
         Schema::create('prizes', function (Blueprint $table) {
             $table->increments('id');
             $table->string('title');
-            $table->string('description',1000)->default('');
+            $table->string('description',5000)->default('');
             $table->string('image_url',1000);
 
             $table->integer('summary_activation_count')->default(0);

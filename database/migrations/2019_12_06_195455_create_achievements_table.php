@@ -17,11 +17,11 @@ class CreateAchievementsTable extends Migration
         Schema::create('achievements', function (Blueprint $table) {
             $table->increments('id');
             $table->string('title')->default('');
-            $table->string('description',1000)->default('');
+            $table->string('description',5000)->default('');
             $table->string('ach_image_url',1000)->nullable(false);
             $table->integer('trigger_type')->nullable(false);
             $table->integer('trigger_value')->default(0);
-            $table->string('prize_description',1000)->nullable(false);
+            $table->string('prize_description',5000)->nullable(false);
             $table->string('prize_image_url',1000)->nullable(false);
             $table->boolean('is_active')->default(true);
 

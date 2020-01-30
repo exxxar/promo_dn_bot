@@ -450,7 +450,7 @@ class SkidkiDNBot extends Bot implements iSkidkiDNBot
             ];
 
 
-            $this->sendPhoto('*' . $company->title . "*", $company->logo_url, $keyboard);
+            $this->sendPhoto('*' . $company->title . "*\n".($company->menu_url??''), $company->logo_url, $keyboard);
         }
 
         $this->pagination("/promo_by_company", $companies, $page, "Выберите действие");

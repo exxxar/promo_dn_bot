@@ -19,7 +19,8 @@ class Company extends Model
         'logo_url',
         'position',
         'telegram_bot_url',
-        'is_active'
+        'is_active',
+        'menu_url'
     ];
 
     public function uniqCategories()

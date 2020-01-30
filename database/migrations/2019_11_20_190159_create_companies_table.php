@@ -25,6 +25,7 @@ class CreateCompaniesTable extends Migration
             $table->string('bailee')->default('');//имя ответственного лица от предприятия
             $table->string('logo_url',1000)->default('');
             $table->integer('position')->default(0);
+            $table->string('menu_url',1000)->nullable();
             $table->timestamps();
         });
         Schema::enableForeignKeyConstraints();

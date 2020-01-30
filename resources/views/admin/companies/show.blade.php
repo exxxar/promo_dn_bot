@@ -72,7 +72,8 @@
                     <tr>
                         <td>Ссылка на бота</td>
                         <td>
-                            <a href="{{$company->telegram_bot_url}}" target="_blank" class="btn btn-link">{{$company->telegram_bot_url}}</a>
+                            <a href="{{$company->telegram_bot_url}}" target="_blank"
+                               class="btn btn-link">{{$company->telegram_bot_url}}</a>
                         </td>
                     </tr>
                     <tr>
@@ -116,17 +117,23 @@
                     </tr>
 
                     <tr>
+                        <td>Акционное меню (в виде статьи)</td>
+                        <td>
+                            <a href="{{$company->menu_url}}" target="_blank">Посмотреть статью</a>
+                        </td>
+                    </tr>
+                    <tr>
                         <td></td>
-                    <td>
-                        <a class="btn btn-primary" href="{{ route('companies.edit',$company->id) }}">
-                            Редактировать <i class="fas fa-edit"></i>
-                        </a>
-                        <form action="{{ route('companies.destroy', $company->id)}}" method="post">
-                            @csrf
-                            @method('DELETE')
-                            <button class="btn btn-link" type="submit">Удалить <i class="fas fa-times"></i></button>
-                        </form>
-                    </td>
+                        <td>
+                            <a class="btn btn-primary" href="{{ route('companies.edit',$company->id) }}">
+                                Редактировать <i class="fas fa-edit"></i>
+                            </a>
+                            <form action="{{ route('companies.destroy', $company->id)}}" method="post">
+                                @csrf
+                                @method('DELETE')
+                                <button class="btn btn-link" type="submit">Удалить <i class="fas fa-times"></i></button>
+                            </form>
+                        </td>
                     </tr>
 
                     </tbody>

@@ -75,6 +75,7 @@ class CompanyController extends Controller
             'position' => $request->get('position') ?? 0,
             'is_active' => $request->get('is_active') ?? false,
             'telegram_bot_url' => $request->get('telegram_bot_url') ?? '',
+            'menu_url' => $request->get('menu_url') ?? null,
             'created_at' => Carbon::now(),
             'updated_at' => Carbon::now(),
         ]);
@@ -142,6 +143,7 @@ class CompanyController extends Controller
         $company->logo_url = $request->get('logo_url') ?? '';
         $company->position = $request->get('position') ?? 0;
         $company->is_active = $request->get('is_active') ?? false;
+        $company->menu_url = $request->get('menu_url') ?? null;
         $company->telegram_bot_url = $request->get('telegram_bot_url') ?? '';
         $company->save();
 

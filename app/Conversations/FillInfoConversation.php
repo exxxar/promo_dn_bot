@@ -96,7 +96,7 @@ class FillInfoConversation extends Conversation
 
     public function askSex()
     {
-        if ($this->getUser()->sex != null) {
+        if ($this->getUser()->sex !== null) {
             $this->askBirthday();
             return;
         }
@@ -156,6 +156,7 @@ class FillInfoConversation extends Conversation
         });
 
     }
+
 
     public function saveData()
     {

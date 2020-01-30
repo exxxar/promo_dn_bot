@@ -19,7 +19,7 @@ class CreateCategoriesTable extends Migration
         Schema::create('categories', function (Blueprint $table) {
             $table->increments('id');
             $table->string('title')->default('');
-            $table->string('description')->default('')->nullable();
+            $table->string('description',1000)->default('')->nullable();
             $table->string('image_url',1000)->default('')->nullable();
             $table->integer('position')->default(0);
             $table->timestamps();
