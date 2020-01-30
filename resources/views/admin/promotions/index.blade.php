@@ -46,7 +46,7 @@
                         </tr>
                         </thead>
                         <tbody>
-                        @foreach($company->promotions()->paginate(10) as $key => $promotion)
+                        @foreach($company->promotions as $key => $promotion)
                             <tr>
                                 <td>{{$key + 1}}</td>
                                 <td><a href="{{ route('promotions.show',$promotion->id) }}">
@@ -81,7 +81,7 @@
 
                         </tbody>
                     </table>
-                            {{ $companies->promotions->links() }}
+
                     @endforeach
                     {{ $companies->links() }}
                 @endisset
