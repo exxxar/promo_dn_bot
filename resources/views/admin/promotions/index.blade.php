@@ -38,7 +38,8 @@
                         @endif
                         <h2><a class="btn btn-link" href="{{ route('companies.show',$company->id) }}">
                                 {{$company->title}}</a>
-                            <a class="btn btn-link" href="{{ route('companies.edit',$company->id) }}">
+
+                            <a class="btn btn-link" href="{{ route('companies.edit',$company->id) }}" title="Редактировать компанию">
                                 <i class="fas fa-edit"></i>
                             </a>
                             <a class="btn btn-link" href="{{ route('companies.channel',$company->id) }}"
@@ -53,11 +54,6 @@
                                     <i class="fas fa-eye-slash"></i>
                                 @endif
                             </a>
-                            <form class="btn btn-link" action="{{ route('companies.destroy', $company->id)}}" method="post">
-                                @csrf
-                                @method('DELETE')
-                                <button class="btn btn-link" type="submit"><i class="fas fa-times"></i></button>
-                            </form>
                         </h2>
                         <table class="table mt-2">
 
