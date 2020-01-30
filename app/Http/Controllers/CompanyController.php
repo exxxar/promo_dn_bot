@@ -174,13 +174,13 @@ class CompanyController extends Controller
 
         $keyboard = [
             [
-                ['text' => "\xF0\x9F\x91\x89Переход в бота", 'url' =>"https://t.me/" . env("APP_BOT_NAME")],
+                ['text' => "\xF0\x9F\x91\x89Акионный бот", 'url' =>"https://t.me/" . env("APP_BOT_NAME")],
             ],
         ];
 
         if (strlen(trim($company->telegram_bot_url)) > 0)
-            array_push($tmp_keyboards, [
-                ['text' => "\xF0\x9F\x91\x89Перейти в бота", 'url' => $company->telegram_bot_url],
+            array_push($keyboard, [
+                ['text' => "\xF0\x9F\x91\x89Бот компании", 'url' => $company->telegram_bot_url],
             ]);
 
         if (!is_null($company->menu_url))
