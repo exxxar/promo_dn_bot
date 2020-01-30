@@ -29,7 +29,7 @@ class PromotionController extends Controller
         $companies = Company::with(["promotions"])
             ->orderBy('position', 'DESC')
             //->groupBy("title")
-            ->paginate(10);
+            ->paginate(5);
 
         return view('admin.promotions.index', compact('companies'))
             ->with('i', ($request->get('page', 1) - 1) * 15);
