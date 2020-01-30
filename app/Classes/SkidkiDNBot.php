@@ -557,6 +557,7 @@ class SkidkiDNBot extends Bot implements iSkidkiDNBot
         $this->sendPhoto($message, $company->logo_url, $keyboard);
 
         $promotions = $company->promotions()
+            ->orderBy('position', 'DESC')
             ->take(config("bot.results_per_page"))
             ->skip($page * config("bot.results_per_page"))
             ->get();
