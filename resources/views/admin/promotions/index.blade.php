@@ -31,7 +31,9 @@
                 </div>
 
                     <h1>Акции</h1>
-                @isset($promotions)
+                @isset($companies)
+                    @foreach($companies as $company)
+                    <h2>{{$company->title}}</h2>
                     <table class="table mt-2">
 
                         <thead class="thead-light">
@@ -44,7 +46,7 @@
                         </tr>
                         </thead>
                         <tbody>
-                        @foreach($promotions as $key => $promotion)
+                        @foreach($company->promotions as $key => $promotion)
                             <tr>
                                 <td>{{$key + 1}}</td>
                                 <td><a href="{{ route('promotions.show',$promotion->id) }}">
@@ -79,7 +81,7 @@
 
                         </tbody>
                     </table>
-
+                    @endforeach
                     {{ $promotions->links() }}
                 @endisset
             </div>

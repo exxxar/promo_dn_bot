@@ -26,10 +26,12 @@ class PromotionController extends Controller
      */
     public function index(Request $request)
     {
-        $promotions = Promotion::orderBy('position', 'DESC')
-            ->paginate(15);
+        $companies = Company::with(["promotions"])
+            ->orderBy('position', 'DESC')
+            ->groupBy("title")
+            ->paginate(2);
 
-        return view('admin.promotions.index', compact('promotions'))
+        return view('admin.promotions.index', compact('companies'))
             ->with('i', ($request->get('page', 1) - 1) * 15);
     }
 
