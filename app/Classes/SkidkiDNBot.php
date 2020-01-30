@@ -496,6 +496,7 @@ class SkidkiDNBot extends Bot implements iSkidkiDNBot
             ->where("id", $id)
             ->first())
             ->promotions()
+            ->orderBy('position', 'DESC')
             ->take(config("bot.results_per_page"))
             ->skip($page * config("bot.results_per_page"))
             ->get();
@@ -533,6 +534,7 @@ class SkidkiDNBot extends Bot implements iSkidkiDNBot
 
         $company = \App\Company::with(["promotions", "promotions.users"])
             ->where("id", $id)
+            ->orderBy('position', 'DESC')
             ->first();
 
         if (!$company->is_active) {
