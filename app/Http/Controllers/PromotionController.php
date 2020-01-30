@@ -27,8 +27,8 @@ class PromotionController extends Controller
     public function index(Request $request)
     {
         $companies = Company::with(["promotions"])
-            //->orderBy('position', 'DESC')
-            ->groupBy("title")
+            ->orderBy('position', 'DESC')
+            //->groupBy("title")
             ->paginate(10);
 
         return view('admin.promotions.index', compact('companies'))
