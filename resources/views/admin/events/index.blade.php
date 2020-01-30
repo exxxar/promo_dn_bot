@@ -63,7 +63,7 @@
                                     </a>
 
                                     @if($event->promo_id!=null)
-                                        <a class="btn btn-link" href="{{ route('promotions.index',$event->promo_id) }}" title="Связано с акцией">
+                                        <a class="btn btn-link" href="{{ route('promotions.show',$event->promo_id) }}" title="Связано с акцией">
                                             <i class="fas fa-link"></i>
                                         </a>
                                         @endif
