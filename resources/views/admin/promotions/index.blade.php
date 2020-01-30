@@ -81,7 +81,7 @@
 
                         </tbody>
                     </table>
-                            {{ $companies->promotions()->links() }}
+                            {{ $companies->promotions->links() }}
                     @endforeach
                     {{ $companies->links() }}
                 @endisset
