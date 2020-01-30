@@ -174,7 +174,7 @@ class CompanyController extends Controller
 
         $keyboard = [
             [
-                ['text' => "\xF0\x9F\x91\x89Акионный бот", 'url' =>"https://t.me/" . env("APP_BOT_NAME")],
+                ['text' => "\xF0\x9F\x91\x89Акционный бот", 'url' =>"https://t.me/" . env("APP_BOT_NAME")],
             ],
         ];
 
