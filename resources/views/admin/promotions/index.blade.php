@@ -33,6 +33,9 @@
                     <h1>Акции</h1>
                 @isset($companies)
                     @foreach($companies as $company)
+                        @if (count($company->promotions)==0)
+                                @continue
+                        @endif
                     <h2>{{$company->title}}</h2>
                     <table class="table mt-2">
 
