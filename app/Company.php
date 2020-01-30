@@ -23,6 +23,11 @@ class Company extends Model
         'menu_url'
     ];
 
+    public function getPromotionsSortedByPosition()
+    {
+        return $this->promotions()->orderBy('position', 'DESC')->get();
+    }
+
     public function uniqCategories()
     {
         $tmp = "";

@@ -49,7 +49,7 @@
                         </tr>
                         </thead>
                         <tbody>
-                        @foreach($company->promotions()->orderBy('position', 'DESC')->get() as $key => $promotion)
+                        @foreach($company->getPromotionsSortedByPosition() as $key => $promotion)
                             <tr>
                                 <td>{{$key + 1}}</td>
                                 <td><a href="{{ route('promotions.show',$promotion->id) }}">
