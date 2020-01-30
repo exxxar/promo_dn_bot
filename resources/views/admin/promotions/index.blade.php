@@ -36,7 +36,7 @@
                         @if (count($company->promotions)==0)
                             @continue
                         @endif
-                        <h2><a href="{{ route('companies.show',$company->id) }}">
+                        <h2><a class="btn btn-link" href="{{ route('companies.show',$company->id) }}">
                                 {{$company->title}}</a>
                             <a class="btn btn-link" href="{{ route('companies.edit',$company->id) }}">
                                 <i class="fas fa-edit"></i>
@@ -53,7 +53,7 @@
                                     <i class="fas fa-eye-slash"></i>
                                 @endif
                             </a>
-                            <form action="{{ route('companies.destroy', $company->id)}}" method="post">
+                            <form class="btn btn-link" action="{{ route('companies.destroy', $company->id)}}" method="post">
                                 @csrf
                                 @method('DELETE')
                                 <button class="btn btn-link" type="submit"><i class="fas fa-times"></i></button>
