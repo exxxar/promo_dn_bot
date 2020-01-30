@@ -183,6 +183,10 @@ class CompanyController extends Controller
                 ['text' => "\xF0\x9F\x91\x89Перейти в бота", 'url' => $company->telegram_bot_url],
             ]);
 
+        if (!is_null($company->menu_url))
+            array_push($keyboard,[
+                ["text"=>"\xE2\x9D\x97\xE2\x9D\x97\xE2\x9D\x97Акционное меню\xE2\x9D\x97\xE2\x9D\x97\xE2\x9D\x97","url"=>$company->menu_url]
+            ]);
 
         Telegram::sendPhoto([
             'chat_id' => "-1001392337757",
