@@ -449,8 +449,13 @@ class SkidkiDNBot extends Bot implements iSkidkiDNBot
                 ]
             ];
 
+            if (!is_null($company->menu_url)){
+                array_push($keyboard,[
+                    ["text"=>"\xE2\x9D\x97\xE2\x9D\x97\xE2\x9D\x97Акционное меню\xE2\x9D\x97\xE2\x9D\x97\xE2\x9D\x97","url"=>$company->menu_url]
+                ]);
+            }
 
-            $this->sendPhoto('*' . $company->title . "*\n".($company->menu_url??''), $company->logo_url, $keyboard);
+            $this->sendPhoto('*' . $company->title . "*\n", $company->logo_url, $keyboard);
         }
 
         $this->pagination("/promo_by_company", $companies, $page, "Выберите действие");
