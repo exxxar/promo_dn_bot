@@ -30,60 +30,86 @@
                     </div>
                 </div>
 
-                    <h1>Акции</h1>
+                <h1>Акции</h1>
                 @isset($companies)
                     @foreach($companies as $company)
                         @if (count($company->promotions)==0)
-                                @continue
+                            @continue
                         @endif
-                    <h2>{{$company->title}}</h2>
-                    <table class="table mt-2">
+                        <h2><a href="{{ route('companies.show',$company->id) }}">
+                                {{$company->title}}</a>
+                            <a class="btn btn-link" href="{{ route('companies.edit',$company->id) }}">
+                                <i class="fas fa-edit"></i>
+                            </a>
+                            <a class="btn btn-link" href="{{ route('companies.channel',$company->id) }}"
+                               title="Отправить в канал">
+                                <i class="fab fa-telegram"></i>
+                            </a>
+                            <a class="btn btn-link" href="{{ route('companies.hide',$company->id) }}"
+                               title="Скрыть компанию, акции и мероприятия!">
+                                @if($company->is_active)
+                                    <i class="fas fa-eye"></i>
+                                @else
+                                    <i class="fas fa-eye-slash"></i>
+                                @endif
+                            </a>
+                            <form action="{{ route('companies.destroy', $company->id)}}" method="post">
+                                @csrf
+                                @method('DELETE')
+                                <button class="btn btn-link" type="submit"><i class="fas fa-times"></i></button>
+                            </form>
+                        </h2>
+                        <table class="table mt-2">
 
-                        <thead class="thead-light">
-                        <tr>
-                            <th scope="col">#</th>
-                            <th scope="col">Заголовок</th>
-                            <th scope="col">Описание</th>
-                            <th scope="col">Действие</th>
-
-                        </tr>
-                        </thead>
-                        <tbody>
-                        @foreach($company->getPromotionsSortedByPosition() as $key => $promotion)
+                            <thead class="thead-light">
                             <tr>
-                                <td>{{$key + 1}}</td>
-                                <td><a href="{{ route('promotions.show',$promotion->id) }}">
-                                        {{$promotion->title}}</a>
+                                <th scope="col">#</th>
+                                <th scope="col">Заголовок</th>
+                                <th scope="col">Описание</th>
+                                <th scope="col">Действие</th>
 
-
-                                </td>
-
-
-                                <td>{{$promotion->description}}</td>
-
-                                <td>
-                                    <a class="btn btn-link" href="{{ route('promotions.edit',$promotion->id) }}" title="Редактировать">
-                                        <i class="fas fa-edit"></i>
-                                    </a>
-
-                                    <a class="btn btn-link" href="{{ route('promotions.copy',$promotion->id) }}" title="Копировать">
-                                        <i class="far fa-copy"></i>
-                                    </a>
-
-                                    <a class="btn btn-link" href="{{ route('promotions.channel',$promotion->id) }}" title="Отправить в канал">
-                                        <i class="fab fa-telegram"></i>
-                                    </a>
-                                    <form action="{{ route('promotions.destroy', $promotion->id)}}" method="post" >
-                                        @csrf
-                                        @method('DELETE')
-                                        <button class="btn btn-link" type="submit" title="Удалить безвозвратно"><i class="fas fa-times"></i></button>
-                                    </form>
-                                </td>
                             </tr>
-                        @endforeach
+                            </thead>
+                            <tbody>
+                            @foreach($company->getPromotionsSortedByPosition() as $key => $promotion)
+                                <tr>
+                                    <td>{{$key + 1}}</td>
+                                    <td><a href="{{ route('promotions.show',$promotion->id) }}">
+                                            {{$promotion->title}}</a>
 
-                        </tbody>
-                    </table>
+
+                                    </td>
+
+
+                                    <td>{{$promotion->description}}</td>
+
+                                    <td>
+                                        <a class="btn btn-link" href="{{ route('promotions.edit',$promotion->id) }}"
+                                           title="Редактировать">
+                                            <i class="fas fa-edit"></i>
+                                        </a>
+
+                                        <a class="btn btn-link" href="{{ route('promotions.copy',$promotion->id) }}"
+                                           title="Копировать">
+                                            <i class="far fa-copy"></i>
+                                        </a>
+
+                                        <a class="btn btn-link" href="{{ route('promotions.channel',$promotion->id) }}"
+                                           title="Отправить в канал">
+                                            <i class="fab fa-telegram"></i>
+                                        </a>
+                                        <form action="{{ route('promotions.destroy', $promotion->id)}}" method="post">
+                                            @csrf
+                                            @method('DELETE')
+                                            <button class="btn btn-link" type="submit" title="Удалить безвозвратно"><i
+                                                        class="fas fa-times"></i></button>
+                                        </form>
+                                    </td>
+                                </tr>
+                            @endforeach
+
+                            </tbody>
+                        </table>
 
                     @endforeach
                     {{ $companies->links() }}

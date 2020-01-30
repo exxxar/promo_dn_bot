@@ -32,7 +32,7 @@ class PromotionController extends Controller
             ->paginate(5);
 
         return view('admin.promotions.index', compact('companies'))
-            ->with('i', ($request->get('page', 1) - 1) * 15);
+            ->with('i', ($request->get('page', 1) - 1) * 5);
     }
 
     /**

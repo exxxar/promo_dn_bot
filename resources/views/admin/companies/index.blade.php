@@ -50,12 +50,13 @@
                                 <td><a href="{{ route('companies.show',$company->id) }}">
                                         {{$company->title}}</a>
 
-                                    <a class="btn btn-link" href="{{ route('companies.edit',$company->id) }}">
-                                        <i class="fas fa-edit"></i>
-                                    </a>
+
                                 </td>
                                 <td>{{$company->description}}</td>
                                 <td>
+                                    <a class="btn btn-link" href="{{ route('companies.edit',$company->id) }}">
+                                        <i class="fas fa-edit"></i>
+                                    </a>
                                     <a class="btn btn-link" href="{{ route('companies.channel',$company->id) }}"
                                        title="Отправить в канал">
                                         <i class="fab fa-telegram"></i>
