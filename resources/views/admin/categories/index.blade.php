@@ -29,34 +29,35 @@
                     </div>
                 </div>
 
-                    <h1>Категории</h1>
+                <h1>Категории</h1>
                 @isset($categories)
-
+                    <div class="row justify-content-around">
                         @foreach($categories as $key => $category)
-                            <div class="row justify-content-around">
-                                @foreach($companies as $key => $company)
 
-                                    <div class="card card-accent-success" style="width: 300px">
-                                        <div class="card-header ">
-                                            <form class="btn btn-link" action="{{ route('categories.destroy', $category->id)}}" method="post">
-                                                @csrf
-                                                @method('DELETE')
-                                                <button class="btn btn-link" type="submit"><i class="fas fa-times"></i></button>
-                                            </form>
-                                        </div>
-                                        <img class="card-img-top" src="{{$category->image_url}}">
-                                        <div class="card-body">
-                                            <h5 class="card-title">{{$category->title}}</h5>
-                                            <a class="btn btn-primary" href="{{ route('categories.show',$category->id) }}">
-                                                Подробнее</a>
-                                        </div>
-                                    </div>
 
-                                @endforeach
+
+                            <div class="card card-accent-success" style="width: 300px">
+                                <div class="card-header ">
+                                    <form class="btn btn-link" action="{{ route('categories.destroy', $category->id)}}"
+                                          method="post">
+                                        @csrf
+                                        @method('DELETE')
+                                        <button class="btn btn-link" type="submit"><i class="fas fa-times"></i></button>
+                                    </form>
+                                </div>
+                                <img class="card-img-top" src="{{$category->image_url}}">
+                                <div class="card-body">
+                                    <h5 class="card-title">{{$category->title}}</h5>
+                                    <a class="btn btn-primary" href="{{ route('categories.show',$category->id) }}">
+                                        Подробнее</a>
+                                </div>
                             </div>
 
-                        @endforeach
 
+
+
+                        @endforeach
+                    </div>
                     {{ $categories->links() }}
                 @endisset
             </div>
