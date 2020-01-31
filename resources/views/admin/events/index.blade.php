@@ -36,7 +36,7 @@
                     @foreach($events as $key => $event)
 
 
-                        <div class="card card-accent-success" style="width: 200px">
+                        <div class="card card-accent-success" style="width: 300px">
                             <div class="card-header">
                                 <a class="btn btn-link" href="{{ route('events.edit',$event->id) }}">
                                     <i class="fas fa-edit"></i>
