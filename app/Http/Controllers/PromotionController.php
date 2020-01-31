@@ -262,7 +262,22 @@ class PromotionController extends Controller
             ->orderBy('position', 'DESC')
             ->paginate(10);
 
-        return view('admin.promotions.in_category', compact('promotions'))
-            ->with('i', ($request->get('page', 1) - 1) * 5);
+        return view('admin.promotions.index_panel', compact('promotions'))
+            ->with('i', ($request->get('page', 1) - 1) * 10);
     }
+
+    public function inCompany(Request $request,$id){
+
+        $promotions = (Company::with(["promotions"])
+            ->where("id",$id)
+            ->first())
+            ->promotions()
+            ->orderBy('position', 'DESC')
+            ->paginate(10);
+
+
+        return view('admin.promotions.index_panel', compact('promotions'))
+            ->with('i', ($request->get('page', 1) - 1) * 10);
+    }
+
 }

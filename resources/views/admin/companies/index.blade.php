@@ -63,6 +63,8 @@
                                     <h5 class="card-title">{{$company->title}}</h5>
                                     <a class="btn btn-primary" href="{{ route('companies.show',$company->id) }}">
                                         Подробнее</a>
+                                    <a class="btn btn-info" href="{{ route('promotions.in_company',$company->id) }}">
+                                        Акции в компании</a>
                                 </div>
                             </div>
 
