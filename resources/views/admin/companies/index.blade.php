@@ -32,7 +32,7 @@
 
                 <h1>Компании</h1>
                 @isset($companies)
-                    <div class="row">
+                    <div class="row justify-content-around">
                         @foreach($companies as $key => $company)
 
                             <div class="card card-accent-success" style="width: 300px">
@@ -52,7 +52,7 @@
                                             <i class="fas fa-eye-slash"></i>
                                         @endif
                                     </a>
-                                    <form action="{{ route('companies.destroy', $company->id)}}" method="post">
+                                    <form class="btn btn-link" action="{{ route('companies.destroy', $company->id)}}" method="post">
                                         @csrf
                                         @method('DELETE')
                                         <button class="btn btn-link" type="submit"><i class="fas fa-times"></i></button>
@@ -61,7 +61,7 @@
                                 <img class="card-img-top" src="{{$company->logo_url}}">
                                 <div class="card-body">
                                     <h5 class="card-title">{{$company->title}}</h5>
-                                    <p class="card-text">{{$company->description}}</p>
+                                    <p class="card-text">{{substr($company->description, min(255,strlen($company->description)))}}</p>
                                     <a class="btn btn-primary" href="{{ route('companies.show',$company->id) }}">
                                         Подробнее</a>
 
