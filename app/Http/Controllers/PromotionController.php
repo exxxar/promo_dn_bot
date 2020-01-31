@@ -253,4 +253,16 @@ class PromotionController extends Controller
             ->route('promotions.index')
             ->with('success', 'Акция успешно добавлена в канал');
     }
+
+    public function inCategory(Request $request,$id){
+        $promotions = (Category::with(["promotions", "promotions.company"])
+            ->where("id", $id)
+            ->first())
+            ->promotions()
+            ->orderBy('position', 'DESC')
+            ->paginate(10);
+
+        return view('admin.promotions.in_category', compact('promotions'))
+            ->with('i', ($request->get('page', 1) - 1) * 5);
+    }
 }

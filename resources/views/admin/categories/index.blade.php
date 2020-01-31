@@ -39,6 +39,7 @@
                                     <a class="btn btn-link" href="{{ route('categories.edit',$category->id) }}">
                                         <i class="fas fa-edit"></i>
                                     </a>
+
                                     <form class="btn btn-link" action="{{ route('categories.destroy', $category->id)}}"
                                           method="post">
                                         @csrf
@@ -46,11 +47,13 @@
                                         <button class="btn btn-link" type="submit"><i class="fas fa-times"></i></button>
                                     </form>
                                 </div>
-                                <img class="card-img-top" src="{{$category->image_url}}">
+                                <img class="card-img-top" src="{{$category->promo_image_url}}">
                                 <div class="card-body">
                                     <h5 class="card-title">{{$category->title}}</h5>
                                     <a class="btn btn-primary" href="{{ route('categories.show',$category->id) }}">
                                         Подробнее</a>
+                                    <a class="btn btn-info" href="{{ route('promotions.in_category',$category->id) }}">
+                                        Акции в категории</a>
                                 </div>
                             </div>
 
