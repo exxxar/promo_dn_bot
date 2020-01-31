@@ -27,6 +27,8 @@ mix.copy('resources/sass/vendors/bootstrap', 'public/vendor/bootstrap');
 mix.copy('resources/sass/vendors/fontawesome-free', 'public/vendor/fontawesome-free');
 mix.copy('resources/sass/vendors/jquery', 'public/vendor/jquery');
 mix.copy('resources/sass/vendors/jquery-easing', 'public/vendor/jquery-easing');
+mix.copy('resources/assets/device-mockups', 'public/device-mockups');
+
 mix.copy('resources/sass/vendors/simple-line-icons', 'public/vendor/simple-line-icons');
 //************** SCRIPTS ******************
 // general scripts
