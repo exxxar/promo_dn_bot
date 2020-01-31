@@ -1,6 +1,27 @@
 {
   "private": true,
   "scripts": {
+    "build": "npm-run-all build-clean build-copy build-vendors",
+    "build-clean": "rimraf dist",
+    "build-copy": "copyfiles -a -e \"public/scss/**/*\" -u 1 \"public/**/*\" dist/",
+    "build-vendors": "node build/vendors.js",
+    "css": "npm-run-all --parallel css-compile* --sequential css-prefix css-minify*",
+    "css-compile": "node-sass --output-style expanded --source-map true --source-map-contents true --precision 6 public/scss/style.scss public/css/style.css",
+    "css-compile-vendors": "node build/vendors-sass.js",
+    "css-lint": "stylelint --config build/.stylelintrc --syntax scss \"public/scss/**/*.scss\"",
+    "css-minify": "cleancss --level 1 --source-map --source-map-inline-sources --output public/css/style.min.css public/css/style.css",
+    "css-prefix": "postcss --config build/postcss.config.js --replace \"public/css/*.css\" \"!public/css/*.min.css\"",
+    "js": "npm-run-all --parallel js-compile* js-lint*",
+    "js-compile": "cross-env PLUGINS=true babel public/js/src/ --out-dir public/js/ --source-maps",
+    "js-lint": "eslint public/js/src",
+    "localhost": "browser-sync start --server \"./public\" --serveStatic \"./\" --files \"!./public/js/src/**/*, ./public/**/*, !./public/scss/**/*\"",
+    "localhost-dist": "browser-sync start --server \"./dist\"",
+    "pug": "node build/pug.js",
+    "release-version": "node build/change-version.js",
+    "serve": "npm-run-all --parallel localhost watch-css watch-js",
+    "watch-css": "nodemon --ignore dist/ -e scss -x \"npm run css\"",
+    "watch-js": "nodemon --watch public/js/src/ -x \"npm run js\"",
+    "watch-pug": "nodemon -e pug -x \"npm run pug\"",
     "dev": "npm run development",
     "development": "cross-env NODE_ENV=development node_modules/webpack/bin/webpack.js --progress --hide-modules --config=node_modules/laravel-mix/setup/webpack.config.js",
     "watch": "npm run development -- --watch",
@@ -10,16 +31,26 @@
     "production": "cross-env NODE_ENV=production node_modules/webpack/bin/webpack.js --no-progress --hide-modules --config=node_modules/laravel-mix/setup/webpack.config.js"
   },
   "devDependencies": {
+    "@coreui/coreui": "3.0.0-beta.3",
+    "@coreui/coreui-chartjs": "2.0.0-beta.0",
+    "@coreui/icons": "1.0.0-beta.3",
     "axios": "^0.18",
     "bootstrap": "^4.0.0",
     "popper.js": "^1.12",
     "cross-env": "^5.1",
     "jquery": "^3.2",
-    "laravel-mix": "^2.0",
     "lodash": "^4.17.4",
-    "vue": "^2.5.7"
+    "vue": "^2.5.7",
+    "cropperjs": "^1.5.6",
+    "laravel-mix": "^5.0.0",
+    "pace-progress": "1.0.2",
+    "perfect-scrollbar": "1.4.0"
   },
   "dependencies": {
-    "botman-tinker": "^0.0.1"
+    "botman-tinker": "^0.0.1",
+    "resolve-url-loader": "^3.1.0",
+    "sass": "^1.23.6",
+    "sass-loader": "^8.0.0",
+    "vue-template-compiler": "^2.6.10"
   }
 }

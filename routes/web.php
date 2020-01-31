@@ -21,8 +21,8 @@ use Telegram\Bot\FileUpload\InputFile;
 use Telegram\Bot\Laravel\Facades\Telegram;
 use Vinkla\Instagram\Instagram;
 
-Route::get('/test_crash', function () {
-    throw new \PHPUnit\Runner\Exception("asdasd");
+Route::get('/test_admin', function () {
+   return view("newadmin");
 });
 Route::get('/test_user', function () {
     /*  $users = \App\User::with(["parent","childs"])->get();
