@@ -61,10 +61,8 @@
                                 <img class="card-img-top" src="{{$company->logo_url}}">
                                 <div class="card-body">
                                     <h5 class="card-title">{{$company->title}}</h5>
-                                    <p class="card-text">{{substr($company->description, 0,min(255,strlen($company->description)))}}</p>
                                     <a class="btn btn-primary" href="{{ route('companies.show',$company->id) }}">
                                         Подробнее</a>
-
                                 </div>
                             </div>
 
