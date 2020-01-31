@@ -59,7 +59,7 @@
                                     <button class="btn btn-link" type="submit"><i class="fas fa-times"></i></button>
                                 </form>
                             </div>
-                            <img class="card-img-top" src="..." alt="Card image cap">
+                            <img class="card-img-top" src="{{$event->event_image_url}}" >
                             <div class="card-body">
                                 <h5 class="card-title">{{$event->title}}</h5>
                                 <p class="card-text">{{$event->description}}</p>
