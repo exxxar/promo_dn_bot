@@ -32,21 +32,8 @@
 
                 <h1>Компании</h1>
                 @isset($companies)
-
-                    <table class="table mt-2">
-
-                        <thead class="thead-light">
-                        <tr>
-                            <th scope="col">#</th>
-                            <th scope="col">Название</th>
-                            <th scope="col">Описание</th>
-                            <th scope="col">Действие</th>
-
-                        </tr>
-                        </thead>
-                        <tbody>
                         @foreach($companies as $key => $company)
-
+                        <div class="row">
                             <div class="card card-accent-success" style="width: 300px">
                                 <div class="card-header ">
                                     <a class="btn btn-link" href="{{ route('companies.edit',$company->id) }}">
@@ -79,7 +66,7 @@
 
                                 </div>
                             </div>
-
+                        </div>
 
                         @endforeach
 

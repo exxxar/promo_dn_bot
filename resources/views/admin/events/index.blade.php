@@ -35,39 +35,39 @@
 
                     @foreach($events as $key => $event)
 
-
-                        <div class="card card-accent-success" style="width: 300px">
-                            <div class="card-header ">
-                                <a class="btn btn-link" href="{{ route('events.edit',$event->id) }}">
-                                    <i class="fas fa-edit"></i>
-                                </a>
-                                <a class="btn btn-link" href="{{ route('events.channel',$event->id) }}"
-                                   title="Отправить в канал">
-                                    <i class="fab fa-telegram"></i>
-                                </a>
-
-                                @if($event->promo_id!=null)
-                                    <a class="btn btn-link" href="{{ route('promotions.show',$event->promo_id) }}"
-                                       title="Связано с акцией">
-                                        <i class="fas fa-link"></i>
+                        <div class="row">
+                            <div class="card card-accent-success" style="width: 300px">
+                                <div class="card-header ">
+                                    <a class="btn btn-link" href="{{ route('events.edit',$event->id) }}">
+                                        <i class="fas fa-edit"></i>
                                     </a>
-                                @endif
-                                <form class="btn btn-link" action="{{ route('events.destroy', $event->id)}}"
-                                      method="post">
-                                    @csrf
-                                    @method('DELETE')
-                                    <button class="btn btn-link" type="submit"><i class="fas fa-times"></i></button>
-                                </form>
-                            </div>
-                            <img class="card-img-top" src="{{$event->event_image_url}}">
-                            <div class="card-body">
-                                <h5 class="card-title">{{$event->title}}</h5>
-                                <p class="card-text">{{$event->description}}</p>
-                                <a class="btn btn-primary" href="{{ route('events.show',$event->id) }}">
-                                    Подробнее</a>
+                                    <a class="btn btn-link" href="{{ route('events.channel',$event->id) }}"
+                                       title="Отправить в канал">
+                                        <i class="fab fa-telegram"></i>
+                                    </a>
+
+                                    @if($event->promo_id!=null)
+                                        <a class="btn btn-link" href="{{ route('promotions.show',$event->promo_id) }}"
+                                           title="Связано с акцией">
+                                            <i class="fas fa-link"></i>
+                                        </a>
+                                    @endif
+                                    <form class="btn btn-link" action="{{ route('events.destroy', $event->id)}}"
+                                          method="post">
+                                        @csrf
+                                        @method('DELETE')
+                                        <button class="btn btn-link" type="submit"><i class="fas fa-times"></i></button>
+                                    </form>
+                                </div>
+                                <img class="card-img-top" src="{{$event->event_image_url}}">
+                                <div class="card-body">
+                                    <h5 class="card-title">{{$event->title}}</h5>
+                                    <p class="card-text">{{$event->description}}</p>
+                                    <a class="btn btn-primary" href="{{ route('events.show',$event->id) }}">
+                                        Подробнее</a>
+                                </div>
                             </div>
                         </div>
-
                     @endforeach
 
 
