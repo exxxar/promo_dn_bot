@@ -5,7 +5,7 @@ body {
 }
 
 body {
-  font-family: "Muli", "Helvetica", "Arial", "sans-serif";
+  font-family: "Open Sans", sans-serif;
 }
 
 a {
@@ -36,7 +36,7 @@ h3,
 h4,
 h5,
 h6 {
-  font-family: "Catamaran", "Helvetica", "Arial", "sans-serif";
+  font-family: "Open Sans", sans-serif;
   font-weight: 200;
   letter-spacing: 1px;
 }
@@ -60,14 +60,14 @@ section h2 {
   background-color: white;
   -webkit-transition: all 0.35s;
   transition: all 0.35s;
-  font-family: "Catamaran", "Helvetica", "Arial", "sans-serif";
+  font-family: "Open Sans", sans-serif;
   font-weight: 200;
   letter-spacing: 1px;
 }
 
 #mainNav .navbar-brand {
   color: #fdcc52;
-  font-family: "Catamaran", "Helvetica", "Arial", "sans-serif";
+  font-family: "Open Sans", sans-serif;
   font-weight: 200;
   letter-spacing: 1px;
 }
@@ -85,7 +85,7 @@ section h2 {
 
 #mainNav .navbar-nav > li > a {
   font-size: 11px;
-  font-family: "Lato", "Helvetica", "Arial", "sans-serif";
+  font-family: "Open Sans", sans-serif;
   letter-spacing: 2px;
   text-transform: uppercase;
 }
@@ -443,7 +443,7 @@ footer ul li a.active {
 
 .btn {
   border-radius: 300px;
-  font-family: "Lato", "Helvetica", "Arial", "sans-serif";
+  font-family: "Open Sans", sans-serif;
   letter-spacing: 2px;
   text-transform: uppercase;
 }
@@ -451,5 +451,266 @@ footer ul li a.active {
 .btn-xl {
   font-size: 11px;
   padding: 15px 45px;
+}
+
+#portfolio .portfolio-item {
+  right: 0;
+  margin: 0 0 15px;
+}
+
+#portfolio .portfolio-item .portfolio-link {
+  position: relative;
+  display: block;
+  max-width: 400px;
+  margin: 0 auto;
+  cursor: pointer;
+}
+
+#portfolio .portfolio-item .portfolio-link .portfolio-hover {
+  position: absolute;
+  width: 100%;
+  height: 100%;
+  -webkit-transition: all ease 0.5s;
+  transition: all ease 0.5s;
+  opacity: 0;
+  background: rgba(254, 209, 54, 0.9);
+}
+
+#portfolio .portfolio-item .portfolio-link .portfolio-hover:hover {
+  opacity: 1;
+}
+
+#portfolio .portfolio-item .portfolio-link .portfolio-hover .portfolio-hover-content {
+  font-size: 20px;
+  position: absolute;
+  top: 50%;
+  width: 100%;
+  height: 20px;
+  margin-top: -12px;
+  text-align: center;
+  color: #fff;
+}
+
+#portfolio .portfolio-item .portfolio-link .portfolio-hover .portfolio-hover-content i {
+  margin-top: -12px;
+}
+
+#portfolio .portfolio-item .portfolio-link .portfolio-hover .portfolio-hover-content h3,
+#portfolio .portfolio-item .portfolio-link .portfolio-hover .portfolio-hover-content h4 {
+  margin: 0;
+}
+
+#portfolio .portfolio-item .portfolio-caption {
+  max-width: 400px;
+  margin: 0 auto;
+  padding: 25px;
+  text-align: center;
+  background-color: #fff;
+}
+
+#portfolio .portfolio-item .portfolio-caption h4 {
+  margin: 0;
+  text-transform: none;
+}
+
+#portfolio .portfolio-item .portfolio-caption p {
+  font-size: 16px;
+  font-style: italic;
+  margin: 0;
+  font-family: "Droid Serif", -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif, "Apple Color Emoji", "Segoe UI Emoji", "Segoe UI Symbol", "Noto Color Emoji";
+}
+
+#portfolio * {
+  z-index: 2;
+}
+
+#portfolio .section-heading {
+  margin-bottom: 50px;
+}
+
+@media (min-width: 767px) {
+  #portfolio .portfolio-item {
+    margin: 0 0 30px;
+  }
+}
+
+.portfolio-modal .modal-dialog {
+  margin: 1rem;
+  max-width: 100vw;
+}
+
+.portfolio-modal .modal-content {
+  padding: 100px 0;
+  text-align: center;
+}
+
+.portfolio-modal .modal-content h2 {
+  font-size: 3em;
+  margin-bottom: 15px;
+}
+
+.portfolio-modal .modal-content p {
+  margin-bottom: 30px;
+}
+
+.portfolio-modal .modal-content p.item-intro {
+  font-size: 16px;
+  font-style: italic;
+  margin: 20px 0 30px;
+  font-family: "Droid Serif", -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif, "Apple Color Emoji", "Segoe UI Emoji", "Segoe UI Symbol", "Noto Color Emoji";
+}
+
+.portfolio-modal .modal-content ul.list-inline {
+  margin-top: 0;
+  margin-bottom: 30px;
+}
+
+.portfolio-modal .modal-content img {
+  margin-bottom: 30px;
+}
+
+.portfolio-modal .modal-content button {
+  cursor: pointer;
+}
+
+.portfolio-modal .close-modal {
+  position: absolute;
+  top: 25px;
+  right: 25px;
+  width: 75px;
+  height: 75px;
+  cursor: pointer;
+  background-color: transparent;
+}
+
+.portfolio-modal .close-modal:hover {
+  opacity: 0.3;
+}
+
+.portfolio-modal .close-modal .lr {
+  z-index: 1051;
+  width: 1px;
+  height: 75px;
+  margin-left: 35px;
+  -webkit-transform: rotate(45deg);
+          transform: rotate(45deg);
+  background-color: #212529;
+}
+
+.portfolio-modal .close-modal .lr .rl {
+  z-index: 1052;
+  width: 1px;
+  height: 75px;
+  -webkit-transform: rotate(90deg);
+          transform: rotate(90deg);
+  background-color: #212529;
+}
+
+.portfolio-modal .portfolio-item .portfolio-wrapper {
+  border: 1px solid lightgray;
+  margin-bottom: 10px;
+  padding: 10px;
+  overflow: hidden;
+}
+
+.portfolio-modal .portfolio-item .portfolio-wrapper h4 {
+  font-size: 16px;
+  letter-spacing: initial;
+}
+
+.portfolio-modal .section-heading {
+  padding-bottom: 50px;
+}
+
+#reviwes {
+  padding-top: 40px;
+  padding-bottom: 80px;
+  font-family: "Rubik", sans-serif;
+}
+
+.review-author {
+  font-size: 22px;
+  font-weight: 500;
+  margin-top: 30px;
+  text-transform: uppercase;
+}
+
+.review-logo {
+  display: -webkit-box;
+  display: flex;
+  -webkit-box-pack: center;
+          justify-content: center;
+  -webkit-box-align: center;
+          align-items: center;
+  font-size: 120px;
+  background: linear-gradient(45deg, #820000 33%, #f86200 66%, #eb0019);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  color: #ff0404;
+}
+
+.carousel-indicators {
+  bottom: -58px;
+}
+
+.carousel-indicators li {
+  background-color: rgba(0, 0, 0, 0.5);
+}
+
+.carousel-indicators .active {
+  background-color: #000;
+}
+
+.carousel-control-next-icon,
+.carousel-control-prev-icon {
+  width: 35px;
+  height: 35px;
+}
+
+.carousel-control-prev-icon {
+  background-image: url("data:image/svg+xml;charset=utf8,%3Csvg xmlns='http://www.w3.org/2000/svg' fill='%23000' viewBox='0 0 8 8'%3E%3Cpath d='M5.25 0l-4 4 4 4 1.5-1.5-2.5-2.5 2.5-2.5-1.5-1.5z'/%3E%3C/svg%3E");
+}
+
+.carousel-control-next-icon {
+  background-image: url("data:image/svg+xml;charset=utf8,%3Csvg xmlns='http://www.w3.org/2000/svg' fill='%23000' viewBox='0 0 8 8'%3E%3Cpath d='M2.75 0l-1.5 1.5 2.5 2.5-2.5 2.5 1.5 1.5 4-4-4-4z'/%3E%3C/svg%3E");
+}
+
+@media (max-width: 575px) {
+  .review {
+    padding-left: 40px;
+    padding-right: 20px;
+  }
+}
+
+.send-message-modal {
+  position: fixed;
+  bottom: 50px;
+  right: 50px;
+  z-index: 100;
+  padding: 20px;
+  width: 70px;
+  height: 70px;
+  border-radius: 50%;
+  box-shadow: 1px 1px 5px 0px black;
+  background: red;
+  color: white;
+  font-size: 34px;
+  display: -webkit-box;
+  display: flex;
+  -webkit-box-pack: center;
+          justify-content: center;
+  -webkit-box-align: center;
+          align-items: center;
+}
+
+.send-message-modal:hover {
+  text-decoration: none;
+}
+
+.callback-modal label {
+  width: 100%;
+  text-align: left;
+  font-size: 12px;
+  margin-bottom: 0px;
 }
 
