@@ -34,10 +34,11 @@
                     <div class="row justify-content-around">
                         @foreach($categories as $key => $category)
 
-
-
                             <div class="card card-accent-success" style="width: 300px">
                                 <div class="card-header ">
+                                    <a class="btn btn-link" href="{{ route('categories.edit',$category->id) }}">
+                                        <i class="fas fa-edit"></i>
+                                    </a>
                                     <form class="btn btn-link" action="{{ route('categories.destroy', $category->id)}}"
                                           method="post">
                                         @csrf
