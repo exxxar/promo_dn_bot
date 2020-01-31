@@ -146,6 +146,17 @@ document.getElementById("type").onchange = function () {
 
 /***/ }),
 
+/***/ "./resources/sass/new-age.scss":
+/*!*************************************!*\
+  !*** ./resources/sass/new-age.scss ***!
+  \*************************************/
+/*! no static exports found */
+/***/ (function(module, exports) {
+
+// removed by extract-text-webpack-plugin
+
+/***/ }),
+
 /***/ "./resources/sass/style.scss":
 /*!***********************************!*\
   !*** ./resources/sass/style.scss ***!
@@ -158,14 +169,15 @@ document.getElementById("type").onchange = function () {
 /***/ }),
 
 /***/ 0:
-/*!******************************************************************************!*\
-  !*** multi ./resources/js/coreui/menu-create.js ./resources/sass/style.scss ***!
-  \******************************************************************************/
+/*!************************************************************************************************************!*\
+  !*** multi ./resources/js/coreui/menu-create.js ./resources/sass/style.scss ./resources/sass/new-age.scss ***!
+  \************************************************************************************************************/
 /*! no static exports found */
 /***/ (function(module, exports, __webpack_require__) {
 
 __webpack_require__(/*! D:\xampp\htdocs\promo_dn_bot\resources\js\coreui\menu-create.js */"./resources/js/coreui/menu-create.js");
-module.exports = __webpack_require__(/*! D:\xampp\htdocs\promo_dn_bot\resources\sass\style.scss */"./resources/sass/style.scss");
+__webpack_require__(/*! D:\xampp\htdocs\promo_dn_bot\resources\sass\style.scss */"./resources/sass/style.scss");
+module.exports = __webpack_require__(/*! D:\xampp\htdocs\promo_dn_bot\resources\sass\new-age.scss */"./resources/sass/new-age.scss");
 
 
 /***/ })
