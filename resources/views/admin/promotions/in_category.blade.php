@@ -33,46 +33,50 @@
                 <h1>Акции</h1>
                 @isset($promotions)
 
-                        <div class="row justify-content-around">
-                            @foreach($promotions as $key => $promotion)
+                    @if(count($promotions))
+                        <h2>К сожалению, акций в данной категории сейчас нет!</h2>
 
-                                <div class="card card-accent-success" style="width: 300px">
-                                    <div class="card-header ">
-                                        <a class="btn btn-link" href="{{ route('promotions.edit',$promotion->id) }}"
-                                           title="Редактировать">
-                                            <i class="fas fa-edit"></i>
-                                        </a>
+                    @endif
+                    <div class="row justify-content-around">
+                        @foreach($promotions as $key => $promotion)
 
-                                        <a class="btn btn-link" href="{{ route('promotions.copy',$promotion->id) }}"
-                                           title="Копировать">
-                                            <i class="far fa-copy"></i>
-                                        </a>
+                            <div class="card card-accent-success" style="width: 300px">
+                                <div class="card-header ">
+                                    <a class="btn btn-link" href="{{ route('promotions.edit',$promotion->id) }}"
+                                       title="Редактировать">
+                                        <i class="fas fa-edit"></i>
+                                    </a>
 
-                                        <a class="btn btn-link" href="{{ route('promotions.channel',$promotion->id) }}"
-                                           title="Отправить в канал">
-                                            <i class="fab fa-telegram"></i>
-                                        </a>
-                                        <form action="{{ route('promotions.destroy', $promotion->id)}}" method="post">
-                                            @csrf
-                                            @method('DELETE')
-                                            <button class="btn btn-link" type="submit" title="Удалить безвозвратно"><i
-                                                        class="fas fa-times"></i></button>
-                                        </form>
-                                    </div>
-                                    <img class="card-img-top" src="{{$promotion->promo_image_url}}">
-                                    <div class="card-body">
-                                        <h5 class="card-title">{{$promotion->title}}</h5>
-                                        <a class="btn btn-primary" href="{{ route('promotions.show',$promotion->id) }}">
-                                            Подробнее</a>
+                                    <a class="btn btn-link" href="{{ route('promotions.copy',$promotion->id) }}"
+                                       title="Копировать">
+                                        <i class="far fa-copy"></i>
+                                    </a>
 
-                                    </div>
+                                    <a class="btn btn-link" href="{{ route('promotions.channel',$promotion->id) }}"
+                                       title="Отправить в канал">
+                                        <i class="fab fa-telegram"></i>
+                                    </a>
+                                    <form action="{{ route('promotions.destroy', $promotion->id)}}" method="post">
+                                        @csrf
+                                        @method('DELETE')
+                                        <button class="btn btn-link" type="submit" title="Удалить безвозвратно"><i
+                                                    class="fas fa-times"></i></button>
+                                    </form>
                                 </div>
+                                <img class="card-img-top" src="{{$promotion->promo_image_url}}">
+                                <div class="card-body">
+                                    <h5 class="card-title">{{$promotion->title}}</h5>
+                                    <a class="btn btn-primary" href="{{ route('promotions.show',$promotion->id) }}">
+                                        Подробнее</a>
+
+                                </div>
+                            </div>
 
 
 
 
-                            @endforeach
-                        </div>
+                        @endforeach
+                    </div>
 
 
                     {{ $promotions->links() }}
