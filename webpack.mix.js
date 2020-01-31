@@ -23,7 +23,12 @@ mix.copy('node_modules/cropperjs/dist/cropper.css', 'public/css');
 mix.sass('resources/sass/style.scss', 'public/css');
 mix.sass('resources/sass/new-age.scss', 'public/css');
 
-//************** SCRIPTS ****************** 
+mix.copy('resources/sass/vendors/bootstrap', 'public/vendors/bootstrap');
+mix.copy('resources/sass/vendors/fontawesome-free', 'public/vendors/fontawesome-free');
+mix.copy('resources/sass/vendors/jquery', 'public/vendors/jquery');
+mix.copy('resources/sass/vendors/jquery-easing', 'public/vendors/jquery-easing');
+mix.copy('resources/sass/vendors/simple-line-icons', 'public/vendors/simple-line-icons');
+//************** SCRIPTS ******************
 // general scripts
 mix.copy('node_modules/axios/dist/axios.min.js', 'public/js'); 
 mix.copy('node_modules/pace-progress/pace.min.js', 'public/js');  
