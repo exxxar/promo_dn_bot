@@ -62,7 +62,7 @@
                                 <img class="card-img-top" src="{{$event->event_image_url}}">
                                 <div class="card-body">
                                     <h5 class="card-title">{{$event->title}}</h5>
-                                    <p class="card-text">{{substr($event->description, min(255,strlen($event->description)))}}</p>
+                                    <p class="card-text">{{substr($event->description, 0,min(255,strlen($event->description)))}}</p>
                                     <a class="btn btn-primary" href="{{ route('events.show',$event->id) }}">
                                         Подробнее</a>
                                 </div>
