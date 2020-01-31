@@ -37,7 +37,7 @@
 
 
                         <div class="card card-accent-success" style="width: 300px">
-                            <div class="card-header">
+                            <div class="card-header ">
                                 <a class="btn btn-link" href="{{ route('events.edit',$event->id) }}">
                                     <i class="fas fa-edit"></i>
                                 </a>
@@ -64,7 +64,7 @@
                                 <h5 class="card-title">{{$event->title}}</h5>
                                 <p class="card-text">{{$event->description}}</p>
                                 <a class="btn btn-primary" href="{{ route('events.show',$event->id) }}">
-                                    {{$event->title}}</a>
+                                    Подробнее</a>
                             </div>
                         </div>
 

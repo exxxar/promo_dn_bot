@@ -23,11 +23,11 @@ mix.copy('node_modules/cropperjs/dist/cropper.css', 'public/css');
 mix.sass('resources/sass/style.scss', 'public/css');
 mix.sass('resources/sass/new-age.scss', 'public/css');
 
-mix.copy('resources/sass/vendors/bootstrap', 'public/vendors/bootstrap');
-mix.copy('resources/sass/vendors/fontawesome-free', 'public/vendors/fontawesome-free');
-mix.copy('resources/sass/vendors/jquery', 'public/vendors/jquery');
-mix.copy('resources/sass/vendors/jquery-easing', 'public/vendors/jquery-easing');
-mix.copy('resources/sass/vendors/simple-line-icons', 'public/vendors/simple-line-icons');
+mix.copy('resources/sass/vendors/bootstrap', 'public/vendor/bootstrap');
+mix.copy('resources/sass/vendors/fontawesome-free', 'public/vendor/fontawesome-free');
+mix.copy('resources/sass/vendors/jquery', 'public/vendor/jquery');
+mix.copy('resources/sass/vendors/jquery-easing', 'public/vendor/jquery-easing');
+mix.copy('resources/sass/vendors/simple-line-icons', 'public/vendor/simple-line-icons');
 //************** SCRIPTS ******************
 // general scripts
 mix.copy('node_modules/axios/dist/axios.min.js', 'public/js'); 
