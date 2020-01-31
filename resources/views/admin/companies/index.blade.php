@@ -32,8 +32,9 @@
 
                 <h1>Компании</h1>
                 @isset($companies)
+                    <div class="row">
                         @foreach($companies as $key => $company)
-                        <div class="row">
+
                             <div class="card card-accent-success" style="width: 300px">
                                 <div class="card-header ">
                                     <a class="btn btn-link" href="{{ route('companies.edit',$company->id) }}">
@@ -57,18 +58,18 @@
                                         <button class="btn btn-link" type="submit"><i class="fas fa-times"></i></button>
                                     </form>
                                 </div>
-                                <img class="card-img-top" src="{{$company->logo_url}}" >
+                                <img class="card-img-top" src="{{$company->logo_url}}">
                                 <div class="card-body">
                                     <h5 class="card-title">{{$company->title}}</h5>
                                     <p class="card-text">{{$company->description}}</p>
-                                    <a class="btn btn-primary"  href="{{ route('companies.show',$company->id) }}">
+                                    <a class="btn btn-primary" href="{{ route('companies.show',$company->id) }}">
                                         Подробнее</a>
 
                                 </div>
                             </div>
-                        </div>
 
                         @endforeach
+                    </div>
 
                     {{ $companies->links() }}
                 @endisset

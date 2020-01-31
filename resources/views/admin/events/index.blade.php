@@ -32,10 +32,10 @@
 
                 <h1>События\мероприятия</h1>
                 @isset($events)
+                    <div class="row">
+                        @foreach($events as $key => $event)
 
-                    @foreach($events as $key => $event)
 
-                        <div class="row">
                             <div class="card card-accent-success" style="width: 300px">
                                 <div class="card-header ">
                                     <a class="btn btn-link" href="{{ route('events.edit',$event->id) }}">
@@ -67,9 +67,9 @@
                                         Подробнее</a>
                                 </div>
                             </div>
-                        </div>
-                    @endforeach
 
+                        @endforeach
+                    </div>
 
                     {{ $events->links() }}
                 @endisset
