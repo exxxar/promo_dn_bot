@@ -18876,3 +18876,7 @@ body {
   background: #4532ee;
 }
 
+form.btn {
+  padding: 0;
+}
+
