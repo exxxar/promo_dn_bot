@@ -44,7 +44,7 @@
             <div class="card text-white bg-custom py-5 d-md-down-none" style="width:44%">
               <div class="card-body text-center">
                 <div>
-                    <img src="{{asset("/logo.png")}}" class="main-logo" alt="">
+                    <img src="{{asset("/logo.png")}}" class="main-logo main-logo-lum" alt="">
                 </div>
               </div>
             </div>

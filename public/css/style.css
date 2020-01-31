@@ -18865,6 +18865,9 @@ body {
   height: auto;
   -o-object-fit: cover;
      object-fit: cover;
+}
+
+.main-logo-lum {
   mix-blend-mode: luminosity;
 }
 

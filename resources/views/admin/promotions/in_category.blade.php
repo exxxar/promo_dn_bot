@@ -33,7 +33,7 @@
                 <h1>Акции</h1>
                 @isset($promotions)
 
-                    @if(count($promotions))
+                    @if(count($promotions)===0)
                         <h2>К сожалению, акций в данной категории сейчас нет!</h2>
 
                     @endif
@@ -56,7 +56,7 @@
                                        title="Отправить в канал">
                                         <i class="fab fa-telegram"></i>
                                     </a>
-                                    <form action="{{ route('promotions.destroy', $promotion->id)}}" method="post">
+                                    <form class="btn btn-link" action="{{ route('promotions.destroy', $promotion->id)}}" method="post">
                                         @csrf
                                         @method('DELETE')
                                         <button class="btn btn-link" type="submit" title="Удалить безвозвратно"><i
