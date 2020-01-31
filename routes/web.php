@@ -320,7 +320,7 @@ Route::prefix('admin')->group(function () {
     Route::get("/promotions/copy/{id}", "PromotionController@copy")->name("promotions.copy");
     Route::get("/promotions/channel/{id}", "PromotionController@channel")->name("promotions.channel");
     Route::get("/promotions/incategory/{id}", "PromotionController@inCategory")->name("promotions.in_category");
-    Route::get("/promotions/incompany/{id}", "PromotionController@inCategory")->name("promotions.in_company");
+    Route::get("/promotions/incompany/{id}", "PromotionController@inCompany")->name("promotions.in_company");
     Route::get("/events/channel/{id}", "EventsController@channel")->name("events.channel");
     Route::get("/companies/channel/{id}", "CompanyController@channel")->name("companies.channel");
     Route::get("/companies/hide/{id}", "CompanyController@hide")->name("companies.hide");
