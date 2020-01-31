@@ -59,7 +59,7 @@
                                                         class="fas fa-times"></i></button>
                                         </form>
                                     </div>
-                                    <img class="card-img-top" src="{{$promotion->image_url}}">
+                                    <img class="card-img-top" src="{{$promotion->promo_image_url}}">
                                     <div class="card-body">
                                         <h5 class="card-title">{{$promotion->title}}</h5>
                                         <a class="btn btn-primary" href="{{ route('promotions.show',$promotion->id) }}">

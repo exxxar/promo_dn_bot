@@ -47,7 +47,7 @@
                                         <button class="btn btn-link" type="submit"><i class="fas fa-times"></i></button>
                                     </form>
                                 </div>
-                                <img class="card-img-top" src="{{$category->promo_image_url}}">
+                                <img class="card-img-top" src="{{$category->image_url}}">
                                 <div class="card-body">
                                     <h5 class="card-title">{{$category->title}}</h5>
                                     <a class="btn btn-primary" href="{{ route('categories.show',$category->id) }}">
