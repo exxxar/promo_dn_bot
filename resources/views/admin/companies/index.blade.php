@@ -32,6 +32,7 @@
 
                 <h1>Компании</h1>
                 @isset($companies)
+
                     <table class="table mt-2">
 
                         <thead class="thead-light">
@@ -45,15 +46,9 @@
                         </thead>
                         <tbody>
                         @foreach($companies as $key => $company)
-                            <tr>
-                                <td>{{$key + 1}}</td>
-                                <td><a href="{{ route('companies.show',$company->id) }}">
-                                        {{$company->title}}</a>
 
-
-                                </td>
-                                <td>{{$company->description}}</td>
-                                <td>
+                            <div class="card card-accent-success" style="width: 300px">
+                                <div class="card-header ">
                                     <a class="btn btn-link" href="{{ route('companies.edit',$company->id) }}">
                                         <i class="fas fa-edit"></i>
                                     </a>
@@ -74,12 +69,19 @@
                                         @method('DELETE')
                                         <button class="btn btn-link" type="submit"><i class="fas fa-times"></i></button>
                                     </form>
-                                </td>
-                            </tr>
-                        @endforeach
+                                </div>
+                                <img class="card-img-top" src="{{$company->logo_url}}" >
+                                <div class="card-body">
+                                    <h5 class="card-title">{{$company->title}}</h5>
+                                    <p class="card-text">{{$company->description}}</p>
+                                    <a class="btn btn-primary"  href="{{ route('companies.show',$company->id) }}">
+                                        Подробнее</a>
 
-                        </tbody>
-                    </table>
+                                </div>
+                            </div>
+
+
+                        @endforeach
 
                     {{ $companies->links() }}
                 @endisset

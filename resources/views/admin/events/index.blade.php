@@ -59,7 +59,7 @@
                                     <button class="btn btn-link" type="submit"><i class="fas fa-times"></i></button>
                                 </form>
                             </div>
-                            <img class="card-img-top" src="{{$event->event_image_url}}" >
+                            <img class="card-img-top" src="{{$event->event_image_url}}">
                             <div class="card-body">
                                 <h5 class="card-title">{{$event->title}}</h5>
                                 <p class="card-text">{{$event->description}}</p>
@@ -68,13 +68,11 @@
                             </div>
                         </div>
 
-                        @endforeach
+                    @endforeach
 
-                        </tbody>
-                        </table>
 
-                        {{ $events->links() }}
-                        @endisset
+                    {{ $events->links() }}
+                @endisset
             </div>
         </div>
     </div>
