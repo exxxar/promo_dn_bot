@@ -908,8 +908,7 @@ class SkidkiDNBot extends Bot implements iSkidkiDNBot
                     'id' => uniqid(),
                     'title' => "Ваш промокод",
                     'input_message_content' => [
-                        'message_text' => "Переходи в бота и получай самые сочные скидки Донецка!\nhttps://sun9-35.userapi.com/c205328/v205328682/56913/w8tBXIcG91E.jpg
-                        ",
+                        'message_text' => "Переходи в бота и получай самые сочные скидки Донецка!\nhttps://sun9-35.userapi.com/c205328/v205328682/56913/w8tBXIcG91E.jpg",
                     ],
                     'reply_markup' => [
                         'inline_keyboard' => [
