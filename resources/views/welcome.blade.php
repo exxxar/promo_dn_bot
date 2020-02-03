@@ -472,7 +472,7 @@
             <i class="fas fa-heart"></i>
             новых друзей!</h2>
         <div id="telegramLogin">
-            <script async src="https://telegram.org/js/telegram-widget.js?7" data-telegram-login="skidki_dn_bot" data-size="medium" data-radius="5" {{--data-onauth="onTelegramAuth(user)"--}} data-auth-url="https://skidka-service.ru/auth/telegram/callback" data-request-access="write"></script>
+            <script async src="https://telegram.org/js/telegram-widget.js?7" data-telegram-login="skidki_dn_bot" data-size="medium" data-radius="5" data-onauth="onTelegramAuth(user)" ></script>
 
         </div>
         <ul class="list-inline list-social hidden" id="socials">
@@ -730,8 +730,22 @@
         if (user){
             $("#telegramLogin").addClass("hidden");
             $("#socials").removeClass("hidden");
+
+            var tmp_id = ""+user.id;
+            while (tmp_id.length < 10)
+                tmp_id = "0" + tmp_id;
+
+            var code = window.btoa("001" + tmp_id + "0000000000");
+
+            var url = "https://t.me/" + "{{env("APP_BOT_NAME")}}"+ "?start="+code;
+
+            localStorage.setItem("url",url);
+
+            $("#share").attr({"href":"http://www.facebook.com/sharer.php?u="+url});
         }
-       /* alert('Logged in as ' + user.first_name + ' ' + user.last_name + ' (' + user.id + (user.username ? ', @' + user.username : '') + ')');*/
+
+
+
     }
 
     !function (e) {
@@ -740,7 +754,7 @@
 
 
 
-        $("#vkShare").html(VK.Share.button({url: "https://t.me/skidki_dn_bot"}, {
+        $("#vkShare").html(VK.Share.button({url: localStorage.getItem("url","https://skidka-service.ru")}, {
             type: "custom",
             text: '<img src="https://cdn4.iconfinder.com/data/icons/social-media-flat-7/64/Social-media_VK-512.png"  />'
         }));
