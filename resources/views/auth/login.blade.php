@@ -35,13 +35,13 @@
                                            name="password" required>
                                 </div>
                                 <div class="row justify-content-center">
-                                    <div class="col-12">
+                                    <div class="col-4">
 
                                         <button class="btn btn-primary px-4" type="submit">{{ __('Войти') }}</button>
                                     </div>
                                 </div>
-                                <div class="row justify-content-center">
-                                    <div class="col-12">
+                                <div class="row justify-content-center mt-4">
+                                    <div class="col-6">
                                         <script async src="https://telegram.org/js/telegram-widget.js?7" data-telegram-login="skidki_dn_bot" data-size="medium" data-radius="5" {{--data-onauth="onTelegramAuth(user)"--}} data-auth-url="https://skidka-service.ru/auth/telegram/callback" data-request-access="write"></script>
 
                                     </div>
