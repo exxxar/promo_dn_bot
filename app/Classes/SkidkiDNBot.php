@@ -851,7 +851,10 @@ class SkidkiDNBot extends Bot implements iSkidkiDNBot
                     ->skip(0)
                     ->orderBy("id","DESC")
                     ->get() :
-                Promotion::all();
+                Promotion::take(5)
+                    ->skip(0)
+                    ->orderBy("id","DESC")
+                    ->get();
 
             Log::info("QUERY START");
 
