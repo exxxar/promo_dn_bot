@@ -832,8 +832,6 @@ class SkidkiDNBot extends Bot implements iSkidkiDNBot
     {
         $this->bot->loadDriver(TelegramInlineQueryDriver::DRIVER_NAME);
 
-        Log::info("inline_query_start");
-
         $queryObject = json_decode($this->bot->getDriver()->getEvent());
 
         if ($queryObject) {
@@ -842,7 +840,6 @@ class SkidkiDNBot extends Bot implements iSkidkiDNBot
 
             $query = $queryObject->query;
 
-            Log::info("ID=$id QUERY=$query");
 
             $promotions = strlen(trim($query)) > 0 ?
                 Promotion::where("title", "like", "%$query%")
@@ -851,12 +848,8 @@ class SkidkiDNBot extends Bot implements iSkidkiDNBot
                     ->skip(0)
                     ->orderBy("id","DESC")
                     ->get() :
-                Promotion::take(5)
-                    ->skip(0)
-                    ->orderBy("id","DESC")
+                Promotion::orderBy("id","DESC")
                     ->get();
-
-            Log::info("QUERY START");
 
             $button_list = [];
             foreach ($promotions as $promo) {
@@ -884,15 +877,13 @@ class SkidkiDNBot extends Bot implements iSkidkiDNBot
                         'reply_markup' => [
                             'inline_keyboard' => [
                                 [
-                                    ['text' => "Ссылка на акцию", "url" => "$url_link"],
+                                    ['text' => "\xF0\x9F\x91\x89Перейти к акции", "url" => "$url_link"],
                                 ],
-                                [
-                                    ['text' => "Отправить другу", "switch_inline_query" => ""],
-                                ]
+
                             ]
                         ],
                         'thumb_url' => $promo->promo_image_url,
-                        'url' => "https://vk.com/lotus",
+                        'url' => env("APP_URL"),
                         'description' => $promo->description,
                         'hide_url' => true
                     ];
@@ -910,6 +901,5 @@ class SkidkiDNBot extends Bot implements iSkidkiDNBot
                 ]);
         }
 
-        Log::info("inline_query_end");
     }
 }
