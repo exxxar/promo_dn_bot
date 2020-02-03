@@ -710,16 +710,13 @@ class SkidkiDNBot extends Bot implements iSkidkiDNBot
             [
                 ["text" => "\xF0\x9F\x91\x89Пригласить друзей", "switch_inline_query" => ""]
             ],
-            [
 
-                ["text" => "Посмотреть друзей", "callback_data" => "/friends 0"]
-            ]
         ];
 
-        /*        if ($ref > 0)
-                    $this->sendMessage($message, $keyboard);
-                else
-                    $this->reply($message);*/
+        if ($ref > 0)
+            array_push($keyboard, [
+                ["text" => "Посмотреть друзей", "callback_data" => "/friends 0"]
+            ]);
 
 
         $tmp_id = (string)$this->getChatId();
@@ -730,7 +727,7 @@ class SkidkiDNBot extends Bot implements iSkidkiDNBot
 
         $qr_url = env("QR_URL") . "https://t.me/" . env("APP_BOT_NAME") . "?start=$code";
 
-        $this->sendPhoto("_Ваш реферальный код_\n$message", $qr_url, ($ref > 0 ? $keyboard : []));
+        $this->sendPhoto("_Ваш реферальный код_\n$message", $qr_url, $keyboard);
 
     }
 
