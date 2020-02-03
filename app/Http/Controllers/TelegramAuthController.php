@@ -7,6 +7,8 @@ use Azate\LaravelTelegramLoginAuth\TelegramLoginAuth;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Log;
+use Telegram\Bot\FileUpload\InputFile;
+use Telegram\Bot\Laravel\Facades\Telegram;
 
 class TelegramAuthController extends Controller
 {
@@ -41,6 +43,13 @@ class TelegramAuthController extends Controller
             $lastName = $telegramUser["last_name"];
 
             $user = User::where("telegram_chat_id",$id)->first();
+
+            Telegram::sendMessage([
+                'chat_id' => $id,
+                'parse_mode' => 'Markdown',
+                'text' => "Спасибо что пользуетесь нашей системой!",
+                'disable_notification' => 'true'
+            ]);
 
             if (isset($user))
                 Auth::loginUsingId($user->id);

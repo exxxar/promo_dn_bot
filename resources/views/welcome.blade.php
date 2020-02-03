@@ -34,6 +34,11 @@
     .hidden {
         display: none;
     }
+
+    .social-vk {
+        background: white;
+        border-radius: 50%;
+    }
 </style>
 
 <body id="page-top">
@@ -463,20 +468,12 @@
             новых друзей!</h2>
         <div id="telegramLogin">
             <script async src="https://telegram.org/js/telegram-widget.js?7" data-telegram-login="skidki_dn_bot" data-size="medium" data-radius="5" data-onauth="onTelegramAuth(user)"></script>
-            <script type="text/javascript">
-                function onTelegramAuth(user) {
-                    if (user){
-                        $("#telegramLogin").addClass("hidden");
-                        $("#socials").removeClass("hidden");
-                    }
-                    alert('Logged in as ' + user.first_name + ' ' + user.last_name + ' (' + user.id + (user.username ? ', @' + user.username : '') + ')');
-                }
-            </script>
+
         </div>
         <ul class="list-inline list-social hidden" id="socials">
 
             <li class="list-inline-item social-facebook">
-                <a id="share" href="http://www.facebook.com/sharer.php?u=test">
+                <a id="share" href="http://www.facebook.com/sharer.php?u=https://t.me/skidki_dn_bot">
                     <i class="fab fa-facebook-f"></i>
                 </a>
 
@@ -724,13 +721,23 @@
 
     //$('#quiz').modal('show');
 
+    function onTelegramAuth(user) {
+        if (user){
+            $("#telegramLogin").addClass("hidden");
+            $("#socials").removeClass("hidden");
+        }
+       /* alert('Logged in as ' + user.first_name + ' ' + user.last_name + ' (' + user.id + (user.username ? ', @' + user.username : '') + ')');*/
+    }
+
     !function (e) {
         "use strict";
 
 
-        $("#vkShare").html(VK.Share.button({url: "test"}, {
+
+
+        $("#vkShare").html(VK.Share.button({url: "https://t.me/skidki_dn_bot"}, {
             type: "custom",
-            text: '<img src="https://cdn4.iconfinder.com/data/icons/social-media-flat-7/64/Social-media_VK-512.png"  />'
+            text: 'Делись с друзьями сылкой и получай бонусы!'
         }));
 
         $('#share').popupWindow({
