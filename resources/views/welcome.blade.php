@@ -39,6 +39,11 @@
         background: white;
         border-radius: 50%;
     }
+
+    .social-vk img {
+        width: 100%;
+        padding: 19px;
+    }
 </style>
 
 <body id="page-top">

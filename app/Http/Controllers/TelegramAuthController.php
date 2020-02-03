@@ -34,6 +34,7 @@ class TelegramAuthController extends Controller
      */
     public function handleTelegramCallback()
     {
+        Log::info("AUTH try");
         if ($this->telegram->validate()) {
 
             $telegramUser = $this->telegram->user();
@@ -44,6 +45,7 @@ class TelegramAuthController extends Controller
 
             $user = User::where("telegram_chat_id",$id)->first();
 
+            Log::info("AUTH SUCCESS $id");
             Telegram::sendMessage([
                 'chat_id' => $id,
                 'parse_mode' => 'Markdown',
@@ -70,6 +72,7 @@ class TelegramAuthController extends Controller
                 Auth::login($u);
             }
         }
+
 
         return redirect('/admin');
     }
