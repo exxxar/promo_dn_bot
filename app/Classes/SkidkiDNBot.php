@@ -708,7 +708,7 @@ class SkidkiDNBot extends Bot implements iSkidkiDNBot
         $keyboard = [
 
             [
-                ["text" => "Пригласить друзей", "switch_inline_query" => ""]
+                ["text" => "\xF0\x9F\x91\x89Пригласить друзей", "switch_inline_query" => ""]
             ],
             [
 
@@ -795,14 +795,14 @@ class SkidkiDNBot extends Bot implements iSkidkiDNBot
 
         $keyboard = [
             [
-                ['text' => "Ввести код и начать", 'callback_data' => "/lottery"]
+                ['text' => "\xF0\x9F\x92\xAAВвести код и начать", 'callback_data' => "/lottery"]
             ]
         ];
 
         if ($rules != null)
-            array_push($keyboard, [['text' => "Условия розыгрыша и призы", 'url' => $rules->url]]);
+            array_push($keyboard, [['text' => "\xF0\x9F\x93\x84Условия розыгрыша и призы", 'url' => $rules->url]]);
 
-        $this->sendMessage("Розыгрыш призов", $keyboard);
+        $this->sendMessage("\xF0\x9F\x8E\xB0Розыгрыш призов", $keyboard);
     }
 
     public function getLatestCashBack()
@@ -902,6 +902,7 @@ class SkidkiDNBot extends Bot implements iSkidkiDNBot
                 $code = base64_encode("001" . $tmp_id . "0000000000");
                 $url_link = "https://t.me/" . env("APP_BOT_NAME") . "?start=$code";
 
+                //todo что-то сделать с этим текстом... некрасиво
                 $tmp_button = [
                     'type' => 'article',
                     'id' => uniqid(),
@@ -922,7 +923,7 @@ class SkidkiDNBot extends Bot implements iSkidkiDNBot
                     'reply_markup' => [
                         'inline_keyboard' => [
                             [
-                                ['text' => "\xF0\x9F\x91\x89Перейти к акции", "url" => "$url_link"],
+                                ['text' => "\xF0\x9F\x91\x89Перейти в бота", "url" => "$url_link"],
                             ],
 
                         ]
