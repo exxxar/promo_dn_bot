@@ -345,7 +345,7 @@ class SkidkiDNBot extends Bot implements iSkidkiDNBot
 
             ],
             [
-                ['text' => "Как пользоваться", 'callback_data' => env('APP_URL') . "/faq"],
+                ['text' => "Как пользоваться", 'url' => env('APP_URL') . "/faq"],
             ],
         ];
 
