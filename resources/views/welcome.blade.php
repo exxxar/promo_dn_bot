@@ -737,7 +737,7 @@
 
         $("#vkShare").html(VK.Share.button({url: "https://t.me/skidki_dn_bot"}, {
             type: "custom",
-            text: 'Делись с друзьями сылкой и получай бонусы!'
+            text: '<img src="https://cdn4.iconfinder.com/data/icons/social-media-flat-7/64/Social-media_VK-512.png"  />'
         }));
 
         $('#share').popupWindow({
