@@ -472,7 +472,7 @@
             <i class="fas fa-heart"></i>
             новых друзей!</h2>
         <div id="telegramLogin">
-            <script async src="https://telegram.org/js/telegram-widget.js?7" data-telegram-login="skidki_dn_bot" data-size="medium" data-radius="5" data-onauth="onTelegramAuth(user)" data-auth-url="https://skidka-service.ru/auth/telegram/callback" data-request-access="write"></script>
+            <script async src="https://telegram.org/js/telegram-widget.js?7" data-telegram-login="skidki_dn_bot" data-size="medium" data-radius="5" {{--data-onauth="onTelegramAuth(user)"--}} data-auth-url="https://skidka-service.ru/auth/telegram/callback" data-request-access="write"></script>
 
         </div>
         <ul class="list-inline list-social hidden" id="socials">
