@@ -906,7 +906,7 @@ class SkidkiDNBot extends Bot implements iSkidkiDNBot
                 $tmp_button = [
                     'type' => 'article',
                     'id' => uniqid(),
-                    'title' => "Ваш промокод",
+                    'title' => "ВАША РЕФЕРАЛЬНАЯ ССЫЛКА",
                     'input_message_content' => [
                         'message_text' => "Переходи в бота и получай самые сочные скидки Донецка!\nhttps://sun9-35.userapi.com/c205328/v205328682/56913/w8tBXIcG91E.jpg",
                     ],
@@ -920,7 +920,7 @@ class SkidkiDNBot extends Bot implements iSkidkiDNBot
                     ],
                     'thumb_url' => "https://sun9-35.userapi.com/c205328/v205328682/56913/w8tBXIcG91E.jpg",
                     'url' => env("APP_URL"),
-                    'description' => "Отправляйте\пересылайте данный промокод своим друзьям и увеличивайте свой CashBack!",
+                    'description' => "Отправляйте\пересылайте своим друзьям и получай боунсы!",
                     'hide_url' => true
                 ];
 
