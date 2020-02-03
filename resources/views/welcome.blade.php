@@ -478,7 +478,7 @@
         <ul class="list-inline list-social hidden" id="socials">
 
             <li class="list-inline-item social-facebook">
-                <a id="share" href="http://www.facebook.com/sharer.php?u=https://t.me/skidki_dn_bot">
+                <a id="share" href="">
                     <i class="fab fa-facebook-f"></i>
                 </a>
 
@@ -742,6 +742,7 @@
             localStorage.setItem("url",url);
 
             $("#share").attr({"href":"http://www.facebook.com/sharer.php?u="+url});
+            $("#vkShare").attr({"href":"https://vk.com/share.php?url="+url});
         }
 
 
@@ -753,13 +754,7 @@
 
 
 
-
-        $("#vkShare").html(VK.Share.button({url: localStorage.getItem("url","https://skidka-service.ru")}, {
-            type: "custom",
-            text: '<img src="https://cdn4.iconfinder.com/data/icons/social-media-flat-7/64/Social-media_VK-512.png"  />'
-        }));
-
-        $('#share').popupWindow({
+        $('#share,#vkShare').popupWindow({
             height:500,
             width:800,
             top:50,
