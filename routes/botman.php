@@ -28,7 +28,7 @@ $botman->hears("\xF0\x9F\x93\xB2Мои друзья", BotController::class . '@g
 $botman->hears("\xF0\x9F\x92\xB3Мои баллы", BotController::class . '@getMyMoney');
 $botman->hears("\xE2\x9B\x84Мероприятия", BotController::class . '@getEventsMenu');
 $botman->hears("\xE2\x9D\x93F.A.Q.", BotController::class . '@getFAQMenu');
-$botman->hears("\xF0\x9F\x94\xA5Акции", BotController::class . '@getPromotionMenu');
+$botman->hears("\xF0\x9F\x94\xA5Акции и скидки", BotController::class . '@getPromotionMenu');
 $botman->hears('/promo_by_company ([0-9]+)', BotController::class . '@getPromoByCompanies');
 $botman->hears('/promo_by_category ([0-9]+)', BotController::class . '@getPromoByCategories');
 $botman->hears('/payments ([0-9]+)', BotController::class . '@getPayments');

@@ -841,57 +841,89 @@ class SkidkiDNBot extends Bot implements iSkidkiDNBot
             $query = $queryObject->query;
 
 
-            $promotions = strlen(trim($query)) > 0 ?
-                Promotion::where("title", "like", "%$query%")
-                    ->orWhere("description", "like", "%$query%")
-                    ->take(5)
-                    ->skip(0)
-                    ->orderBy("id","DESC")
-                    ->get() :
-                Promotion::orderBy("id","DESC")
-                    ->get();
-
             $button_list = [];
-            foreach ($promotions as $promo) {
-                $isActive = $promo->isActive();
-                if ($isActive) {
 
-                    $tmp_id = (string)$id;
-                    while (strlen($tmp_id) < 10)
-                        $tmp_id = "0" . $tmp_id;
+            if (strlen(trim($query)) > 0) {
+                $promotions =
+                    Promotion::where("title", "like", "%$query%")
+                        ->orWhere("description", "like", "%$query%")
+                        ->take(5)
+                        ->skip(0)
+                        ->orderBy("id", "DESC")
+                        ->get();
 
-                    $tmp_promo_id = (string)$promo->id;
-                    while (strlen($tmp_promo_id) < 10)
-                        $tmp_promo_id = "0" . $tmp_promo_id;
+                foreach ($promotions as $promo) {
+                    $isActive = $promo->isActive();
+                    if ($isActive) {
 
-                    $code = base64_encode("001" . $tmp_id . $tmp_promo_id);
-                    $url_link = "https://t.me/" . env("APP_BOT_NAME") . "?start=$code";
+                        $tmp_id = (string)$id;
+                        while (strlen($tmp_id) < 10)
+                            $tmp_id = "0" . $tmp_id;
 
-                    $tmp_button = [
-                        'type' => 'article',
-                        'id' => uniqid(),
-                        'title' => $promo->title,
-                        'input_message_content' => [
-                            'message_text' => $promo->description . "\n" . $promo->promo_image_url,
-                        ],
-                        'reply_markup' => [
-                            'inline_keyboard' => [
-                                [
-                                    ['text' => "\xF0\x9F\x91\x89Перейти к акции", "url" => "$url_link"],
-                                ],
+                        $tmp_promo_id = (string)$promo->id;
+                        while (strlen($tmp_promo_id) < 10)
+                            $tmp_promo_id = "0" . $tmp_promo_id;
 
-                            ]
-                        ],
-                        'thumb_url' => $promo->promo_image_url,
-                        'url' => env("APP_URL"),
-                        'description' => $promo->description,
-                        'hide_url' => true
-                    ];
+                        $code = base64_encode("001" . $tmp_id . $tmp_promo_id);
+                        $url_link = "https://t.me/" . env("APP_BOT_NAME") . "?start=$code";
 
-                    array_push($button_list, $tmp_button);
+                        $tmp_button = [
+                            'type' => 'article',
+                            'id' => uniqid(),
+                            'title' => $promo->title,
+                            'input_message_content' => [
+                                'message_text' => $promo->description . "\n" . $promo->promo_image_url,
+                            ],
+                            'reply_markup' => [
+                                'inline_keyboard' => [
+                                    [
+                                        ['text' => "\xF0\x9F\x91\x89Перейти к акции", "url" => "$url_link"],
+                                    ],
+
+                                ]
+                            ],
+                            'thumb_url' => $promo->promo_image_url,
+                            'url' => env("APP_URL"),
+                            'description' => $promo->description,
+                            'hide_url' => true
+                        ];
+
+                        array_push($button_list, $tmp_button);
 
 
+                    }
                 }
+            }else {
+
+                $tmp_id = (string)$id;
+                while (strlen($tmp_id) < 10)
+                    $tmp_id = "0" . $tmp_id;
+
+                $code = base64_encode("001" . $tmp_id . "0000000000");
+                $url_link = "https://t.me/" . env("APP_BOT_NAME") . "?start=$code";
+
+                $tmp_button = [
+                    'type' => 'article',
+                    'id' => uniqid(),
+                    'title' => "Приглашаем Вас воспользоваться услугами нашего сервиса!",
+                    'input_message_content' => [
+                        'message_text' => "Лучшие скидки💥, акции💯 и мероприятии🔥 нашего любимого города🥰 уже ждут встречи с Вами✨",
+                    ],
+                    'reply_markup' => [
+                        'inline_keyboard' => [
+                            [
+                                ['text' => "\xF0\x9F\x91\x89Перейти к акции", "url" => "$url_link"],
+                            ],
+
+                        ]
+                    ],
+                    'thumb_url' => "https://sun9-35.userapi.com/c205328/v205328682/56913/w8tBXIcG91E.jpg",
+                    'url' => env("APP_URL"),
+                    'description' => "Переходи по ссылке и получай крутые акции и скидки города!!",
+                    'hide_url' => true
+                ];
+
+                array_push($button_list, $tmp_button);
             }
             return $this->bot->sendRequest("answerInlineQuery",
                 [
