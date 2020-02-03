@@ -43,7 +43,7 @@ class SkidkiDNBot extends Bot implements iSkidkiDNBot
                 if (!is_null($event->promo_id)) {
                     $keyboard = [
                         [
-                            ["text"=>"\xF0\x9F\x91\x89Перейти к описанию акции","callback_data"=>"/promotion ".$event->promo_id]
+                            ["text" => "\xF0\x9F\x91\x89Перейти к описанию акции", "callback_data" => "/promotion " . $event->promo_id]
                         ]
                     ];
                 }
@@ -336,6 +336,23 @@ class SkidkiDNBot extends Bot implements iSkidkiDNBot
 
     }
 
+    public function getFAQSimpleMenu()
+    {
+
+        $keyboard = [
+            [
+                ['text' => "Полезная информация", 'callback_data' => "/articles 0"],
+
+            ],
+            [
+                ['text' => "Как пользоваться", 'callback_data' => env('APP_URL') . "/faq"],
+            ],
+        ];
+
+        $this->sendMessage("*F.A.Q.*\n_Не знаете как начать пользоваться? - Почитайте наше описание! Узнайте больше о приложении, компании и разработчике!_", $keyboard);
+
+    }
+
     public function getPromotionsMenu()
     {
         $keyboard = [
@@ -449,9 +466,9 @@ class SkidkiDNBot extends Bot implements iSkidkiDNBot
                 ]
             ];
 
-            if (!is_null($company->menu_url)){
-                array_push($keyboard,[
-                    ["text"=>"\xE2\x9D\x97\xE2\x9D\x97\xE2\x9D\x97Акционное меню\xE2\x9D\x97\xE2\x9D\x97\xE2\x9D\x97","url"=>$company->menu_url]
+            if (!is_null($company->menu_url)) {
+                array_push($keyboard, [
+                    ["text" => "\xE2\x9D\x97\xE2\x9D\x97\xE2\x9D\x97Акционное меню\xE2\x9D\x97\xE2\x9D\x97\xE2\x9D\x97", "url" => $company->menu_url]
                 ]);
             }
 
@@ -689,7 +706,12 @@ class SkidkiDNBot extends Bot implements iSkidkiDNBot
         $message = "Вы пригласили *$ref* друзей!\n" . $network_tmp . "_Делитесь Вашим QR-кодом и накапливайте баллы!_\n";
 
         $keyboard = [
+
             [
+                ["text" => "Пригласить друзей", "switch_inline_query" => ""]
+            ],
+            [
+
                 ["text" => "Посмотреть друзей", "callback_data" => "/friends 0"]
             ]
         ];
@@ -810,6 +832,7 @@ class SkidkiDNBot extends Bot implements iSkidkiDNBot
     {
         $this->bot->loadDriver(TelegramInlineQueryDriver::DRIVER_NAME);
 
+        Log::info("inline_query_start");
 
         $queryObject = json_decode($this->bot->getDriver()->getEvent());
 
@@ -819,12 +842,18 @@ class SkidkiDNBot extends Bot implements iSkidkiDNBot
 
             $query = $queryObject->query;
 
+            Log::info("ID=$id QUERY=$query");
 
-            $promotions = strlen(trim($query)) > 0 ? Promotion::where("title", "like", "%$query%")
-                ->orWhere("description", "like", "%$query%")
-                ->get() :
+            $promotions = strlen(trim($query)) > 0 ?
+                Promotion::where("title", "like", "%$query%")
+                    ->orWhere("description", "like", "%$query%")
+                    ->take(5)
+                    ->skip(0)
+                    ->orderBy("id","DESC")
+                    ->get() :
                 Promotion::all();
 
+            Log::info("QUERY START");
 
             $button_list = [];
             foreach ($promotions as $promo) {
@@ -877,5 +906,7 @@ class SkidkiDNBot extends Bot implements iSkidkiDNBot
                     "results" => json_encode($button_list)
                 ]);
         }
+
+        Log::info("inline_query_end");
     }
 }

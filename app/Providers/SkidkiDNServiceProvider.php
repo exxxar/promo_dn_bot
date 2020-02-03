@@ -17,7 +17,6 @@ class SkidkiDNServiceProvider extends ServiceProvider
      */
     public function register()
     {
-
         App::singleton(SkidkiDNBot::class, function() {
             return new SkidkiDNBot();
         });

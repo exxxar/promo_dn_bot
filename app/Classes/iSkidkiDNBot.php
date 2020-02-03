@@ -23,6 +23,7 @@ interface iSkidkiDNBot
     public function getRefLink($id);
 
     public function getFAQMenu();
+    public function getFAQSimpleMenu();
     public function getPromotionsMenu();
     public function getFriends($page);
     public function getPaymentMenu();

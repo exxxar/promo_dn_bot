@@ -22,6 +22,7 @@ class BotController extends Controller
 
     private $sdnbot;
 
+
     public function __construct(SkidkiDNBot $sdnbot)
     {
         $this->sdnbot = $sdnbot;
@@ -133,18 +134,18 @@ class BotController extends Controller
             ->getPromotionsByCompany($page);
     }
 
-    public function getCategoryById($bot, $categoryId,$page)
+    public function getCategoryById($bot, $categoryId, $page)
     {
         $this->sdnbot
             ->setBot($bot)
-            ->getCategoryById($categoryId,$page);
+            ->getCategoryById($categoryId, $page);
     }
 
-    public function getCompanyById($bot, $companyId,$page)
+    public function getCompanyById($bot, $companyId, $page)
     {
         $this->sdnbot
             ->setBot($bot)
-            ->getCompanyById($companyId,$page);
+            ->getCompanyById($companyId, $page);
     }
 
     public function getPromotionMenu($bot)
@@ -170,9 +171,13 @@ class BotController extends Controller
 
     public function getFAQMenu($bot)
     {
-        $this->sdnbot
-            ->setBot($bot)
-            ->getFAQMenu();
+        $tmp = $this->sdnbot
+            ->setBot($bot);
+
+        if (env("FAQ_RESTRICTED"))
+            $tmp->getFAQSimpleMenu();
+        else
+            $tmp->getFAQMenu();
     }
 
     public function getEventsMenu($bot)
@@ -210,14 +215,14 @@ class BotController extends Controller
             ->getLatestCashBack();
     }
 
-    public function getAchievementsAll($bot,$page)
+    public function getAchievementsAll($bot, $page)
     {
         $this->sdnbot
             ->setBot($bot)
             ->getAchievementsAll($page);
     }
 
-    public function getAchievementsMy($bot,$page)
+    public function getAchievementsMy($bot, $page)
     {
         $this->sdnbot
             ->setBot($bot)
@@ -253,55 +258,64 @@ class BotController extends Controller
             ->getRefLink($id);
     }
 
-    public function paymentConversation($bot,$arg1,$arg2){
+    public function paymentConversation($bot, $arg1, $arg2)
+    {
         $this->sdnbot
             ->setBot($bot)
-            ->startConversation(new PaymentConversation($bot,$arg1,$arg2));
+            ->startConversation(new PaymentConversation($bot, $arg1, $arg2));
     }
 
-    public function fillInfoConversation($bot){
+    public function fillInfoConversation($bot)
+    {
         $this->sdnbot
             ->setBot($bot)
             ->startConversation(new FillInfoConversation($bot));
     }
 
-    public function startConversation($bot){
+    public function startConversation($bot)
+    {
         $this->sdnbot
             ->setBot($bot)
             ->startConversation(new StartConversation($bot));
     }
 
-    public function lotteryConversation($bot){
+    public function lotteryConversation($bot)
+    {
         $this->sdnbot
             ->setBot($bot)
             ->startConversation(new LotteryConversation($bot));
     }
 
-    public function startDataConversation($bot,$data){
+    public function startDataConversation($bot, $data)
+    {
         $this->sdnbot
             ->setBot($bot)
-            ->startConversation(new StartDataConversation($bot,$data));
+            ->startConversation(new StartDataConversation($bot, $data));
     }
 
-    public function stopConversation($bot){
+    public function stopConversation($bot)
+    {
         $this->sdnbot
             ->setBot($bot)
             ->startConversation(new StopConversation($bot));
     }
 
-    public function promoConversation($bot,$data){
+    public function promoConversation($bot, $data)
+    {
         $this->sdnbot
             ->setBot($bot)
-            ->startConversation(new PromoConversation($bot,$data));
+            ->startConversation(new PromoConversation($bot, $data));
     }
 
-    public function lotusprofileConversation($bot,$data){
+    public function lotusprofileConversation($bot, $data)
+    {
         $this->sdnbot
             ->setBot($bot)
-            ->startConversation(new LotusProfileConversation($bot,$data));
+            ->startConversation(new LotusProfileConversation($bot, $data));
     }
 
-    public function fallback($bot){
+    public function fallback($bot)
+    {
         $this->sdnbot
             ->setBot($bot)
             ->getFallback();
