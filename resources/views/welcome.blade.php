@@ -40,6 +40,9 @@
         border-radius: 50%;
     }
 
+    .social-vk i {
+        color: #3b5998;
+    }
     .social-vk img {
         width: 100%;
         padding: 19px;
@@ -737,7 +740,7 @@
 
             var code = window.btoa("001" + tmp_id + "0000000000");
 
-            var url = "https%3A%2F%2Ft.me%2Fskidki_dn_bot%3Fstart="+code;
+            var url = "https://t.me/" + "{{env("APP_BOT_NAME")}}"+ "?start="+code;
 
             localStorage.setItem("url",url);
 
