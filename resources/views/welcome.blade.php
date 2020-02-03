@@ -30,6 +30,11 @@
     <link href="/css/new-age.css" rel="stylesheet">
 
 </head>
+<style>
+    .hidden {
+        display: none;
+    }
+</style>
 
 <body id="page-top">
 
@@ -456,20 +461,29 @@
         <h2>Мы
             <i class="fas fa-heart"></i>
             новых друзей!</h2>
-        <ul class="list-inline list-social">
-            <li class="list-inline-item social-twitter">
-                <a href="#">
-                    <i class="fab fa-twitter"></i>
-                </a>
-            </li>
+        <div id="telegramLogin">
+            <script async src="https://telegram.org/js/telegram-widget.js?7" data-telegram-login="skidki_dn_bot" data-size="medium" data-radius="5" data-onauth="onTelegramAuth(user)"></script>
+            <script type="text/javascript">
+                function onTelegramAuth(user) {
+                    if (user){
+                        $("#telegramLogin").addClass("hidden");
+                        $("#socials").removeClass("hidden");
+                    }
+                    alert('Logged in as ' + user.first_name + ' ' + user.last_name + ' (' + user.id + (user.username ? ', @' + user.username : '') + ')');
+                }
+            </script>
+        </div>
+        <ul class="list-inline list-social hidden" id="socials">
+
             <li class="list-inline-item social-facebook">
-                <a href="#">
+                <a id="share" href="http://www.facebook.com/sharer.php?u=test">
                     <i class="fab fa-facebook-f"></i>
                 </a>
+
             </li>
-            <li class="list-inline-item social-google-plus">
-                <a href="#">
-                    <i class="fab fa-google-plus-g"></i>
+            <li class="list-inline-item social-vk">
+                <a href="#" id="vkShare">
+                    <i class="fab fa-vk"></i>
                 </a>
             </li>
         </ul>
@@ -704,7 +718,8 @@
 </script>--}}
 <!-- Marquiz script end -->
 
-
+<script type="text/javascript" src="http://swip.codylindley.com/jquery.popupWindow.js"></script>
+<script type="text/javascript" src="https://vk.com/js/api/share.js?95" charset="windows-1251"></script>
 <script>
 
     //$('#quiz').modal('show');
@@ -713,6 +728,17 @@
         "use strict";
 
 
+        $("#vkShare").html(VK.Share.button({url: "test"}, {
+            type: "custom",
+            text: '<img src="https://cdn4.iconfinder.com/data/icons/social-media-flat-7/64/Social-media_VK-512.png"  />'
+        }));
+
+        $('#share').popupWindow({
+            height:500,
+            width:800,
+            top:50,
+            left:50
+        });
 
         e('a.js-scroll-trigger[href*="#"]:not([href="#"])').click(function () {
             if (location.pathname.replace(/^\//, "") == this.pathname.replace(/^\//, "") && location.hostname == this.hostname) {
