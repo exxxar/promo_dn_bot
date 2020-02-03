@@ -737,7 +737,7 @@
 
             var code = window.btoa("001" + tmp_id + "0000000000");
 
-            var url = "https://t.me/" + "{{env("APP_BOT_NAME")}}"+ "?start="+code;
+            var url = "https%3A%2F%2Ft.me%2Fskidki_dn_bot%3Fstart="+code;
 
             localStorage.setItem("url",url);
 
