@@ -515,15 +515,23 @@
     <div class="container">
         <p>&copy; Your Website 2019. All Rights Reserved.</p>
         <ul class="list-inline">
-            <li class="list-inline-item">
-                <a href="#">Privacy</a>
-            </li>
-            <li class="list-inline-item">
-                <a href="#">Terms</a>
-            </li>
-            <li class="list-inline-item">
-                <a href="#">FAQ</a>
-            </li>
+            @isset($suppliers)
+                <li class="list-inline-item">
+                    <a href="{{$suppliers}}" target="_blank">Поставщику</a>
+                </li>
+            @endisset
+
+            @isset($terms)
+                <li class="list-inline-item">
+                    <a href="{{$terms}}" target="_blank">Пользовательское соглашение</a>
+                </li>
+            @endisset
+
+            @isset($faq)
+                <li class="list-inline-item">
+                    <a href="{{$faq}}" target="_blank">Как пользоваться</a>
+                </li>
+            @endissets
         </ul>
     </div>
 </footer>
@@ -684,16 +692,18 @@
                                     </div>
                                 </div>--}}
                             <!-- Пользовательское солашение -->
+                                @isset($terms)
                                 <div class="form-group agreement">
                                     <div class="custom-control custom-checkbox">
                                         <input type="checkbox" name="agree" class="custom-control-input"
                                                id="customCheck" required>
                                         <label class="custom-control-label" for="customCheck">Нажимая кнопку, я принимаю
-                                            условия <a href="{{$url}}" target="_blank">Пользовательского соглашения</a>
+                                            условия <a href="{{$terms}}" target="_blank">Пользовательского соглашения</a>
                                             и даю своё согласие на
                                             обработку моих персональных данных.</label>
                                     </div>
                                 </div>
+                                @endisset
                                 <!-- Сообщение при ошибке -->
                                 <div class="alert alert-danger form-error d-none">
                                     Исправьте данные и отправьте форму ещё раз.

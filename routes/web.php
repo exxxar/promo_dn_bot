@@ -230,9 +230,17 @@ Route::get("/insta", function (Request $request) {
 
 Route::get('/', function (Request $request) {
     $companies = \App\Company::with(["promotions", "promotions.category"])->where("is_active", true)->get();
-    $article = \App\Article::where("part", \App\Enums\Parts::Terms_of_use)->first() ?? null;
-    $url = $article == null ? env("APP_URL") : ($article)->url;
-    return view('welcome', compact("companies", 'url'));
+
+    $terms = \App\Article::where("part", \App\Enums\Parts::Terms_of_use)->first() ?? null;
+    $terms = $terms == null ? env("APP_URL") : ($terms)->url;
+
+    $faq = \App\Article::where("part", \App\Enums\Parts::How_to_use)->first() ?? null;
+    $faq = $faq == null ? env("APP_URL") : ($faq)->url;
+
+    $suppliers = \App\Article::where("part", \App\Enums\Parts::Suppliers)->first() ?? null;
+    $suppliers = $suppliers == null ? env("APP_URL") : ($suppliers)->url;
+
+    return view('welcome', compact("companies", 'terms','faq','suppliers'));
 })->name("welcome");
 
 Route::post('/send-request', function (Request $request) {
