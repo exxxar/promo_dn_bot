@@ -517,19 +517,19 @@
         <ul class="list-inline">
             @isset($suppliers)
                 <li class="list-inline-item">
-                    <a href="{{$suppliers}}" target="_blank">Поставщику</a>
+                    <a href="{{$suppliers}}" id="suppliers" name="suppliers" target="_blank">Поставщику</a>
                 </li>
             @endisset
 
             @isset($terms)
                 <li class="list-inline-item">
-                    <a href="{{$terms}}" target="_blank">Пользовательское соглашение</a>
+                    <a href="{{$terms}}" id="terms" name="terms" target="_blank">Пользовательское соглашение</a>
                 </li>
             @endisset
 
             @isset($faq)
                 <li class="list-inline-item">
-                    <a href="{{$faq}}" target="_blank">Как пользоваться</a>
+                    <a href="{{$faq}}" id="faq" name="faq" target="_blank">Как пользоваться</a>
                 </li>
             @endisset
         </ul>
