@@ -345,7 +345,7 @@ class SkidkiDNBot extends Bot implements iSkidkiDNBot
 
             ],
             [
-                ['text' => "Как пользоваться", 'url' => env('APP_URL') . "/faq"],
+                ['text' => "Как пользоваться", 'url' => env('APP_URL') . "#faq"],
             ],
         ];
 
@@ -730,7 +730,8 @@ class SkidkiDNBot extends Bot implements iSkidkiDNBot
 
         $qr_url = env("QR_URL") . "https://t.me/" . env("APP_BOT_NAME") . "?start=$code";
 
-        $this->sendPhoto("_Ваш реферальный код_\n$message", $qr_url, $keyboard);
+        $this->sendPhoto("_Ваш реферальный код_", $qr_url);
+        $this->sendMessage("$message", $keyboard);
 
     }
 

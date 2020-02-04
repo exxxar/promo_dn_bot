@@ -485,13 +485,13 @@
                 <ul class="list-inline list-social hidden" id="socials">
 
                     <li class="list-inline-item social-facebook">
-                        <a id="share" href="">
+                        <a id="share" href="" target="_blank">
                             <i class="fab fa-facebook-f"></i>
                         </a>
 
                     </li>
                     <li class="list-inline-item social-vk">
-                        <a href="#" id="vkShare">
+                        <a href="#" id="vkShare" target="_blank">
                             <i class="fab fa-vk"></i>
                         </a>
                     </li>
@@ -499,13 +499,13 @@
             </div>
         </div>
 
-        <div class="row">
+        <div class="row mt-4">
             <div class="col">
-                <h6>
+                <h3>
                     <em>
                         Нажми на кнопку социальной сети, чтоб поделиться своей реферальной ссылкой с друзьями!
                     </em>
-                </h6>
+                </h3>
             </div>
         </div>
     </div>
