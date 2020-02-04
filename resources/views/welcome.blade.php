@@ -531,7 +531,7 @@
                 <li class="list-inline-item">
                     <a href="{{$faq}}" target="_blank">Как пользоваться</a>
                 </li>
-            @endissets
+            @endisset
         </ul>
     </div>
 </footer>
