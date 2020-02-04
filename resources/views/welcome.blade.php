@@ -43,6 +43,7 @@
     .social-vk i {
         color: #3b5998;
     }
+
     .social-vk img {
         width: 100%;
         padding: 19px;
@@ -469,29 +470,44 @@
 </section>--}}
 
 
-<section class="contact bg-primary" id="contact">
+<section class="contact bg-primary" id="contact" name="contact">
     <div class="container">
-        <h2>Мы
-            <i class="fas fa-heart"></i>
-            новых друзей!</h2>
-        <div id="telegramLogin">
-            <script async src="https://telegram.org/js/telegram-widget.js?7" data-telegram-login="skidki_dn_bot" data-size="medium" data-radius="5" data-onauth="onTelegramAuth(user)" ></script>
+        <div class="row">
+            <div class="col">
+                <h2>Мы
+                    <i class="fas fa-heart"></i>
+                    новых друзей!</h2>
+                <div id="telegramLogin">
+                    <script async src="https://telegram.org/js/telegram-widget.js?7" data-telegram-login="skidki_dn_bot"
+                            data-size="medium" data-radius="5" data-onauth="onTelegramAuth(user)"></script>
 
+                </div>
+                <ul class="list-inline list-social hidden" id="socials">
+
+                    <li class="list-inline-item social-facebook">
+                        <a id="share" href="">
+                            <i class="fab fa-facebook-f"></i>
+                        </a>
+
+                    </li>
+                    <li class="list-inline-item social-vk">
+                        <a href="#" id="vkShare">
+                            <i class="fab fa-vk"></i>
+                        </a>
+                    </li>
+                </ul>
+            </div>
         </div>
-        <ul class="list-inline list-social hidden" id="socials">
 
-            <li class="list-inline-item social-facebook">
-                <a id="share" href="">
-                    <i class="fab fa-facebook-f"></i>
-                </a>
-
-            </li>
-            <li class="list-inline-item social-vk">
-                <a href="#" id="vkShare">
-                    <i class="fab fa-vk"></i>
-                </a>
-            </li>
-        </ul>
+        <div class="row">
+            <div class="col">
+                <h6>
+                    <em>
+                        Нажми на кнопку социальной сети, чтоб поделиться своей реферальной ссылкой с друзьями!
+                    </em>
+                </h6>
+            </div>
+        </div>
     </div>
 </section>
 
@@ -591,8 +607,8 @@
                 <div class="row">
                     <div class="col-lg-12 mx-auto">
                         <div class="modal-body">
-                            <iframe src="https://mrqz.me/5e29b17d3e851d004431a587" frameborder="0" style="width:100%;min-height:600px;"></iframe>
-                      
+                            <iframe src="https://mrqz.me/5e29b17d3e851d004431a587" frameborder="0"
+                                    style="width:100%;min-height:600px;"></iframe>
 
 
                         </div>
@@ -729,25 +745,34 @@
 
     //$('#quiz').modal('show');
 
+    if (window.location.hash != '') {
+        window.hashName = window.location.hash;
+        window.location.hash = '';
+        $(document).ready(function () {
+            $('html').animate({scrollTop: $(window.hashName).offset().top}, 2000, function () {
+                window.location.hash = window.hashName;
+            });
+        });
+    }
+
     function onTelegramAuth(user) {
-        if (user){
+        if (user) {
             $("#telegramLogin").addClass("hidden");
             $("#socials").removeClass("hidden");
 
-            var tmp_id = ""+user.id;
+            var tmp_id = "" + user.id;
             while (tmp_id.length < 10)
                 tmp_id = "0" + tmp_id;
 
             var code = window.btoa("001" + tmp_id + "0000000000");
 
-            var url = "https://t.me/" + "{{env("APP_BOT_NAME")}}"+ "?start="+code;
+            var url = "https://t.me/" + "{{env("APP_BOT_NAME")}}" + "?start=" + code;
 
-            localStorage.setItem("url",url);
+            localStorage.setItem("url", url);
 
-            $("#share").attr({"href":"http://www.facebook.com/sharer.php?u="+url});
-            $("#vkShare").attr({"href":"https://vk.com/share.php?url="+url});
+            $("#share").attr({"href": "http://www.facebook.com/sharer.php?u=" + url});
+            $("#vkShare").attr({"href": "https://vk.com/share.php?url=" + url});
         }
-
 
 
     }
@@ -756,12 +781,11 @@
         "use strict";
 
 
-
         $('#share,#vkShare').popupWindow({
-            height:500,
-            width:800,
-            top:50,
-            left:50
+            height: 500,
+            width: 800,
+            top: 50,
+            left: 50
         });
 
         e('a.js-scroll-trigger[href*="#"]:not([href="#"])').click(function () {

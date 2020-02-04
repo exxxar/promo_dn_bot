@@ -708,7 +708,10 @@ class SkidkiDNBot extends Bot implements iSkidkiDNBot
         $keyboard = [
 
             [
-                ["text" => "\xF0\x9F\x91\x89Пригласить друзей", "switch_inline_query" => ""]
+                ["text" => "\xF0\x9F\x91\x89Пригласить друзей из Telegram", "switch_inline_query" => ""]
+            ],
+            [
+                ["text" => "\xF0\x9F\x91\x89Пригласить друзей из VK\FB", "url" => env("APP_URL")."#contact"]
             ],
 
         ];
