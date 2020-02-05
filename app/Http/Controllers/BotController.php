@@ -26,6 +26,7 @@ class BotController extends Controller
     public function __construct(SkidkiDNBot $sdnbot)
     {
         $this->sdnbot = $sdnbot;
+        $this->sdnbot->initKeyboards();
     }
 
     public function getLotterySlot($bot, $slotId, $codeId)
