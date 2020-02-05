@@ -112,7 +112,7 @@
     </div>
 </header>
 <div class="container-fluid">
-    <p>Предупреждение! Пока вы не нажали кнопку экспорта публикаций ключи видны не будут!</p>
+    <p>Предупреждение! Пока вы не нажали кнопку импорта публикаций ключи видны не будут!</p>
     <div class="alert alert-success success-import" style="display:none;">
         <p>Done importing, processed <strong class="counter">N</strong> items! Reload this page to refresh the groups!</p>
     </div>
