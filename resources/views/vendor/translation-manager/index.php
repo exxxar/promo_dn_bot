@@ -143,7 +143,7 @@
                         </select>
                     </div>
                     <div class="col-sm-2">
-                    <button type="submit" class="btn btn-success btn-block"  data-disable-with="Loading..">Импортировать группу</button>
+                    <button type="submit" class="btn btn-success btn-block"  data-disable-with="Loading..">Импортировать</button>
                     </div>
                 </div>
             </div>
@@ -189,12 +189,12 @@
                 <textarea class="form-control" rows="3" name="keys" placeholder="Добавить 1 ключ на строку без префикса группы"></textarea>
             </div>
             <div class="form-group">
-                <input type="submit" value="Add keys" class="btn btn-primary">
+                <input type="submit" value="Добавить ключи" class="btn btn-primary">
             </div>
         </form>
         <div class="row">
             <div class="col-sm-2">
-                <span class="btn btn-default enable-auto-translate-group">Use Auto Translate</span>
+                <span class="btn btn-default enable-auto-translate-group">Использовать авто перевод</span>
             </div>
         </div>
         <form class="form-add-locale autotranslate-block-group hidden" method="POST" role="form" action="<?php echo action('\Barryvdh\TranslationManager\Controller@postTranslateMissing') ?>">
@@ -227,7 +227,7 @@
             </div>
         </form>
         <hr>
-    <h4>Total: <?= $numTranslations ?>, changed: <?= $numChanged ?></h4>
+    <h4>Всего: <?= $numTranslations ?>, изменено: <?= $numChanged ?></h4>
         <table class="table">
             <thead>
             <tr>
@@ -295,24 +295,24 @@
                 <input type="hidden" name="_token" value="<?php echo csrf_token(); ?>">
                 <div class="form-group">
                     <p>
-                        Enter new locale key:
+                        Введите локальный ключ:
                     </p>
                     <div class="row">
                         <div class="col-sm-3">
                             <input type="text" name="new-locale" class="form-control" />
                         </div>
-                        <div class="col-sm-2">
-                            <button type="submit" class="btn btn-default btn-block"  data-disable-with="Adding..">Добавить новую локализацию</button>
+                        <div class="col-sm-4">
+                            <button type="submit" class="btn btn-default btn-block"  data-disable-with="Добавление...">Добавить новую локализацию</button>
                         </div>
                     </div>
                 </div>
             </form>
         </fieldset>
         <fieldset>
-            <legend>Export all translations</legend>
+            <legend>Экспортировать все переводы</legend>
             <form class="form-inline form-publish-all" method="POST" action="<?php echo action('\Barryvdh\TranslationManager\Controller@postPublish', '*') ?>" data-remote="true" role="form" data-confirm="Вы уверены, что хотите опубликовать всю группу переводов? Это перезапишет существующие языковые файлы.">
                 <input type="hidden" name="_token" value="<?php echo csrf_token(); ?>">
-                <button type="submit" class="btn btn-primary" data-disable-with="Publishing.." >Публиковать всё</button>
+                <button type="submit" class="btn btn-primary" data-disable-with="Публикуется..." >Публиковать всё</button>
             </form>
         </fieldset>
 
