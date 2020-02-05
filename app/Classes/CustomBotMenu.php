@@ -188,6 +188,7 @@ trait CustomBotMenu
 
     protected function sendMenu($message, $keyboard)
     {
+        $this->initKeyboards();
         $this->bot->sendRequest("sendMessage", [
             "text" => $message,
             'reply_markup' => json_encode([
