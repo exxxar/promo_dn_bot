@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "9833a6daa802d1211b042a328cc3412d",
+    "content-hash": "ac5dfb1842cd52cdfc75c265e528f29d",
     "packages": [
         {
             "name": "azate/laravel-telegram-login-auth",
@@ -102,6 +102,61 @@
             "description": "BaconQrCode is a QR code generator for PHP.",
             "homepage": "https://github.com/Bacon/BaconQrCode",
             "time": "2017-10-17T09:59:25+00:00"
+        },
+        {
+            "name": "barryvdh/laravel-translation-manager",
+            "version": "v0.5.7",
+            "source": {
+                "type": "git",
+                "url": "https://github.com/barryvdh/laravel-translation-manager.git",
+                "reference": "a21c76c72ca0ea36ce4bb3853b59a67808cde3f9"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://api.github.com/repos/barryvdh/laravel-translation-manager/zipball/a21c76c72ca0ea36ce4bb3853b59a67808cde3f9",
+                "reference": "a21c76c72ca0ea36ce4bb3853b59a67808cde3f9",
+                "shasum": ""
+            },
+            "require": {
+                "illuminate/support": "^5.5|^6",
+                "illuminate/translation": "^5.5|^6",
+                "php": ">=7",
+                "symfony/finder": "^3|^4",
+                "tanmuhittin/laravel-google-translate": "^1.0.2"
+            },
+            "type": "library",
+            "extra": {
+                "branch-alias": {
+                    "dev-master": "0.5-dev"
+                },
+                "laravel": {
+                    "providers": [
+                        "Barryvdh\\TranslationManager\\ManagerServiceProvider"
+                    ]
+                }
+            },
+            "autoload": {
+                "psr-4": {
+                    "Barryvdh\\TranslationManager\\": "src/"
+                }
+            },
+            "notification-url": "https://packagist.org/downloads/",
+            "license": [
+                "MIT"
+            ],
+            "authors": [
+                {
+                    "name": "Barry vd. Heuvel",
+                    "email": "barryvdh@gmail.com"
+                }
+            ],
+            "description": "Manage Laravel Translations",
+            "keywords": [
+                "laravel",
+                "translations",
+                "translator"
+            ],
+            "time": "2019-12-06T12:32:53+00:00"
         },
         {
             "name": "bensampo/laravel-enum",
@@ -4226,6 +4281,55 @@
             "time": "2019-12-15T18:52:09+00:00"
         },
         {
+            "name": "stichoza/google-translate-php",
+            "version": "v4.0.2",
+            "source": {
+                "type": "git",
+                "url": "https://github.com/Stichoza/google-translate-php.git",
+                "reference": "6109b1e0035c6694aac38c2f9e119b6264c2bfb1"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://api.github.com/repos/Stichoza/google-translate-php/zipball/6109b1e0035c6694aac38c2f9e119b6264c2bfb1",
+                "reference": "6109b1e0035c6694aac38c2f9e119b6264c2bfb1",
+                "shasum": ""
+            },
+            "require": {
+                "ext-json": "*",
+                "ext-mbstring": "*",
+                "guzzlehttp/guzzle": "~6.0",
+                "php": "^7.1"
+            },
+            "require-dev": {
+                "phpunit/phpunit": "^7.0"
+            },
+            "type": "library",
+            "autoload": {
+                "psr-4": {
+                    "Stichoza\\GoogleTranslate\\": "src/"
+                }
+            },
+            "notification-url": "https://packagist.org/downloads/",
+            "license": [
+                "MIT"
+            ],
+            "authors": [
+                {
+                    "name": "Levan Velijanashvili",
+                    "email": "me@stichoza.com"
+                }
+            ],
+            "description": "Free Google Translate API PHP Package",
+            "homepage": "http://github.com/Stichoza/google-translate-php",
+            "keywords": [
+                "google",
+                "php",
+                "translate",
+                "translator"
+            ],
+            "time": "2019-07-22T22:28:03+00:00"
+        },
+        {
             "name": "swiftmailer/swiftmailer",
             "version": "v6.2.3",
             "source": {
@@ -5654,6 +5758,54 @@
                 "dump"
             ],
             "time": "2020-01-04T13:00:46+00:00"
+        },
+        {
+            "name": "tanmuhittin/laravel-google-translate",
+            "version": "1.0.3",
+            "source": {
+                "type": "git",
+                "url": "https://github.com/tanmuhittin/laravel-google-translate.git",
+                "reference": "7b4efd17e509a10fa7e8ae32dd458dd96f97bf27"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://api.github.com/repos/tanmuhittin/laravel-google-translate/zipball/7b4efd17e509a10fa7e8ae32dd458dd96f97bf27",
+                "reference": "7b4efd17e509a10fa7e8ae32dd458dd96f97bf27",
+                "shasum": ""
+            },
+            "require": {
+                "illuminate/console": ">=5.1",
+                "illuminate/support": "^5.5|^6",
+                "illuminate/translation": "^5.5|^6",
+                "php": ">=7.0.0",
+                "stichoza/google-translate-php": "^4.0"
+            },
+            "require-dev": {
+                "ext-json": "*",
+                "phpunit/phpunit": "^8.3@dev"
+            },
+            "type": "library",
+            "extra": {
+                "laravel": {
+                    "providers": [
+                        "Tanmuhittin\\LaravelGoogleTranslate\\LaravelGoogleTranslateServiceProvider"
+                    ]
+                }
+            },
+            "autoload": {
+                "psr-4": {
+                    "Tanmuhittin\\LaravelGoogleTranslate\\": "src"
+                }
+            },
+            "notification-url": "https://packagist.org/downloads/",
+            "authors": [
+                {
+                    "name": "Muhittin Tan",
+                    "email": "tanmuhittin@gmail.com"
+                }
+            ],
+            "description": "Translate translation files to other languages using google translate api",
+            "time": "2019-10-02T06:32:47+00:00"
         },
         {
             "name": "thecodingmachine/discovery",

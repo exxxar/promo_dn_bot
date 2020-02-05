@@ -149,6 +149,7 @@ return [
         SimpleSoftwareIO\QrCode\QrCodeServiceProvider::class,
         Telegram\Bot\Laravel\TelegramServiceProvider::class,
         BenSampo\Enum\EnumServiceProvider::class,
+        Barryvdh\TranslationManager\ManagerServiceProvider::class,
 
         /*
          * Package Service Providers...

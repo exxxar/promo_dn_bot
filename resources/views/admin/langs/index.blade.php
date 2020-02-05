@@ -24,12 +24,6 @@
                     </div>
                 @endif
 
-                <div class="row">
-                    <div class="col-sm-4">
-                        <a class="btn btn-primary" href="{{route("home")}}">Новый приз</a>
-                    </div>
-                </div>
-
                 <h1>Параметры</h1>
                 @isset($params)
                     {{dd($params)}}
