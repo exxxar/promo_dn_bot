@@ -529,7 +529,7 @@
 
             @isset($faq)
                 <li class="list-inline-item">
-                    <a href="{{$faq}}" id="faq" name="faq" target="_blank">Как пользоваться</a>
+                    <a href="{{$faq}}" id="faq" name="faq" target="_blank">Навигация по телеграмм-боту</a>
                 </li>
             @endisset
         </ul>

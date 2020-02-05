@@ -137,7 +137,7 @@
 
         <li class="c-sidebar-nav-item">
             <a class="c-sidebar-nav-link" href="{{ route('lang') }}">
-                <i class="cil-gift c-sidebar-nav-icon"></i>
+                <i class="cil-excerpt c-sidebar-nav-icon"></i>
                 Перевод
             </a>
         </li>
