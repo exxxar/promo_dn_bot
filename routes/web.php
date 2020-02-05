@@ -293,11 +293,8 @@ Route::prefix('admin')->group(function () {
     Route::post('/announce', 'HomeController@announce')
         ->name('users.announce');
 
-    Route::post('/incoming_massage', 'HomeController@setInformation')
-        ->name('users.incoming_massage');
 
     Route::get('/sender', 'HomeController@sender');
-    Route::get('/langs', 'HomeController@content')->name("langs");
 
     Route::post('/sender', 'HomeController@announceCustom')
         ->name("sender.announce");

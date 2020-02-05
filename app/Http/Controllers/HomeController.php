@@ -304,17 +304,5 @@ class HomeController extends Controller
 
         return view("admin.langs.index", compact('params'));
     }
-
-    public function setInformation(Request $request)
-    {
-
-        $jsonString = file_get_contents(base_path('resources/lang/ru/messages.php'));
-        $data = json_decode($jsonString, true);
-        $data['menu_title_7'] = $request->get("incoming_message");
-        $data['menu_title_8'] = $request->get("incoming_message");
-        $newJsonString = json_encode($data, JSON_PRETTY_PRINT);
-        file_put_contents(base_path('resources/lang/ru/messages.php'), stripslashes($newJsonString));
-
-        return back()->with("success", "Приветственное сообщение успешно изменено!");
-    }
+    
 }

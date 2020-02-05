@@ -26,8 +26,7 @@
                                 {{ $message }}
                             </div>
                         @endif
-                        @include("partials.incoming_message")
-                        <hr>
+
                         @include("partials.cashback")
                         <hr>
                         @include("partials.search")
