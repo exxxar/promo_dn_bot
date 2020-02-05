@@ -24,11 +24,11 @@ $botman->hears('.*Розыгрыш|/start_lottery_test', BotController::class . 
 $botman->hears('/achievements_all ([0-9]+)', BotController::class . '@getAchievementsAll'); //перенёс
 $botman->hears('/achievements_panel', BotController::class . '@getAchievementMenu'); //перенёс
 $botman->hears('/activity_information', BotController::class . '@getActivityInformation');
-$botman->hears("\xF0\x9F\x93\xB2Мои друзья", BotController::class . '@getMyFriends');
-$botman->hears("\xF0\x9F\x92\xB3Мои баллы", BotController::class . '@getMyMoney');
-$botman->hears("\xE2\x9B\x84Мероприятия", BotController::class . '@getEventsMenu');
-$botman->hears("\xE2\x9D\x93F.A.Q.", BotController::class . '@getFAQMenu');
-$botman->hears("\xF0\x9F\x94\xA5Акции и скидки", BotController::class . '@getPromotionMenu');
+$botman->hears(__("messages.global_menu_1"), BotController::class . '@getMyFriends');
+$botman->hears(__("messages.global_menu_2"), BotController::class . '@getMyMoney');
+$botman->hears(__("messages.global_menu_3"), BotController::class . '@getEventsMenu');
+$botman->hears(__("messages.global_menu_4"), BotController::class . '@getFAQMenu');
+$botman->hears(__("messages.global_menu_5"), BotController::class . '@getPromotionMenu');
 $botman->hears('/promo_by_company ([0-9]+)', BotController::class . '@getPromoByCompanies');
 $botman->hears('/promo_by_category ([0-9]+)', BotController::class . '@getPromoByCategories');
 $botman->hears('/payments ([0-9]+)', BotController::class . '@getPayments');

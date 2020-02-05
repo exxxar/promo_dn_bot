@@ -1,6 +1,12 @@
 <?php
 
 return [
+    'global_menu_1'=>"\xF0\x9F\x93\xB2Мои друзья",
+    'global_menu_2'=>"\xF0\x9F\x92\xB3Мои баллы",
+    'global_menu_3'=>"\xE2\x9B\x84Мероприятия",
+    'global_menu_4'=>"\xE2\x9D\x93F.A.Q.",
+    'global_menu_5'=>"\xF0\x9F\x94\xA5Акции и скидки",
+
     'menu_title_1'=>'Что-то пошло не так...',
     'menu_title_2'=>'Начнем-с...',
     'menu_title_3'=>"Получайте удовольствие от использование системы!",

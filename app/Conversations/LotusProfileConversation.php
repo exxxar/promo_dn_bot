@@ -34,9 +34,9 @@ class LotusProfileConversation extends Conversation
 
     public function __construct($bot, $data)
     {
+        $this->initKeyboards();
         $this->setBot($bot);
         $this->data = $data;
-        Log::info("test data=$data");
     }
 
     public function run()

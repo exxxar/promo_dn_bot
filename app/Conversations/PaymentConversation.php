@@ -31,6 +31,7 @@ class PaymentConversation extends Conversation
 
     public function __construct($bot, $request_id, $company_id)
     {
+        $this->initKeyboards();
         $this->setBot($bot);
         $this->request_id = $request_id;
         $this->company_id = $company_id;

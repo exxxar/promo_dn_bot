@@ -16,19 +16,7 @@ trait CustomBotMenu
 {
     protected $bot;
 
-    protected $keyboard = [
-        ["\xE2\x9B\x84Мероприятия","\xF0\x9F\x94\xA5Акции и скидки"],
-        ["\xF0\x9F\x93\xB2Мои друзья", "\xF0\x9F\x92\xB3Мои баллы"],
-        ["\xE2\x9D\x93F.A.Q."],
-
-    ];
-
-    protected $keyboard_admin = [
-        ["\xE2\x9B\x84Мероприятия","\xF0\x9F\x94\xA5Акции и скидки"],
-        ["\xF0\x9F\x93\xB2Мои друзья", "\xF0\x9F\x92\xB3Мои баллы"],
-        ["\xE2\x9D\x93F.A.Q."],
-
-    ];
+    protected $keyboard;
 
     protected $keyboard_fallback = [
         ["Попробовать снова"],
@@ -37,6 +25,15 @@ trait CustomBotMenu
     protected $keyboard_conversation = [
         ["Продолжить позже"],
     ];
+
+    public function initKeyboards()
+    {
+        $this->keyboard = [
+            [__("messages.global_menu_3"), __("messages.global_menu_5")],
+            [__("messages.global_menu_1"), __("messages.global_menu_2")],
+            [__("messages.global_menu_4")]
+        ];
+    }
 
 
     public function setBot($bot)
@@ -49,12 +46,12 @@ trait CustomBotMenu
     protected function createNewUser()
     {
 
-        $id = $this->bot->getUser()->getId()??null;
+        $id = $this->bot->getUser()->getId() ?? null;
         $username = $this->bot->getUser()->getUsername();
         $lastName = $this->bot->getUser()->getLastName();
         $firstName = $this->bot->getUser()->getFirstName();
 
-        if ($id==null)
+        if ($id == null)
             return false;
 
         if ($this->getUser() == null) {
@@ -94,7 +91,7 @@ trait CustomBotMenu
 
     public function getUser(array $params = [])
     {
-        return  (count($params) == 0 ?
+        return (count($params) == 0 ?
                 User::where("telegram_chat_id", $this->getChatId())->first() :
                 User::with($params)->where("telegram_chat_id", $this->getChatId())->first()) ?? null;
 
@@ -149,7 +146,8 @@ trait CustomBotMenu
             ]);
     }
 
-    protected function sendMessageToChat($chatId,$message,array $keyboard = [], $parseMode = 'Markdown'){
+    protected function sendMessageToChat($chatId, $message, array $keyboard = [], $parseMode = 'Markdown')
+    {
         $this->bot->sendRequest("sendMessage",
             [
                 "chat_id" => $chatId,
@@ -175,7 +173,7 @@ trait CustomBotMenu
             ]);
     }
 
-    protected function sendLocation( $latitude,$longitude, array $keyboard = [])
+    protected function sendLocation($latitude, $longitude, array $keyboard = [])
     {
         $this->bot->sendRequest("sendLocation",
             [
@@ -200,16 +198,19 @@ trait CustomBotMenu
         ]);
     }
 
-    public function mainMenu($message){
-        $this->sendMenu($message,$this->keyboard);
+    public function mainMenu($message)
+    {
+        $this->sendMenu($message, $this->keyboard);
     }
 
-    public function conversationMenu($message){
-        $this->sendMenu($message,$this->keyboard_conversation);
+    public function conversationMenu($message)
+    {
+        $this->sendMenu($message, $this->keyboard_conversation);
     }
 
-    public function fallbackMenu($message){
-        $this->sendMenu($message,$this->keyboard_fallback);
+    public function fallbackMenu($message)
+    {
+        $this->sendMenu($message, $this->keyboard_fallback);
     }
 
     protected function sendPhotoToChanel($message, $photoUrl, $parseMode = 'Markdown')
@@ -246,7 +247,8 @@ trait CustomBotMenu
         $this->sendMessage("Категории акций:", $keyboard);
     }
 
-    public function startConversation($conversaton){
+    public function startConversation($conversaton)
+    {
         $this->bot->startConversation($conversaton);
     }
 }
