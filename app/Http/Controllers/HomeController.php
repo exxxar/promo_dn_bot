@@ -36,7 +36,7 @@ class HomeController extends Controller
         $users = User::all();
         $promotions = Promotion::all();
 
-        $json_data =  file_get_contents(base_path('resources/lang/ru/messages.php'));
+        $json_data = file_get_contents(base_path('resources/lang/ru/messages.php'));
         $incoming_message = (json_decode($json_data, true))["menu_title_7"];
 
         $current_user = User::with(["companies"])->find(Auth::user()->id);
@@ -57,14 +57,14 @@ class HomeController extends Controller
 
                 $qrimage = "https://api.qrserver.com/v1/create-qr-code/?size=150x150&data=https://t.me/" . env("APP_BOT_NAME") . "?start=$code";
 
-                return view('home', compact('users', 'promotions', 'qrimage', 'current_user', "tmp_user", "tmp_promo",'incoming_message'));
+                return view('home', compact('users', 'promotions', 'qrimage', 'current_user', "tmp_user", "tmp_promo", 'incoming_message'));
             } catch (\Exception $e) {
                 return redirect()
                     ->back();
             }
         }
 
-        return view('home', compact('users', 'promotions', 'current_user','incoming_message'));
+        return view('home', compact('users', 'promotions', 'current_user', 'incoming_message'));
     }
 
     public function searchAjax(Request $request)
@@ -169,7 +169,6 @@ class HomeController extends Controller
     }
 
 
-
     public function announce(Request $request)
     {
 
@@ -184,18 +183,18 @@ class HomeController extends Controller
             return back()
                 ->with("success", "Заголовок или сообщение не заполнены!");
 
-        if ($send_to_type==3){
+        if ($send_to_type == 3) {
 
             $keyboard = [
                 [
-                    ['text' => "\xF0\x9F\x91\x89Переход в бота", 'url' =>"https://t.me/" . env("APP_BOT_NAME")],
+                    ['text' => "\xF0\x9F\x91\x89Переход в бота", 'url' => "https://t.me/" . env("APP_BOT_NAME")],
                 ],
             ];
 
             Telegram::sendPhoto([
                 'chat_id' => env("CHANNEL_ID"),
                 'parse_mode' => 'HTML',
-                "photo"=>InputFile::create($announce_url),
+                "photo" => InputFile::create($announce_url),
                 'disable_notification' => 'true',
 
             ]);
@@ -203,7 +202,7 @@ class HomeController extends Controller
             Telegram::sendMessage([
                 'chat_id' => env("CHANNEL_ID"),
                 'parse_mode' => 'HTML',
-                "text"=>"<b>".$announce_title."</b>\n <em>".$announce_message."</em>",
+                "text" => "<b>" . $announce_title . "</b>\n <em>" . $announce_message . "</em>",
                 'disable_notification' => 'true',
                 'reply_markup' => json_encode([
                     'inline_keyboard' =>
@@ -298,7 +297,16 @@ class HomeController extends Controller
         return view("cabinet", compact('url', 'title', 'summary', 'image'));
     }
 
-    public function setInformation(Request $request){
+    public function content(Request $request)
+    {
+        $jsonString = file_get_contents(base_path('resources/lang/ru/messages.php'));
+        $params = json_decode($jsonString);
+
+        return view("admin.langs.index", compact('params'));
+    }
+
+    public function setInformation(Request $request)
+    {
 
         $jsonString = file_get_contents(base_path('resources/lang/ru/messages.php'));
         $data = json_decode($jsonString, true);
