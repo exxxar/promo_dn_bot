@@ -32,6 +32,7 @@
 
                 <h1>Параметры</h1>
                 @isset($params)
+                    {{dd($params)}}
                     <table class="table mt-2">
                         <thead class="thead-light">
                         <tr>
@@ -46,7 +47,7 @@
                             <tr>
                                 <td>{{++$key}}</td>
                                 <td>
-                                    {{dd($param)}}
+
                                 </td>
                                 <td>
                                     test
