@@ -135,6 +135,13 @@
         </a>
         </li>
 
+        <li class="c-sidebar-nav-item">
+            <a class="c-sidebar-nav-link" href="{{ route('lang') }}">
+                <i class="cil-gift c-sidebar-nav-icon"></i>
+                Перевод
+            </a>
+        </li>
+
 
     </ul>
     <button class="c-sidebar-minimizer c-class-toggler" type="button" data-target="_parent"

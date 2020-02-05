@@ -282,6 +282,9 @@ Route::prefix('admin')->group(function () {
     Route::post('/', 'HomeController@index')
         ->name('home.qr');
 
+    Route::post('/lang', 'HomeController@translations')
+        ->name('lang');
+
 
     Route::post('/search', 'HomeController@search')
         ->name('users.phone.search');

@@ -304,5 +304,7 @@ class HomeController extends Controller
 
         return view("admin.langs.index", compact('params'));
     }
-    
+    public function translations(){
+        return view('admin.langs.index');
+    }
 }
