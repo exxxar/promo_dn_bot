@@ -36,16 +36,16 @@ class HomeController extends Controller
         $users = User::all();
         $promotions = Promotion::all();
 
+        $json_data =  file_get_contents(base_path('resources/lang/ru/messages.php'));
+        $incoming_message = (json_decode($json_data, true))["menu_title_7"];
+
         $current_user = User::with(["companies"])->find(Auth::user()->id);
 
         if ($request->isMethod("POST")) {
 
-            Log::info($request->get("user_phone_gen"));
             try {
                 $tmp_user = "" . (User::where("phone", "=", $request->get("user_phone_gen"))->first())->telegram_chat_id;
                 $tmp_promo = "" . $request->get("promotion_id");
-
-                Log::info($tmp_user);
 
                 while (strlen($tmp_user) < 10)
                     $tmp_user = "0" . $tmp_user;
@@ -57,14 +57,14 @@ class HomeController extends Controller
 
                 $qrimage = "https://api.qrserver.com/v1/create-qr-code/?size=150x150&data=https://t.me/" . env("APP_BOT_NAME") . "?start=$code";
 
-                return view('home', compact('users', 'promotions', 'qrimage', 'current_user', "tmp_user", "tmp_promo"));
+                return view('home', compact('users', 'promotions', 'qrimage', 'current_user', "tmp_user", "tmp_promo",'incoming_message'));
             } catch (\Exception $e) {
                 return redirect()
                     ->back();
             }
         }
 
-        return view('home', compact('users', 'promotions', 'current_user'));
+        return view('home', compact('users', 'promotions', 'current_user','incoming_message'));
     }
 
     public function searchAjax(Request $request)
@@ -289,8 +289,6 @@ class HomeController extends Controller
 
     public function cabinet()
     {
-
-
         $title = urlencode('Заголовок вашей вкладки или веб-страницы');
         $url = urlencode('https://t.me/skidki_dn_bot?start=MDAxMDQ4NDY5ODcwMzAwMDAwMDAwMDA=');
         $summary = urlencode('Текстовое описание, которое вкратце рассказывает, зачем пользователям переходить по этой ссылке.');
@@ -298,5 +296,17 @@ class HomeController extends Controller
 
 
         return view("cabinet", compact('url', 'title', 'summary', 'image'));
+    }
+
+    public function setInformation(Request $request){
+
+        $jsonString = file_get_contents(base_path('resources/lang/ru/messages.php'));
+        $data = json_decode($jsonString, true);
+        $data['menu_title_7'] = $request->get("incoming_message");
+        $data['menu_title_8'] = $request->get("incoming_message");
+        $newJsonString = json_encode($data, JSON_PRETTY_PRINT);
+        file_put_contents(base_path('resources/lang/ru/messages.php'), stripslashes($newJsonString));
+
+        return back()->with("success", "Приветственное сообщение успешно изменено!");
     }
 }

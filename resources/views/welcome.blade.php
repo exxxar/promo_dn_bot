@@ -503,7 +503,7 @@
             <div class="col">
                 <h3>
                     <em>
-                        Нажми на кнопку социальной сети, чтоб поделиться своей реферальной ссылкой с друзьями!
+                        Авторизируйся через Telegram и нажми на кнопку социальной сети, чтоб поделиться своей реферальной ссылкой с друзьями!
                     </em>
                 </h3>
             </div>
@@ -513,7 +513,7 @@
 
 <footer>
     <div class="container">
-        <p>&copy; Your Website 2019. All Rights Reserved.</p>
+        <p> Skidka Service &copy; 2020. Все права защищены</p>
         <ul class="list-inline">
             @isset($suppliers)
                 <li class="list-inline-item">
