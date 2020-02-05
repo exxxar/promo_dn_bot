@@ -282,7 +282,7 @@ Route::prefix('admin')->group(function () {
     Route::post('/', 'HomeController@index')
         ->name('home.qr');
 
-    Route::post('/lang', 'HomeController@translations')
+    Route::get('/lang', 'HomeController@translations')
         ->name('lang');
 
 
