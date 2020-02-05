@@ -26,7 +26,7 @@ class PromoConversation extends Conversation
 
     public function __construct($bot, $data)
     {
-        $this->initKeyboards();
+
         $this->setBot($bot);
         $this->data = $data;
     }

@@ -114,17 +114,17 @@ trait CustomBotMenu
         $inline_keyboard = [];
 
         if ($page == 0 && count($model) == config("bot.results_per_page"))
-            array_push($inline_keyboard, ['text' => "\xE2\x8F\xA9Далее", 'callback_data' => "$command " . ($page + 1)]);
+            array_push($inline_keyboard, ['text' => __("messages.action_next_btn"), 'callback_data' => "$command " . ($page + 1)]);
         if ($page > 0) {
             if (count($model) == 0) {
-                array_push($inline_keyboard, ['text' => "\xE2\x8F\xAAНазад", 'callback_data' => "$command " . ($page - 1)]);
+                array_push($inline_keyboard, ['text' => __("messages.action_prew_btn"), 'callback_data' => "$command " . ($page - 1)]);
             }
             if (count($model) == config("bot.results_per_page")) {
-                array_push($inline_keyboard, ['text' => "\xE2\x8F\xAAНазад", 'callback_data' => "$command " . ($page - 1)]);
-                array_push($inline_keyboard, ['text' => "\xE2\x8F\xA9Далее", 'callback_data' => "$command " . ($page + 1)]);
+                array_push($inline_keyboard, ['text' => __("messages.action_prew_btn"), 'callback_data' => "$command " . ($page - 1)]);
+                array_push($inline_keyboard, ['text' => __("messages.action_next_btn"), 'callback_data' => "$command " . ($page + 1)]);
             }
             if (count($model) > 0 && count($model) < config("bot.results_per_page")) {
-                array_push($inline_keyboard, ['text' => "\xE2\x8F\xAAНазад", 'callback_data' => "$command " . ($page - 1)]);
+                array_push($inline_keyboard, ['text' => __("messages.action_prew_btn"), 'callback_data' => "$command " . ($page - 1)]);
             }
         }
 
@@ -227,7 +227,7 @@ trait CustomBotMenu
 
     public function startMenuWithCategories()
     {
-        $this->sendMenu("Добрый день!Приветствуем вас в нашем акционном боте! Мы рады, что Вы присоединились к нам. Все акции будут активны с 17 января.",
+        $this->sendMenu( __("messages.menu_title_8"),
             $this->keyboard);
 
         $categories = Category::orderBy('id', 'DESC')
@@ -235,7 +235,7 @@ trait CustomBotMenu
             ->get();
 
         if (count($categories) == 0) {
-            $this->reply("К сожалению, сейчас акций нет, но они появятся в ближайшее время!");
+            $this->reply(__("messages.promo_message_1"));
             return;
         }
         $keyboard = [];
@@ -245,7 +245,7 @@ trait CustomBotMenu
                 ["text" => $cat->title, "callback_data" => "/category " . $cat->id]
             ]);
 
-        $this->sendMessage("Категории акций:", $keyboard);
+        $this->sendMessage(__("messages.promo_message_2"), $keyboard);
     }
 
     public function startConversation($conversaton)

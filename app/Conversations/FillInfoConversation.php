@@ -17,7 +17,6 @@ class FillInfoConversation extends Conversation
 
     public function __construct($bot)
     {
-        $this->initKeyboards();
         $this->setBot($bot);
     }
 

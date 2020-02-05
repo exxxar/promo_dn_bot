@@ -21,11 +21,6 @@ use Illuminate\Support\Facades\Log;
 class SkidkiDNBot extends Bot implements iSkidkiDNBot
 {
 
-    public function __construct()
-    {
-        $this->initKeyboards();
-    }
-
     public function getEventsAll($page)
     {
         $events = Event::with(['company'])

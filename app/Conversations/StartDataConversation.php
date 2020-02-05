@@ -34,7 +34,7 @@ class StartDataConversation extends Conversation
 
     public function __construct($bot, $data)
     {
-        $this->initKeyboards();
+
         $this->setBot($bot);
         $this->data = $data;
     }
@@ -48,7 +48,7 @@ class StartDataConversation extends Conversation
             $this->startWithData();
         } catch (\Exception $e) {
             Log::error(get_class($this) . " " . $e->getMessage() . " " . $e->getLine());
-            $this->fallbackMenu("Добрый день!Приветствуем вас в нашем акционном боте! Сейчас у нас технические работы.\n");
+            $this->fallbackMenu(__("messages.menu_title_7"));
         }
     }
 
@@ -104,7 +104,7 @@ class StartDataConversation extends Conversation
 
         if ($canBeRefferal) {
             $this->activateRefferal();
-            $this->mainMenu('Добрый день! Приветствуем вас в нашем акционном боте! Мы рады, что Вы присоединились к нам. Все акции будут активны с 1 февраля!');
+            $this->mainMenu(__("messages.menu_title_8"));
 
             if ($this->code == "100" && intval($this->promo_id) != 0) {
                 $this->openEvent();
@@ -134,11 +134,11 @@ class StartDataConversation extends Conversation
             ]);
 
         if (count($keyboard) == 0) {
-            $this->reply("Вы не добавлены не в одну компанию и не можете проводить процесс списания.");
+            $this->reply(__("messages.payment_message_5"));
             return;
         }
 
-        $this->sendMessage("Диалог управления средствами\nВыберите вашу компанию:", $keyboard);
+        $this->sendMessage(__("messages.payment_message_6"), $keyboard);
 
 
     }
@@ -160,7 +160,7 @@ class StartDataConversation extends Conversation
             ->first();
 
         if ($on_promo) {
-            $this->reply('Приз по акции уже был активирован ранее');
+            $this->reply(__("messages.promo_message_3"));
             return;
         }
 
@@ -180,7 +180,7 @@ class StartDataConversation extends Conversation
 
             $promoTitle = $promo->title;
             $promoDescription = $promo->description;
-            $this->reply("Приз по акции `$promoTitle` успешно активирован. Описание:\n$promoDescription");
+            $this->reply(sprintf(__("messages.promo_message_4"),$promoTitle,$promoDescription));
 
 
             event(new AchievementEvent(AchievementTriggers::MaxReferralBonusCount, 10, $remote_user));
@@ -189,9 +189,9 @@ class StartDataConversation extends Conversation
 
 
         if ($promo->current_activation_count == $promo->activation_count) {
-            $this->reply('Больше нет призов по акции, нет возможности выдать приз пользователю!');
+            $this->reply(__("messages.promo_message_5"));
             $this->sendMessageToChat($remote_user->telegram_chat_id,
-                "Больше нет призов по акции, вы не успели(");
+                __("messages.promo_message_6"));
         }
 
         $remote_user->activated = 1;
@@ -233,7 +233,7 @@ class StartDataConversation extends Conversation
          $this->bot->reply($sender_user->id??"empty");*/
 
         if ($this->getUser()->id == $sender_user->id) {
-            $this->reply("Вы перешли по собственной ссылке");
+            $this->reply(__("messages.ref_message_1"));
             return;
         }
 
