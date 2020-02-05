@@ -293,7 +293,7 @@ Route::prefix('admin')->group(function () {
     Route::post('/announce', 'HomeController@announce')
         ->name('users.announce');
 
-    Route::post('/announce', 'HomeController@setInformation')
+    Route::post('/incoming_massage', 'HomeController@setInformation')
         ->name('users.incoming_massage');
 
     Route::get('/sender', 'HomeController@sender');
