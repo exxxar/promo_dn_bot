@@ -426,31 +426,28 @@ class HomeController extends Controller
 
         $accounts = $fb->request('GET', '/me/accounts');
 
-        $batch = [
-            'user-photos' => $accounts,
-        ];
-
-
-        try {
-            $responses = $fb->sendBatchRequest($batch, $accessToken);
-        } catch (FacebookResponseException $e) {
-            // When Graph returns an error
-            Log::error( 'Graph returned an error: ' . $e->getMessage());
-            return;
-        } catch (FacebookSDKException $e) {
-            // When validation fails or other local issues
-            Log::error('Facebook SDK returned an error: ' . $e->getMessage());
-            return;
-        }
+        $responses = $fb->sendBatchRequest([
+            'data' => $accounts,
+        ], $accessToken);
 
         foreach ($responses as $key => $response) {
-            if ($response->isError()) {
-                $e = $response->getThrownException();
-            } else {
+          $dataId = \GuzzleHttp\json_decode($response->getBody())->id;
 
-                Log::info("Response: " . $response->getBody() );
-               
+            $req = $fb->request('GET', "/$dataId?fields=instagram_business_account");
+
+            $responses = $fb->sendBatchRequest([
+                'data' => $req,
+            ], $accessToken);
+
+
+            try {
+                $localId = json_decode($responses[0]->getBody(), true)["instagram_business_account"]["id"];
+                Log::info("ID=$localId");
+            }catch (\Exception $e){
+
             }
+
+
         }
     }
 }
