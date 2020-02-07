@@ -62,9 +62,12 @@
                                     <a class="btn btn-link" href="{{ route('users.edit',$user->id) }}">
                                         <i class="fas fa-edit"></i>
                                     </a>
-                                    <a class="btn btn-link" href="{{ route('users.promotions',$user->id) }}" title="Поучаствовал в акции">
-                                        <i class="fas fa-audio-description"></i>
-                                    </a>
+                                    @if($user->onPromos())
+                                        <a class="btn btn-link" href="{{ route('users.promotions',$user->id) }}"
+                                           title="Поучаствовал в акции">
+                                            <i class="fas fa-audio-description"></i>
+                                        </a>
+                                    @endif
                                 </td>
                                 <td>{{$user->phone}}</td>
                                 <td>

@@ -79,6 +79,11 @@ class User extends Authenticatable
             ->withTimestamps();
     }
 
+    public function onPromos()
+    {
+        return $this->promos()->count()>0;
+    }
+
     public function companies()
     {
         return $this->belongsToMany('App\Company', 'user_in_companies', 'user_id', 'company_id')
