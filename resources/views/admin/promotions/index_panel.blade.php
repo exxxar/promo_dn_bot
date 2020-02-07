@@ -34,7 +34,7 @@
                 @isset($promotions)
 
                     @if(count($promotions)===0)
-                        <h2>К сожалению, акций в данной категории сейчас нет!</h2>
+                        <h2>К сожалению, доступных для просмотра акций нет!</h2>
 
                     @endif
                     <div class="row justify-content-around">
