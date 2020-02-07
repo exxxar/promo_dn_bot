@@ -292,7 +292,7 @@ class UsersController extends Controller
 
 
     public function getUserPromotions(Request $request,$id){
-        $promotions = (User::with(["promos"])->find($id))
+        $promotions = (User::with(["promotions"])->find($id))
             ->promotions()
             ->orderBy('position', 'DESC')
             ->paginate(10);

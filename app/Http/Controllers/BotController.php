@@ -157,6 +157,13 @@ class BotController extends Controller
             ->getPromotionsMenu();
     }
 
+    public function getInstaPromos($bot, $page)
+    {
+        $this->sdnbot
+            ->setBot($bot)
+            ->getInstaPromos($page);
+    }
+
     public function getActivityInformation($bot)
     {
         $this->sdnbot

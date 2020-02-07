@@ -38,6 +38,8 @@ interface iSkidkiDNBot
 
     public function getLatestCashBack();
 
+    public function getInstaPromos($page);
+
 
     public function getPromotionsByCategory($page);
     public function getPromotionsByCompany($page);
