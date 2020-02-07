@@ -287,7 +287,7 @@ class UsersController extends Controller
                 ->orWhere("phone", "like", "%$user%")
                 ->orWhere("address", "like", "%$user%")
                 ->orderBy('id', "DESC")
-                ->get();
+                ->paginate(15);
 
             if ($withPromos) {
                 Log::info("1");
@@ -298,7 +298,7 @@ class UsersController extends Controller
                 Log::info("2");
             }
 
-            $users = $users->paginate(15);
+            //$users = $users->paginate(15);
             Log::info("3");
 
         } catch (\Exception $e) {
