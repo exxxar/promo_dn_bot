@@ -408,7 +408,7 @@ class HomeController extends Controller
                 return;
             }
 
-            Log::ingo("Long-lived=".$accessToken->getValue());
+            Log::info("Long-lived=".$accessToken->getValue());
         }
 
         $_SESSION['fb_access_token'] = (string)$accessToken;
