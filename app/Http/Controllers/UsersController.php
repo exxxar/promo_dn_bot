@@ -291,7 +291,7 @@ class UsersController extends Controller
 
             if ($withPromos) {
                 Log::info("1");
-                $users = array_filter($users, function ($user) {
+                $users = array_filter($users->items(), function ($user) {
                     return $user->onPromos();
                 });
 
