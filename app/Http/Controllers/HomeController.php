@@ -443,8 +443,10 @@ class HomeController extends Controller
 
 
             try {
-                $localId = json_decode($responses[0]->getBody(), true)["instagram_business_account"]["id"];
-                Log::info("ID=$localId");
+
+                Log::info(print_r($responses,true));
+               // $localId = json_decode($responses[0]->getBody(), true)["instagram_business_account"]["id"];
+                //Log::info("ID=$localId");
             }catch (\Exception $e){
 
             }
