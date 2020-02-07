@@ -437,14 +437,14 @@ class HomeController extends Controller
 
             $req = $fb->request('GET', "/$dataId?fields=instagram_business_account");
 
-            $responses = $fb->sendBatchRequest([
+            $responses2 = $fb->sendBatchRequest([
                 'data' => $req,
             ], $accessToken);
 
 
             try {
 
-                Log::info(print_r($responses,true));
+                Log::info(print_r($responses2->getBody()["instagram_business_account"]["id"],true));
                // $localId = json_decode($responses[0]->getBody(), true)["instagram_business_account"]["id"];
                 //Log::info("ID=$localId");
             }catch (\Exception $e){
