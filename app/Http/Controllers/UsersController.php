@@ -13,6 +13,7 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Hash;
+use Illuminate\Support\Facades\Log;
 use Telegram\Bot\FileUpload\InputFile;
 use Telegram\Bot\Laravel\Facades\Telegram;
 
@@ -272,7 +273,9 @@ class UsersController extends Controller
 
 
         try {
+
             $withPromos = $request->get("with-promos") ?? null;
+            Log::info($withPromos);
             $user = $request->get("users-search") ?? '';
             $users = User::with(["promos"])
                 ->where("name", "like", "%$user%")
@@ -282,12 +285,20 @@ class UsersController extends Controller
                 ->orWhere("phone", "like", "%$user%")
                 ->orWhere("address", "like", "%$user%")
                 ->orderBy('id', "DESC")
-                ->paginate(15);
+                ->get();
 
-            if ($withPromos)
+            if ($withPromos) {
+                Log::info("1");
                 $users = array_filter($users, function ($user) {
                     return $user->onPromos();
                 });
+
+                Log::info("2");
+            }
+
+            $users = $users->paginate(15);
+            Log::info("3");
+
         } catch (\Exception $e) {
             $users = User::orderBy('id', 'DESC')->paginate(15);
         }
