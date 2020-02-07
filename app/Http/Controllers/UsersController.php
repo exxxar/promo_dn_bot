@@ -302,6 +302,7 @@ class UsersController extends Controller
             Log::info("3");
 
         } catch (\Exception $e) {
+            Log::info($e->getMessage()." ".$e->getLine());
             $users = User::orderBy('id', 'DESC')->paginate(15);
         }
 
