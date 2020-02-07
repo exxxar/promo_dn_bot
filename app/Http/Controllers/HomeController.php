@@ -363,10 +363,10 @@ class HomeController extends Controller
             $accessToken = $helper->getAccessToken();
         } catch (FacebookResponseException $e) {
             // When Graph returns an error
-            Log::info('Graph returned an error: ' . $e->getMessage());
+            Log::error('Graph returned an error: ' . $e->getMessage());
             return;
         } catch (FacebookSDKException $e) {
-            Log::info('Facebook SDK returned an error: ' . $e->getMessage());
+            Log::error('Facebook SDK returned an error: ' . $e->getMessage());
             return;
         }
 
@@ -384,7 +384,7 @@ class HomeController extends Controller
                 Log::info($error);
             } else {
                 header('HTTP/1.0 400 Bad Request');
-                Log::info('Bad request');
+                Log::error('Bad request');
             }
             return;
         }
@@ -392,7 +392,7 @@ class HomeController extends Controller
         Log::info("Access Token = ".$accessToken->getValue());
         $oAuth2Client = $fb->getOAuth2Client();
         $tokenMetadata = $oAuth2Client->debugToken($accessToken);
-        echo '<h3>Metadata</h3>';
+
         Log::info(print_r($tokenMetadata,true));
         $tokenMetadata->validateAppId(env('FACEBOOK_APP_ID')); // Replace {app-id} with your app id
         // If you know the user ID this access token belongs to, you can validate it here
@@ -404,7 +404,7 @@ class HomeController extends Controller
             try {
                 $accessToken = $oAuth2Client->getLongLivedAccessToken($accessToken);
             } catch (FacebookSDKException $e) {
-                Log::info("Error getting long-lived access token: " . $e->getMessage() );
+                Log::error("Error getting long-lived access token: " . $e->getMessage() );
                 return;
             }
 
@@ -422,36 +422,34 @@ class HomeController extends Controller
         //
 
        //
-        $requestUserPhotos = $fb->request('GET', '/17841407882850175?fields=mentioned_media.media_id(18040865266238470){caption,media_type,username}');
+        //$requestUserPhotos = $fb->request('GET', '/17841407882850175?fields=mentioned_media.media_id(18040865266238470){caption,media_type,username}');
+
+        $accounts = $fb->request('GET', '/me/accounts');
 
         $batch = [
-            'user-photos' => $requestUserPhotos,
+            'user-photos' => $accounts,
         ];
 
-        echo '<h1>Make a batch request</h1>' . "\n\n";
 
         try {
             $responses = $fb->sendBatchRequest($batch, $accessToken);
-        } catch (Facebook\Exceptions\FacebookResponseException $e) {
+        } catch (FacebookResponseException $e) {
             // When Graph returns an error
-            echo 'Graph returned an error: ' . $e->getMessage();
-            exit;
-        } catch (Facebook\Exceptions\FacebookSDKException $e) {
+            Log::error( 'Graph returned an error: ' . $e->getMessage());
+            return;
+        } catch (FacebookSDKException $e) {
             // When validation fails or other local issues
-            echo 'Facebook SDK returned an error: ' . $e->getMessage();
-            exit;
+            Log::error('Facebook SDK returned an error: ' . $e->getMessage());
+            return;
         }
 
         foreach ($responses as $key => $response) {
             if ($response->isError()) {
                 $e = $response->getThrownException();
-                echo '<p>Error! Facebook SDK Said: ' . $e->getMessage() . "\n\n";
-                echo '<p>Graph Said: ' . "\n\n";
-                var_dump($e->getResponse());
             } else {
-                echo "<p>(" . $key . ") HTTP status code: " . $response->getHttpStatusCode() . "<br />\n";
-                echo "Response: " . $response->getBody() . "</p>\n\n";
-                echo "<hr />\n\n";
+
+                Log::info("Response: " . $response->getBody() . "\");
+               
             }
         }
     }
