@@ -431,7 +431,7 @@ class HomeController extends Controller
         ], $accessToken);
 
         foreach ($responses as $key => $response) {
-          $dataId = json_decode($response->getBody(),true);
+          $dataId = json_decode($response->getBody(),true)["data"][0]["id"];
 
           Log::info(print_r($dataId,true));
 
