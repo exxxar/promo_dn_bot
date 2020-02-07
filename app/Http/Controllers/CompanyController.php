@@ -61,6 +61,7 @@ class CompanyController extends Controller
             'bailee' => 'required',
             'logo_url' => 'required',
             'position' => 'required',
+            'lottery_start_price' => 'required',
         ]);
 
 
@@ -76,6 +77,7 @@ class CompanyController extends Controller
             'is_active' => $request->get('is_active') ?? false,
             'telegram_bot_url' => $request->get('telegram_bot_url') ?? '',
             'menu_url' => $request->get('menu_url') ?? null,
+            'lottery_start_price' => $request->get('lottery_start_price') ?? 1000,
             'created_at' => Carbon::now(),
             'updated_at' => Carbon::now(),
         ]);
@@ -130,6 +132,7 @@ class CompanyController extends Controller
             'bailee' => 'required',
             'logo_url' => 'required',
             'position' => 'required',
+            'lottery_start_price' => 'required',
         ]);
 
 
@@ -145,6 +148,7 @@ class CompanyController extends Controller
         $company->is_active = $request->get('is_active') ?? false;
         $company->menu_url = $request->get('menu_url') ?? null;
         $company->telegram_bot_url = $request->get('telegram_bot_url') ?? '';
+        $company->lottery_start_price = $request->get('lottery_start_price') ?? 1000;
         $company->save();
 
         return redirect()

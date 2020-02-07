@@ -38,6 +38,12 @@
                             </td>
                         </tr>
                         <tr>
+                            <td>Позиция</td>
+                            <td>
+                                <p>{{$article->position}}</p>
+                            </td>
+                        </tr>
+                        <tr>
                             <td>Раздел</td>
                             <td>
                                 <p>{{$article->part->key}}</p>

@@ -78,6 +78,10 @@
                             </td>
                         </tr>
                         <tr>
+                            <td>Цена промокода(розыгрыша) за CashBack</td>
+                            <td><input type="number" min="0" name="lottery_start_price" class="form-control"></td>
+                        </tr>
+                        <tr>
                             <td>Адрес</td>
                             <td>
                                 <input type="text" name="address" class="form-control" required>

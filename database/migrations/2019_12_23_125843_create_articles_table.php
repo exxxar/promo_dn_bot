@@ -18,6 +18,7 @@ class CreateArticlesTable extends Migration
             $table->string('url',1000);
             $table->integer('part');
             $table->boolean('is_visible');
+            $table->integer('position')->default(0);
             $table->timestamps();
         });
     }

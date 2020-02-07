@@ -6,6 +6,10 @@ $botman = resolve('botman');
 
 
 $botman->hears("/lottery", BotController::class . '@lotteryConversation');
+$botman->hears("/start_cashback_lottery", BotController::class . '@lotteryCashback');
+$botman->hears("/get_gift_companies (gift|lottery)", BotController::class . '@getLotteryGiftCompanies');
+$botman->hears("/pay_lottery (gift|lottery) ([0-9]+)", BotController::class . '@payForLottery');
+
 $botman->hears("/start ([0-9a-zA-Z=]+)", BotController::class . '@startDataConversation');
 $botman->hears("/promotion ([0-9]+)", BotController::class . '@promoConversation');
 $botman->hears("/lotusprofile ([0-9]+)", BotController::class . '@lotusprofileConversation');

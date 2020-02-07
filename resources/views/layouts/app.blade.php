@@ -68,6 +68,12 @@
     </div>
     <ul class="c-sidebar-nav">
         <li class="c-sidebar-nav-item">
+            <a class="c-sidebar-nav-link" href="{{ route('home') }}">
+                <i class="cil-cog c-sidebar-nav-icon"></i>
+                Главная страница</a>
+        </li>
+
+        <li class="c-sidebar-nav-item">
             <a class="c-sidebar-nav-link" href="{{ route('promotions.index') }}">
                 <i class="cil-tags c-sidebar-nav-icon"></i>
                 Акции</a>

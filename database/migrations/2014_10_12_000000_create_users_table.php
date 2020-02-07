@@ -22,6 +22,7 @@ class CreateUsersTable extends Migration
 
             $table->string('fio_from_telegram')->default('');
             $table->string('fio_from_request')->default('')->nullable();
+            $table->string('instagram')->nullable();
 
             $table->string('phone')->unique()->nullable();
 

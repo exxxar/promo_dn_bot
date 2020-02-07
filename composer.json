@@ -23,6 +23,7 @@
         "doctrine/dbal": "^2.10",
         "facebook/graph-sdk": "^5.7",
         "fideloper/proxy": "^4.0",
+        "gregoriohc/laravel-trello": "^0.3.0",
         "grkamil/laravel-telegram-logging": "^1.1",
         "irazasyed/telegram-bot-sdk": "^3.0",
         "kyslik/column-sortable": "^6.2",

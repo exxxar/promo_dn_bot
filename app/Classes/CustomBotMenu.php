@@ -95,12 +95,10 @@ trait CustomBotMenu
                 User::where("telegram_chat_id", $this->getChatId())->first() :
                 User::with($params)->where("telegram_chat_id", $this->getChatId())->first()) ?? null;
 
-
     }
 
     public function reply($message)
     {
-        //$this->bot->reply($message);
         $this->sendMessage($message);
     }
 

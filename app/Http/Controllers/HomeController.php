@@ -7,6 +7,9 @@ use App\Company;
 use App\Promotion;
 use App\User;
 use Carbon\Carbon;
+use Facebook\Exceptions\FacebookResponseException;
+use Facebook\Exceptions\FacebookSDKException;
+use Facebook\Facebook;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Log;
@@ -26,6 +29,35 @@ class HomeController extends Controller
         $this->middleware('auth');
     }
 
+    private function instaURL()
+    {
+        if (!session_id()) {
+            session_start();
+        }
+
+        $fb = new Facebook([
+            'app_id' => env('FACEBOOK_APP_ID'),
+            'app_secret' => env('FACEBOOK_APP_SECRET'),
+            'default_graph_version' => 'v3.2',
+            'persistent_data_handler' => 'session'
+        ]);
+
+        $helper = $fb->getRedirectLoginHelper();
+
+        $permissions = ['manage_pages',
+            'pages_show_list',
+            'publish_pages',
+            'business_management',
+            'instagram_basic',
+            'public_profile',
+            'instagram_manage_insights',
+            'instagram_manage_comments',
+            'ads_management'];
+        $loginUrl = $helper->getLoginUrl('https://skidka-service.ru/insta', $permissions);
+
+        return $loginUrl;
+    }
+
     /**
      * Show the application dashboard.
      *
@@ -40,6 +72,8 @@ class HomeController extends Controller
         $incoming_message = (json_decode($json_data, true))["menu_title_7"];
 
         $current_user = User::with(["companies"])->find(Auth::user()->id);
+
+        $instaURL = $this->instaURL();
 
         if ($request->isMethod("POST")) {
 
@@ -57,14 +91,14 @@ class HomeController extends Controller
 
                 $qrimage = "https://api.qrserver.com/v1/create-qr-code/?size=150x150&data=https://t.me/" . env("APP_BOT_NAME") . "?start=$code";
 
-                return view('home', compact('users', 'promotions', 'qrimage', 'current_user', "tmp_user", "tmp_promo", 'incoming_message'));
+                return view('home', compact('users', 'promotions', 'qrimage', 'current_user', "tmp_user", "tmp_promo", 'incoming_message', 'instaURL'));
             } catch (\Exception $e) {
                 return redirect()
                     ->back();
             }
         }
 
-        return view('home', compact('users', 'promotions', 'current_user', 'incoming_message'));
+        return view('home', compact('users', 'promotions', 'current_user', 'incoming_message', 'instaURL'));
     }
 
     public function searchAjax(Request $request)
@@ -304,7 +338,121 @@ class HomeController extends Controller
 
         return view("admin.langs.index", compact('params'));
     }
-    public function translations(){
+
+    public function translations()
+    {
         return view('admin.langs.index');
+    }
+
+
+    public function instagramCallabck()
+    {
+        if (!session_id()) {
+            session_start();
+        }
+        $fb = new Facebook([
+            'app_id' => env('FACEBOOK_APP_ID'), // Replace {app-id} with your app id
+            'app_secret' => env('FACEBOOK_APP_SECRET'),
+            'default_graph_version' => 'v3.2',
+            'persistent_data_handler' => 'session'
+        ]);
+
+        $helper = $fb->getRedirectLoginHelper();
+
+        try {
+            $accessToken = $helper->getAccessToken();
+        } catch (FacebookResponseException $e) {
+            // When Graph returns an error
+            Log::info('Graph returned an error: ' . $e->getMessage());
+            return;
+        } catch (FacebookSDKException $e) {
+            Log::info('Facebook SDK returned an error: ' . $e->getMessage());
+            return;
+        }
+
+        if (!isset($accessToken)) {
+            if ($helper->getError()) {
+                header('HTTP/1.0 401 Unauthorized');
+
+                $error = sprintf("Error:%s\nError Code:%s\nError Reason:%s\nError Description:%s",
+                    $helper->getError(),
+                    $helper->getErrorCode(),
+                    $helper->getErrorReason(),
+                    $helper->getErrorDescription()
+                );
+
+                Log::info($error);
+            } else {
+                header('HTTP/1.0 400 Bad Request');
+                Log::info('Bad request');
+            }
+            return;
+        }
+
+        Log::info("Access Token = ".$accessToken->getValue());
+        $oAuth2Client = $fb->getOAuth2Client();
+        $tokenMetadata = $oAuth2Client->debugToken($accessToken);
+        echo '<h3>Metadata</h3>';
+        Log::info(print_r($tokenMetadata,true));
+        $tokenMetadata->validateAppId(env('FACEBOOK_APP_ID')); // Replace {app-id} with your app id
+        // If you know the user ID this access token belongs to, you can validate it here
+        //$tokenMetadata->validateUserId('123');
+        $tokenMetadata->validateExpiration();
+
+        if (!$accessToken->isLongLived()) {
+            // Exchanges a short-lived access token for a long-lived one
+            try {
+                $accessToken = $oAuth2Client->getLongLivedAccessToken($accessToken);
+            } catch (FacebookSDKException $e) {
+                Log::info("Error getting long-lived access token: " . $e->getMessage() );
+                return;
+            }
+
+            Log::ingo("Long-lived=".$accessToken->getValue());
+        }
+
+        $_SESSION['fb_access_token'] = (string)$accessToken;
+
+        ////ig_hashtag_search?user_id=17841407882850175&q=альпинадонну - находим хэштег
+        ////17913566134265893/top_media?user_id=17841407882850175&fields=caption,media_type,media_url
+        ////17913566134265893/top_media?user_id=17841407882850175
+        ////17913566134265893/recent_media?fields=caption,media_type,media_url,like_count,id,permalink&user_id=17841407882850175 - находим недавние медиа объекты с хэштегом
+        //
+        ////17841407882850175?fields=mentioned_media.media_id(18040865266238470){caption,media_type,username}   - получаем инфу о пользователе по идентификации медиа-объекта
+        //
+
+       //
+        $requestUserPhotos = $fb->request('GET', '/17841407882850175?fields=mentioned_media.media_id(18040865266238470){caption,media_type,username}');
+
+        $batch = [
+            'user-photos' => $requestUserPhotos,
+        ];
+
+        echo '<h1>Make a batch request</h1>' . "\n\n";
+
+        try {
+            $responses = $fb->sendBatchRequest($batch, $accessToken);
+        } catch (Facebook\Exceptions\FacebookResponseException $e) {
+            // When Graph returns an error
+            echo 'Graph returned an error: ' . $e->getMessage();
+            exit;
+        } catch (Facebook\Exceptions\FacebookSDKException $e) {
+            // When validation fails or other local issues
+            echo 'Facebook SDK returned an error: ' . $e->getMessage();
+            exit;
+        }
+
+        foreach ($responses as $key => $response) {
+            if ($response->isError()) {
+                $e = $response->getThrownException();
+                echo '<p>Error! Facebook SDK Said: ' . $e->getMessage() . "\n\n";
+                echo '<p>Graph Said: ' . "\n\n";
+                var_dump($e->getResponse());
+            } else {
+                echo "<p>(" . $key . ") HTTP status code: " . $response->getHttpStatusCode() . "<br />\n";
+                echo "Response: " . $response->getBody() . "</p>\n\n";
+                echo "<hr />\n\n";
+            }
+        }
     }
 }

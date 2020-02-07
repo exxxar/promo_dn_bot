@@ -183,7 +183,7 @@ class StartDataConversation extends Conversation
             $this->reply(sprintf(__("messages.promo_message_4"),$promoTitle,$promoDescription));
 
 
-            event(new AchievementEvent(AchievementTriggers::MaxReferralBonusCount, 10, $remote_user));
+            event(new AchievementEvent(AchievementTriggers::MaxReferralBonusCount, $promo->refferal_bonus, $remote_user));
             event(new AchievementEvent(AchievementTriggers::PromosActivationSequence, 1, $remote_user));
         }
 
@@ -216,7 +216,7 @@ class StartDataConversation extends Conversation
 
         event(new NetworkLevelRecounterEvent($sender_user->id));
         event(new AchievementEvent(AchievementTriggers::ReferralCount, 1, $sender_user));
-        event(new AchievementEvent(AchievementTriggers::MaxReferralBonusCount, 1, $sender_user));
+        event(new AchievementEvent(AchievementTriggers::MaxReferralBonusCount, env("REFERRAL_BONUS"), $sender_user));
 
         $this->sendMessageToChat($remote_user->telegram_chat_id,
             "Вам начислено " . env("REFERRAL_BONUS") . " бонусов.");

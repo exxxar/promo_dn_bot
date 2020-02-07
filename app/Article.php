@@ -20,5 +20,6 @@ class Article extends Model
         'url',
         'part',
         'is_visible',
+        'position'
     ];
 }

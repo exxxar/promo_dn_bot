@@ -20,7 +20,8 @@ class Company extends Model
         'position',
         'telegram_bot_url',
         'is_active',
-        'menu_url'
+        'menu_url',
+        'lottery_start_price'
     ];
 
     public function getPromotionsSortedByPosition()
@@ -62,6 +63,11 @@ class Company extends Model
         return array_filter($this->promotions()->get(), function ($item) use ($chatId) {
             return $item->isNotActiveByUser($chatId);
         });
+    }
+
+    public function hasPrizes()
+    {
+        return $this->prizes()->count() > 0;
     }
 
 

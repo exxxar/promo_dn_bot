@@ -28,6 +28,7 @@ class User extends Authenticatable
         'fio_from_telegram',
         'fio_from_request',
         'phone',
+        'instagram',
         'avatar_url',
         'address',
         'sex',

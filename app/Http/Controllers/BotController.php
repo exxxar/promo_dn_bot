@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 
 use App\Classes\SkidkiDNBot;
 use App\Conversations\FillInfoConversation;
+use App\Conversations\LotteryCashbackConversation;
 use App\Conversations\LotteryConversation;
 use App\Conversations\LotusProfileConversation;
 use App\Conversations\PaymentConversation;
@@ -202,6 +203,21 @@ class BotController extends Controller
             ->getMyFriends();
     }
 
+    public function getLotteryGiftCompanies($bot, $giftType)
+    {
+        $this->sdnbot
+            ->setBot($bot)
+            ->getLotteryGiftCompanies($giftType);
+    }
+
+
+    public function payForLottery($bot, $type, $companyId)
+    {
+        $this->sdnbot
+            ->setBot($bot)
+            ->payForLottery($type, $companyId);
+    }
+
     public function getLotteryMenu($bot)
     {
         $this->sdnbot
@@ -285,6 +301,13 @@ class BotController extends Controller
         $this->sdnbot
             ->setBot($bot)
             ->startConversation(new LotteryConversation($bot));
+    }
+
+    public function lotteryCashback($bot)
+    {
+        $this->sdnbot
+            ->setBot($bot)
+            ->getLotteryCashBack();
     }
 
     public function startDataConversation($bot, $data)

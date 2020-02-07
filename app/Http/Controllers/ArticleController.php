@@ -17,7 +17,7 @@ class ArticleController extends Controller
     public function index(Request $request)
     {
         //
-        $articles = Article::orderBy('id', 'DESC')
+        $articles = Article::orderBy('position', 'DESC')
             ->paginate(15);
 
 
@@ -50,12 +50,14 @@ class ArticleController extends Controller
             'url' => 'required',
             'part' => 'required',
             'is_visible' => 'required',
+            'position' => 'required',
         ]);
 
         $article = Article::create([
             'url' => $request->get('url') ?? '',
             'part' => Parts::getInstance(intval($request->get('part')))->value ?? 0,
             'is_visible' => $request->get('is_visible') ?? 0,
+            'position' => $request->get('position') ?? 0,
             'created_at' => Carbon::now(),
             'updated_at' => Carbon::now(),
         ]);
@@ -112,12 +114,14 @@ class ArticleController extends Controller
             'url' => 'required',
             'part' => 'required',
             'is_visible' => 'required',
+            'position' => 'required',
         ]);
 
         $article = Article::find($id);
         $article->url = $request->get("url") ?? '';
         $article->part = Parts::getInstance(intval($request->get('part')))->value ?? 0;
         $article->is_visible = $request->get('is_visible') ?? 0;
+        $article->position = $request->get('position') ?? 0;
         $article->save();
 
         return redirect()

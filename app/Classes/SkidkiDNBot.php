@@ -14,6 +14,8 @@ use App\Event;
 use App\Prize;
 use App\Promocode;
 use App\Promotion;
+use App\RefferalsPaymentHistory;
+use App\User;
 use BotMan\BotMan\BotMan;
 use Carbon\Carbon;
 use Illuminate\Support\Facades\Log;
@@ -43,7 +45,7 @@ class SkidkiDNBot extends Bot implements iSkidkiDNBot
                 if (!is_null($event->promo_id)) {
                     $keyboard = [
                         [
-                            ["text" =>__('messages.get_all_events_btn') , "callback_data" => "/promotion " . $event->promo_id]
+                            ["text" => __('messages.get_all_events_btn'), "callback_data" => "/promotion " . $event->promo_id]
                         ]
                     ];
                 }
@@ -214,7 +216,7 @@ class SkidkiDNBot extends Bot implements iSkidkiDNBot
         if ($on_ach_activated)
             if ($on_ach_activated->activated == false)
                 array_push($keyboard, [
-                    ["text" =>__("messages.achievements_btn_1") , "callback_data" => "/achievements_get_prize $id"]
+                    ["text" => __("messages.achievements_btn_1"), "callback_data" => "/achievements_get_prize $id"]
                 ]);
 
         array_push($keyboard, [
@@ -353,6 +355,12 @@ class SkidkiDNBot extends Bot implements iSkidkiDNBot
             [
                 ['text' => __("messages.faq_btn_2"), 'url' => env('APP_URL') . "#faq"],
             ],
+            [
+                ['text' => __("messages.promo_menu_btn_4"), 'url' => env("APP_PROMO_LINK")],
+            ],
+            [
+                ['text' => __("messages.faq_btn_3"), 'url' => env("CHANNEL_LINK")],
+            ],
         ];
 
         $this->sendMessage(__("messages.faq_message_1"), $keyboard);
@@ -367,14 +375,16 @@ class SkidkiDNBot extends Bot implements iSkidkiDNBot
                 ['text' => __("messages.promo_menu_btn_2"), 'callback_data' => '/promo_by_company 0'],
             ],
             [
+                ['text' => __("messages.promo_menu_btn_7"), 'callback_data' => "/insta_promos"],
+            ],
+            [
+                ['text' => __("messages.promo_menu_btn_6"), 'callback_data' => '/start_lottery_test']
+            ],
+            [
                 ['text' => __("messages.promo_menu_btn_3"), 'callback_data' => "/achievements_panel"],
             ],
-            [
-                ['text' => __("messages.promo_menu_btn_4"), 'url' => env("APP_PROMO_LINK")],
-            ],
-            [
-                ['text' => __("messages.promo_menu_btn_5"), 'url' => env("CHANNEL_LINK")],
-            ],
+
+
 
         ];
 
@@ -445,7 +455,7 @@ class SkidkiDNBot extends Bot implements iSkidkiDNBot
                 ["text" => __("messages.achievements_btn_4"), "callback_data" => "/achievements_my 0"],
             ]
         ];
-        $this->sendMessage(__("messages.achievements_message_7"),$keyboard);
+        $this->sendMessage(__("messages.achievements_message_7"), $keyboard);
     }
 
     public function getPromouterMenu()
@@ -537,9 +547,12 @@ class SkidkiDNBot extends Bot implements iSkidkiDNBot
 
                 $isEmpty = false;
 
+                $emptyHandler = is_null($promo->handler)||strlen(trim($promo->handler))==0;
+
                 $keyboard = [
                     [
-                        ["text" => __("messages.promo_btn_1"), 'callback_data' => $promo->handler == null ? "/promotion " . $promo->id : $promo->handler . " " . $promo->id]
+                        ["text" => __("messages.promo_btn_1"), 'callback_data' => $emptyHandler ? "/promotion " . $promo->id : $promo->handler . " " . $promo->id],
+                        ["text" => __("messages.promo_btn_2"), 'switch_inline_query' => $promo->title]
                     ]
                 ];
 
@@ -598,9 +611,12 @@ class SkidkiDNBot extends Bot implements iSkidkiDNBot
 
                 $isEmpty = false;
 
+                $emptyHandler = is_null($promo->handler)||strlen(trim($promo->handler))==0;
+
                 $keyboard = [
                     [
-                        ['text' => __("messages.promo_btn_1"), 'callback_data' => $promo->handler == null ? "/promotion " . $promo->id : $promo->handler . " " . $promo->id],
+                        ['text' => __("messages.promo_btn_1"), 'callback_data' => $emptyHandler ? "/promotion " . $promo->id : $promo->handler . " " . $promo->id],
+                        ["text" => __("messages.promo_btn_2"), 'switch_inline_query' => $promo->title]
                     ],
                 ];
 
@@ -621,7 +637,7 @@ class SkidkiDNBot extends Bot implements iSkidkiDNBot
             ->where("is_visible", 1)
             ->skip($page * config("bot.results_per_page"))
             ->take(config("bot.results_per_page"))
-            ->orderBy('id', 'DESC')
+            ->orderBy('position', 'DESC')
             ->get();
 
         if (count($articles) > 0) {
@@ -670,7 +686,7 @@ class SkidkiDNBot extends Bot implements iSkidkiDNBot
         $this->sendPhoto($message, $prize->image_url);
 
         $companyTitle = $prize->company->title;
-        $message = sprintf( __("messages.lottery_message_5"),
+        $message = sprintf(__("messages.lottery_message_5"),
             $companyTitle,
             $message,
             Carbon::now()
@@ -713,7 +729,7 @@ class SkidkiDNBot extends Bot implements iSkidkiDNBot
 
         $network_tmp = $this->getUser()->current_network_level > 0 ? "Сеть друзей *$network* чел.!\n" : "";
 
-        $message = sprintf( __("messages.friends_message_1"),
+        $message = sprintf(__("messages.friends_message_1"),
             $ref,
             $network_tmp);
 
@@ -723,7 +739,7 @@ class SkidkiDNBot extends Bot implements iSkidkiDNBot
                 ["text" => __("messages.friends_btn_1"), "switch_inline_query" => ""]
             ],
             [
-                ["text" => __("messages.friends_btn_2"), "url" => env("APP_URL")."#contact"]
+                ["text" => __("messages.friends_btn_2"), "url" => env("APP_URL") . "#contact"]
             ],
 
         ];
@@ -783,7 +799,7 @@ class SkidkiDNBot extends Bot implements iSkidkiDNBot
 
             if ($tmp_money > 0)
                 array_push($keyboard, [
-                    ["text" => sprintf(__("messages.money_message_2"),$tmp_money), "callback_data" => "/cashback_get"]
+                    ["text" => sprintf(__("messages.money_message_2"), $tmp_money), "callback_data" => "/cashback_get"]
                 ]);
 
         }
@@ -798,7 +814,7 @@ class SkidkiDNBot extends Bot implements iSkidkiDNBot
 
         $qr_url = env("QR_URL") . "https://t.me/" . env("APP_BOT_NAME") . "?start=$code";
 
-        $this->sendPhoto(sprintf(__("messages.money_message_3"),$message), $qr_url, $keyboard);
+        $this->sendPhoto(sprintf(__("messages.money_message_3"), $message), $qr_url, $keyboard);
     }
 
     public function getLotteryMenu()
@@ -806,12 +822,15 @@ class SkidkiDNBot extends Bot implements iSkidkiDNBot
 
         $rules = Article::where("part", Parts::Lottery)
             ->where("is_visible", 1)
-            ->orderBy("id", "DESC")
+            ->orderBy("position", "DESC")
             ->first();
 
         $keyboard = [
             [
                 ['text' => __("messages.lottery_menu_btn_1"), 'callback_data' => "/lottery"]
+            ],
+            [
+                ['text' => __("messages.lottery_menu_btn_4"), 'callback_data' => "/start_cashback_lottery"]
             ]
         ];
 
@@ -819,6 +838,135 @@ class SkidkiDNBot extends Bot implements iSkidkiDNBot
             array_push($keyboard, [['text' => __("messages.lottery_menu_btn_2"), 'url' => $rules->url]]);
 
         $this->sendMessage(__("messages.lottery_menu_btn_3"), $keyboard);
+    }
+
+    public function getLotteryCashBack()
+    {
+        $keyboard = [
+            [
+                ['text' => __("messages.lottery_menu_btn_5"), 'callback_data' => "/get_gift_companies gift"]
+            ],
+            [
+                ['text' => __("messages.lottery_menu_btn_6"), 'callback_data' => "/get_gift_companies lottery"]
+            ]
+        ];
+
+        $this->sendMessage(__("messages.lottery_menu_btn_3"), $keyboard);
+    }
+
+    public function getLotteryGiftCompanies($giftType)
+    {
+
+        $companies = Company::with(["prizes"])->get();
+        $hasPrizes = false;
+
+        foreach ($companies as $company) {
+            if (!$company->hasPrizes() || !$company->is_active)
+                continue;
+
+            $keyboard = [];
+
+            $hasPrizes = true;
+
+            array_push($keyboard, [[
+                "text" => ($giftType == "gift" ?
+                        "Подарить промокод " :
+                        "Участвовать в розыгрыше "
+                    ) . "(*" . $company->lottery_start_price . "₽*)",
+                "callback_data" => "/pay_lottery $giftType " . $company->id
+            ]]);
+            $this->sendPhoto($company->logo_url, $keyboard);
+        }
+
+        if (!$hasPrizes)
+            $this->reply(__("messages.lottery_message_7"));
+    }
+
+    public function payForLottery($giftType, $companyId)
+    {
+
+        $company = Company::with(["prizes"])->where("id", $companyId)->first() ?? null;
+
+        $user = $this->getUser();
+
+        $nedded = $company->lottery_start_price;
+
+        if ($company == null) {
+            $this->reply(__("messages.company_message_4"));
+            return;
+        }
+
+        if (!$company->hasPrizes() || !$company->is_active) {
+            $this->reply(__("messages.lottery_message_6"));
+            return;
+        }
+
+        if ($user->referral_bonus_count + $user->cashback_bonus_count < intval($nedded)) {
+            $this->reply(__("messages.payment_message_7"));
+            return;
+        }
+
+
+        if ($user->referral_bonus_count <= intval($nedded)) {
+            $module = intval($nedded) - $user->referral_bonus_count;
+            $user->referral_bonus_count = 0;
+            $user->cashback_bonus_count -= $module;
+        } else
+            $user->referral_bonus_count -= intval($nedded);
+
+        $user->save();
+
+        $skidobot = User::where("email", "skidobot@gmail.com")->first();
+
+        RefferalsPaymentHistory::create([
+            'user_id' => $user->id,
+            'company_id' => $company->id,
+            'employee_id' => $skidobot->id,
+            'value' => intval($nedded),
+        ]);
+
+        $code = md5(env("APP_BOT_NAME") . (Carbon::now()));
+        $promocode = Promocode::create([
+            'code' => $code,
+            'company_id' => $company->id,
+            'created_at' => Carbon::now(),
+            'updated_at' => Carbon::now(),
+        ]);
+
+        $this->reply("С вас было списано *" . intval($nedded) . "₽* CashBack");
+
+        if ($giftType == "gift") {
+            $this->reply(sprintf(__("messages.promocode_message_2"),$code));
+            return;
+        }
+
+        $prizes = json_decode(Prize::where("is_active", 1)
+            ->where("company_id", $company->id)
+            ->get(), true);
+
+        $prizes = array_filter($prizes, function ($item) {
+            return $item["summary_activation_count"] > $item["current_activation_count"];
+
+        });
+
+        if (count($prizes) == 0) {
+            $this->reply(__("messages.ask_promocode_error_3"));
+            return;
+        }
+
+        shuffle($prizes);
+        $inline_keyboard = [];
+        $tmp_menu = [];
+        foreach ($prizes as $key => $prize) {
+            $index = $key + 1;
+            array_push($tmp_menu, ["text" => "\xF0\x9F\x8E\xB4", "callback_data" => "/check_lottery_slot " . $prize["id"] . " " . $promocode->id]);
+            if ($index % 5 == 0 || count($prizes) == $index) {
+                array_push($inline_keyboard, $tmp_menu);
+                $tmp_menu = [];
+            }
+        }
+
+        $this->sendMessage(__("messages.ask_promocode_success_1"), $inline_keyboard);
     }
 
     public function getLatestCashBack()
@@ -951,4 +1099,6 @@ class SkidkiDNBot extends Bot implements iSkidkiDNBot
         }
 
     }
+
+
 }

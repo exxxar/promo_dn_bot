@@ -18,4 +18,5 @@ final class Parts extends Enum
     const Lottery = 8;
     const ForUsers = 9;
     const Terms_of_use = 10;
+    const Instagram = 11;
 }

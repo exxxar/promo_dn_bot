@@ -150,6 +150,7 @@ return [
         Telegram\Bot\Laravel\TelegramServiceProvider::class,
         BenSampo\Enum\EnumServiceProvider::class,
         Barryvdh\TranslationManager\ManagerServiceProvider::class,
+        Gregoriohc\LaravelTrello\TrelloServiceProvider::class,
 
         /*
          * Package Service Providers...
@@ -216,7 +217,8 @@ return [
         'View' => Illuminate\Support\Facades\View::class,
         'QrCode' => SimpleSoftwareIO\QrCode\Facades\QrCode::class,
         'Telegram' => Telegram\Bot\Laravel\Facades\Telegram::class,
-        'SkidkiDNBot' => App\Helpers\Facades\SkidkiDNBot::class
+        'SkidkiDNBot' => App\Helpers\Facades\SkidkiDNBot::class,
+        'Trello' => Gregoriohc\LaravelTrello\Facades\Wrapper::class
 
     ],
 

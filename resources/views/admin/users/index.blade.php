@@ -62,6 +62,9 @@
                                     <a class="btn btn-link" href="{{ route('users.edit',$user->id) }}">
                                         <i class="fas fa-edit"></i>
                                     </a>
+                                    <a class="btn btn-link" href="{{ route('users.promotions',$user->id) }}" title="Поучаствовал в акции">
+                                        <i class="fas fa-audio-description"></i>
+                                    </a>
                                 </td>
                                 <td>{{$user->phone}}</td>
                                 <td>

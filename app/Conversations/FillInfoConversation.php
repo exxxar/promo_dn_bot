@@ -43,7 +43,7 @@ class FillInfoConversation extends Conversation
 
         $this->ask($question, function (Answer $answer) {
             $user = $this->getUser();
-            $user->fio_from_request = $answer->getText();
+            $user->fio_from_request = $answer->getText() ?? '';
             $user->save();
             $this->askPhone();
         });
@@ -51,7 +51,7 @@ class FillInfoConversation extends Conversation
 
     public function askPhone()
     {
-        if ($this->getUser()->phone != null) {
+        if (!is_null($this->getUser()->phone) && strlen(trim($this->getUser()->phone)) > 0) {
             $this->askSex();
             return;
         }
@@ -69,6 +69,11 @@ class FillInfoConversation extends Conversation
 
             $pattern = "/^\+380\d{3}\d{2}\d{2}\d{2}$/";
 
+            if (strlen($tmp_phone) > 13) {
+                $this->reply(__("messages.ask_phone_error_1"));
+                $this->askPhone();
+            }
+
             if (preg_match($pattern, $tmp_phone) == 0) {
 
                 $this->reply(__("messages.ask_phone_error_1"));
@@ -78,7 +83,7 @@ class FillInfoConversation extends Conversation
 
                 $tmp_user = User::where("phone", $tmp_phone)->first();
 
-                if ($tmp_user == null) {
+                if (is_null($tmp_user)) {
                     $user = $this->getUser();
                     $user->phone = $tmp_phone;
                     $user->save();
@@ -96,7 +101,7 @@ class FillInfoConversation extends Conversation
 
     public function askSex()
     {
-        if ($this->getUser()->sex !== null) {
+        if (!is_null($this->getUser()->sex)) {
             $this->askBirthday();
             return;
         }
@@ -111,7 +116,7 @@ class FillInfoConversation extends Conversation
         $this->ask($question, function (Answer $answer) {
             if ($answer->isInteractiveMessageReply()) {
                 $user = $this->getUser();
-                $user->sex = ($answer->getValue() == "man" ? 0 : 1)??0;
+                $user->sex = ($answer->getValue() == "man" ? 0 : 1) ?? 0;
                 $user->save();
                 $this->askBirthday();
             }
@@ -122,7 +127,7 @@ class FillInfoConversation extends Conversation
 
     public function askBirthday()
     {
-        if ($this->getUser()->birthday != null) {
+        if (!is_null($this->getUser()->birthday) && strlen(trim($this->getUser()->birthday)) > 0) {
             $this->askCity();
             return;
         }
@@ -132,7 +137,7 @@ class FillInfoConversation extends Conversation
 
         $this->ask($question, function (Answer $answer) {
             $user = $this->getUser();
-            $user->birthday = $answer->getText();
+            $user->birthday = $answer->getText() ?? '';
             $user->save();
             $this->askCity();
         });
@@ -140,7 +145,7 @@ class FillInfoConversation extends Conversation
 
     public function askCity()
     {
-        if ($this->getUser()->address != null) {
+        if (!is_null($this->getUser()->address) && strlen(trim($this->getUser()->address)) > 0) {
             $this->saveData();
             return;
         }
@@ -150,7 +155,7 @@ class FillInfoConversation extends Conversation
 
         $this->ask($question, function (Answer $answer) {
             $user = $this->getUser();
-            $user->address = $answer->getText();
+            $user->address = $answer->getText() ?? '';
             $user->save();
             $this->saveData();
         });

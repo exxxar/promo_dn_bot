@@ -13,6 +13,8 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Hash;
+use Telegram\Bot\FileUpload\InputFile;
+use Telegram\Bot\Laravel\Facades\Telegram;
 
 class UsersController extends Controller
 {
@@ -242,10 +244,11 @@ class UsersController extends Controller
                 'employee_id' => $employee->id,
             ]);
 
-
-            $botman = resolve('botman');
-            $botman->say("Вам зачислен кэшбэк в размере $bonus", $user->telegram_chat_id, TelegramDriver::class);
-
+            Telegram::sendMessage([
+                'chat_id' => $user->telegram_chat_id,
+                'parse_mode' => 'Markdown',
+                'text' => "Вам зачислен кэшбэк в размере $bonus",
+            ]);
 
             return redirect()
                 ->route('users.index')
@@ -287,5 +290,15 @@ class UsersController extends Controller
             ->with('i', ($request->get('page', 1) - 1) * 15);
     }
 
+
+    public function getUserPromotions(Request $request,$id){
+        $promotions = (User::with(["promos"])->find($id))
+            ->promotions()
+            ->orderBy('position', 'DESC')
+            ->paginate(10);
+
+        return view('admin.promotions.index_panel', compact('promotions'))
+            ->with('i', ($request->get('page', 1) - 1) * 10);
+    }
 
 }

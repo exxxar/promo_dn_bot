@@ -144,7 +144,7 @@ class LotusProfileConversation extends Conversation
 
     public function askFirstname()
     {
-        if ($this->model_name != null) {
+        if (!is_null($this->model_name)) {
             $this->askPhone();
             return;
         }
@@ -153,7 +153,7 @@ class LotusProfileConversation extends Conversation
             ->fallback(__("messages.ask_fallback"));
 
         $this->ask($question, function (Answer $answer) {
-            $this->model_name = $answer->getText();
+            $this->model_name = $answer->getText()??'';
 
             $user = $this->getUser();
             $user->fio_from_request = $this->model_name;
@@ -166,7 +166,7 @@ class LotusProfileConversation extends Conversation
 
     public function askPhone()
     {
-        if ($this->getUser()->phone != null) {
+        if (!is_null($this->getUser()->phone)&&strlen(trim($this->getUser()->phone))>0) {
             $this->askSex();
             return;
         }
@@ -183,6 +183,11 @@ class LotusProfileConversation extends Conversation
             $tmp_phone = strpos($tmp_phone, "+38") === false ?
                 "+38" . $tmp_phone :
                 $tmp_phone;
+
+            if (strlen($tmp_phone)>13){
+                $this->reply(__("messages.ask_phone_error_1"));
+                $this->askPhone();
+            }
 
             $pattern = "/^\+380\d{3}\d{2}\d{2}\d{2}$/";
 
@@ -215,7 +220,7 @@ class LotusProfileConversation extends Conversation
 
     public function askSex()
     {
-        if ($this->sex != null) {
+        if (!is_null($this->sex)) {
             $this->askAge();
             return;
         }
@@ -240,7 +245,7 @@ class LotusProfileConversation extends Conversation
 
     public function askAge()
     {
-        if ($this->getUser()->age != null) {
+        if (!is_null($this->getUser()->age )) {
             $this->askHeight();
             return;
         }
@@ -260,7 +265,7 @@ class LotusProfileConversation extends Conversation
 
     public function askHeight()
     {
-        if ($this->height != null) {
+        if (!is_null($this->height)) {
             $this->askWeight();
             return;
         }
@@ -269,7 +274,7 @@ class LotusProfileConversation extends Conversation
             ->fallback(__("messages.ask_fallback"));
 
         $this->ask($question, function (Answer $answer) {
-            $this->height = $answer->getText();
+            $this->height = $answer->getText()??'';
             $this->askWeight();
         });
 
@@ -278,7 +283,7 @@ class LotusProfileConversation extends Conversation
 
     public function askWeight()
     {
-        if ($this->weight != null) {
+        if (!is_null($this->weight)) {
             $this->askBreastVolume();
             return;
         }
@@ -286,7 +291,7 @@ class LotusProfileConversation extends Conversation
             ->fallback(__("messages.ask_fallback"));
 
         $this->ask($question, function (Answer $answer) {
-            $this->weight = $answer->getText();
+            $this->weight = $answer->getText()??'';
             $this->askBreastVolume();
         });
     }
@@ -295,7 +300,7 @@ class LotusProfileConversation extends Conversation
 
     public function askBreastVolume()
     {
-        if ($this->breast_volume != null || $this->sex == 0) {
+        if (!is_null($this->breast_volume) || $this->sex == 0) {
             $this->askWaist();
             return;
         }
@@ -303,7 +308,7 @@ class LotusProfileConversation extends Conversation
             ->fallback(__("messages.ask_fallback"));
 
         $this->ask($question, function (Answer $answer) {
-            $this->breast_volume = $answer->getText();
+            $this->breast_volume = $answer->getText()??'';
             $this->askWaist();
 
         });
@@ -314,7 +319,7 @@ class LotusProfileConversation extends Conversation
 
     public function askWaist()
     {
-        if ($this->waist != null || $this->sex == 0) {
+        if (!is_null($this->waist) || $this->sex == 0) {
             $this->askHips();
             return;
         }
@@ -322,7 +327,7 @@ class LotusProfileConversation extends Conversation
             ->fallback(__("messages.ask_fallback"));
 
         $this->ask($question, function (Answer $answer) {
-            $this->waist = $answer->getText();
+            $this->waist = $answer->getText()??'';
             $this->askHips();
         });
 
@@ -332,7 +337,7 @@ class LotusProfileConversation extends Conversation
 
     public function askHips()
     {
-        if ($this->hips != null || $this->sex == 0) {
+        if (!is_null($this->hips) || $this->sex == 0) {
             $this->askModelSchool();
             return;
         }
@@ -340,7 +345,7 @@ class LotusProfileConversation extends Conversation
             ->fallback(__("messages.ask_fallback"));
 
         $this->ask($question, function (Answer $answer) {
-            $this->hips = $answer->getText();
+            $this->hips = $answer->getText()??'';
             $this->askModelSchool();
         });
 
@@ -349,7 +354,7 @@ class LotusProfileConversation extends Conversation
 
     public function askModelSchool()
     {
-        if ($this->model_school_education != null) {
+        if (!is_null($this->model_school_education)) {
             $this->askAboutUs();
             return;
         }
@@ -371,7 +376,7 @@ class LotusProfileConversation extends Conversation
 
     public function askAboutUs()
     {
-        if ($this->about != null) {
+        if (is_null($this->about)) {
             $this->askHobby();
             return;
         }
@@ -379,7 +384,7 @@ class LotusProfileConversation extends Conversation
             ->fallback(__("messages.ask_fallback"));
 
         $this->ask($question, function (Answer $answer) {
-            $this->about = $answer->getText();
+            $this->about = $answer->getText()??'';
             $this->askHobby();
         });
 
@@ -389,7 +394,7 @@ class LotusProfileConversation extends Conversation
 
     public function askHobby()
     {
-        if ($this->hobby != null) {
+        if (!is_null($this->hobby) ) {
             $this->askEducation();
             return;
         }
@@ -397,7 +402,7 @@ class LotusProfileConversation extends Conversation
             ->fallback(__("messages.ask_fallback"));
 
         $this->ask($question, function (Answer $answer) {
-            $this->hobby = $answer->getText();
+            $this->hobby = $answer->getText()??'';
             $this->askEducation();
         });
 
@@ -408,7 +413,7 @@ class LotusProfileConversation extends Conversation
 
     public function askEducation()
     {
-        if ($this->education != null) {
+        if (!is_null($this->education)) {
             $this->askWishLearn();
             return;
         }
@@ -416,7 +421,7 @@ class LotusProfileConversation extends Conversation
             ->fallback(__("messages.ask_fallback"));
 
         $this->ask($question, function (Answer $answer) {
-            $this->education = $answer->getText();
+            $this->education = $answer->getText()??'';
             $this->askWishLearn();
         });
 
@@ -424,7 +429,7 @@ class LotusProfileConversation extends Conversation
 
     public function askWishLearn()
     {
-        if ($this->wish_learn != null) {
+        if (!is_null($this->wish_learn)) {
             $this->saveData();
             return;
         }

@@ -83,6 +83,10 @@
                         </td>
                     </tr>
                     <tr>
+                        <td>Цена промокода(розыгрыша) за CashBack</td>
+                        <td><p>{{$company->lottery_start_price}}</p></td>
+                    </tr>
+                    <tr>
                         <td>Адрес</td>
                         <td>
                             <p>{{$company->address}}</p>
