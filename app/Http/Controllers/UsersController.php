@@ -23,14 +23,16 @@ class UsersController extends Controller
         $this->middleware('auth');
     }
 
-    public function statistic(){
-        $count = User::count()??0;
+    public function statistic()
+    {
+        $count = User::count() ?? 0;
 
-        $dayUsers =  DB::table('users')
-                ->whereDay('created_at',  date('d') )
-                ->count()??0;
-        return ["count"=>$count,"day_users"=>$dayUsers];
+        $dayUsers = DB::table('users')
+                ->whereDay('created_at', date('d'))
+                ->count() ?? 0;
+        return ["count" => $count, "day_users" => $dayUsers];
     }
+
     /**
      * Display a listing of the resource.
      *
@@ -38,16 +40,16 @@ class UsersController extends Controller
      */
     public function index(Request $request)
     {
-        $users = User::with(["parent","spentCashBack","stats"])
+        $users = User::with(["parent", "spentCashBack", "stats"])
             ->sortable(['id' => 'desc'])
             //->orderBy('id', 'DESC')
             ->paginate(15);
 
         $count = $this->statistic()["count"];
 
-        $dayUsers =  $this->statistic()["day_users"];
+        $dayUsers = $this->statistic()["day_users"];
 
-        return view('admin.users.index', compact('users', 'count','dayUsers'))
+        return view('admin.users.index', compact('users', 'count', 'dayUsers'))
             ->with('i', ($request->get('page', 1) - 1) * 15);
     }
 
@@ -218,7 +220,7 @@ class UsersController extends Controller
 
         $companies = Company::all();
 
-        return view('admin.users.cashback', compact('user','companies'));
+        return view('admin.users.cashback', compact('user', 'companies'));
     }
 
     public function addCashBack(Request $request)
@@ -261,16 +263,19 @@ class UsersController extends Controller
 
     }
 
-    public function search(Request $request){
-        if ($request->get("users-search")==null)
+    public function search(Request $request)
+    {
+        if ($request->get("users-search") == null)
             return redirect()
                 ->route('users.index')
                 ->with('error', 'Нет данных!');
 
 
         try {
-            $user = $request->get("users-search")??'';
-            $users = User::where("name", "like", "%$user%")
+            $withPromos = $request->get("with-promos") ?? null;
+            $user = $request->get("users-search") ?? '';
+            $users = User::with(["promos"])
+                ->where("name", "like", "%$user%")
                 ->orWhere("email", "like", "%$user%")
                 ->orWhere("fio_from_telegram", "like", "%$user%")
                 ->orWhere("fio_from_request", "like", "%$user%")
@@ -278,20 +283,26 @@ class UsersController extends Controller
                 ->orWhere("address", "like", "%$user%")
                 ->orderBy('id', "DESC")
                 ->paginate(15);
-        }catch (\Exception $e) {
+
+            if ($withPromos)
+                $users = array_filter($users, function ($user) {
+                    return $user->onPromos();
+                });
+        } catch (\Exception $e) {
             $users = User::orderBy('id', 'DESC')->paginate(15);
         }
 
         $count = $this->statistic()["count"];
 
-        $dayUsers =  $this->statistic()["day_users"];
+        $dayUsers = $this->statistic()["day_users"];
 
-        return view('admin.users.index', compact('users','count','dayUsers'))
+        return view('admin.users.index', compact('users', 'count', 'dayUsers'))
             ->with('i', ($request->get('page', 1) - 1) * 15);
     }
 
 
-    public function getUserPromotions(Request $request,$id){
+    public function getUserPromotions(Request $request, $id)
+    {
         $promotions = (User::with(["promos"])->find($id))
             ->promos()
             ->orderBy('position', 'DESC')
