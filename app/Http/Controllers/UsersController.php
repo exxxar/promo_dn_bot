@@ -266,8 +266,7 @@ class UsersController extends Controller
 
     public function search(Request $request)
     {
-        if ($request->get("users-search") == null&&
-            $request->get("with-promos")==null
+        if ($request->get("users-search") == null
         )
             return redirect()
                 ->route('users.index')
@@ -276,11 +275,9 @@ class UsersController extends Controller
 
         try {
 
-            $withPromos = $request->get("with-promos") ?? null;
-            Log::info($withPromos);
+
             $user = $request->get("users-search") ?? '';
 
-            if (!$withPromos)
             $users = User::with(["promos"])
                 ->where("name", "like", "%$user%")
                 ->orWhere("email", "like", "%$user%")
@@ -291,22 +288,9 @@ class UsersController extends Controller
                 ->orderBy('id', "DESC")
                 ->paginate(15);
 
-            if ($withPromos) {
-                $users =  $users = User::with(["promos"])->get();
-                $users = array_filter($users, function ($user) {
-                    return $user->onPromos();
-                });
-
-                $users = $users->paginate(15);
-
-                Log::info("2");
-            }
-
-            //$users = $users->paginate(15);
-            Log::info("3");
 
         } catch (\Exception $e) {
-            Log::info($e->getMessage()." ".$e->getLine());
+            Log::info($e->getMessage() . " " . $e->getLine());
             $users = User::orderBy('id', 'DESC')->paginate(15);
         }
 
