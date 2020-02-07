@@ -431,7 +431,7 @@ class HomeController extends Controller
         ], $accessToken);
 
         foreach ($responses as $key => $response) {
-          $dataId = \GuzzleHttp\json_decode($response->getBody())->id;
+          $dataId = json_decode($response->getBody(),true)["id"];
 
             $req = $fb->request('GET', "/$dataId?fields=instagram_business_account");
 
