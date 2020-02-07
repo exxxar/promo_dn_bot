@@ -369,7 +369,8 @@ class SkidkiDNBot extends Bot implements iSkidkiDNBot
 
     public function getInstaPromos($page)
     {
-        $this->reply("Данный раздел будет доступен в скором времени!)");
+        $keyboard = [];
+        $this->sendMessage("Данный раздел будет доступен в ближайшее время!)", $keyboard);
     }
 
     public function getPromotionsMenu()
