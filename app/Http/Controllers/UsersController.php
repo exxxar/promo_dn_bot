@@ -279,6 +279,8 @@ class UsersController extends Controller
             $withPromos = $request->get("with-promos") ?? null;
             Log::info($withPromos);
             $user = $request->get("users-search") ?? '';
+
+            if (!$withPromos)
             $users = User::with(["promos"])
                 ->where("name", "like", "%$user%")
                 ->orWhere("email", "like", "%$user%")
@@ -290,10 +292,12 @@ class UsersController extends Controller
                 ->paginate(15);
 
             if ($withPromos) {
-                Log::info("1");
-                $users = array_filter($users->items(), function ($user) {
+                $users =  $users = User::with(["promos"])->get();
+                $users = array_filter($users, function ($user) {
                     return $user->onPromos();
                 });
+
+                $users = $users->paginate(15);
 
                 Log::info("2");
             }
