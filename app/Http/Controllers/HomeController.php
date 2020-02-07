@@ -448,7 +448,7 @@ class HomeController extends Controller
                 $e = $response->getThrownException();
             } else {
 
-                Log::info("Response: " . $response->getBody() . "\");
+                Log::info("Response: " . $response->getBody() );
                
             }
         }
