@@ -431,7 +431,9 @@ class HomeController extends Controller
         ], $accessToken);
 
         foreach ($responses as $key => $response) {
-          $dataId = json_decode($response->getBody(),true)["id"];
+          $dataId = json_decode($response->getBody(),true);
+
+          Log::info(print_r($dataId,true));
 
             $req = $fb->request('GET', "/$dataId?fields=instagram_business_account");
 
