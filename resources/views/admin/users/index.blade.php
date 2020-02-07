@@ -31,7 +31,7 @@
                                    name="users-search" placeholder="Поиск по таблице">
                         </div>
                         <div class="form-group col-md-3">
-                            <input type="checkbox" class="form-control pull-right" name="with-promos" id="with-promos">
+                            <input type="checkbox" class=" pull-right" name="with-promos" id="with-promos">
                             <label for="with-promos">Участвовали в акциях</label>
                         </div>
                         <div class="form-group col-md-3">

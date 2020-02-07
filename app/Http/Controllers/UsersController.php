@@ -266,7 +266,9 @@ class UsersController extends Controller
 
     public function search(Request $request)
     {
-        if ($request->get("users-search") == null)
+        if ($request->get("users-search") == null&&
+            $request->get("with-promos")==null
+        )
             return redirect()
                 ->route('users.index')
                 ->with('error', 'Нет данных!');
