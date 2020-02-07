@@ -380,9 +380,9 @@ class SkidkiDNBot extends Bot implements iSkidkiDNBot
                 ['text' => __("messages.promo_menu_btn_1"), 'callback_data' => '/promo_by_category 0'],
                 ['text' => __("messages.promo_menu_btn_2"), 'callback_data' => '/promo_by_company 0'],
             ],
-            [
+           /* [
                 ['text' => __("messages.promo_menu_btn_7"), 'callback_data' => "/insta_promos"],
-            ],
+            ],*/
             [
                 ['text' => __("messages.promo_menu_btn_6"), 'callback_data' => '/start_lottery_test']
             ],
