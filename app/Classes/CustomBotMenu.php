@@ -41,7 +41,7 @@ trait CustomBotMenu
         $this->bot = $bot;
         if (env("MAINTENANCE_MODE")===true) {
             $this->fallbackMenu("Система находится на техническом обслуживании! Ориентировочное время 10 минут.");
-            return null;
+            return $this;
         }
         $this->createNewUser();
         return $this;
