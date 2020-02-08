@@ -40,8 +40,8 @@ trait CustomBotMenu
     {
         $this->bot = $bot;
         if (env("MAINTENANCE_MODE") === true) {
-            $this->fallbackMenu("Система находится на техническом обслуживании! Ориентировочное время " . env("MAINTENANCE_TIME") . " мин.");
-            $this->sendPhoto("Пока мы улучшаем наши сервисы Вы можете узнать про актаульные акции и скидки в нашем канале!",
+            $this->fallbackMenu("Система находится на техническом обслуживании! Ориентировочное время *" . env("MAINTENANCE_TIME") . " мин.*");
+            $this->sendPhoto("*Пока мы улучшаем наши сервисы Вы можете узнать про актаульные акции и скидки в нашем канале!*",
                 "https://sun9-29.userapi.com/c858232/v858232349/173635/lTlP7wMcZEA.jpg",
                 [
                     [
