@@ -39,13 +39,15 @@ trait CustomBotMenu
     public function setBot($bot)
     {
         $this->bot = $bot;
-        if (env("MAINTENANCE_MODE")===true) {
-            $this->fallbackMenu("Система находится на техническом обслуживании! Ориентировочное время ".env("MAINTENANCE_TIME")." мин.");
-            $this->sendMessage("Читайте новости в нашем канал!",[
+        if (env("MAINTENANCE_MODE") === true) {
+            $this->fallbackMenu("Система находится на техническом обслуживании! Ориентировочное время " . env("MAINTENANCE_TIME") . " мин.");
+            $this->sendPhoto("Пока мы улучшаем наши сервисы Вы можете узнать про актаульные акции и скидки в нашем канале!",
+                "https://sun9-29.userapi.com/c858232/v858232349/173635/lTlP7wMcZEA.jpg",
                 [
-                    ["text"=>"\xF0\x9F\x91\x89Перейти в канал","url"=>env("CHANNEL_LINK")]
-                ]
-            ]);
+                    [
+                        ["text" => "\xF0\x9F\x91\x89Перейти в канал", "url" => env("CHANNEL_LINK")]
+                    ]
+                ]);
             exit;
         }
         $this->createNewUser();
@@ -235,7 +237,7 @@ trait CustomBotMenu
 
     public function startMenuWithCategories()
     {
-        $this->sendMenu( __("messages.menu_title_8"),
+        $this->sendMenu(__("messages.menu_title_8"),
             $this->keyboard);
 
         $categories = Category::orderBy('id', 'DESC')
