@@ -40,7 +40,12 @@ trait CustomBotMenu
     {
         $this->bot = $bot;
         if (env("MAINTENANCE_MODE")===true) {
-            $this->fallbackMenu("Система находится на техническом обслуживании! Ориентировочное время 10 минут.");
+            $this->fallbackMenu("Система находится на техническом обслуживании! Ориентировочное время ".env("MAINTENANCE_TIME")." мин.");
+            $this->sendMessage("Читайте новости в нашем канал!",[
+                [
+                    ["text"=>"\xF0\x9F\x91\x89Перейти в канал","url"=>env("CHANNEL_LINK")]
+                ]
+            ]);
             exit;
         }
         $this->createNewUser();
