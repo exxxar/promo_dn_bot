@@ -49,5 +49,13 @@ class WelcomeController extends Controller
         return redirect()->route("welcome");
     }
 
+    public function terms()
+    {
+        return view("terms");
+    }
 
+    public function policy()
+    {
+        return view("policy");
+    }
 }

@@ -389,11 +389,11 @@ class HomeController extends Controller
             return;
         }
 
-        Log::info("Access Token = ".$accessToken->getValue());
+        Log::info("Access Token = " . $accessToken->getValue());
         $oAuth2Client = $fb->getOAuth2Client();
         $tokenMetadata = $oAuth2Client->debugToken($accessToken);
 
-        Log::info(print_r($tokenMetadata,true));
+        Log::info(print_r($tokenMetadata, true));
         $tokenMetadata->validateAppId(env('FACEBOOK_APP_ID')); // Replace {app-id} with your app id
         // If you know the user ID this access token belongs to, you can validate it here
         //$tokenMetadata->validateUserId('123');
@@ -404,11 +404,11 @@ class HomeController extends Controller
             try {
                 $accessToken = $oAuth2Client->getLongLivedAccessToken($accessToken);
             } catch (FacebookSDKException $e) {
-                Log::error("Error getting long-lived access token: " . $e->getMessage() );
+                Log::error("Error getting long-lived access token: " . $e->getMessage());
                 return;
             }
 
-            Log::info("Long-lived=".$accessToken->getValue());
+            Log::info("Long-lived=" . $accessToken->getValue());
         }
 
         $_SESSION['fb_access_token'] = (string)$accessToken;
@@ -421,37 +421,39 @@ class HomeController extends Controller
         ////17841407882850175?fields=mentioned_media.media_id(18040865266238470){caption,media_type,username}   - получаем инфу о пользователе по идентификации медиа-объекта
         //
 
-       //
+        //
         //$requestUserPhotos = $fb->request('GET', '/17841407882850175?fields=mentioned_media.media_id(18040865266238470){caption,media_type,username}');
 
-        $accounts = $fb->request('GET', '/me/accounts');
 
-        $responses = $fb->sendBatchRequest([
-            'data' => $accounts,
-        ], $accessToken);
+        $response = $fb->sendRequest('GET', '/me/accounts', [], $accessToken);
+        $tmp = [];
 
-        foreach ($responses as $key => $response) {
-          $dataId = json_decode($response->getBody(),true)["data"][0]["id"];
+        $companies = json_decode($response->getBody())->data;
 
-          Log::info(print_r($dataId,true));
+        $hashTag = "аркадия";
+        $firstFindeUserId = null;
 
-            $req = $fb->request('GET', "/$dataId?fields=instagram_business_account");
+        foreach ($companies as $company) {
+            $localId = $company->id;
+            $response = $fb->sendRequest('GET', "/$localId?fields=instagram_business_account", [], $accessToken);
 
-            $responses2 = $fb->sendBatchRequest([
-                'data' => $req,
-            ], $accessToken);
+            if (!isset(json_decode($response->getBody(), true)["instagram_business_account"]))
+                continue;
+            $iba = json_decode($response->getBody())->instagram_business_account;
 
+            //echo $iba->id . "<br>";
 
-            try {
-
-                Log::info(print_r($responses2->getBody(),true));
-               // $localId = json_decode($responses[0]->getBody(), true)["instagram_business_account"]["id"];
-                //Log::info("ID=$localId");
-            }catch (\Exception $e){
-
-            }
-
+            $firstFindeUserId = $iba->id;
+            break;
 
         }
+
+        if ($firstFindeUserId==null)
+        return;
+
+        $responseHashTag = $fb->sendRequest('GET', "/ig_hashtag_search?user_id=".$iba->id."&q=$hashTag", [], $accessToken);
+
+        dd($responseHashTag);
+
     }
 }

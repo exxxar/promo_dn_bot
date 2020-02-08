@@ -23,22 +23,34 @@ use Trello\Client;
 use Trello\Manager;
 use Vinkla\Instagram\Instagram;
 
-Route::get('/trello', function () {
+
+Route::post('/instawebhook', function (Request $request) {
+
+    Log::info("test post");
+
+});
+
+Route::get('/instawebhook', function (Request $request) {
+
+    Log::info("test");
     // Create the card
+    /*
+        $client = new Client();
+        $client->authenticate(config("trello.api_key"), config("trello.api_token"), Client::AUTH_URL_CLIENT_ID);
 
-    $client = new Client();
-    $client->authenticate(config("trello.api_key"), config("trello.api_token"), Client::AUTH_URL_CLIENT_ID);
+        $manager = new Manager($client);
 
-    $manager = new Manager($client);
+        $card = $manager->getCard("");
 
-    $card = $manager->getCard("");
+        $card
+            ->setName('Test card 2')
+            ->setDescription('Test description 2')
+            ->save();
 
-    $card
-        ->setName('Test card 2')
-        ->setDescription('Test description 2')
-        ->save();
-
-    //dd($boards);
+        //dd($boards
+        */
+    Log::info($request->get("hub_challenge"));
+    return $request->get("hub_challenge");
 });
 
 
@@ -49,6 +61,10 @@ Auth::routes();
 Route::get('auth/telegram/callback', 'TelegramAuthController@handleTelegramCallback')->name('auth.telegram.handle');
 
 Route::get('/', 'WelcomeController@index')->name("welcome");
+
+Route::get('/terms-of-use', 'WelcomeController@terms')->name("terms");
+Route::get('/privacy-policy', 'WelcomeController@policy')->name("policy");
+
 Route::get("/insta", 'HomeController@instagramCallabck');
 Route::post('/send-request', 'WelcomeController@sendRequestFromSite')->name("send.callback");
 
