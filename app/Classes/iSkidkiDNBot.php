@@ -21,8 +21,9 @@ interface iSkidkiDNBot
     public function getMyMoney();
 
     public function getPaymentMenu();
+    public function getFriendsMenu();
 
-    public function getRefLink($id);
+    public function getRefLink();
 
     public function getFAQMenu();
     public function getFAQSimpleMenu();

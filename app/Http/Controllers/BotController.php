@@ -219,6 +219,16 @@ class BotController extends Controller
             ->getMyMoney();
     }
 
+    public function getFriendsMenu($bot)
+    {
+        $this->sdnbot
+            ->setBot($bot)
+            ->getFriendsMenu();
+    }
+
+    /**
+     * @deprecated устарело и больше не требуется
+     */
     public function getMyFriends($bot)
     {
         $this->sdnbot
@@ -284,18 +294,18 @@ class BotController extends Controller
             ->getAchievementsInfo($achId);
     }
 
-    public function getFriends($bot, $page)
+    public function getFriends($bot, $page = 0)
     {
         $this->sdnbot
             ->setBot($bot)
             ->getFriends($page);
     }
 
-    public function getRefs($bot, $id)
+    public function getRefs($bot)
     {
         $this->sdnbot
             ->setBot($bot)
-            ->getRefLink($id);
+            ->getRefLink();
     }
 
     public function paymentConversation($bot, $arg1, $arg2)

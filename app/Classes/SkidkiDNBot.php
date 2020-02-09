@@ -267,10 +267,8 @@ class SkidkiDNBot extends Bot implements iSkidkiDNBot
 
     }
 
-    /**
-     * @deprecated устарело и больше не требуется
-     */
-    public function getRefLink($id)
+
+    public function getRefLink()
     {
 
         if (!$this->getUser()->hasPhone()) {
@@ -288,27 +286,20 @@ class SkidkiDNBot extends Bot implements iSkidkiDNBot
         while (strlen($tmp_id) < 10)
             $tmp_id = "0" . $tmp_id;
 
-        switch ($id) {
-            default:
-            case 1:
-                $comand_code = "001";
-                break;
-            case 2:
-                $comand_code = "004";
-                break;
-            case 3:
-                $comand_code = "005";
-                break;
-            case 4:
-                $comand_code = "006";
-                break;
-        }
 
-        $code = base64_encode($comand_code . $tmp_id . "0000000000");
+
+        $code = base64_encode("001" . $tmp_id . "0000000000");
         $url_link = "https://t.me/" . env("APP_BOT_NAME") . "?start=$code";
-        $href_url_link = "<a href='" . $url_link . "'>Пересылай сообщение друзьям и получай больше баллов!</a>";
-        $this->reply("Делись ссылкой с друзьями:\n" . ($id == 1 ? $href_url_link : $url_link));
+        $href_url_link = "[$url_link](Пересылай сообщение друзьям и получай больше баллов!)";
+        $this->reply("Делись ссылкой с друзьями:\n$href_url_link");
 
+        $keyboard = [
+            [
+                ["text" => "Поделиться", "url" => env("APP_URL") . "#contact"]
+            ],
+        ];
+
+        $this->sendMessage("Или делись с друзьями в других соц. сетях!",$keyboard);
     }
 
     public function getMainMenu(){
@@ -745,6 +736,40 @@ class SkidkiDNBot extends Bot implements iSkidkiDNBot
         $this->reply(count($stats) > 0 ? $message : __("messages.statistic_message_10"));
     }
 
+    public function getFriendsMenu()
+    {
+        $ref = $this->getUser()->referrals_count;
+
+        $network = $this->getUser()->network_friends_count + $ref;
+
+        $network_tmp = $this->getUser()->current_network_level > 0 ? "Сеть друзей *$network* чел.!\n" : "";
+
+        $message = sprintf(__("messages.friends_message_1"),
+            $ref,
+            $network_tmp);
+
+        $keyboard = [
+
+            [
+                ["text" => "Пригласить друзей", "switch_inline_query" => ""]
+            ],
+        ];
+
+        $tmp_id = (string)$this->getChatId();
+        while (strlen($tmp_id) < 10)
+            $tmp_id = "0" . $tmp_id;
+
+        $code = base64_encode("001" . $tmp_id . "0000000000");
+
+        $qr_url = env("QR_URL") . "https://t.me/" . env("APP_BOT_NAME") . "?start=$code";
+
+        $this->sendPhoto(__("messages.friends_message_2"), $qr_url,$keyboard);
+        $this->friendsMenu("$message");
+    }
+
+    /**
+     * @deprecated устарело и больше не требуется
+     */
     public function getMyFriends()
     {
 

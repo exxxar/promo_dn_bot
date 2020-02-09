@@ -80,13 +80,10 @@ trait CustomBotMenu
 
         $this->keyboard_friends = [
             [
-                "Мой реферальный QR-код",
-            ],
-            [
                 "Поделиться в соц. сетях",
             ],
             [
-                "Список моих друзей",
+                "Посмотреть моих друзей",
             ],
             [
                 "Главное меню"
@@ -99,6 +96,9 @@ trait CustomBotMenu
             ],
             [
                 "Списания CashBack",
+            ],
+            [
+                "Статистика активности",
             ],
             /* [
                  "Благотворительность"
@@ -308,6 +308,12 @@ trait CustomBotMenu
     {
         $this->initKeyboards();
         $this->sendMenu($message, $this->keyboard_payments);
+    }
+
+    public function friendsMenu($message)
+    {
+        $this->initKeyboards();
+        $this->sendMenu($message, $this->keyboard_friends);
     }
 
     public function mainMenu($message)
