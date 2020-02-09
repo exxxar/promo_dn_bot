@@ -87,7 +87,7 @@ class BotController extends Controller
             ->getArticlesByPartId(Parts::How_to_use, 0);
     }
 
-    public function getArticlesByPage($bot, $page=0)
+    public function getArticlesByPage($bot, $page = 0)
     {
         $this->sdnbot
             ->setBot($bot)
@@ -111,14 +111,14 @@ class BotController extends Controller
             ->getEventsAll($page);
     }
 
-    public function getCashbacks($bot, $page=0)
+    public function getCashbacks($bot, $page = 0)
     {
         $this->sdnbot
             ->setBot($bot)
             ->getCashBacksAll($page);
     }
 
-    public function getPayments($bot, $page=0)
+    public function getPayments($bot, $page = 0)
     {
         $this->sdnbot
             ->setBot($bot)
@@ -202,6 +202,16 @@ class BotController extends Controller
             ->getEventsAll(0);
     }
 
+    public function getPaymentMenu($bot)
+    {
+        $this->sdnbot
+            ->setBot($bot)
+            ->getPaymentMenu();
+    }
+
+    /**
+     * @deprecated устарело и больше не требуется
+     */
     public function getMyMoney($bot)
     {
         $this->sdnbot
