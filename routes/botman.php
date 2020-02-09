@@ -30,7 +30,7 @@ $botman->hears('/check_lottery_slot ([0-9]+) ([0-9]+)', BotController::class . '
 $botman->hears('/cashback_get', BotController::class . '@getLatestCashBack'); //перенёс
 $botman->hears('.*Розыгрыш|/start_lottery_test', BotController::class . '@getLotteryMenu'); //перенёс
 $botman->hears('Все достижения|/achievements_all ([0-9]+)', BotController::class . '@getAchievementsAll'); //перенёс
-$botman->hears('.*Достижения|/achievements_panel', BotController::class . '@getAchievementMenu'); //перенёс
+$botman->hears('.*Система достижений|/achievements_panel', BotController::class . '@getAchievementMenu'); //перенёс
 $botman->hears('.*Статистика активности|/activity_information', BotController::class . '@getActivityInformation');
 
 $botman->hears(".*Пригласить друзей|".__("messages.global_menu_1"), BotController::class . '@getFriendsMenu');
