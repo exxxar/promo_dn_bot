@@ -290,8 +290,8 @@ class SkidkiDNBot extends Bot implements iSkidkiDNBot
 
         $code = base64_encode("001" . $tmp_id . "0000000000");
         $url_link = "https://t.me/" . env("APP_BOT_NAME") . "?start=$code";
-        $href_url_link = "[$url_link](Пересылай сообщение друзьям и получай больше баллов!)";
-        $this->sendMessage("Делись ссылкой с друзьями:\n$href_url_link");
+        $href_url_link = "[Пересылай сообщение друзьям и получай больше баллов!]($url_link)";
+        $this->sendMessage("$href_url_link");
 
         $keyboard = [
             [
