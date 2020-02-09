@@ -834,8 +834,8 @@ class SkidkiDNBot extends Bot implements iSkidkiDNBot
 
         $qr_url = env("QR_URL") . "https://t.me/" . env("APP_BOT_NAME") . "?start=$code";
 
-        $this->sendPhoto("", $qr_url,$keyboard);
-        $this->paymentMenu(sprintf(__("messages.money_message_3"), $message));
+        $this->sendPhoto(__("messages.money_message_3"), $qr_url,$keyboard);
+        $this->paymentMenu($message);
     }
 
     /**
