@@ -64,7 +64,7 @@ trait CustomBotMenu
                 "\xF0\x9F\x8E\xAAМероприятия", "\xF0\x9F\x8E\xB4Акции в Instagram",
             ],
             [
-                "\xF0\x9F\x8E\xAFДостижения", "\xF0\x9F\x8E\xB0Розыгрыши"
+                "\xF0\x9F\x8E\xAFСистема достижений", "\xF0\x9F\x8E\xB0Розыгрыши"
             ],
             [
                 "\xF0\x9F\x94\x99Главное меню"
