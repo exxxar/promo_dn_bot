@@ -133,10 +133,7 @@ trait CustomBotMenu
 
         $this->keyboard_achievements = [
             [
-                "\xE2\x9C\xA8Все достижения",
-            ],
-            [
-                "\xF0\x9F\x92\xAAМои достижения",
+                "\xE2\x9C\xA8Все достижения", "\xF0\x9F\x92\xAAМои достижения",
             ],
             [
                 "\xF0\x9F\x94\x99Акции, скидки и мероприятия"
