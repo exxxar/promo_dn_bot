@@ -178,6 +178,13 @@ class BotController extends Controller
             ->getAchievementsMenu();
     }
 
+    public function getMainMenu($bot)
+    {
+        $this->sdnbot
+            ->setBot($bot)
+            ->getMainMenu();
+    }
+
     public function getFAQMenu($bot)
     {
         $this->sdnbot

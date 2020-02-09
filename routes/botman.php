@@ -50,7 +50,8 @@ $botman->hears('/promouter', BotController::class . '@getPromouterInfo');
 $botman->hears('/suppliers', BotController::class . '@getSuppliers');
 
 $botman->hears('Продолжить позже|stop', BotManController::class . '@stopConversation')->stopsConversation();
-$botman->hears("Главное меню|Попробовать снова|/start", BotController::class . '@startConversation');
+$botman->hears("Попробовать снова|/start", BotController::class . '@startConversation');
+$botman->hears("Главное меню", BotController::class . '@getMainMenu');
 
 $botman->fallback(BotController::class . "@fallback");
 

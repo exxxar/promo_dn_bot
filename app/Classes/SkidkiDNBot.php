@@ -311,6 +311,10 @@ class SkidkiDNBot extends Bot implements iSkidkiDNBot
 
     }
 
+    public function getMainMenu(){
+        $this->mainMenu("Главное меню");
+    }
+
     public function getFAQBottomMenu()
     {
         $keyboard = [
@@ -323,8 +327,8 @@ class SkidkiDNBot extends Bot implements iSkidkiDNBot
             ]
         ];
 
-        $this->sendMessage("Больше информации в нашем канале!", $keyboard);
         $this->faqMenu(__("messages.faq_message_1"));
+        $this->sendMessage("Больше информации в нашем канале!", $keyboard);
 
     }
 
