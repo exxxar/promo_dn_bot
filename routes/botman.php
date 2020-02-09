@@ -32,7 +32,7 @@ $botman->hears('/activity_information', BotController::class . '@getActivityInfo
 $botman->hears(__("messages.global_menu_1"), BotController::class . '@getMyFriends');
 $botman->hears(__("messages.global_menu_2"), BotController::class . '@getMyMoney');
 $botman->hears(__("messages.global_menu_3"), BotController::class . '@getEventsMenu');
-$botman->hears(__("messages.global_menu_4"), BotController::class . '@getFAQMenu');
+$botman->hears("\xF0\x9F\x93\x9CПомощь", BotController::class . '@getFAQMenu');
 $botman->hears(__("messages.global_menu_5"), BotController::class . '@getPromotionMenu');
 $botman->hears('/promo_by_company ([0-9]+)', BotController::class . '@getPromoByCompanies');
 $botman->hears('/promo_by_category ([0-9]+)', BotController::class . '@getPromoByCategories');
