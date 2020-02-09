@@ -312,14 +312,14 @@ class SkidkiDNBot extends Bot implements iSkidkiDNBot
     }
 
     public function getMainMenu(){
-        $this->mainMenu("Главное меню");
+        $this->mainMenu("*Главное меню*:\n_Пользуйся сам, приводи друзей, получай бонусы!_");
     }
 
     public function getFAQBottomMenu()
     {
         $keyboard = [
             [
-                ['text' => __("messages.faq_btn_3"), 'url' => env("CHANNEL_LINK")],
+                ['text' => "Перейти в канал", 'url' => env("CHANNEL_LINK")],
 
             ],
             [
