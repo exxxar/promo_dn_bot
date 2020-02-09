@@ -38,14 +38,6 @@ trait CustomBotMenu
 
     public function initKeyboards()
     {
-        /*
-        $this->keyboard = [
-            [__("messages.global_menu_3"), __("messages.global_menu_5")],
-            [__("messages.global_menu_1"), __("messages.global_menu_2")],
-            [  "\xF0\x9F\x93\x9CПомощь"]
-        ];
-*/
-
         $this->keyboard = [
             [
                 "\xE2\xAD\x90Акции, скидки и мероприятия"
