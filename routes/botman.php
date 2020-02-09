@@ -23,13 +23,13 @@ $botman->hears('.*Посмотреть моих друзей|/friends ([0-9]+)',
 
 $botman->hears('/category ([0-9]+) ([0-9]+)', BotController::class . '@getCategoryById');
 $botman->hears('/company ([0-9]+) ([0-9]+)', BotController::class . '@getCompanyById');
-$botman->hears('/achievements_my ([0-9]+)', BotController::class . '@getAchievementsMy');
+$botman->hears('.*Мои достижения|/achievements_my ([0-9]+)', BotController::class . '@getAchievementsMy');
 $botman->hears('/achievements_description ([0-9]+)', BotController::class . '@getAchievementDescriptionById');
 $botman->hears('/achievements_get_prize ([0-9]+)', BotController::class . '@getAchievementPrizeById');
 $botman->hears('/check_lottery_slot ([0-9]+) ([0-9]+)', BotController::class . '@getLotterySlot');
 $botman->hears('/cashback_get', BotController::class . '@getLatestCashBack'); //перенёс
 $botman->hears('.*Розыгрыш|/start_lottery_test', BotController::class . '@getLotteryMenu'); //перенёс
-$botman->hears('/achievements_all ([0-9]+)', BotController::class . '@getAchievementsAll'); //перенёс
+$botman->hears('Все достижения|/achievements_all ([0-9]+)', BotController::class . '@getAchievementsAll'); //перенёс
 $botman->hears('.*Достижения|/achievements_panel', BotController::class . '@getAchievementMenu'); //перенёс
 $botman->hears('.*Статистика активности|/activity_information', BotController::class . '@getActivityInformation');
 

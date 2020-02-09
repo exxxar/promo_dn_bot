@@ -272,14 +272,14 @@ class BotController extends Controller
             ->getLatestCashBack();
     }
 
-    public function getAchievementsAll($bot, $page)
+    public function getAchievementsAll($bot, $page=0)
     {
         $this->sdnbot
             ->setBot($bot)
             ->getAchievementsAll($page);
     }
 
-    public function getAchievementsMy($bot, $page)
+    public function getAchievementsMy($bot, $page=0)
     {
         $this->sdnbot
             ->setBot($bot)

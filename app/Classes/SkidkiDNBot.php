@@ -447,13 +447,7 @@ class SkidkiDNBot extends Bot implements iSkidkiDNBot
 
     public function getAchievementsMenu()
     {
-        $keyboard = [
-            [
-                ["text" => __("messages.achievements_btn_3"), "callback_data" => "/achievements_all 0"],
-                ["text" => __("messages.achievements_btn_4"), "callback_data" => "/achievements_my 0"],
-            ]
-        ];
-        $this->sendMessage(__("messages.achievements_message_7"), $keyboard);
+        $this->achievementsMenu(__("messages.achievements_message_7"));
     }
 
     public function getPromouterMenu()

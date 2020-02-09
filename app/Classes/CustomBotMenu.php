@@ -26,6 +26,8 @@ trait CustomBotMenu
 
     protected $keyboard_faq;
 
+    protected $keyboard_achievements;
+
     protected $keyboard_lottery;
 
     protected $keyboard_fallback = [
@@ -120,6 +122,21 @@ trait CustomBotMenu
             ],
             [
                 "\xF0\x9F\x8E\x81Промокод в подарок",
+            ],
+            [
+                "\xF0\x9F\x94\x99Акции, скидки и мероприятия"
+            ],
+            [
+                "\xF0\x9F\x94\x99Главное меню"
+            ]
+        ];
+
+        $this->keyboard_achievements = [
+            [
+                "\xE2\x9C\xA8Все достижения",
+            ],
+            [
+                "\xF0\x9F\x92\xAAМои достижения",
             ],
             [
                 "\xF0\x9F\x94\x99Акции, скидки и мероприятия"
@@ -314,6 +331,12 @@ trait CustomBotMenu
     {
         $this->initKeyboards();
         $this->sendMenu($message, $this->keyboard_lottery);
+    }
+
+    public function achievementsMenu($message)
+    {
+        $this->initKeyboards();
+        $this->sendMenu($message, $this->keyboard_achievements);
     }
 
     public function paymentMenu($message)
