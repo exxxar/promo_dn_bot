@@ -94,6 +94,9 @@ class BotController extends Controller
             ->getArticlesByPartId(Parts::Articles, $page);
     }
 
+    /**
+     * @deprecated устарело и больше не требуется
+     */
     public function getStatistic($bot)
     {
         $this->sdnbot
@@ -108,14 +111,14 @@ class BotController extends Controller
             ->getEventsAll($page);
     }
 
-    public function getCashbacks($bot, $page)
+    public function getCashbacks($bot, $page=0)
     {
         $this->sdnbot
             ->setBot($bot)
             ->getCashBacksAll($page);
     }
 
-    public function getPayments($bot, $page)
+    public function getPayments($bot, $page=0)
     {
         $this->sdnbot
             ->setBot($bot)

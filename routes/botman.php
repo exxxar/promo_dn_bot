@@ -29,15 +29,15 @@ $botman->hears('.*Розыгрыш|/start_lottery_test', BotController::class . 
 $botman->hears('/achievements_all ([0-9]+)', BotController::class . '@getAchievementsAll'); //перенёс
 $botman->hears('/achievements_panel', BotController::class . '@getAchievementMenu'); //перенёс
 $botman->hears('/activity_information', BotController::class . '@getActivityInformation');
-$botman->hears(__("messages.global_menu_1"), BotController::class . '@getMyFriends');
-$botman->hears(__("messages.global_menu_2"), BotController::class . '@getMyMoney');
+$botman->hears("\xE2\x9C\x8CПригласить друзей|".__("messages.global_menu_1"), BotController::class . '@getMyFriends');
+$botman->hears("\xF0\x9F\x92\xB5Оплатить бонусами|".__("messages.global_menu_2"), BotController::class . '@getPaymentMenu');
 $botman->hears(__("messages.global_menu_3"), BotController::class . '@getEventsMenu');
-$botman->hears("\xF0\x9F\x93\x9CПомощь", BotController::class . '@getFAQMenu');
-$botman->hears(__("messages.global_menu_5"), BotController::class . '@getPromotionMenu');
+$botman->hears("\xF0\x9F\x93\x9CПомощь|".__("messages.global_menu_3"), BotController::class . '@getFAQMenu');
+$botman->hears("\xE2\xAD\x90Акции, скидки и мероприятия|".__("messages.global_menu_5"), BotController::class . '@getPromotionMenu');
 $botman->hears('/promo_by_company ([0-9]+)', BotController::class . '@getPromoByCompanies');
 $botman->hears('/promo_by_category ([0-9]+)', BotController::class . '@getPromoByCategories');
-$botman->hears('/payments ([0-9]+)', BotController::class . '@getPayments');
-$botman->hears('/cashbacks ([0-9]+)', BotController::class . '@getCashbacks');
+$botman->hears('Списания CashBack|/payments ([0-9]+)', BotController::class . '@getPayments');
+$botman->hears('Начисления CashBack|/cashbacks ([0-9]+)', BotController::class . '@getCashbacks');
 $botman->hears('/events ([0-9]+)', BotController::class . '@getEvents');
 $botman->hears('Полезная информация|/articles ([0-9]+)', BotController::class . '@getArticlesByPage');
 $botman->hears('Как пользоваться|/help', BotController::class . '@getHelp');

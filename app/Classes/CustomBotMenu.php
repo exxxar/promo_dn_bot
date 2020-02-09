@@ -36,13 +36,14 @@ trait CustomBotMenu
 
     public function initKeyboards()
     {
+        /*
         $this->keyboard = [
             [__("messages.global_menu_3"), __("messages.global_menu_5")],
             [__("messages.global_menu_1"), __("messages.global_menu_2")],
             [  "\xF0\x9F\x93\x9CПомощь"]
         ];
+*/
 
-        /*
         $this->keyboard = [
             [
                 "\xE2\xAD\x90Акции, скидки и мероприятия"
@@ -58,7 +59,7 @@ trait CustomBotMenu
             ],
 
         ];
-*/
+
         $this->keyboard_promotions = [
             [
                 "Акции по компаниям", "Акции по категориям",
@@ -77,7 +78,7 @@ trait CustomBotMenu
             ]
         ];
 
-        $this->keyboard_payments = [
+        $this->keyboard_friends = [
             [
                 "Мой реферальный QR-код",
             ],
@@ -92,7 +93,7 @@ trait CustomBotMenu
             ]
         ];
 
-        $this->keyboard_friends = [
+        $this->keyboard_payments = [
             [
                 "Начисления CashBack",
             ],
@@ -301,6 +302,12 @@ trait CustomBotMenu
     {
         $this->initKeyboards();
         $this->sendMenu($message, $this->keyboard_faq);
+    }
+
+    public function paymentMenu($message)
+    {
+        $this->initKeyboards();
+        $this->sendMenu($message, $this->keyboard_payments);
     }
 
     public function mainMenu($message)

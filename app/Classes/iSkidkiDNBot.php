@@ -20,6 +20,8 @@ interface iSkidkiDNBot
     public function getMyFriends();
     public function getMyMoney();
 
+    public function getPaymentMenu();
+
     public function getRefLink($id);
 
     public function getFAQMenu();
@@ -30,7 +32,6 @@ interface iSkidkiDNBot
 
     public function getPromotionsMenu();
     public function getFriends($page);
-    public function getPaymentMenu();
     public function getStatisticMenu();
     public function getAchievementsMenu();
     public function getPromouterMenu();

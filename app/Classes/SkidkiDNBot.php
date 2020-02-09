@@ -455,10 +455,7 @@ class SkidkiDNBot extends Bot implements iSkidkiDNBot
         $this->pagination('/friends', $refs, $page, "Ваши действия");
     }
 
-    public function getPaymentMenu()
-    {
-        // TODO: Implement getPaymentMenu() method.
-    }
+
 
     //todo: реализовать благотворительность
     public function getStatisticMenu()
@@ -791,6 +788,59 @@ class SkidkiDNBot extends Bot implements iSkidkiDNBot
 
     }
 
+    public function getPaymentMenu(){
+
+        $summary = $this->getUser()->referral_bonus_count +
+            $this->getUser()->cashback_bonus_count +
+            $this->getUser()->network_cashback_bonus_count;
+
+        $cashback = $this->getUser()->cashback_bonus_count;
+
+        $tmp_network = $this->getUser()->network_friends_count >= config("bot.step_one_friends") ?
+            "Сетевой бонус *" . $this->getUser()->network_cashback_bonus_count . "*\n" : '';
+
+        $message = sprintf(__("messages.money_message_1"),
+            $summary,
+            $cashback,
+            $tmp_network
+        );
+
+
+        $keyboard = [];
+
+
+        $cashback_history = $this->getUser()->getCashBacksByPhone(0);
+
+        if (count($cashback_history) > 0) {
+            $tmp_money = 0;
+            foreach ($cashback_history as $ch)
+                if ($ch->activated == 0)
+                    $tmp_money += round(intval($ch->money_in_check) * env("CAHSBAK_PROCENT") / 100);
+
+            if ($tmp_money > 0)
+                array_push($keyboard, [
+                    ["text" => sprintf(__("messages.money_message_2"), $tmp_money), "callback_data" => "/cashback_get"]
+                ]);
+
+        }
+
+        //$this->sendMessage($message,$keyboard);
+
+        $tmp_id = (string)$this->getChatId();
+        while (strlen($tmp_id) < 10)
+            $tmp_id = "0" . $tmp_id;
+
+        $code = base64_encode("002" . $tmp_id . "0000000000");
+
+        $qr_url = env("QR_URL") . "https://t.me/" . env("APP_BOT_NAME") . "?start=$code";
+
+        $this->sendPhoto("", $qr_url,$keyboard);
+        $this->paymentMenu(sprintf(__("messages.money_message_3"), $message));
+    }
+
+    /**
+     * @deprecated устарело и больше не требуется
+     */
     public function getMyMoney()
     {
 
