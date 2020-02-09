@@ -311,6 +311,17 @@ class SkidkiDNBot extends Bot implements iSkidkiDNBot
 
     }
 
+    public function getFAQBottomMenu(){
+        $keyboard = [
+            [
+                ['text' => __("messages.faq_btn_3"), 'url' => env("CHANNEL_LINK")],
+            ],
+        ];
+
+        $this->sendMessage("Больше информации в нашем канале!", $keyboard);
+        $this->faqMenu(__("messages.faq_message_1"));
+
+    }
     /**
      * @deprecated устарело и больше не требуется
      */
@@ -344,6 +355,9 @@ class SkidkiDNBot extends Bot implements iSkidkiDNBot
 
     }
 
+    /**
+     * @deprecated устарело и больше не требуется
+     */
     public function getFAQSimpleMenu()
     {
 

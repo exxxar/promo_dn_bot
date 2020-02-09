@@ -24,6 +24,8 @@ interface iSkidkiDNBot
 
     public function getFAQMenu();
     public function getFAQSimpleMenu();
+    public function getFAQBottomMenu();
+
     public function getPromotionsMenu();
     public function getFriends($page);
     public function getPaymentMenu();

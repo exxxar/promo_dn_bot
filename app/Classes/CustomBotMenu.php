@@ -24,6 +24,8 @@ trait CustomBotMenu
 
     protected $keyboard_payments;
 
+    protected $keyboard_faq;
+
     protected $keyboard_fallback = [
         ["Попробовать снова"],
     ];
@@ -74,7 +76,7 @@ trait CustomBotMenu
             ]
         ];
 
-        $this->keyboard_friends = [
+        $this->keyboard_payments = [
         [
             "Мой реферальный QR-код",
         ],
@@ -99,6 +101,24 @@ trait CustomBotMenu
            /* [
                 "Благотворительность"
             ],*/
+            [
+                "Главное меню"
+            ]
+        ];
+
+        $this->keyboard_faq = [
+            [
+                "Акции и призы на сайте"
+            ],
+            [
+                "Полезная информация",
+            ],
+            [
+                "Как пользоваться",
+            ],
+            [
+                 "Согласшение на обработку данных"
+             ],
             [
                 "Главное меню"
             ]
@@ -276,6 +296,12 @@ trait CustomBotMenu
                 'resize_keyboard' => true
             ])
         ]);
+    }
+
+    public function faqMenu($message)
+    {
+        $this->initKeyboards();
+        $this->sendMenu($message, $this->keyboard_faq);
     }
 
     public function mainMenu($message)
