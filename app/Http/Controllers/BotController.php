@@ -343,12 +343,6 @@ class BotController extends Controller
             ->startConversation(new LotteryConversation($bot));
     }
 
-    public function lotteryCashback($bot)
-    {
-        $this->sdnbot
-            ->setBot($bot)
-            ->getLotteryCashBack();
-    }
 
     public function startDataConversation($bot, $data)
     {

@@ -7,7 +7,6 @@ $botman = resolve('botman');
 
 $botman->hears(".*Ввести код и начать|/lottery", BotController::class . '@lotteryConversation');
 $botman->hears(".*Акции в Instagram|/insta_promos ([0-9]+)", BotController::class . '@getInstaPromosList');
-//$botman->hears(".*Розыгрышь за CashBack|/start_cashback_lottery", BotController::class . '@lotteryCashback');
 
 $botman->hears(".*Розыгрыш за CashBack", BotController::class . '@getLotteryCashBackCompanies');
 $botman->hears(".*Промокод в подарок", BotController::class . '@getLotteryGiftCompanies');
