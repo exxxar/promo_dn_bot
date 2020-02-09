@@ -316,6 +316,12 @@ trait CustomBotMenu
         $this->sendMenu($message, $this->keyboard_friends);
     }
 
+    public function promotionsMenu($message)
+    {
+        $this->initKeyboards();
+        $this->sendMenu($message, $this->keyboard_promotions);
+    }
+
     public function mainMenu($message)
     {
         $this->initKeyboards();

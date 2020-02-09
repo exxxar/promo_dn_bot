@@ -125,14 +125,14 @@ class BotController extends Controller
             ->getPaymentsAll($page);
     }
 
-    public function getPromoByCategories($bot, $page)
+    public function getPromoByCategories($bot, $page=0)
     {
         $this->sdnbot
             ->setBot($bot)
             ->getPromotionsByCategory($page);
     }
 
-    public function getPromoByCompanies($bot, $page)
+    public function getPromoByCompanies($bot, $page=0)
     {
         $this->sdnbot
             ->setBot($bot)
@@ -160,7 +160,7 @@ class BotController extends Controller
             ->getPromotionsMenu();
     }
 
-    public function getInstaPromosList($bot, $page)
+    public function getInstaPromosList($bot, $page=0)
     {
         $this->sdnbot
             ->setBot($bot)

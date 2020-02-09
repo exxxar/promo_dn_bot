@@ -287,22 +287,22 @@ class SkidkiDNBot extends Bot implements iSkidkiDNBot
             $tmp_id = "0" . $tmp_id;
 
 
-
         $code = base64_encode("001" . $tmp_id . "0000000000");
         $url_link = "https://t.me/" . env("APP_BOT_NAME") . "?start=$code";
-        $href_url_link = "[Пересылай сообщение друзьям и получай больше баллов!]($url_link)";
+        $href_url_link = "[Пересылай *ЭТО* сообщение друзьям и получай больше баллов!]($url_link)";
         $this->sendMessage("$href_url_link");
 
         $keyboard = [
             [
-                ["text" => "Поделиться через ВК/Facebook", "url" => env("APP_URL") . "#contact"]
+                ["text" => "Поделиться с друзьями в ВК/Facebook", "url" => env("APP_URL") . "#contact"]
             ],
         ];
 
-        $this->sendMessage("_Или делись с друзьями в других соц. сетях!_",$keyboard);
+        $this->sendMessage("_Или делись с друзьями в других соц. сетях!_", $keyboard);
     }
 
-    public function getMainMenu(){
+    public function getMainMenu()
+    {
         $this->mainMenu("*Главное меню*:\n_Пользуйся сам, приводи друзей, получай бонусы!_");
     }
 
@@ -390,24 +390,7 @@ class SkidkiDNBot extends Bot implements iSkidkiDNBot
 
     public function getPromotionsMenu()
     {
-        $keyboard = [
-            [
-                ['text' => __("messages.promo_menu_btn_1"), 'callback_data' => '/promo_by_category 0'],
-                ['text' => __("messages.promo_menu_btn_2"), 'callback_data' => '/promo_by_company 0'],
-            ],
-            [
-                ['text' => __("messages.promo_menu_btn_3"), 'callback_data' => "/achievements_panel"],
-            ],
-            [
-                ['text' => __("messages.promo_menu_btn_7"), 'callback_data' => "/insta_promos 0"],
-            ],
-            [
-                ['text' => __("messages.promo_menu_btn_6"), 'callback_data' => '/start_lottery_test']
-            ],
-
-        ];
-
-        $this->sendMessage(__("messages.promo_menu_message_1"), $keyboard);
+        $this->promotionsMenu(__("messages.promo_menu_message_1"));
     }
 
     public function getFriends($page)
@@ -445,7 +428,6 @@ class SkidkiDNBot extends Bot implements iSkidkiDNBot
         $this->reply(strlen($tmp) > 0 ? $tmp : "У вас нет друзей:(");
         $this->pagination('/friends', $refs, $page, "Ваши действия");
     }
-
 
 
     //todo: реализовать благотворительность
@@ -763,7 +745,7 @@ class SkidkiDNBot extends Bot implements iSkidkiDNBot
 
         $qr_url = env("QR_URL") . "https://t.me/" . env("APP_BOT_NAME") . "?start=$code";
 
-        $this->sendPhoto(__("messages.friends_message_2"), $qr_url,$keyboard);
+        $this->sendPhoto(__("messages.friends_message_2"), $qr_url, $keyboard);
         $this->friendsMenu("$message");
     }
 
@@ -813,7 +795,8 @@ class SkidkiDNBot extends Bot implements iSkidkiDNBot
 
     }
 
-    public function getPaymentMenu(){
+    public function getPaymentMenu()
+    {
 
         $summary = $this->getUser()->referral_bonus_count +
             $this->getUser()->cashback_bonus_count +
@@ -859,7 +842,7 @@ class SkidkiDNBot extends Bot implements iSkidkiDNBot
 
         $qr_url = env("QR_URL") . "https://t.me/" . env("APP_BOT_NAME") . "?start=$code";
 
-        $this->sendPhoto(__("messages.money_message_3"), $qr_url,$keyboard);
+        $this->sendPhoto(__("messages.money_message_3"), $qr_url, $keyboard);
         $this->paymentMenu($message);
     }
 

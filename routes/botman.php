@@ -6,7 +6,7 @@ $botman = resolve('botman');
 
 
 $botman->hears("/lottery", BotController::class . '@lotteryConversation');
-$botman->hears("/insta_promos ([0-9]+)", BotController::class . '@getInstaPromosList');
+$botman->hears(".*Акции в Instagram|/insta_promos ([0-9]+)", BotController::class . '@getInstaPromosList');
 $botman->hears("/start_cashback_lottery", BotController::class . '@lotteryCashback');
 $botman->hears("/get_gift_companies (gift|lottery)", BotController::class . '@getLotteryGiftCompanies');
 $botman->hears("/pay_lottery (gift|lottery) ([0-9]+)", BotController::class . '@payForLottery');
@@ -16,8 +16,8 @@ $botman->hears("/promotion ([0-9]+)", BotController::class . '@promoConversation
 $botman->hears("/lotusprofile ([0-9]+)", BotController::class . '@lotusprofileConversation');
 $botman->hears("/fillinfo", BotController::class . '@fillInfoConversation');
 $botman->hears("/payment ([0-9]{1,10}) ([0-9]{1,10})", BotController::class . '@paymentConversation');
-$botman->hears("Поделиться в соц. сетях|/ref ([0-9]+)", BotController::class . '@getRefs');
-$botman->hears('Посмотреть моих друзей|/friends ([0-9]+)', BotController::class . '@getFriends');
+$botman->hears(".*Поделиться в соц. сетях|/ref ([0-9]+)", BotController::class . '@getRefs');
+$botman->hears('.*Посмотреть моих друзей|/friends ([0-9]+)', BotController::class . '@getFriends');
 
 $botman->hears('/category ([0-9]+) ([0-9]+)', BotController::class . '@getCategoryById');
 $botman->hears('/company ([0-9]+) ([0-9]+)', BotController::class . '@getCompanyById');
@@ -28,24 +28,24 @@ $botman->hears('/check_lottery_slot ([0-9]+) ([0-9]+)', BotController::class . '
 $botman->hears('/cashback_get', BotController::class . '@getLatestCashBack'); //перенёс
 $botman->hears('.*Розыгрыш|/start_lottery_test', BotController::class . '@getLotteryMenu'); //перенёс
 $botman->hears('/achievements_all ([0-9]+)', BotController::class . '@getAchievementsAll'); //перенёс
-$botman->hears('/achievements_panel', BotController::class . '@getAchievementMenu'); //перенёс
-$botman->hears('Статистика активности|/activity_information', BotController::class . '@getActivityInformation');
+$botman->hears('.*Достижения|/achievements_panel', BotController::class . '@getAchievementMenu'); //перенёс
+$botman->hears('.*Статистика активности|/activity_information', BotController::class . '@getActivityInformation');
 
-$botman->hears("\xE2\x9C\x8CПригласить друзей|".__("messages.global_menu_1"), BotController::class . '@getFriendsMenu');
+$botman->hears(".*Пригласить друзей|".__("messages.global_menu_1"), BotController::class . '@getFriendsMenu');
 
-$botman->hears("\xF0\x9F\x92\xB5Оплатить бонусами|".__("messages.global_menu_2"), BotController::class . '@getPaymentMenu');
-$botman->hears(__("messages.global_menu_3"), BotController::class . '@getEventsMenu');
-$botman->hears("\xF0\x9F\x93\x9CПомощь|".__("messages.global_menu_3"), BotController::class . '@getFAQMenu');
-$botman->hears("\xE2\xAD\x90Акции, скидки и мероприятия|".__("messages.global_menu_5"), BotController::class . '@getPromotionMenu');
+$botman->hears(".*Оплатить бонусами|".__("messages.global_menu_2"), BotController::class . '@getPaymentMenu');
+$botman->hears("Мероприятия", BotController::class . '@getEventsMenu');
+$botman->hears(".*Помощь|".__("messages.global_menu_3"), BotController::class . '@getFAQMenu');
+$botman->hears(".*Акции, скидки и мероприятия|".__("messages.global_menu_5"), BotController::class . '@getPromotionMenu');
 
-$botman->hears('/promo_by_company ([0-9]+)', BotController::class . '@getPromoByCompanies');
-$botman->hears('/promo_by_category ([0-9]+)', BotController::class . '@getPromoByCategories');
-$botman->hears('Списания CashBack|/payments ([0-9]+)', BotController::class . '@getPayments');
-$botman->hears('Начисления CashBack|/cashbacks ([0-9]+)', BotController::class . '@getCashbacks');
+$botman->hears('.*Акции по компаниям|/promo_by_company ([0-9]+)', BotController::class . '@getPromoByCompanies');
+$botman->hears('.*Акции по категориям|/promo_by_category ([0-9]+)', BotController::class . '@getPromoByCategories');
+$botman->hears('.*Списания CashBack|/payments ([0-9]+)', BotController::class . '@getPayments');
+$botman->hears('.*Начисления CashBack|/cashbacks ([0-9]+)', BotController::class . '@getCashbacks');
 $botman->hears('/events ([0-9]+)', BotController::class . '@getEvents');
-$botman->hears('Полезная информация|/articles ([0-9]+)', BotController::class . '@getArticlesByPage');
-$botman->hears('Как пользоваться|/help', BotController::class . '@getHelp');
-$botman->hears('Соглашение на обработку данных|/rules', BotController::class . '@getRules');
+$botman->hears('.*Полезная информация|/articles ([0-9]+)', BotController::class . '@getArticlesByPage');
+$botman->hears('.*Как пользоваться|/help', BotController::class . '@getHelp');
+$botman->hears('.*Соглашение на обработку данных|/rules', BotController::class . '@getRules');
 $botman->hears('/for_users', BotController::class . '@getForUsers');
 $botman->hears('/dev', BotController::class . '@getDev');
 $botman->hears('/about', BotController::class . '@getAbout');
