@@ -287,6 +287,7 @@ trait CustomBotMenu
 
         $this->bot->sendRequest("sendMessage", [
             "text" => $message,
+            'parse_mode'=>'Markdown',
             'reply_markup' => json_encode([
                 'keyboard' => $keyboard,
                 'one_time_keyboard' => false,
