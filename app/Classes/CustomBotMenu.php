@@ -18,6 +18,12 @@ trait CustomBotMenu
 
     protected $keyboard;
 
+    protected $keyboard_promotions;
+
+    protected $keyboard_friends;
+
+    protected $keyboard_payments;
+
     protected $keyboard_fallback = [
         ["Попробовать снова"],
     ];
@@ -28,10 +34,74 @@ trait CustomBotMenu
 
     public function initKeyboards()
     {
-        $this->keyboard = [
+        /*$this->keyboard = [
             [__("messages.global_menu_3"), __("messages.global_menu_5")],
             [__("messages.global_menu_1"), __("messages.global_menu_2")],
             [__("messages.global_menu_4")]
+        ];*/
+
+        $this->keyboard = [
+            [
+                "\xE2\xAD\x90Акции, скидки и мероприятия"
+            ],
+            [
+                "\xE2\x9C\x8CПригласить дурзей"
+            ],
+            [
+                "\xF0\x9F\x92\xB5Оплатить бонусами"
+            ],
+            [
+                "\xF0\x9F\x93\x9CПомощь"
+            ],
+
+        ];
+
+        $this->keyboard_promotions = [
+            [
+                "Акции по компаниям", "Акции по категориям",
+            ],
+            [
+                "Мероприятия", "Розыгрыши",
+            ],
+            [
+                "Достижения",
+            ],
+            [
+                "Акции в Instagram",
+            ],
+            [
+                "Главное меню"
+            ]
+        ];
+
+        $this->keyboard_friends = [
+        [
+            "Мой реферальный QR-код",
+        ],
+        [
+            "Поделиться в соц. сетях",
+        ],
+        [
+            "Список моих друзей",
+        ],
+        [
+            "Главное меню"
+        ]
+    ];
+
+        $this->keyboard_friends = [
+            [
+                "Начисления CashBack",
+            ],
+            [
+                "Списания CashBack",
+            ],
+           /* [
+                "Благотворительность"
+            ],*/
+            [
+                "Главное меню"
+            ]
         ];
     }
 
@@ -39,6 +109,7 @@ trait CustomBotMenu
     public function setBot($bot)
     {
         $this->bot = $bot;
+        $this->createNewUser();
         if (env("MAINTENANCE_MODE") === true) {
             $this->fallbackMenu("Система находится на техническом обслуживании! Ориентировочное время " . env("MAINTENANCE_TIME") . " мин.");
             $this->sendPhoto("*Пока мы улучшаем наши сервисы Вы можете узнать про актаульные акции и скидки в нашем канале!*",
@@ -50,7 +121,6 @@ trait CustomBotMenu
                 ]);
             exit;
         }
-        $this->createNewUser();
         return $this;
     }
 
