@@ -316,8 +316,11 @@ class SkidkiDNBot extends Bot implements iSkidkiDNBot
         $keyboard = [
             [
                 ['text' => __("messages.faq_btn_3"), 'url' => env("CHANNEL_LINK")],
-                ['text' => __("messages.promo_menu_btn_4"), 'url' => env("APP_PROMO_LINK")],
+
             ],
+            [
+                ['text' => __("messages.promo_menu_btn_4"), 'url' => env("APP_PROMO_LINK")],
+            ]
         ];
 
         $this->sendMessage("Больше информации в нашем канале!", $keyboard);
