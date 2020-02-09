@@ -124,7 +124,7 @@ trait CustomBotMenu
 
         $this->keyboard_lottery = [
             [
-                "Ввести код и начать",  "Розыгрышь за CashBack",
+                "Ввести код и начать",  "Розыгрыш за CashBack",
             ],
             [
                 "Промокод в подарок",

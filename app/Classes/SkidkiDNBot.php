@@ -926,6 +926,7 @@ class SkidkiDNBot extends Bot implements iSkidkiDNBot
     public function getLotteryGiftCompanies($giftType)
     {
 
+        Log::info($giftType);
         $companies = Company::with(["prizes"])->get();
         $hasPrizes = false;
 
