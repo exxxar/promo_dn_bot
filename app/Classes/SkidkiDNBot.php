@@ -311,10 +311,16 @@ class SkidkiDNBot extends Bot implements iSkidkiDNBot
 
     }
 
-    public function getFAQBottomMenu(){
+    public function getFAQBottomMenu()
+    {
         $keyboard = [
             [
-                ['text' => __("messages.faq_btn_3"), 'url' => env("CHANNEL_LINK")],
+                [
+                    'text' => __("messages.faq_btn_3"), 'url' => env("CHANNEL_LINK")
+                ],
+                [
+                    ['text' => __("messages.promo_menu_btn_4"), 'url' => env("APP_PROMO_LINK")],
+                ],
             ],
         ];
 
@@ -322,6 +328,7 @@ class SkidkiDNBot extends Bot implements iSkidkiDNBot
         $this->faqMenu(__("messages.faq_message_1"));
 
     }
+
     /**
      * @deprecated устарело и больше не требуется
      */
@@ -565,7 +572,7 @@ class SkidkiDNBot extends Bot implements iSkidkiDNBot
 
                 $isEmpty = false;
 
-                $emptyHandler = is_null($promo->handler)||strlen(trim($promo->handler))==0;
+                $emptyHandler = is_null($promo->handler) || strlen(trim($promo->handler)) == 0;
 
                 $keyboard = [
                     [
@@ -629,7 +636,7 @@ class SkidkiDNBot extends Bot implements iSkidkiDNBot
 
                 $isEmpty = false;
 
-                $emptyHandler = is_null($promo->handler)||strlen(trim($promo->handler))==0;
+                $emptyHandler = is_null($promo->handler) || strlen(trim($promo->handler)) == 0;
 
                 $keyboard = [
                     [
@@ -954,7 +961,7 @@ class SkidkiDNBot extends Bot implements iSkidkiDNBot
         $this->reply("С вас было списано *" . intval($nedded) . "₽* CashBack");
 
         if ($giftType == "gift") {
-            $this->reply(sprintf(__("messages.promocode_message_2"),$code));
+            $this->reply(sprintf(__("messages.promocode_message_2"), $code));
             return;
         }
 

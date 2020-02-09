@@ -39,9 +39,9 @@ $botman->hears('/promo_by_category ([0-9]+)', BotController::class . '@getPromoB
 $botman->hears('/payments ([0-9]+)', BotController::class . '@getPayments');
 $botman->hears('/cashbacks ([0-9]+)', BotController::class . '@getCashbacks');
 $botman->hears('/events ([0-9]+)', BotController::class . '@getEvents');
-$botman->hears('/articles ([0-9]+)', BotController::class . '@getArticlesByPage');
-$botman->hears('/help', BotController::class . '@getHelp');
-$botman->hears('/rules', BotController::class . '@getRules');
+$botman->hears('Полезная информация|/articles ([0-9]+)', BotController::class . '@getArticlesByPage');
+$botman->hears('Как пользоваться|/help', BotController::class . '@getHelp');
+$botman->hears('Соглашение на обработку данных|/rules', BotController::class . '@getRules');
 $botman->hears('/for_users', BotController::class . '@getForUsers');
 $botman->hears('/dev', BotController::class . '@getDev');
 $botman->hears('/about', BotController::class . '@getAbout');

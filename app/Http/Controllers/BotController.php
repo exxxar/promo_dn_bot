@@ -87,7 +87,7 @@ class BotController extends Controller
             ->getArticlesByPartId(Parts::How_to_use, 0);
     }
 
-    public function getArticlesByPage($bot, $page)
+    public function getArticlesByPage($bot, $page=0)
     {
         $this->sdnbot
             ->setBot($bot)
@@ -180,13 +180,9 @@ class BotController extends Controller
 
     public function getFAQMenu($bot)
     {
-        $tmp = $this->sdnbot
-            ->setBot($bot);
-
-        if (env("FAQ_RESTRICTED"))
-            $tmp->getFAQSimpleMenu();
-        else
-            $tmp->getFAQMenu();
+        $this->sdnbot
+            ->setBot($bot)
+            ->getFAQBottomMenu();
     }
 
     public function getEventsMenu($bot)
