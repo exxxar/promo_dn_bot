@@ -5,10 +5,13 @@ use App\Http\Controllers\BotManController;
 $botman = resolve('botman');
 
 
-$botman->hears("/lottery", BotController::class . '@lotteryConversation');
+$botman->hears(".*Ввести код и начать|/lottery", BotController::class . '@lotteryConversation');
 $botman->hears(".*Акции в Instagram|/insta_promos ([0-9]+)", BotController::class . '@getInstaPromosList');
-$botman->hears("/start_cashback_lottery", BotController::class . '@lotteryCashback');
-$botman->hears("/get_gift_companies (gift|lottery)", BotController::class . '@getLotteryGiftCompanies');
+$botman->hears(".*Розыгрышь за CashBack|/start_cashback_lottery", BotController::class . '@lotteryCashback');
+
+$botman->hears(".*Розыгрышь за CashBack", BotController::class . '@getLotteryCashBackCompanies');
+$botman->hears(".*Промокод в подарок", BotController::class . '@getLotteryGiftCompanies');
+
 $botman->hears("/pay_lottery (gift|lottery) ([0-9]+)", BotController::class . '@payForLottery');
 
 $botman->hears("/start ([0-9a-zA-Z=]+)", BotController::class . '@startDataConversation');
@@ -55,7 +58,7 @@ $botman->hears('/suppliers', BotController::class . '@getSuppliers');
 
 $botman->hears('Продолжить позже|stop', BotManController::class . '@stopConversation')->stopsConversation();
 $botman->hears("Попробовать снова|/start", BotController::class . '@startConversation');
-$botman->hears("Главное меню", BotController::class . '@getMainMenu');
+$botman->hears(".*Главное меню", BotController::class . '@getMainMenu');
 
 $botman->fallback(BotController::class . "@fallback");
 

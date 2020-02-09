@@ -26,6 +26,8 @@ trait CustomBotMenu
 
     protected $keyboard_faq;
 
+    protected $keyboard_lottery;
+
     protected $keyboard_fallback = [
         ["Попробовать снова"],
     ];
@@ -65,16 +67,13 @@ trait CustomBotMenu
                 "Акции по компаниям", "Акции по категориям",
             ],
             [
-                "Мероприятия", "Розыгрыши",
+                "Мероприятия", "Акции в Instagram",
             ],
             [
-                "Достижения",
+                "Достижения", "Розыгрыши"
             ],
             [
-                "Акции в Instagram",
-            ],
-            [
-                "Главное меню"
+                "\xF0\x9F\x91\x88Главное меню"
             ]
         ];
 
@@ -86,7 +85,7 @@ trait CustomBotMenu
                 "Посмотреть моих друзей",
             ],
             [
-                "Главное меню"
+                "\xF0\x9F\x91\x88Главное меню"
             ]
         ];
 
@@ -104,7 +103,7 @@ trait CustomBotMenu
                  "Благотворительность"
              ],*/
             [
-                "Главное меню"
+                "\xF0\x9F\x91\x88Главное меню"
             ]
         ];
 
@@ -119,7 +118,22 @@ trait CustomBotMenu
                 "Соглашение на обработку данных"
             ],
             [
-                "Главное меню"
+                "\xF0\x9F\x91\x88Главное меню"
+            ]
+        ];
+
+        $this->keyboard_lottery = [
+            [
+                "Ввести код и начать",  "Розыгрышь за CashBack",
+            ],
+            [
+                "Промокод в подарок",
+            ],
+            [
+              "\xF0\x9F\x91\x88Акции, скидки и мероприятия"
+            ],
+            [
+                "\xF0\x9F\x91\x88Главное меню"
             ]
         ];
     }
@@ -289,7 +303,7 @@ trait CustomBotMenu
 
         $this->bot->sendRequest("sendMessage", [
             "text" => $message,
-            'parse_mode'=>'Markdown',
+            'parse_mode' => 'Markdown',
             'reply_markup' => json_encode([
                 'keyboard' => $keyboard,
                 'one_time_keyboard' => false,
@@ -302,6 +316,12 @@ trait CustomBotMenu
     {
         $this->initKeyboards();
         $this->sendMenu($message, $this->keyboard_faq);
+    }
+
+    public function lotteryMenu($message)
+    {
+        $this->initKeyboards();
+        $this->sendMenu($message, $this->keyboard_lottery);
     }
 
     public function paymentMenu($message)

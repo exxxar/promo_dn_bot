@@ -289,7 +289,7 @@ class SkidkiDNBot extends Bot implements iSkidkiDNBot
 
         $code = base64_encode("001" . $tmp_id . "0000000000");
         $url_link = "https://t.me/" . env("APP_BOT_NAME") . "?start=$code";
-        $href_url_link = "[Пересылай *ЭТО* сообщение друзьям и получай больше баллов!]($url_link)";
+        $href_url_link = "[Пересылай ЭТО сообщение друзьям (или скопируй ссылку) и получай больше баллов!]($url_link)";
         $this->sendMessage("$href_url_link");
 
         $keyboard = [
@@ -912,32 +912,15 @@ class SkidkiDNBot extends Bot implements iSkidkiDNBot
             ->first();
 
         $keyboard = [
-            [
-                ['text' => __("messages.lottery_menu_btn_1"), 'callback_data' => "/lottery"]
-            ],
-            [
-                ['text' => __("messages.lottery_menu_btn_4"), 'callback_data' => "/start_cashback_lottery"]
-            ]
+
         ];
 
         if ($rules != null)
             array_push($keyboard, [['text' => __("messages.lottery_menu_btn_2"), 'url' => $rules->url]]);
 
         $this->sendMessage(__("messages.lottery_menu_btn_3"), $keyboard);
-    }
 
-    public function getLotteryCashBack()
-    {
-        $keyboard = [
-            [
-                ['text' => __("messages.lottery_menu_btn_5"), 'callback_data' => "/get_gift_companies gift"]
-            ],
-            [
-                ['text' => __("messages.lottery_menu_btn_6"), 'callback_data' => "/get_gift_companies lottery"]
-            ]
-        ];
-
-        $this->sendMessage(__("messages.lottery_menu_btn_3"), $keyboard);
+        $this->lotteryMenu("_Участвуйте в розыгрыше и получайте больше призов!_");
     }
 
     public function getLotteryGiftCompanies($giftType)

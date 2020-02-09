@@ -236,11 +236,18 @@ class BotController extends Controller
             ->getMyFriends();
     }
 
-    public function getLotteryGiftCompanies($bot, $giftType)
+    public function getLotteryGiftCompanies($bot)
     {
         $this->sdnbot
             ->setBot($bot)
-            ->getLotteryGiftCompanies($giftType);
+            ->getLotteryGiftCompanies("gift");
+    }
+
+    public function getLotteryCashBackCompanies($bot)
+    {
+        $this->sdnbot
+            ->setBot($bot)
+            ->getLotteryGiftCompanies("lottery");
     }
 
 

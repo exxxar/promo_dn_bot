@@ -38,7 +38,6 @@ interface iSkidkiDNBot
     public function getPromouterMenu();
 
     public function getLotteryMenu();
-    public function getLotteryCashBack();
     public function getLotteryGiftCompanies($giftType);
     public function payForLottery($giftType,$companyId);
 
