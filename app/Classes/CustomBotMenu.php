@@ -61,7 +61,7 @@ trait CustomBotMenu
                 "\xF0\x9F\x8F\xACАкции по компаниям", "\xF0\x9F\x8E\xADАкции по категориям",
             ],
             [
-                "\xF0\x9F\x8E\xAAМероприятия", "\xF0\x9F\x8E\xB4Акции в Instagram",
+                "\xF0\x9F\x8E\xAAНаши мероприятия", "\xF0\x9F\x8E\xB4Акции в Instagram",
             ],
             [
                 "\xF0\x9F\x8E\xAFСистема достижений", "\xF0\x9F\x8E\xB0Розыгрыши"

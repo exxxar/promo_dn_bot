@@ -36,7 +36,7 @@ $botman->hears('.*Статистика активности|/activity_informatio
 $botman->hears(".*Пригласить друзей|".__("messages.global_menu_1"), BotController::class . '@getFriendsMenu');
 
 $botman->hears(".*Оплатить бонусами|".__("messages.global_menu_2"), BotController::class . '@getPaymentMenu');
-$botman->hears(".*Мероприятия", BotController::class . '@getEventsMenu');
+$botman->hears(".*Наши мероприятия", BotController::class . '@getEventsMenu');
 $botman->hears(".*Помощь|".__("messages.global_menu_3"), BotController::class . '@getFAQMenu');
 $botman->hears(".*Акции, скидки и мероприятия|".__("messages.global_menu_5"), BotController::class . '@getPromotionMenu');
 
