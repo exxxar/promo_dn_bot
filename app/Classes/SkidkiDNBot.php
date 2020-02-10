@@ -1178,7 +1178,11 @@ class SkidkiDNBot extends Bot implements iSkidkiDNBot
             Log::info($url);
             $this->reply("Изображение успешно загружено!");
 
-            $this->sendPhoto("test", $url);
+            $contents = file_get_contents($url);
+            $name = substr($url, strrpos($url, '/') + 1);
+            Storage::put($name, $contents);
+
+
         }
 
     }
