@@ -20,5 +20,4 @@ use Telegram\Bot\Laravel\Facades\Telegram;
 abstract class Bot
 {
     use CustomBotMenu;
-
 }

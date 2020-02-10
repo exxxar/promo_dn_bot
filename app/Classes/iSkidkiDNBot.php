@@ -60,4 +60,6 @@ interface iSkidkiDNBot
 
     public function getFallback();
 
+    public function uploadImages($images);
+
 }

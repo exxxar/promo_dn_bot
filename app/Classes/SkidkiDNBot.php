@@ -1165,4 +1165,16 @@ class SkidkiDNBot extends Bot implements iSkidkiDNBot
     }
 
 
+    public function uploadImages($images)
+    {
+
+        foreach ($images as $image) {
+
+            $url = $image->getUrl(); // The direct url
+            $title = $image->getTitle(); // The title, if available
+            $payload = $image->getPayload(); // The original payload
+            $this->reply("Изображение успешно загружено!");
+        }
+
+    }
 }

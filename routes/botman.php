@@ -61,3 +61,4 @@ $botman->hears(".*Главное меню", BotController::class . '@getMainMenu
 
 $botman->fallback(BotController::class . "@fallback");
 
+$botman->receivesImages(BotController::class."@uploadImages");

@@ -17,8 +17,14 @@ class CreateInstaPromotionsTable extends Migration
             $table->bigIncrements('id');
             $table->string('photo_url',1000)->nullable();
             $table->string('description',1000)->default('');
-            $table->string('tag')->nullable();
-            $table->integer('promo_bonus')->nullable();
+            $table->integer('promo_bonus')->default(0);
+            $table->integer('position')->default(0);
+            $table->boolean('is_active')->default(true);
+            $table->unsignedInteger('company_id')->nullable();
+
+            if (env("DB_CONNECTION") == 'mysql') {
+                $table->foreign('company_id')->references('id')->on('companies');
+            }
             $table->timestamps();
         });
     }

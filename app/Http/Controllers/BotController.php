@@ -378,4 +378,10 @@ class BotController extends Controller
             ->setBot($bot)
             ->getFallback();
     }
+
+    public function uploadImages($bot,$images){
+        $this->sdnbot
+            ->setBot($bot)
+            ->uploadImages($images);
+    }
 }

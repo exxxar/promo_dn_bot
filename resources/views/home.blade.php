@@ -27,9 +27,9 @@
                             </div>
                         @endif
 
-                        @isset($instaURL)
+                       {{-- @isset($instaURL)
                                 <a href="{{$instaURL}}">Обработать данные из Instagram</a>
-                        @endisset
+                        @endisset--}}
                         @include("partials.cashback")
                         <hr>
                         @include("partials.search")
