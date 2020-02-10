@@ -29,12 +29,12 @@
         "kyslik/column-sortable": "^6.2",
         "laravel/framework": "5.8.*",
         "laravel/tinker": "^1.0",
+        "nao-pon/flysystem-google-drive": "~1.1",
         "php-http/guzzle6-adapter": "^2.0",
         "php-http/message": "^1.8",
         "simplesoftwareio/simple-qrcode": "^2.0",
         "spatie/laravel-db-snapshots": "^1.4",
-        "vinkla/instagram": "^9.3",
-        "nao-pon/flysystem-google-drive": "~1.1"
+        "vinkla/instagram": "^9.3"
     },
     "require-dev": {
         "beyondcode/laravel-dump-server": "^1.0",

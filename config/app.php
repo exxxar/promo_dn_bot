@@ -151,6 +151,7 @@ return [
         BenSampo\Enum\EnumServiceProvider::class,
         Barryvdh\TranslationManager\ManagerServiceProvider::class,
         Gregoriohc\LaravelTrello\TrelloServiceProvider::class,
+        //GoogleDriveServiceProvider::class ,
 
         /*
          * Package Service Providers...

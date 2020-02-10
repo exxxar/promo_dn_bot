@@ -19,6 +19,7 @@ use App\User;
 use BotMan\BotMan\BotMan;
 use Carbon\Carbon;
 use Illuminate\Support\Facades\Log;
+use Illuminate\Support\Facades\Storage;
 
 class SkidkiDNBot extends Bot implements iSkidkiDNBot
 {
@@ -1173,7 +1174,10 @@ class SkidkiDNBot extends Bot implements iSkidkiDNBot
             $url = $image->getUrl(); // The direct url
             $title = $image->getTitle(); // The title, if available
             $payload = $image->getPayload(); // The original payload
-            $this->reply("Изображение успешно загружено!");
+
+            Storage::disk('local')->put($url, $title);
+
+            $this->reply("Изображение $url ($title) успешно загружено!");
         }
 
     }
