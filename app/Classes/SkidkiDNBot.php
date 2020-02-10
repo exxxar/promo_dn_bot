@@ -1173,14 +1173,9 @@ class SkidkiDNBot extends Bot implements iSkidkiDNBot
 
 
             $url = $image->getUrl(); // The direct url
-            Log::info(print_r($url,true));
-            $title = $image->getTitle(); // The title, if available
-            Log::info(print_r($title,true));
-            $payload = $image->getPayload(); // The original payload
 
-            Storage::disk('public')->put($url, $title);
 
-            $this->reply("Изображение успешно загружено!");
+            $this->reply("Изображение успешно загружено!$url");
         }
 
     }
