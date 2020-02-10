@@ -18,6 +18,7 @@ use App\RefferalsPaymentHistory;
 use App\User;
 use BotMan\BotMan\BotMan;
 use Carbon\Carbon;
+use Illuminate\Http\UploadedFile;
 use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Facades\Storage;
 
@@ -1178,9 +1179,11 @@ class SkidkiDNBot extends Bot implements iSkidkiDNBot
             Log::info($url);
             $this->reply("Изображение успешно загружено!");
 
+            $info = pathinfo($url);
             $contents = file_get_contents($url);
-            $name = substr($url, strrpos($url, '/') + 1);
-            Storage::put($name, $contents);
+            $file = '/tmp/' . $info['basename'];
+            file_put_contents($file, $contents);
+            $uploaded_file = new UploadedFile($file, $info['basename']);
 
 
         }
