@@ -41,7 +41,7 @@
                         @foreach($instapromos as $key => $promo)
                             <div class="col">
                                 <div class="wrapper" style="padding: 10px">
-                                    <div class="card" style="width:220px;">
+                                    <div class="card" style="width:350px;">
                                         <!-- Изображение -->
                                         <img class="card-img-top" src="{{$promo->photo_url}}" style="width:100%;">
                                         <!-- Текстовый контент -->
