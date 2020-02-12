@@ -28,9 +28,11 @@
                     <div class="col-sm-4">
                         <a class="btn btn-primary" href="{{route("instapromos.create")}}">Новая акция для Instagram</a>
                     </div>
-                    <div class="col-sm-4">
-                        <a class="btn btn-primary" href="{{route("users.uploadphotos")}}">Пользователи по акциям</a>
-                    </div>
+                    @if($hasUploadPhotos)
+                        <div class="col-sm-4">
+                            <a class="btn btn-primary" href="{{route("users.uploadphotos")}}">Пользователи по акциям</a>
+                        </div>
+                    @endif
                 </div>
 
                 <h1>Акции для Instagram</h1>
@@ -66,7 +68,8 @@
                                                 <i class="fab fa-telegram"></i>
                                             </a>
 
-                                            <form class="btn btn-link" action="{{ route('instapromos.destroy', $promo->id)}}" method="post">
+                                            <form class="btn btn-link"
+                                                  action="{{ route('instapromos.destroy', $promo->id)}}" method="post">
                                                 @csrf
                                                 @method('DELETE')
                                                 <button class="btn btn-link" type="submit">
@@ -77,7 +80,7 @@
                                                 <div class="col">
                                                     <span class="badge badge-primary">{{$promo->company->title}}</span>
                                                     <span class="badge badge-info">{{$promo->is_active?"Активно":"Не активно"}}</span>
-                                                      </div>
+                                                </div>
 
                                             </div>
                                         </div>

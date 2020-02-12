@@ -7,6 +7,7 @@ use App\Event;
 use App\InstaPromotion;
 use App\Prize;
 use App\Promotion;
+use App\UplodedPhotos;
 use Carbon\Carbon;
 use Illuminate\Http\Request;
 use Telegram\Bot\FileUpload\InputFile;
@@ -30,7 +31,10 @@ class InstaPromotionController extends Controller
         $instapromos = InstaPromotion::orderBy('position', 'DESC')
             ->paginate(15);
 
-        return view('admin.instapromos.index', compact('instapromos'))
+        $hasUploadPhotos = UplodedPhotos::where("activated", false)
+                ->count() > 0;
+
+        return view('admin.instapromos.index', compact('instapromos', 'hasUploadPhotos'))
             ->with('i', ($request->get('page', 1) - 1) * 15);
     }
 
@@ -71,7 +75,7 @@ class InstaPromotionController extends Controller
             'photo_url' => $request->get('photo_url') ?? '',
             'promo_bonus' => $request->get('promo_bonus') ?? 0,
             'position' => $request->get('position') ?? 0,
-            'is_active' => $request->get('is_active')=="on" ? true : false,
+            'is_active' => $request->get('is_active') == "on" ? true : false,
             'company_id' => $request->get('company_id') ?? null,
 
             'created_at' => Carbon::now(),
@@ -139,7 +143,7 @@ class InstaPromotionController extends Controller
         $instapromo->promo_bonus = $request->get("promo_bonus") ?? 0;
         $instapromo->position = $request->get("position") ?? 0;
 
-        $instapromo->is_active =   $request->get("is_active")=="on"?true:false;
+        $instapromo->is_active = $request->get("is_active") == "on" ? true : false;
         $instapromo->company_id = $request->get("company_id") ?? null;
 
 
@@ -205,5 +209,22 @@ class InstaPromotionController extends Controller
             ->route('instapromos.index')
             ->with('success', 'Акция Instagram успешно продублирован');
 
+    }
+
+    public function uploadphotos(Request $request)
+    {
+
+        $uploadPhotos = UplodedPhotos::with(["user"])
+            ->where("activated", false)
+            ->paginate(15);
+
+
+        $instaPromos = InstaPromotion::where("is_active",true)
+            ->orderBy("position","DESK")
+            ->get();
+
+
+        return view('admin.instapromos.uploadphotos', compact('uploadphotos','instapromos'))
+            ->with('i', ($request->get('page', 1) - 1) * 15);
     }
 }
