@@ -220,7 +220,7 @@ class InstaPromotionController extends Controller
 
 
         $instaPromos = InstaPromotion::where("is_active",true)
-            ->orderBy("position","DESK")
+            ->orderBy("position","desc")
             ->get();
 
 
