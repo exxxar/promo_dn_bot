@@ -54,6 +54,8 @@ class FillInstagramConversation extends Conversation
 
             $user->instagram = $instagram ?? null;
             $user->save();
+
+            $this->mainMenu(__("messages.menu_title_4"));
         });
     }
 }
