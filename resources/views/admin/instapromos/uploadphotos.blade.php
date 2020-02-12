@@ -37,7 +37,7 @@
                                         <img class="card-img-top" src="{{$photo->url}}" style="width:100%;height:250px;object-fit: contain;">
                                         <!-- Текстовый контент -->
                                         <div class="card-body">
-                                            <h5>{{$photo->user->name??$photo->user->telegram_chat_id}}</h5>
+                                            <h5><a href="{{route("users.show",$photo->user_id)}}">{{$photo->user->name??$photo->user->telegram_chat_id}}</a></h5>
 
                                             <form action="{{ route('users.uploadphotos.accept', $photo->id)}}"
                                                   method="post">

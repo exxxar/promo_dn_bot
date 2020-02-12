@@ -8,6 +8,7 @@ use App\InstaPromotion;
 use App\Prize;
 use App\Promotion;
 use App\UplodedPhotos;
+use App\User;
 use Carbon\Carbon;
 use Illuminate\Http\Request;
 use Telegram\Bot\FileUpload\InputFile;
@@ -226,5 +227,45 @@ class InstaPromotionController extends Controller
 
         return view('admin.instapromos.uploadphotos', compact('uploadphotos','instapromos'))
             ->with('i', ($request->get('page', 1) - 1) * 15);
+    }
+
+    public function accept(Request $request,$id){
+        $insta_promotions_id = $request->get("insta_promotions_id")??null;
+        if (is_null($insta_promotions_id))
+            return redirect()
+                ->route('users.uploadphotos')
+                ->with('success', 'Акция Instagram не найдена!');
+
+        $photo = UplodedPhotos::find($id);
+
+        $hasPromoActivated = UplodedPhotos::where("insta_promotions_id",$insta_promotions_id)
+            ->where("user_id",$photo->user_id)
+            ->first();
+
+        if (!is_null($hasPromoActivated))
+            return redirect()
+                ->route('users.uploadphotos')
+                ->with('success', 'Пользователь уже активировал данную акцию!');
+
+
+        $photo->activated = true;
+        $photo->insta_promotions_id = $insta_promotions_id;
+        $photo->save();
+
+        $bonus = (InstaPromotion::find($insta_promotions_id))->promo_bonus;
+        $user = User::find($photo->user_id);
+        $user->referral_bonus_count += $bonus;
+        $user->save();
+
+        Telegram::sendPhoto([
+            'chat_id' => $user->telegram_chat_id,
+            'parse_mode' => 'Markdown',
+            "photo" => InputFile::create($photo->url),
+            "caption" => "Вам начислили бонус $bonus ₽ за участие в акции",
+        ]);
+
+        return redirect()
+            ->route('users.uploadphotos')
+            ->with('success', 'Акция успешно подтверждена!');
     }
 }
