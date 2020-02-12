@@ -139,7 +139,7 @@ class InstaPromotionController extends Controller
         $instapromo->promo_bonus = $request->get("promo_bonus") ?? 0;
         $instapromo->position = $request->get("position") ?? 0;
 
-        $instapromo->is_active = $request->get("is_active") ?? false;
+        $instapromo->is_active =   $request->get("is_active")=="on"?true:false;
         $instapromo->company_id = $request->get("company_id") ?? null;
 
 

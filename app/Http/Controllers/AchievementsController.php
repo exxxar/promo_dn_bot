@@ -154,7 +154,7 @@ class AchievementsController extends Controller
         $achievement->prize_description = $request->get("prize_description") ?? '';
         $achievement->prize_image_url = $request->get("prize_image_url") ?? '';
         $achievement->position = $request->get("position") ?? 0;
-        $achievement->is_active = true;
+        $achievement->is_active = $request->get("is_active")?true:false;
 
         $achievement->save();
 
