@@ -214,12 +214,12 @@ class InstaPromotionController extends Controller
     public function uploadphotos(Request $request)
     {
 
-        $uploadPhotos = UplodedPhotos::with(["user"])
+        $uploadphotos = UplodedPhotos::with(["user"])
             ->where("activated", false)
             ->paginate(15);
 
 
-        $instaPromos = InstaPromotion::where("is_active",true)
+        $instapromos = InstaPromotion::where("is_active",true)
             ->orderBy("position","desc")
             ->get();
 
