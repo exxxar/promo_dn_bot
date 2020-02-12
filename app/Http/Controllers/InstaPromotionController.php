@@ -166,11 +166,17 @@ class InstaPromotionController extends Controller
     public function destroy($id)
     {
         $instapromo = InstaPromotion::find($id);
-        $instapromo->delete();
+        if ($instapromo->summary==0) {
+            $instapromo->delete();
+
+            return redirect()
+                ->route('instapromos.index')
+                ->with('success', 'Акция Instagram успешно удалено');
+        }
 
         return redirect()
             ->route('instapromos.index')
-            ->with('success', 'Акция Instagram успешно удалено');
+            ->with('success', 'Удаление акции невозможно! Ей уже воспользовались.');
     }
 
     public function channel($id)
