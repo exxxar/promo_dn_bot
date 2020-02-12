@@ -3,7 +3,9 @@
 namespace App\Http\Controllers;
 
 use App\Company;
+use App\Enums\AchievementTriggers;
 use App\Event;
+use App\Events\AchievementEvent;
 use App\InstaPromotion;
 use App\Prize;
 use App\Promotion;
@@ -220,17 +222,18 @@ class InstaPromotionController extends Controller
             ->paginate(15);
 
 
-        $instapromos = InstaPromotion::where("is_active",true)
-            ->orderBy("position","desc")
+        $instapromos = InstaPromotion::where("is_active", true)
+            ->orderBy("position", "desc")
             ->get();
 
 
-        return view('admin.instapromos.uploadphotos', compact('uploadphotos','instapromos'))
+        return view('admin.instapromos.uploadphotos', compact('uploadphotos', 'instapromos'))
             ->with('i', ($request->get('page', 1) - 1) * 15);
     }
 
-    public function accept(Request $request,$id){
-        $insta_promotions_id = $request->get("insta_promotions_id")??null;
+    public function accept(Request $request, $id)
+    {
+        $insta_promotions_id = $request->get("insta_promotions_id") ?? null;
         if (is_null($insta_promotions_id))
             return redirect()
                 ->route('users.uploadphotos')
@@ -238,8 +241,8 @@ class InstaPromotionController extends Controller
 
         $photo = UplodedPhotos::find($id);
 
-        $hasPromoActivated = UplodedPhotos::where("insta_promotions_id",$insta_promotions_id)
-            ->where("user_id",$photo->user_id)
+        $hasPromoActivated = UplodedPhotos::where("insta_promotions_id", $insta_promotions_id)
+            ->where("user_id", $photo->user_id)
             ->first();
 
         if (!is_null($hasPromoActivated))
@@ -257,15 +260,47 @@ class InstaPromotionController extends Controller
         $user->referral_bonus_count += $bonus;
         $user->save();
 
+        event(new AchievementEvent(AchievementTriggers::MaxReferralBonusCount, $bonus, $user));
+
         Telegram::sendPhoto([
             'chat_id' => $user->telegram_chat_id,
             'parse_mode' => 'Markdown',
             "photo" => InputFile::create($photo->url),
-            "caption" => "Вам начислили бонус $bonus ₽ за участие в акции",
+            "caption" => "_Вам начислили бонус_ *$bonus ₽* _за участие в акции_",
         ]);
 
         return redirect()
             ->route('users.uploadphotos')
             ->with('success', 'Акция успешно подтверждена!');
+    }
+
+    public function decline($id)
+    {
+        $photo = UplodedPhotos::find($id);
+
+        if (is_null($photo))
+            return redirect()
+                ->route('users.uploadphotos')
+                ->with('success', 'Скриншот не найден!');
+
+        $user = User::find($photo->user_id);
+
+        if (is_null($user))
+            return redirect()
+                ->route('users.uploadphotos')
+                ->with('success', 'Пользователь не найден!');
+
+        Telegram::sendPhoto([
+            'chat_id' => $user->telegram_chat_id,
+            'parse_mode' => 'Markdown',
+            "photo" => InputFile::create($photo->url),
+            "caption" => "*Ваш скриншот отклонен!*",
+        ]);
+
+        $photo->delete();
+
+        return redirect()
+            ->route('users.uploadphotos')
+            ->with('success', 'Скриншот к акции отклонен для пользователя!');
     }
 }
