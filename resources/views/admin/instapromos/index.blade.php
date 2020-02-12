@@ -66,10 +66,12 @@
                                                 <i class="fab fa-telegram"></i>
                                             </a>
 
-                                            <form action="{{ route('instapromos.destroy', $promo->id)}}" method="post">
+                                            <form class="btn btn-link" action="{{ route('instapromos.destroy', $promo->id)}}" method="post">
                                                 @csrf
                                                 @method('DELETE')
-                                                <button class="btn btn-link" type="submit">Удалить</button>
+                                                <button class="btn btn-link" type="submit">
+                                                    <i class="fas fa-trash-alt"></i>
+                                                </button>
                                             </form>
                                             <div class="row">
                                                 <div class="col">
