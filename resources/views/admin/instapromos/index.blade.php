@@ -46,9 +46,9 @@
                                         <img class="card-img-top" src="{{$promo->photo_url}}" style="width:100%;">
                                         <!-- Текстовый контент -->
                                         <div class="card-body">
-                                            <h5>{{$prize->title}}</h5>
-                                            <p>{{$prize->description}}</p>
-                                            <p><strong>{{$prize->promo_bonus}}</strong> бонусов за выполнение</p>
+                                            <h5>{{$promo->title}}</h5>
+                                            <p>{{$promo->description}}</p>
+                                            <p><strong>{{$promo->promo_bonus}}</strong> бонусов за выполнение</p>
                                             <a href="{{ route('instapromos.show',$promo->id) }}"
                                                class="btn btn-primary"><i class="fas fa-eye"></i></a>
                                             <a href="{{ route('instapromos.edit',$promo->id) }}" class="btn btn-info"><i
