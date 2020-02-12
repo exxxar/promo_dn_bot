@@ -137,9 +137,14 @@ Route::prefix('admin')->group(function () {
     Route::get("/companies/hide/{id}", "CompanyController@hide")->name("companies.hide");
     Route::get("/achievements/channel/{id}", "AchievementsController@channel")->name("achievements.channel");
     Route::get("/prizes/channel/{id}", "PrizeController@channel")->name("prizes.channel");
+
+    Route::get("/instapromos/channel/{id}", "InstaPromotion@channel")->name("instapromos.channel");
+    Route::get("/instapromos/duplication/{id}", "InstaPromotion@duplication")->name("instapromos.duplication");
+
     Route::get("/promocodes/change_status/{id}", "PromocodeController@change_status")->name("promocodes.changestatus");
 
-    Route::get("/duplication/channel/{id}", "PrizeController@duplication")->name("prizes.duplication");
+    Route::get("/prizes/duplication/{id}", "PrizeController@duplication")->name("prizes.duplication");
+
 
 });
 

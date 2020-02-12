@@ -17,6 +17,7 @@ use App\Promotion;
 use App\RefferalsPaymentHistory;
 use App\User;
 use BotMan\BotMan\BotMan;
+use BotMan\BotMan\Messages\Attachments\Image;
 use Carbon\Carbon;
 use Illuminate\Http\UploadedFile;
 use Illuminate\Support\Facades\Log;
@@ -1169,21 +1170,22 @@ class SkidkiDNBot extends Bot implements iSkidkiDNBot
 
     public function uploadImages($images)
     {
-
         foreach ($images as $image) {
+
 
 
             $url = $image->getUrl(); // The direct url
 
+            $payload = $image->getPayload();
 
-            Log::info($url);
             $this->reply("Изображение успешно загружено!");
 
-            $info = pathinfo($url);
-            $contents = file_get_contents($url);
-            $file = '/tmp/' . $info['basename'];
-            file_put_contents($file, $contents);
-            $uploaded_file = new UploadedFile($file, $info['basename']);
+            $this->reply("https://api.telegram.org/bot917429752:AAFK2nmeqcpbVqNxQLl7VgJDYVhAWTBXnz0/getFile?file_id=".$payload["file_id"]);
+
+
+
+            Log::info(print_r($payload["file_id"],true));
+
 
 
         }

@@ -16,7 +16,8 @@ class CreateInstaPromotionsTable extends Migration
         Schema::create('insta_promotions', function (Blueprint $table) {
             $table->bigIncrements('id');
             $table->string('photo_url',1000)->nullable();
-            $table->string('description',1000)->default('');
+            $table->string('title',1000)->default('');
+            $table->string('description',2000)->default('');
             $table->integer('promo_bonus')->default(0);
             $table->integer('position')->default(0);
             $table->boolean('is_active')->default(true);

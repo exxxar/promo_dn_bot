@@ -79,6 +79,11 @@
                 Акции</a>
         </li>
         <li class="c-sidebar-nav-item">
+            <a class="c-sidebar-nav-link" href="{{ route('instapromos.index') }}">
+                <i class="cil-filter-photo c-sidebar-nav-icon"></i>
+                Акции Instagram</a>
+        </li>
+        <li class="c-sidebar-nav-item">
             <a class="c-sidebar-nav-link" href="{{ route('events.index') }}">
                 <i class="cil-star c-sidebar-nav-icon"></i>
                 Мероприятия</a>
