@@ -1185,7 +1185,7 @@ class SkidkiDNBot extends Bot implements iSkidkiDNBot
 
         $userId = ($this->getUser())->id;
 
-        $instapromos = array_filter($instapromos, function ($item) use ($userId) {
+        $instapromos = $instapromos->filter(function ($item) use ($userId) {
             return is_null(UplodedPhotos::where("insta_promotions_id", $item->id)
                 ->where("user_id", $userId)->first());
         });
