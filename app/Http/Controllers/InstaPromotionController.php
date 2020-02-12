@@ -303,4 +303,14 @@ class InstaPromotionController extends Controller
             ->route('users.uploadphotos')
             ->with('success', 'Скриншот к акции отклонен для пользователя!');
     }
+
+    public function usersOn(Request $request,$id){
+        $photos = UplodedPhotos::with(["user"])
+            ->where("insta_promotions_id",$id)
+            ->paginate(15);
+
+        return view('admin.instapromos.userson', compact('photos'))
+            ->with('i', ($request->get('page', 1) - 1) * 15);
+
+    }
 }
