@@ -21,4 +21,8 @@ class InstaPromotion extends Model
     {
         return $this->belongsTo('App\Company', "company_id", "id");
     }
+
+    public function getSummaryAttribute(){
+        return UplodedPhotos::where("insta_promotions_id",$this->id)->count()??0;
+    }
 }

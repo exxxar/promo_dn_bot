@@ -52,6 +52,7 @@
                                             <p>{{$promo->description}}</p>
                                             <p><strong>{{$promo->promo_bonus}}</strong> бонусов за выполнение</p>
                                             <p> Позиция в выдаче:<span>{{$promo->position}}</span></p>
+                                            <p> Всего активаций:<span>{{$promo->summary}}</span></p>
                                             <a href="{{ route('instapromos.show',$promo->id) }}"
                                                class="btn btn-primary"><i class="fas fa-eye"></i></a>
                                             <a href="{{ route('instapromos.edit',$promo->id) }}" class="btn btn-info"><i
