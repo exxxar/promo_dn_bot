@@ -34,7 +34,7 @@
                                 <div class="wrapper" style="padding: 10px">
                                     <div class="card" style="width:350px;">
                                         <!-- Изображение -->
-                                        <img class="card-img-top" src="{{$photo->url}}" style="width:100%;">
+                                        <img class="card-img-top" src="{{$photo->url}}" style="width:100%;height:350px;object-fit: cover;">
                                         <!-- Текстовый контент -->
                                         <div class="card-body">
                                             <h5>{{$photo->user->name??$photo->user->telegram_chat_id}}</h5>
@@ -43,7 +43,7 @@
                                                   method="post">
                                                 @csrf
                                                 <div class="row">
-                                                    <div class="col-sm-4">
+                                                    <div class="col-sm-12">
                                                         <select name="insta_promotions_id" id="insta_promotions_id"
                                                                 class="form-control" required>
                                                             @foreach($instapromos as $promo)
@@ -53,12 +53,12 @@
                                                     </div>
                                                 </div>
                                                 <div class="row">
-                                                    <div class="col-sm-3">
+                                                    <div class="col-sm-6">
                                                         <button class="btn btn-success" type="submit">
                                                             Подтвердить
                                                         </button>
                                                     </div>
-                                                    <div class="col-sm-3">
+                                                    <div class="col-sm-6">
                                                         <a class="btn btn-danger"
                                                            href="{{route("users.uploadphotos.decline",$photo->id)}}">
                                                             Отменить
