@@ -1176,21 +1176,22 @@ class SkidkiDNBot extends Bot implements iSkidkiDNBot
 
             $url = $image->getUrl(); // The direct url
 
-            $canAddPhoto = UplodedPhotos::where("activated", false)
-                    ->count() < env("USERS_INSTA_PROMOS_LIMIT");
+            $canAddPhoto = count(UplodedPhotos::where("activated", false)
+                    ->get()) < env("USERS_INSTA_PROMOS_LIMIT");
 
             if (!$canAddPhoto) {
                 $this->reply("Вы достигли лимита (" . env("USERS_INSTA_PROMOS_LIMIT") . ") загрузок фотографий за 1 день");
                 continue;
             }
 
-            UplodedPhotos::created([
+            UplodedPhotos::create([
                 'url' => $url,
                 'activated' => false,
                 'user_id' => $this->getUser()->id,
                 'insta_promotions_id' => null,
             ]);
 
+            $this->reply("Спасибо, ваша фотография успешно загружена и будет обработана администратором!");
 
         }
 

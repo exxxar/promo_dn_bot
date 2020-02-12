@@ -20,7 +20,7 @@ class CreateUplodedPhotosTable extends Migration
             $table->boolean('activated')->default(false);
 
             $table->unsignedInteger('user_id');
-            $table->unsignedInteger('insta_promotions_id');
+            $table->unsignedInteger('insta_promotions_id')->nullable();
 
 
             if (env("DB_CONNECTION") == 'mysql') {
