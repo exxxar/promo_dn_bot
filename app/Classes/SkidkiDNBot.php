@@ -11,10 +11,12 @@ use App\Company;
 use App\Drivers\TelegramInlineQueryDriver;
 use App\Enums\Parts;
 use App\Event;
+use App\InstaPromotion;
 use App\Prize;
 use App\Promocode;
 use App\Promotion;
 use App\RefferalsPaymentHistory;
+use App\UplodedPhotos;
 use App\User;
 use BotMan\BotMan\BotMan;
 use BotMan\BotMan\Messages\Attachments\Image;
@@ -1172,20 +1174,22 @@ class SkidkiDNBot extends Bot implements iSkidkiDNBot
     {
         foreach ($images as $image) {
 
-
-
             $url = $image->getUrl(); // The direct url
 
-            $payload = $image->getPayload();
+            $canAddPhoto = UplodedPhotos::where("activated", false)
+                    ->count() < env("USERS_INSTA_PROMOS_LIMIT");
 
-            $this->reply("Изображение успешно загружено!");
+            if (!$canAddPhoto) {
+                $this->reply("Вы достигли лимита (" . env("USERS_INSTA_PROMOS_LIMIT") . ") загрузок фотографий за 1 день");
+                continue;
+            }
 
-            $this->reply("https://api.telegram.org/bot917429752:AAFK2nmeqcpbVqNxQLl7VgJDYVhAWTBXnz0/getFile?file_id=".$payload["file_id"]);
-
-
-
-            Log::info(print_r($payload["file_id"],true));
-
+            UplodedPhotos::created([
+                'url' => $url,
+                'activated' => false,
+                'user_id' => $this->getUser()->id,
+                'insta_promotions_id' => null,
+            ]);
 
 
         }
