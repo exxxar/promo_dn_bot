@@ -32,9 +32,9 @@
                         @foreach($uploadphotos as $key => $photo)
                             <div class="col">
                                 <div class="wrapper" style="padding: 10px">
-                                    <div class="card" style="width:350px;">
+                                    <div class="card" style="width:250px;">
                                         <!-- Изображение -->
-                                        <img class="card-img-top" src="{{$photo->url}}" style="width:100%;height:350px;object-fit: cover;">
+                                        <img class="card-img-top" src="{{$photo->url}}" style="width:100%;height:250px;object-fit: contain;">
                                         <!-- Текстовый контент -->
                                         <div class="card-body">
                                             <h5>{{$photo->user->name??$photo->user->telegram_chat_id}}</h5>
@@ -52,7 +52,7 @@
                                                         </select>
                                                     </div>
                                                 </div>
-                                                <div class="row">
+                                                <div class="row mt-2">
                                                     <div class="col-sm-6">
                                                         <button class="btn btn-success" type="submit">
                                                             Подтвердить
