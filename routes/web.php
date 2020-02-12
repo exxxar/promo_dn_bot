@@ -140,9 +140,9 @@ Route::prefix('admin')->group(function () {
 
     Route::get("/instapromos/channel/{id}", "InstaPromotionController@channel")->name("instapromos.channel");
     Route::get("/instapromos/duplication/{id}", "InstaPromotionController@duplication")->name("instapromos.duplication");
-    Route::get("/instapromos/upoadphotos", "InstaPromotionController@uploadphotos")->name("users.uploadphotos");
-    Route::get("/instapromos/upoadphotos/accept/{id}", "InstaPromotionController@accept")->name("users.uploadphotos.accept");
-    Route::get("/instapromos/upoadphotos/decline/{id}", "InstaPromotionController@decline")->name("users.uploadphotos.decline");
+    Route::get("/upoadphotos", "InstaPromotionController@uploadphotos")->name("users.uploadphotos");
+    Route::get("/upoadphotos/accept/{id}", "InstaPromotionController@accept")->name("users.uploadphotos.accept");
+    Route::get("/upoadphotos/decline/{id}", "InstaPromotionController@decline")->name("users.uploadphotos.decline");
 
     Route::get("/promocodes/change_status/{id}", "PromocodeController@change_status")->name("promocodes.changestatus");
 

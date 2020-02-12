@@ -46,7 +46,7 @@
                                                     <div class="col-sm-4">
                                                         <select name="insta_promotions_id" id="insta_promotions_id"
                                                                 class="form-control" required>
-                                                            @foreach($instaPromos as $promo)
+                                                            @foreach($instapromos as $promo)
                                                                 <option value="{{$promo->id}}">{{$promo->title}}</option>
                                                             @endforeach
                                                         </select>
