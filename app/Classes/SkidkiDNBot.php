@@ -1172,6 +1172,17 @@ class SkidkiDNBot extends Bot implements iSkidkiDNBot
 
     public function uploadImages($images)
     {
+        $user = $this->getUser();
+        if (is_null($user->instagram)){
+            $keyboard = [
+                [
+                    ["text"=>"Заполнить","callback_data"=>"/fill_insta_info"]
+                ]
+            ];
+            $this->sendMessage("Мы не можем принять ваши скриншоты пока вы не укажите свой профиль в *Instagram*",$keyboard);
+            return;
+        }
+
         foreach ($images as $image) {
 
             $url = $image->getUrl(); // The direct url
