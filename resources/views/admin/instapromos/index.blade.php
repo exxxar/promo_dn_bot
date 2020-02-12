@@ -49,6 +49,7 @@
                                             <h5>{{$promo->title}}</h5>
                                             <p>{{$promo->description}}</p>
                                             <p><strong>{{$promo->promo_bonus}}</strong> бонусов за выполнение</p>
+                                            <p> Позиция в выдаче:<span>{{$promo->position}}</span></p>
                                             <a href="{{ route('instapromos.show',$promo->id) }}"
                                                class="btn btn-primary"><i class="fas fa-eye"></i></a>
                                             <a href="{{ route('instapromos.edit',$promo->id) }}" class="btn btn-info"><i
@@ -74,8 +75,7 @@
                                                 <div class="col">
                                                     <span class="badge badge-primary">{{$promo->company->title}}</span>
                                                     <span class="badge badge-info">{{$promo->is_active?"Активно":"Не активно"}}</span>
-                                                    <span class="badge badge-light">{{$promo->position}}</span>
-                                                </div>
+                                                      </div>
 
                                             </div>
                                         </div>

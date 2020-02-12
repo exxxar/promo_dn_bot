@@ -138,9 +138,9 @@ Route::prefix('admin')->group(function () {
     Route::get("/achievements/channel/{id}", "AchievementsController@channel")->name("achievements.channel");
     Route::get("/prizes/channel/{id}", "PrizeController@channel")->name("prizes.channel");
 
-    Route::get("/instapromos/channel/{id}", "InstaPromotion@channel")->name("instapromos.channel");
-    Route::get("/instapromos/duplication/{id}", "InstaPromotion@duplication")->name("instapromos.duplication");
-    Route::get("/instapromos/upoadphotos", "InstaPromotion@uploadphotos")->name("users.uploadphotos");
+    Route::get("/instapromos/channel/{id}", "InstaPromotionController@channel")->name("instapromos.channel");
+    Route::get("/instapromos/duplication/{id}", "InstaPromotionController@duplication")->name("instapromos.duplication");
+    Route::get("/instapromos/upoadphotos", "InstaPromotionController@uploadphotos")->name("users.uploadphotos");
 
     Route::get("/promocodes/change_status/{id}", "PromocodeController@change_status")->name("promocodes.changestatus");
 
