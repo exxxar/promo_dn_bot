@@ -28,6 +28,9 @@
                     <div class="col-sm-4">
                         <a class="btn btn-primary" href="{{route("instapromos.create")}}">Новая акция для Instagram</a>
                     </div>
+                    <div class="col-sm-4">
+                        <a class="btn btn-primary" href="{{route("users.uploadphotos")}}">Пользователи по акциям</a>
+                    </div>
                 </div>
 
                 <h1>Акции для Instagram</h1>

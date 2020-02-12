@@ -71,7 +71,7 @@ class InstaPromotionController extends Controller
             'photo_url' => $request->get('photo_url') ?? '',
             'promo_bonus' => $request->get('promo_bonus') ?? 0,
             'position' => $request->get('position') ?? 0,
-            'is_active' => $request->get('is_active') ?? true,
+            'is_active' => $request->get('is_active')=="on" ? true : false,
             'company_id' => $request->get('company_id') ?? null,
 
             'created_at' => Carbon::now(),

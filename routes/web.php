@@ -140,6 +140,7 @@ Route::prefix('admin')->group(function () {
 
     Route::get("/instapromos/channel/{id}", "InstaPromotion@channel")->name("instapromos.channel");
     Route::get("/instapromos/duplication/{id}", "InstaPromotion@duplication")->name("instapromos.duplication");
+    Route::get("/instapromos/upoadphotos", "InstaPromotion@uploadphotos")->name("users.uploadphotos");
 
     Route::get("/promocodes/change_status/{id}", "PromocodeController@change_status")->name("promocodes.changestatus");
 
