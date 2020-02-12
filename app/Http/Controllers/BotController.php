@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 
 use App\Classes\SkidkiDNBot;
 use App\Conversations\FillInfoConversation;
+use App\Conversations\FillInstagramConversation;
 use App\Conversations\LotteryCashbackConversation;
 use App\Conversations\LotteryConversation;
 use App\Conversations\LotusProfileConversation;
@@ -139,6 +140,7 @@ class BotController extends Controller
             ->getPromotionsByCompany($page);
     }
 
+
     public function getCategoryById($bot, $categoryId, $page)
     {
         $this->sdnbot
@@ -164,7 +166,7 @@ class BotController extends Controller
     {
         $this->sdnbot
             ->setBot($bot)
-            ->getInstaPromos($page);
+            ->getPromotionsByInstagram($page);
     }
 
     public function getActivityInformation($bot)
@@ -370,6 +372,13 @@ class BotController extends Controller
         $this->sdnbot
             ->setBot($bot)
             ->startConversation(new LotusProfileConversation($bot, $data));
+    }
+
+    public function fillInstagramConversation($bot)
+    {
+        $this->sdnbot
+            ->setBot($bot)
+            ->startConversation(new FillInstagramConversation($bot));
     }
 
     public function fallback($bot)

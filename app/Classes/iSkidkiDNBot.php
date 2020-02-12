@@ -43,11 +43,12 @@ interface iSkidkiDNBot
 
     public function getLatestCashBack();
 
-    public function getInstaPromos($page);
 
 
     public function getPromotionsByCategory($page);
     public function getPromotionsByCompany($page);
+
+    public function getPromotionsByInstagram($page);
 
     public function getCategoryById($id,$page);
     public function getCompanyById($id,$page);

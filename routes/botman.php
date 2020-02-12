@@ -17,6 +17,7 @@ $botman->hears("/start ([0-9a-zA-Z=]+)", BotController::class . '@startDataConve
 $botman->hears("/promotion ([0-9]+)", BotController::class . '@promoConversation');
 $botman->hears("/lotusprofile ([0-9]+)", BotController::class . '@lotusprofileConversation');
 $botman->hears("/fillinfo", BotController::class . '@fillInfoConversation');
+$botman->hears("/fill_insta_info", BotController::class . '@fillInstagramConversation');
 $botman->hears("/payment ([0-9]{1,10}) ([0-9]{1,10})", BotController::class . '@paymentConversation');
 $botman->hears(".*Поделиться в соц. сетях|/ref ([0-9]+)", BotController::class . '@getRefs');
 $botman->hears('.*Посмотреть моих друзей|/friends ([0-9]+)', BotController::class . '@getFriends');

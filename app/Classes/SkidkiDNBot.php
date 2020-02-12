@@ -387,11 +387,6 @@ class SkidkiDNBot extends Bot implements iSkidkiDNBot
 
     }
 
-    public function getInstaPromos($page)
-    {
-        $keyboard = [];
-        $this->sendMessage("Данный раздел будет доступен в ближайшее время!)", $keyboard);
-    }
 
     public function getPromotionsMenu()
     {
@@ -1169,17 +1164,56 @@ class SkidkiDNBot extends Bot implements iSkidkiDNBot
 
     }
 
+    public function getPromotionsByInstagram($page)
+    {
+        $user = $this->getUser();
+        if (is_null($user->instagram)) {
+            $keyboard = [
+                [
+                    ["text" => "Заполнить", "callback_data" => "/fill_insta_info"]
+                ]
+            ];
+            $this->sendMessage("\xF0\x9F\x91\x89Вы не можете участвовать в акции пока не укажите свой профиль в *Instagram*", $keyboard);
+            return;
+        }
+
+        $instapromos = InstaPromotion::orderBy('position', 'DESC')
+            ->where("is_active", true)
+            ->take(config("bot.results_per_page"))
+            ->skip($page * config("bot.results_per_page"))
+            ->get();
+
+        $userId = ($this->getUser())->id;
+
+        $instapromos = array_filter($instapromos, function ($item) use ($userId) {
+            return is_null(UplodedPhotos::where("insta_promotions_id", $item->id)
+                ->where("user_id", $userId)->first());
+        });
+
+        if (count($instapromos) == 0) {
+            $this->reply("Акций в данное время нет или все акции выполнены");
+            return;
+        }
+
+        foreach ($instapromos as $promo) {
+            $this->sendPhoto("*$promo->title*\n$promo->description", $promo->photo_url);
+        }
+
+        $this->pagination("/promo_by_category", $instapromos, $page, "Выберите действие");
+
+
+    }
 
     public function uploadImages($images)
     {
         $user = $this->getUser();
-        if (is_null($user->instagram)){
+        if (is_null($user->instagram)) {
             $keyboard = [
                 [
-                    ["text"=>"Заполнить","callback_data"=>"/fill_insta_info"]
+                    ["text" => "Заполнить", "callback_data" => "/fill_insta_info"]
                 ]
             ];
-            $this->sendMessage("Мы не можем принять ваши скриншоты пока вы не укажите свой профиль в *Instagram*",$keyboard);
+            $this->sendMessage("\xF0\x9F\x91\x89Вы не можете участвовать в акции пока не укажите свой профиль в *Instagram*", $keyboard);
             return;
         }
 

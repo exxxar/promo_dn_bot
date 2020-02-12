@@ -38,6 +38,7 @@ return [
     'ask_for_cashback' => 'Введите сумму из чека',
     'ask_for_check_info' => 'Введите номер чека',
     'ask_for_start_promo' => 'Желаете поучаствовать в акции?',
+    'ask_instagram' => 'Укажите ссылку на ваш профиль',
 
 
     'ask_action' => 'Выберите действие',
