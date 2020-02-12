@@ -11,8 +11,8 @@
                             <h2>Просмотр информации о призе</h2>
                         </div>
                         <div class="pull-right">
-                            <a class="btn btn-primary" href="{{ route('prizes.index') }}"> Назад</a>
-                            <a class="btn btn-link" href="{{ route('prizes.edit',$prize->id) }}">
+                            <a class="btn btn-primary" href="{{ route('instapromos.index') }}"> Назад</a>
+                            <a class="btn btn-link" href="{{ route('instapromos.edit',$promo->id) }}">
                                 <i class="fas fa-edit"></i>
                             </a>
 
@@ -23,7 +23,7 @@
                 </div>
 
 
-                <form method="post" action="{{ route('prizes.store') }}">
+                <form method="post" action="{{ route('instapromos.store') }}">
                     @csrf
                     <table class="table mt-2">
                         <thead class="thead-light ">
