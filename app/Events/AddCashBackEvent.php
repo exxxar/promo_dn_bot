@@ -9,6 +9,7 @@ use Illuminate\Broadcasting\PresenceChannel;
 use Illuminate\Foundation\Events\Dispatchable;
 use Illuminate\Broadcasting\InteractsWithSockets;
 use Illuminate\Contracts\Broadcasting\ShouldBroadcast;
+use phpDocumentor\Reflection\Types\Integer;
 
 class AddCashBackEvent
 {
@@ -17,12 +18,13 @@ class AddCashBackEvent
     public $user_id;
     public $company_id;
     public $money_in_check;
+
     /**
      * Create a new event instance.
      *
      * @return void
      */
-    public function __construct($user_id,$company_id,$money_in_check)
+    public function __construct(Integer $user_id, Integer $company_id, Integer $money_in_check)
     {
         //
         $this->user_id = $user_id;
