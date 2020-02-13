@@ -24,7 +24,7 @@ class AddCashBackEvent
      *
      * @return void
      */
-    public function __construct(Integer $user_id, Integer $company_id, Integer $money_in_check)
+    public function __construct(int $user_id, int $company_id, int $money_in_check)
     {
         //
         $this->user_id = $user_id;
