@@ -210,7 +210,7 @@ class PaymentConversation extends Conversation
         }
 
         event(new AddCashBackEvent(
-            $user,
+            $user->id,
             $this->company_id,
             $this->money_in_check
         ));
