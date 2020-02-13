@@ -211,7 +211,9 @@ class InstaPromotionController extends Controller
     {
         $instapromo = InstaPromotion::find($id);
 
-        $instapromo = $instapromo->replicate();;
+        $instapromo = $instapromo->replicate();
+        $instapromo->save();
+
         $instapromo->title = $instapromo->title."#".$instapromo->id."(copy)";
         $instapromo->save();
 
