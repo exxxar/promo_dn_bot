@@ -93,6 +93,11 @@ class User extends Authenticatable
         return $this->hasMany('App\Stat', 'user_id', 'id');
     }
 
+    public function cashbackinfos()
+    {
+        return $this->hasMany('App\CashBackInfo', 'user_id', 'id');
+    }
+
     public function parent()
     {
         return $this->hasOne('App\User', 'id', 'parent_id');

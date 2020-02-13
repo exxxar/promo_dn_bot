@@ -6,11 +6,13 @@ namespace App\Classes;
 
 use App\Achievement;
 use App\Article;
+use App\CashBackInfo;
 use App\Category;
 use App\Company;
 use App\Drivers\TelegramInlineQueryDriver;
 use App\Enums\Parts;
 use App\Event;
+use App\Events\AddCashBackEvent;
 use App\InstaPromotion;
 use App\Prize;
 use App\Promocode;
@@ -687,6 +689,21 @@ class SkidkiDNBot extends Bot implements iSkidkiDNBot
         $this->sendPhotoToChanel($message, $prize->image_url);
     }
 
+    public function getCashBackByCompanies()
+    {
+        $statistic_info = '';
+
+        $cbis = CashBackInfo::with(["company"])->where("user_id", $this->getUser()->id)->get();
+
+        foreach ($cbis as $cbi) {
+            $statistic_info .= sprintf("\xF0\x9F\x94\xB8*%s* => *%s руб.* CashBack\n",
+                $cbi->company->title,
+                $cbi->value);
+        }
+
+        $this->reply($statistic_info);
+    }
+
     public function getActivityInformation()
     {
         $stat_types = [
@@ -791,12 +808,20 @@ class SkidkiDNBot extends Bot implements iSkidkiDNBot
 
     public function getPaymentMenu()
     {
+        $cashback_company_summary = 0;
+        $cbis = CashBackInfo::where("user_id", $this->getUser()->id)->get();
+        if (!empty($cbis))
+            foreach ($cbis as $cbi)
+                $cashback_company_summary += $cbi->value;
+
+        $cashback = (env("INDIVIDUAL_CASHBACK_MODE") ?
+            $cashback_company_summary :
+            $this->getUser()->cashback_bonus_count);
 
         $summary = $this->getUser()->referral_bonus_count +
-            $this->getUser()->cashback_bonus_count +
+            $cashback +
             $this->getUser()->network_cashback_bonus_count;
 
-        $cashback = $this->getUser()->cashback_bonus_count;
 
         $tmp_network = $this->getUser()->network_friends_count >= config("bot.step_one_friends") ?
             "Сетевой бонус *" . $this->getUser()->network_cashback_bonus_count . "*\n" : '';
@@ -807,9 +832,7 @@ class SkidkiDNBot extends Bot implements iSkidkiDNBot
             $tmp_network
         );
 
-
         $keyboard = [];
-
 
         $cashback_history = $this->getUser()->getCashBacksByPhone(0);
 
@@ -817,7 +840,7 @@ class SkidkiDNBot extends Bot implements iSkidkiDNBot
             $tmp_money = 0;
             foreach ($cashback_history as $ch)
                 if ($ch->activated == 0)
-                    $tmp_money += round(intval($ch->money_in_check) * env("CAHSBAK_PROCENT") / 100);
+                    $tmp_money += round(intval($ch->money_in_check) * (Company::find($ch->company_id))->cashback / 100);
 
             if ($tmp_money > 0)
                 array_push($keyboard, [
@@ -1046,10 +1069,11 @@ class SkidkiDNBot extends Bot implements iSkidkiDNBot
                 $ch->user_id = $this->getUser()->id;
                 $ch->save();
 
-                $user = $this->getUser();
-                $user->cashback_bonus_count += round(intval($ch->money_in_check) * env("CAHSBAK_PROCENT") / 100);
-                $user->save();
-
+                event(new AddCashBackEvent(
+                    $this->getUser(),
+                    $ch->company_id,
+                    $ch->money_in_check
+                ));
             }
             $this->reply(__("messages.cashback_message_5"));
         }

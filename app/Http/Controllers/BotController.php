@@ -169,6 +169,12 @@ class BotController extends Controller
             ->getPromotionsByInstagram($page);
     }
 
+    public function getCashBackByCompanies($bot){
+        $this->sdnbot
+            ->setBot($bot)
+            ->getCashBackByCompanies();
+    }
+
     public function getActivityInformation($bot)
     {
         $this->sdnbot

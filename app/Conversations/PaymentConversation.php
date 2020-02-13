@@ -3,11 +3,13 @@
 namespace App\Conversations;
 
 use App\CashbackHistory;
+use App\CashBackInfo;
 use App\Classes\CustomBotMenu;
 use App\Company;
 use App\Enums\AchievementTriggers;
 use App\Events\AchievementEvent;
 use App\Events\ActivateUserEvent;
+use App\Events\AddCashBackEvent;
 use App\Events\NetworkCashBackEvent;
 use App\RefferalsPaymentHistory;
 use App\User;
@@ -58,19 +60,19 @@ class PaymentConversation extends Conversation
     {
         $question = Question::create(__("messages.ask_action"))
             ->addButtons([
-                Button::create(__("messages.ask_action_btn_1"))->value('askpay'),
-                Button::create(__("messages.ask_action_btn_2"))->value('getcashabck'),
+                Button::create(__("messages.ask_action_btn_1"))->value('askforpay'),
+                Button::create(__("messages.ask_action_btn_2"))->value('addcashback'),
             ]);
 
         $this->ask($question, function (Answer $answer) {
             if ($answer->isInteractiveMessageReply()) {
                 $selectedValue = $answer->getValue();
 
-                if ($selectedValue == "askpay") {
+                if ($selectedValue == "askforpay") {
                     $this->askForPay();
                 }
 
-                if ($selectedValue == "getcashabck") {
+                if ($selectedValue == "addcashback") {
                     $this->askForCashback();
                 }
             }
@@ -96,7 +98,18 @@ class PaymentConversation extends Conversation
                 return;
             }
 
-            if ($recipient_user->referral_bonus_count + $recipient_user->cashback_bonus_count >= intval($nedded_bonus)) {
+            $cbi = CashBackInfo::where("company_id", $this->company_id)
+                ->where("user_id", $recipient_user->id)
+                ->first();
+
+            if (env("INDIVIDUAL_CASHBACK_MODE"))
+                $money = $recipient_user->referral_bonus_count + (is_null($cbi) ? 0 : $cbi->value);
+            else
+                $money = $recipient_user->referral_bonus_count + $recipient_user->cashback_bonus_count;
+
+            $canPay = $money >= intval($nedded_bonus);
+
+            if ($canPay) {
 
                 RefferalsPaymentHistory::create([
                     'user_id' => $recipient_user->id,
@@ -108,14 +121,25 @@ class PaymentConversation extends Conversation
                 if ($recipient_user->referral_bonus_count <= intval($nedded_bonus)) {
                     $module = intval($nedded_bonus) - $recipient_user->referral_bonus_count;
                     $recipient_user->referral_bonus_count = 0;
-                    $recipient_user->cashback_bonus_count -= $module;
+                    if (!env('INDIVIDUAL_CASHBACK_MODE'))
+                        $recipient_user->cashback_bonus_count -= $module;
+                    else {
+                        $cbi->value -= $module;
+                        $cbi->save();
+                    }
+
                 } else
                     $recipient_user->referral_bonus_count -= intval($nedded_bonus);
+
                 $recipient_user->save();
 
                 event(new ActivateUserEvent($recipient_user));
-
-                event(new AchievementEvent(AchievementTriggers::MaxCashBackRemoveBonus, $nedded_bonus, $recipient_user));
+                event(new AchievementEvent(
+                        AchievementTriggers::MaxCashBackRemoveBonus,
+                        $nedded_bonus,
+                        $recipient_user
+                    )
+                );
 
                 $company_name = Company::find($this->company_id)->title;
                 Telegram::sendMessage([
@@ -125,9 +149,9 @@ class PaymentConversation extends Conversation
                 ]);
 
                 $this->mainMenu("Спасибо! Успешно списалось $nedded_bonus руб.");
-            } else {
-                $money = $recipient_user->referral_bonus_count + $recipient_user->cashback_bonus_count;
+            }
 
+            if (!$canPay) {
                 Telegram::sendMessage([
                     'chat_id' => $recipient_user->telegram_chat_id,
                     'parse_mode' => 'Markdown',
@@ -139,6 +163,7 @@ class PaymentConversation extends Conversation
 
                 $this->askForAction();
             }
+
 
         });
     }
@@ -168,6 +193,7 @@ class PaymentConversation extends Conversation
             $this->check_info = $answer->getText();
             if (strlen(trim($this->check_info)) == 0) {
                 $this->askForCheckInfo();
+                return;
             }
             $this->saveCashBack();
         });
@@ -183,33 +209,29 @@ class PaymentConversation extends Conversation
             return;
         }
 
-        $cashBack = round(intval($this->money_in_check) * env("CAHSBAK_PROCENT") / 100);
-        $user->cashback_bonus_count += $cashBack;
-        $user->save();
-
-        event(new ActivateUserEvent($user));
-        event(new NetworkCashBackEvent($user->id, $cashBack));
-        event(new AchievementEvent(AchievementTriggers::MaxCashBackCount, $cashBack, $user));
+        event(new AddCashBackEvent(
+            $user,
+            $this->company_id,
+            $this->money_in_check
+        ));
 
         CashbackHistory::create([
             'money_in_check' => $this->money_in_check,
             'activated' => 1,
-            'employee_id' => $this->user->id,
+            'employee_id' => $this->getUser()->id,
             'company_id' => $this->company_id,
             'check_info' => $this->check_info,
             'user_phone' => $this->phone ?? null,
             'user_id' => $user->id,
         ]);
 
-        $companyName = Company::find($this->company_id)->title ?? "Неизвестная компания";
-
-        Telegram::sendMessage([
-            'chat_id' => $user->telegram_chat_id,
-            'parse_mode' => 'Markdown',
-            'text' => "Сумма в чеке *$this->money_in_check* руб.\nВам начислен *CashBack* в размере *$cashBack* руб от компании *$companyName*",
-            'disable_notification' => 'false'
-        ]);
-        $this->mainMenu("Отлично! CashBack начислен пользователю " . ($user->phone ?? $user->fio_from_telegram ?? $user->name ?? $user->email));
+        $this->mainMenu("Отлично! CashBack начислен пользователю " . (
+                $user->phone ??
+                $user->fio_from_telegram ??
+                $user->name ??
+                $user->email
+            )
+        );
 
 
     }

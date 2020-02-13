@@ -85,6 +85,9 @@ trait CustomBotMenu
 
         $this->keyboard_payments = [
             [
+                "\xF0\x9F\x92\xB5CashBack по компаниям",
+            ],
+            [
                 "\xF0\x9F\x93\xB2Начисления CashBack",
             ],
             [

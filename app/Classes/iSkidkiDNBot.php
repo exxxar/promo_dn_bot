@@ -56,6 +56,7 @@ interface iSkidkiDNBot
     public function getArticlesByPartId($partId);
 
     public function getActivityInformation();
+    public function getCashBackByCompanies();
 
     public function getLotterySlot($slotId,$codeId);
 

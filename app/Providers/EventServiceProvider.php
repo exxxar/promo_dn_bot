@@ -4,9 +4,11 @@ namespace App\Providers;
 
 use App\Events\AchievementEvent;
 use App\Events\ActivateUserEvent;
+use App\Events\AddCashBackEvent;
 use App\Events\NetworkCashBackEvent;
 use App\Events\NetworkLevelRecounterEvent;
 use App\Listeners\AchievementProcessor;
+use App\Listeners\CashBackHandler;
 use App\Listeners\NetworkCashBackProcessor;
 use App\Listeners\NetworkLevelRecounterProcessor;
 use App\Listeners\UserStatusHandler;
@@ -28,6 +30,10 @@ class EventServiceProvider extends ServiceProvider
         ],
         AchievementEvent::class => [
             AchievementProcessor::class
+        ],
+
+        AddCashBackEvent::class => [
+            CashBackHandler::class
         ],
 
         NetworkCashBackEvent::class => [

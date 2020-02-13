@@ -123,6 +123,7 @@ Route::prefix('admin')->group(function () {
         'prizes' => 'PrizeController',
         'promocodes' => 'PromocodeController',
         'instapromos' => 'InstaPromotionController',
+        'cashbackinfos' => 'CashBackInfoController',
     ]);
 
     Route::get("/promotions/copy/{id}", "PromotionController@copy")->name("promotions.copy");
