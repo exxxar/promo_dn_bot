@@ -68,7 +68,6 @@ class InstaPromotionController extends Controller
             'photo_url' => 'max:1000',
             'promo_bonus' => 'required',
             'position' => 'required',
-            'is_active' => 'required',
             'company_id' => 'required|integer',
         ]);
 
@@ -134,7 +133,6 @@ class InstaPromotionController extends Controller
             'photo_url' => 'max:1000',
             'promo_bonus' => 'required',
             'position' => 'required',
-            'is_active' => 'required',
             'company_id' => 'required|integer',
         ]);
 
