@@ -695,6 +695,12 @@ class SkidkiDNBot extends Bot implements iSkidkiDNBot
 
         $cbis = CashBackInfo::with(["company"])->where("user_id", $this->getUser()->id)->get();
 
+        if (count($cbis)==0)
+        {
+            $this->reply("Вам не начислялся CashBack!");
+            return;
+        }
+
         foreach ($cbis as $cbi) {
             $statistic_info .= sprintf("\xF0\x9F\x94\xB8*%s* => *%s руб.* CashBack\n",
                 $cbi->company->title,
