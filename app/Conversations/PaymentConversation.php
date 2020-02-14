@@ -169,7 +169,8 @@ class PaymentConversation extends Conversation
                     ])
                 ]);
 
-                $this->reply("У пользователя недостаточно боунсных баллов! В наличии $money руб.");
+                if ($recipient_user->id!=$this->getUser()->id)
+                    $this->reply("У пользователя недостаточно боунсных баллов! В наличии $money руб.(".$cbi->company->title.")");
 
                 $this->askForAction();
                 return;
