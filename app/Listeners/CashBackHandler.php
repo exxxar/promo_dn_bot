@@ -35,6 +35,8 @@ class CashBackHandler
      */
     public function handle(AddCashBackEvent $event)
     {
+        if ($event->money_in_check==0)
+            return;
 
         $user = User::find($event->user_id);
         $company = Company::find($event->company_id);
@@ -85,6 +87,8 @@ class CashBackHandler
             'text' => "Сумма в чеке *$event->money_in_check* руб.\nВам начислен *CashBack* в размере *$cashBack* руб от компании *$companyName*",
             'disable_notification' => 'false'
         ]);
+
+        $event->money_in_check = 0;//event complete
 
     }
 }
