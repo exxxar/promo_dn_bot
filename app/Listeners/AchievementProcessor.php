@@ -33,6 +33,9 @@ class AchievementProcessor
      */
     public function handle(AchievementEvent $event)
     {
+
+        if ($event->isComplete == true)
+            return;
         //
         $stats = Stat::where("stat_type", $event->trigger_type)
             ->where("user_id", $event->user->id)
@@ -94,5 +97,7 @@ class AchievementProcessor
 
             }
         }
+
+        $event->isComplete = true;
     }
 }
