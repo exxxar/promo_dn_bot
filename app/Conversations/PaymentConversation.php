@@ -196,7 +196,6 @@ class PaymentConversation extends Conversation
                 $this->askForCheckInfo();
                 return;
             }
-            Log::info("step 0-3");
             $this->saveCashBack();
         });
     }
@@ -211,14 +210,12 @@ class PaymentConversation extends Conversation
             return;
         }
 
-        Log::info("step 0-1 $user->id  $this->company_id   $this->money_in_check");
         event(new AddCashBackEvent(
             $user->id,
             $this->company_id,
             $this->money_in_check
         ));
 
-        Log::info("step 0-2");
         CashbackHistory::create([
             'money_in_check' => $this->money_in_check,
             'activated' => 1,
