@@ -152,11 +152,19 @@ class PaymentConversation extends Conversation
             }
 
             if (!$canPay) {
+                $keyboard = [
+                    [
+                        ["text"=>"CashBack по компаниям","callback_data"=>'/get_cashback_by_companies']
+                    ]
+                ];
                 Telegram::sendMessage([
                     'chat_id' => $recipient_user->telegram_chat_id,
                     'parse_mode' => 'Markdown',
-                    'text' => "\xE2\x9D\x97Внимание\xE2\x9D\x97Требуется списать *$nedded_bonus* руб, но у вас на счету только $money руб.",
-                    'disable_notification' => 'false'
+                    'text' => "\xE2\x9D\x97Внимание\xE2\x9D\x97Требуется списать *$nedded_bonus* руб, но у вас на счету только $money руб. (".$cbi->company->title.")",
+                    'disable_notification' => 'false',
+                    'reply_markup' => json_encode([
+                        'inline_keyboard' => $keyboard,
+                    ])
                 ]);
 
                 $this->reply("У пользователя недостаточно боунсных баллов! В наличии $money руб.");
