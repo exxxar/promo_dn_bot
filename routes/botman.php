@@ -33,7 +33,7 @@ $botman->hears('.*Розыгрыш|/start_lottery_test', BotController::class . 
 $botman->hears('.*Все достижения|/achievements_all ([0-9]+)', BotController::class . '@getAchievementsAll'); //перенёс
 $botman->hears('.*Система достижений|/achievements_panel', BotController::class . '@getAchievementMenu'); //перенёс
 $botman->hears('.*Статистика активности|/activity_information', BotController::class . '@getActivityInformation');
-$botman->hears('.*CashBack по компаниям|/get_cashback_by_companies', BotController::class . '@getCashBackByCompanies');
+$botman->hears('.*CashBack по компаниям|/get_cashback_by_companies', BotController::class . '@getCashBackByCompanies')->stopsConversation();
 
 $botman->hears(".*Пригласить друзей|".__("messages.global_menu_1"), BotController::class . '@getFriendsMenu');
 
