@@ -699,12 +699,19 @@ class SkidkiDNBot extends Bot implements iSkidkiDNBot
             $this->reply("Вам не начислялся CashBack!");
             return;
         }
-
+        $hasCashBack = false;
         foreach ($cbis as $cbi) {
-            if ($cbi->company->is_active)
+            if ($cbi->company->is_active) {
                 $statistic_info .= sprintf("\xF0\x9F\x94\xB8*%s* => *%s руб.* CashBack\n",
                     $cbi->company->title,
                     $cbi->value);
+                $hasCashBack = true;
+            }
+        }
+
+        if (!$hasCashBack) {
+            $this->reply("Вам не начислялся CashBack!");
+            return;
         }
 
         $this->reply($statistic_info);
