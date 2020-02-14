@@ -563,7 +563,7 @@ class SkidkiDNBot extends Bot implements iSkidkiDNBot
     public function getCompanyById($id, $page)
     {
 
-        $company = \App\Company::with(["promotions", "promotions.users"])
+        $company = Company::with(["promotions", "promotions.users"])
             ->where("id", $id)
             ->orderBy('position', 'DESC')
             ->first();
