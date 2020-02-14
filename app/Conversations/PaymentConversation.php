@@ -149,6 +149,7 @@ class PaymentConversation extends Conversation
                 ]);
 
                 $this->mainMenu("Спасибо! Успешно списалось $nedded_bonus руб.");
+                return;
             }
 
             if (!$canPay) {
@@ -162,6 +163,7 @@ class PaymentConversation extends Conversation
                 $this->reply("У пользователя недостаточно боунсных баллов! В наличии $money руб.");
 
                 $this->askForAction();
+                return;
             }
 
 

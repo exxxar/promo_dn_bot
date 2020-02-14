@@ -129,9 +129,10 @@ class StartDataConversation extends Conversation
         $companies = $this->getUser(["companies", "promos"])->companies;
 
         foreach ($companies as $company)
-            array_push($keyboard, [
-                ["text" => $company->title, "callback_data" => "/payment " . $this->request_user_id . " " . $company->id]
-            ]);
+            if ($company->is_active)
+                array_push($keyboard, [
+                    ["text" => $company->title, "callback_data" => "/payment " . $this->request_user_id . " " . $company->id]
+                ]);
 
         if (count($keyboard) == 0) {
             $this->reply(__("messages.payment_message_5"));
@@ -180,7 +181,7 @@ class StartDataConversation extends Conversation
 
             $promoTitle = $promo->title;
             $promoDescription = $promo->description;
-            $this->reply(sprintf(__("messages.promo_message_4"),$promoTitle,$promoDescription));
+            $this->reply(sprintf(__("messages.promo_message_4"), $promoTitle, $promoDescription));
 
 
             event(new AchievementEvent(AchievementTriggers::MaxReferralBonusCount, $promo->refferal_bonus, $remote_user));
