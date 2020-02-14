@@ -41,24 +41,32 @@ class CashBackHandler
         $cashBack = round(intval($event->money_in_check) * $company->cashback / 100);
         $companyName = $company->title ?? "Неизвестная компания";
 
-        if (env("INDIVIDUAL_CASHBACK_MODE") == false) {
+        Log::info("step 1");
+        if (env("INDIVIDUAL_CASHBACK_MODE") === false) {
             $user->cashback_bonus_count += $cashBack;
             $user->save();
+
+            Log::info("step 2");
         } else
-            if (env("INDIVIDUAL_CASHBACK_MODE") == true) {
+            if (env("INDIVIDUAL_CASHBACK_MODE") === true) {
                 $cbi = CashBackInfo::where("company_id", $event->company_id)
                     ->where("user_id", $event->user_id)
                     ->first();
 
+                Log::info("step 3");
                 if (is_null($cbi)) {
                     CashBackInfo::create([
                         'user_id' => $event->user_id,
                         'company_id' => $event->company_id,
                         'value' => $cashBack
                     ]);
+
+                    Log::info("step 4");
                 } else {
                     $cbi->value += $cashBack;
                     $cbi->save();
+
+                    Log::info("step 5");
                 }
             }
 
