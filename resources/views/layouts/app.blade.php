@@ -128,22 +128,23 @@
             </a>
         </li>
         <li class="c-sidebar-nav-item">
-        <a class="c-sidebar-nav-link" href="{{ route('articles.index') }}">
-            <i class="cil-newspaper c-sidebar-nav-icon"></i>
-            Статьи
-        </a>
+            <a class="c-sidebar-nav-link" href="{{ route('articles.index') }}">
+                <i class="cil-newspaper c-sidebar-nav-icon"></i>
+                Статьи
+            </a>
         </li>
         <li class="c-sidebar-nav-item">
-        <a class="c-sidebar-nav-link" href="{{ route('promocodes.index') }}">
-            <i class="cil-font c-sidebar-nav-icon"></i>
-            Промокоды
-        </a>
+            <a class="c-sidebar-nav-link" href="{{ route('promocodes.index') }}">
+                <i class="cil-font c-sidebar-nav-icon"></i>
+                Промокоды
+            </a>
         </li>
+
         <li class="c-sidebar-nav-item">
-        <a class="c-sidebar-nav-link" href="{{ route('prizes.index') }}">
-            <i class="cil-gift c-sidebar-nav-icon"></i>
-            Призы
-        </a>
+            <a class="c-sidebar-nav-link" href="{{ route('prizes.index') }}">
+                <i class="cil-gift c-sidebar-nav-icon"></i>
+                Призы
+            </a>
         </li>
 
         <li class="c-sidebar-nav-item">
@@ -151,6 +152,18 @@
                 <i class="cil-excerpt c-sidebar-nav-icon"></i>
                 Перевод
             </a>
+        </li>
+
+        <li class="c-sidebar-nav-item">
+            <a class="c-sidebar-nav-link" href="{{ route('charities.index') }}">
+                <i class="cil-arrow-thick-to-bottom c-sidebar-nav-icon"></i>
+                Благотворительные акции</a>
+        </li>
+
+        <li class="c-sidebar-nav-item">
+            <a class="c-sidebar-nav-link" href="{{ route('charityhistories.index') }}">
+                <i class="cil-action-redo c-sidebar-nav-icon"></i>
+                История донатов</a>
         </li>
 
 

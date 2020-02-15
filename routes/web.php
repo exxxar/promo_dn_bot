@@ -23,37 +23,6 @@ use Trello\Client;
 use Trello\Manager;
 use Vinkla\Instagram\Instagram;
 
-
-Route::post('/instawebhook', function (Request $request) {
-
-    Log::info("test post");
-
-});
-
-Route::get('/instawebhook', function (Request $request) {
-
-    Log::info("test");
-    // Create the card
-    /*
-        $client = new Client();
-        $client->authenticate(config("trello.api_key"), config("trello.api_token"), Client::AUTH_URL_CLIENT_ID);
-
-        $manager = new Manager($client);
-
-        $card = $manager->getCard("");
-
-        $card
-            ->setName('Test card 2')
-            ->setDescription('Test description 2')
-            ->save();
-
-        //dd($boards
-        */
-    Log::info($request->get("hub_challenge"));
-    return $request->get("hub_challenge");
-});
-
-
 Route::match(['get', 'post'], '/botman', 'BotManController@handle');
 
 Auth::routes();
@@ -69,45 +38,12 @@ Route::get("/insta", 'HomeController@instagramCallabck');
 Route::post('/send-request', 'WelcomeController@sendRequestFromSite')->name("send.callback");
 
 Route::prefix('admin')->group(function () {
-
-    Route::get('/', 'HomeController@index')
-        ->name('home');
-
-    Route::post('/', 'HomeController@index')
-        ->name('home.qr');
-
-    Route::get('/lang', 'HomeController@translations')
-        ->name('lang');
-
-
-    Route::post('/search', 'HomeController@search')
-        ->name('users.phone.search');
-
-    Route::get('/search_ajax/', 'HomeController@searchAjax')
-        ->name('users.ajax.search');
-
-
-    Route::post('/announce', 'HomeController@announce')
-        ->name('users.announce');
-
-
+    Route::get('/', 'HomeController@index')->name('home');
+    Route::post('/', 'HomeController@index')->name('home.qr');
+    Route::get('/lang', 'HomeController@translations')->name('lang');
     Route::get('/sender', 'HomeController@sender');
-
-    Route::post('/sender', 'HomeController@announceCustom')
-        ->name("sender.announce");
-
-
-    Route::post("/users/cashback/add", "HomeController@cashback")
-        ->name("users.cashback.add");
-
-
-    Route::get("/users/show/byPhone/{phone}", "UsersController@showByPhone")
-        ->name("users.show.phone");
-
-
-    Route::get("/users/cashback/{id}", "UsersController@cashBackPage")->name("users.cashback.index");
-
-    Route::any('users/search', 'UsersController@search')->name("users.search");
+    Route::post('/sender', 'HomeController@announceCustom')->name("sender.announce");
+    Route::get("/promocodes/change_status/{id}", "PromocodeController@change_status")->name("promocodes.changestatus");
 
     Route::resources([
         'articles' => 'ArticleController',
@@ -124,39 +60,68 @@ Route::prefix('admin')->group(function () {
         'promocodes' => 'PromocodeController',
         'instapromos' => 'InstaPromotionController',
         'cashbackinfos' => 'CashBackInfoController',
+        'charities' => 'CharityController',
+        'charitiyhistories' => 'CharityHistoryController',
     ]);
 
-    Route::get("/promotions/copy/{id}", "PromotionController@copy")->name("promotions.copy");
-    Route::get("/promotions/channel/{id}", "PromotionController@channel")->name("promotions.channel");
-    Route::get("/promotions/incategory/{id}", "PromotionController@inCategory")->name("promotions.in_category");
-    Route::get("/promotions/incompany/{id}", "PromotionController@inCompany")->name("promotions.in_company");
+    Route::name('users.')->prefix('users')->group(function () {
+        Route::get("/promotions/{id}", "UsersController@getUserPromotions")->name("promotions");
+        Route::get("/cashback/{id}", "UsersController@cashBackPage")->name("cashback.index");
+        Route::any('/search', 'UsersController@search')->name("search");
+        Route::post('/search', 'HomeController@search')->name('phone.search');
+        Route::get("/show/byPhone/{phone}", "UsersController@showByPhone")->name("show.phone");
+        Route::post("/cashback/add", "HomeController@cashback")->name("cashback.add");
+        Route::post('/announce', 'HomeController@announce')->name('announce');
+        Route::get('/search_ajax', 'HomeController@searchAjax')->name('ajax.search');
 
-    Route::get("/users/promotions/{id}", "UsersController@getUserPromotions")->name("users.promotions");
+        Route::name('uploadphotos.')->prefix('uploadphotos')->group(function () {
+            Route::get("/", "InstaPromotionController@uploadphotos")->name("index");
+            Route::post("/accept/{id}", "InstaPromotionController@accept")->name("accept");
+            Route::get("/decline/{id}", "InstaPromotionController@decline")->name("decline");
+        });
+    });
 
-    Route::get("/events/channel/{id}", "EventsController@channel")->name("events.channel");
-    Route::get("/companies/channel/{id}", "CompanyController@channel")->name("companies.channel");
-    Route::get("/companies/hide/{id}", "CompanyController@hide")->name("companies.hide");
-    Route::get("/achievements/channel/{id}", "AchievementsController@channel")->name("achievements.channel");
-    Route::get("/prizes/channel/{id}", "PrizeController@channel")->name("prizes.channel");
+    Route::name('promotions.')->prefix('promotions')->group(function () {
+        Route::get("/copy/{id}", "PromotionController@copy")->name("copy");
+        Route::get("/channel/{id}", "PromotionController@channel")->name("channel");
+        Route::get("/incategory/{id}", "PromotionController@inCategory")->name("in_category");
+        Route::get("/incompany/{id}", "PromotionController@inCompany")->name("in_company");
+    });
 
-    Route::get("/instapromos/channel/{id}", "InstaPromotionController@channel")->name("instapromos.channel");
-    Route::get("/instapromos/duplication/{id}", "InstaPromotionController@duplication")->name("instapromos.duplication");
-    Route::get("/instapromos/userson/{id}", "InstaPromotionController@usersOn")->name("instapromos.userson");
-
-    Route::get("/upoadphotos", "InstaPromotionController@uploadphotos")->name("users.uploadphotos");
-    Route::post("/upoadphotos/accept/{id}", "InstaPromotionController@accept")->name("users.uploadphotos.accept");
-    Route::get("/upoadphotos/decline/{id}", "InstaPromotionController@decline")->name("users.uploadphotos.decline");
-
-    Route::get("/promocodes/change_status/{id}", "PromocodeController@change_status")->name("promocodes.changestatus");
-
-    Route::get("/prizes/duplication/{id}", "PrizeController@duplication")->name("prizes.duplication");
+    Route::name('instapromos.')->prefix('instapromos')->group(function () {
+        Route::get("/channel/{id}", "InstaPromotionController@channel")->name("channel");
+        Route::get("/duplication/{id}", "InstaPromotionController@duplication")->name("duplication");
+        Route::get("/userson/{id}", "InstaPromotionController@usersOn")->name("userson");
+    });
 
 
+    Route::name('prizes.')->prefix('prizes')->group(function () {
+        Route::get("/channel/{id}", "PrizeController@channel")->name("channel");
+        Route::get("/duplication/{id}", "PrizeController@duplication")->name("duplication");
+    });
+
+    Route::name('charity.')->prefix('charity')->group(function () {
+        Route::get("/channel/{id}", "CharityController@channel")->name("channel");
+        Route::get("/duplication/{id}", "CharityController@duplication")->name("duplication");
+        Route::get("/userson/{id}", "CharityController@usersOn")->name("userson");
+    });
+
+    Route::name('companies.')->prefix('companies')->group(function () {
+        Route::get("/channel/{id}", "CompanyController@channel")->name("channel");
+        Route::get("/hide/{id}", "CompanyController@hide")->name("hide");
+    });
+
+    Route::name('events.')->prefix('events')->group(function () {
+        Route::get("/channel/{id}", "EventsController@channel")->name("channel");
+    });
+
+    Route::name('achievements.')->prefix('achievements')->group(function () {
+        Route::get("/channel/{id}", "AchievementsController@channel")->name("channel");
+    });
 });
 
 
 Route::get("/image", function (\Illuminate\Http\Request $request) {
-
     try {
         $tmp_data = base64_decode($request->get("data"));
     } catch (Exception $e) {
@@ -171,7 +136,6 @@ Route::get("/image", function (\Illuminate\Http\Request $request) {
         return response($pngImage)->header('Content-type', 'image/png');
     } catch (Exception $e) {
         return "https://api.qrserver.com/v1/create-qr-code/?size=150x150&data=https://t.me/" . env("APP_BOT_NAME");
-
     }
 });
 

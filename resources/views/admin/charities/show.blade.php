@@ -8,11 +8,11 @@
                 <div class="row">
                     <div class="col-lg-12 margin-tb">
                         <div class="pull-left">
-                            <h2>Просмотр информации об акции</h2>
+                            <h2>Просмотр информации о благотворительной акции</h2>
                         </div>
                         <div class="pull-right">
-                            <a class="btn btn-primary" href="{{ route('instapromos.index') }}"> Назад</a>
-                            <a class="btn btn-link" href="{{ route('instapromos.edit',$promo->id) }}">
+                            <a class="btn btn-primary" href="{{ route('charities.index') }}"> Назад</a>
+                            <a class="btn btn-link" href="{{ route('charities.edit',$charity->id) }}">
                                 <i class="fas fa-edit"></i>
                             </a>
 
@@ -32,13 +32,13 @@
                     <tr>
                         <td>Заголовок</td>
                         <td>
-                            <p>{{$promo->title}}</p>
+                            <p>{{$charity->title}}</p>
                         </td>
                     </tr>
                     <tr>
                         <td>Описание</td>
                         <td>
-                            <p>{{$promo->description}}</p>
+                            <p>{{$charity->description}}</p>
                         </td>
                     </tr>
 
@@ -46,16 +46,8 @@
                         <td>Картинка к акцие</td>
                         <td>
 
-                            <img src="{{$promo->photo_url}}" class="img-thumbnail" alt=""
+                            <img src="{{$charity->image_url}}" class="img-thumbnail" alt=""
                                  style="object-fit: cover;width:200px;height:200px;">
-                        </td>
-                    </tr>
-
-                    <tr>
-                        <td>Бонус за выполнение условий акции</td>
-                        <td>
-
-                            <p>{{$promo->promo_bonus}}</p>
                         </td>
                     </tr>
 
@@ -63,7 +55,7 @@
                         <td>Позиция в выдаче</td>
                         <td>
 
-                            <p>{{$promo->position}}</p>
+                            <p>{{$charity->position}}</p>
                         </td>
                     </tr>
 
@@ -71,17 +63,10 @@
                     <tr>
                         <td>Доступность акции</td>
                         <td>
-                            <p>{{$promo->is_active?"Активно":"Не активно"}}</p>
+                            <p>{{$charity->is_active?"Активно":"Не активно"}}</p>
                         </td>
                     </tr>
 
-
-                    <tr>
-                        <td>Компания</td>
-                        <td>
-                            <p>{{$promo->company->title}}</p>
-                        </td>
-                    </tr>
 
                     </tbody>
                 </table>

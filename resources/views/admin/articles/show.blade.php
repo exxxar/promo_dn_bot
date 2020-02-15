@@ -23,8 +23,6 @@
                 </div>
 
 
-                <form method="post" action="{{ route('articles.store') }}">
-                    @csrf
                     <table class="table mt-2">
                         <thead class="thead-light ">
                         <th>Параметр</th>
@@ -79,7 +77,7 @@
 
                         </tbody>
                     </table>
-                </form>
+
             </div>
         </div>
     </div>
