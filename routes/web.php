@@ -61,7 +61,7 @@ Route::prefix('admin')->group(function () {
         'instapromos' => 'InstaPromotionController',
         'cashbackinfos' => 'CashBackInfoController',
         'charities' => 'CharityController',
-        'charitiyhistories' => 'CharityHistoryController',
+        'charityhistories' => 'CharityHistoryController',
     ]);
 
     Route::name('users.')->prefix('users')->group(function () {
