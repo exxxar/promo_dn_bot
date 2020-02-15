@@ -30,7 +30,7 @@
                     </div>
                     @if($hasUploadPhotos)
                         <div class="col-sm-4">
-                            <a class="btn btn-primary" href="{{route("users.uploadphotos")}}">Пользователи по акциям</a>
+                            <a class="btn btn-primary" href="{{route("users.uploadphotos.index")}}">Пользователи по акциям</a>
                         </div>
                     @endif
                 </div>

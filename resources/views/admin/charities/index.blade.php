@@ -26,7 +26,7 @@
 
                 <div class="row">
                     <div class="col-sm-4">
-                        <a class="btn btn-primary" href="{{route("charities.create")}}">Новая акция для Instagram</a>
+                        <a class="btn btn-primary" href="{{route("charities.create")}}">Новая акция</a>
                     </div>
 
                     <div class="col-sm-4">
