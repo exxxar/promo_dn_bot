@@ -1309,26 +1309,25 @@ class SkidkiDNBot extends Bot implements iSkidkiDNBot
         }
 
         $tmp = $value;
-        foreach ($cbis as $cbi){
+        foreach ($cbis as $key=>$cbi){
             $module = $tmp;
+            Log::info("step $key value=>$module");
             if ($cbi->value<$module)
             {
-                $company_money_tmp =  $cbi->value;
-                $cbi->value = 0;
-                $cbi->save();
-                $tmp -=$module;
-
                 CharityHistory::create([
                     'user_id' => $this->getUser()->id,
                     'charity_id' => $charityId,
                     'company_id' =>$cbi->company_id,
-                    'donated_money' => $company_money_tmp
+                    'donated_money' => $cbi->value
                 ]);
 
+                $cbi->value = 0;
+                $cbi->save();
+                $tmp -=$module;
                 continue;
             }
 
-            if ($cbi->value>$module){
+            if ($cbi->value>=$module){
                 $cbi->value -=$module;
                 $cbi->save();
 
