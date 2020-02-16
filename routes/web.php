@@ -100,7 +100,7 @@ Route::prefix('admin')->group(function () {
         Route::get("/duplication/{id}", "PrizeController@duplication")->name("duplication");
     });
 
-    Route::name('charity.')->prefix('charity')->group(function () {
+    Route::name('charities.')->prefix('charities')->group(function () {
         Route::get("/channel/{id}", "CharityController@channel")->name("channel");
         Route::get("/duplication/{id}", "CharityController@duplication")->name("duplication");
         Route::get("/userson/{id}", "CharityController@usersOn")->name("userson");
