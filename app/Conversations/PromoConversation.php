@@ -158,6 +158,7 @@ class PromoConversation extends Conversation
             if (strlen($tmp_phone) > 13) {
                 $this->reply(__("messages.ask_phone_error_1"));
                 $this->askPhone();
+                return;
             }
 
             $pattern = "/^\+380\d{3}\d{2}\d{2}\d{2}$/";

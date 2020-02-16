@@ -72,6 +72,7 @@ class FillInfoConversation extends Conversation
             if (strlen($tmp_phone) > 13) {
                 $this->reply(__("messages.ask_phone_error_1"));
                 $this->askPhone();
+                return;
             }
 
             if (preg_match($pattern, $tmp_phone) == 0) {
