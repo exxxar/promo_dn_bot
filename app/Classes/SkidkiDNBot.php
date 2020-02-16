@@ -1289,28 +1289,59 @@ class SkidkiDNBot extends Bot implements iSkidkiDNBot
 
     public function donateCharity($charityId, $value)
     {
-        $cbi = CashBackInfo::with(["company"])
+        $cbis = CashBackInfo::with(["company"])
             ->where("user_id", $this->getUser()->id)
-            ->first();
+            ->orderBy("value","DESC")
+            ->get();
 
-        if (is_null($cbi)) {
-            $this->reply("Что-то пошло не так!");
+        if (count($cbis)==0) {
+            $this->reply("У вас нет накопленного CashBack!");
             return;
         }
 
-        if ($cbi->value < $value) {
-            $this->reply("Недостаточно средств для списания!");
+        $sum = 0;
+        foreach ($cbis as $cbi)
+            $sum += $cbi->value;
+
+        if ($sum<$value) {
+            $this->reply("У вас недостаточно CashBack!");
             return;
         }
 
-        $cbi->value -= $value;
-        $cbi->save();
+        $tmp = $value;
+        foreach ($cbis as $cbi){
+            $module = $tmp;
+            if ($cbi->value<$module)
+            {
+                $company_money_tmp =  $cbi->value;
+                $cbi->value = 0;
+                $cbi->save();
+                $tmp -=$module;
 
-        CharityHistory::create([
-            'user_id' => $this->getUser()->id,
-            'charity_id' => $charityId,
-            'donated_money' => $value
-        ]);
+                CharityHistory::create([
+                    'user_id' => $this->getUser()->id,
+                    'charity_id' => $charityId,
+                    'company_id' =>$cbi->company_id,
+                    'donated_money' => $company_money_tmp
+                ]);
+
+                continue;
+            }
+
+            if ($cbi->value>$module){
+                $cbi->value -=$module;
+                $cbi->save();
+
+                CharityHistory::create([
+                    'user_id' => $this->getUser()->id,
+                    'charity_id' => $charityId,
+                    'company_id' =>$cbi->company_id,
+                    'donated_money' =>$module
+                ]);
+
+                return;
+            }
+        }
 
         $charity = Charity::find($charityId);
 
@@ -1359,9 +1390,8 @@ class SkidkiDNBot extends Bot implements iSkidkiDNBot
             ],
         ];
 
-        $this->sendMessage($charity->description);
         $this->sendPhoto("*" . $charity->title . "*\n"
-            //. $charity->description
+            . $charity->description
             . "Доступно для списания *$sum* ₽\n"
             . "\n*Выберите сумму пожертвования*:", $charity->image_url, $keyboard);
 
