@@ -24,7 +24,7 @@ $botman->hears('.*Посмотреть моих друзей|/friends ([0-9]+)',
 
 $botman->hears('.*Благотворительность|/charity ([0-9]+)', BotController::class . '@getCharityList');
 $botman->hears('/get_charity_item ([0-9]+)', BotController::class . '@getCharity');
-$botman->hears('/donate ([0-9]+) ([0-9]+) ([0-9]{2,5})', BotController::class . '@donateCharity');
+$botman->hears('/donate ([0-9]+) ([0-9]{2,5})', BotController::class . '@donateCharity');
 
 $botman->hears('/category ([0-9]+) ([0-9]+)', BotController::class . '@getCategoryById');
 $botman->hears('/company ([0-9]+) ([0-9]+)', BotController::class . '@getCompanyById');

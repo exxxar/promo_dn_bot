@@ -50,8 +50,10 @@
                                     <p>{{$ch->donated_money}}</p>
                                 </td>
                                 <td>
-                                    <a href="{{ route('charities.show',$ch->charity->id) }}">
-                                        {{$ch->charity->title}}</a>
+                                    @isset($ch->charity)
+                                        <a href="{{ route('charities.show',$ch->charity->id) }}">
+                                            {{$ch->charity->title}}</a>
+                                    @endisset
                                 </td>
                                 <td>
                                     <p>{{$ch->company->title}}</p>

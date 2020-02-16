@@ -1287,11 +1287,10 @@ class SkidkiDNBot extends Bot implements iSkidkiDNBot
 
     }
 
-    public function donateCharity($charityId, $companyId, $value)
+    public function donateCharity($charityId, $value)
     {
         $cbi = CashBackInfo::with(["company"])
             ->where("user_id", $this->getUser()->id)
-            ->where("company_id", $companyId)
             ->first();
 
         if (is_null($cbi)) {
@@ -1347,23 +1346,24 @@ class SkidkiDNBot extends Bot implements iSkidkiDNBot
             return;
         }
 
-        $this->sendPhoto("", $charity->image_url);
-        $this->sendMessage(sprintf("*%s*\n_%s_\n*Выберите счет и сумму пожертвования*:",
-            $charity->title,
-            $charity->description
-        ));
+        $sum = 0;
         foreach ($cbis as $cbi) {
-            $keyboard = [
-                [
-                    ["text" => "100₽", "callback_data" => "/donate " . $cbi->id . " " . $cbi->company->id . " 100"],
-                    ["text" => "250₽", "callback_data" => "/donate " . $cbi->id . " " . $cbi->company->id . " 250"],
-                    ["text" => "500₽", "callback_data" => "/donate " . $cbi->id . " " . $cbi->company->id . " 500"],
-                    ["text" => "1000₽", "callback_data" => "/donate " . $cbi->id . " " . $cbi->company->id . " 1000"],
-                ],
-            ];
-
-            $this->sendMessage("\xF0\x9F\x94\xB8 " . $cbi->company->title . "=>" . $cbi->value . "₽ CashBack", $keyboard);
+            $sum +=$cbi->value;
         }
+
+        $keyboard = [
+            [
+                ["text" => "100₽", "callback_data" => "/donate " . $charity->id . " 100"],
+                ["text" => "250₽", "callback_data" => "/donate " . $charity->id . " 250"],
+                ["text" => "500₽", "callback_data" => "/donate " . $charity->id . " 500"],
+                ["text" => "1000₽", "callback_data" => "/donate " . $charity->id . " 1000"],
+            ],
+        ];
+
+        $this->sendPhoto("*" . $charity->title . "*\n_"
+            . $charity->description
+            . "_Доступно для списания *$sum* ₽\n"
+            . "\n*Выберите сумму пожертвования*:", $charity->image_url, $keyboard);
 
     }
 
