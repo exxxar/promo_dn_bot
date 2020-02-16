@@ -1355,19 +1355,14 @@ class SkidkiDNBot extends Bot implements iSkidkiDNBot
         foreach ($cbis as $cbi) {
             $keyboard = [
                 [
-                    ["text" => "100", "callback_data" => "/donate " . $cbi->id . " " . $cbi->company->id . " 50"],
-                    ["text" => "100", "callback_data" => "/donate " . $cbi->id . " " . $cbi->company->id . " 100"],
-                    ["text" => "100", "callback_data" => "/donate " . $cbi->id . " " . $cbi->company->id . " 200"],
-                    ["text" => "100", "callback_data" => "/donate " . $cbi->id . " " . $cbi->company->id . " 500"],
+                    ["text" => "100₽", "callback_data" => "/donate " . $cbi->id . " " . $cbi->company->id . " 100"],
+                    ["text" => "250₽", "callback_data" => "/donate " . $cbi->id . " " . $cbi->company->id . " 250"],
+                    ["text" => "500₽", "callback_data" => "/donate " . $cbi->id . " " . $cbi->company->id . " 500"],
+                    ["text" => "1000₽", "callback_data" => "/donate " . $cbi->id . " " . $cbi->company->id . " 1000"],
                 ],
-                [
-                    ["text" => "100", "callback_data" => "/donate " . $cbi->id . " " . $cbi->company->id . " 1000"],
-                    ["text" => "100", "callback_data" => "/donate " . $cbi->id . " " . $cbi->company->id . " 2000"],
-                    ["text" => "100", "callback_data" => "/donate " . $cbi->id . " " . $cbi->company->id . " 5000"],
-                ]
             ];
 
-            $this->sendMessage("\xF0\x9F\x94\xB8 " . $cbi->company->title . " " . $cbi->value, $keyboard);
+            $this->sendMessage("\xF0\x9F\x94\xB8 " . $cbi->company->title . "=>" . $cbi->value."₽ CashBack", $keyboard);
         }
 
     }
