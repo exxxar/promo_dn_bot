@@ -8,10 +8,14 @@ use App\Achievement;
 use App\Article;
 use App\CashBackInfo;
 use App\Category;
+use App\Charity;
+use App\CharityHistory;
 use App\Company;
 use App\Drivers\TelegramInlineQueryDriver;
+use App\Enums\AchievementTriggers;
 use App\Enums\Parts;
 use App\Event;
+use App\Events\AchievementEvent;
 use App\Events\AddCashBackEvent;
 use App\InstaPromotion;
 use App\Prize;
@@ -1281,5 +1285,114 @@ class SkidkiDNBot extends Bot implements iSkidkiDNBot
 
         }
 
+    }
+
+    public function donateCharity($charityId, $companyId, $value)
+    {
+        $cbi = CashBackInfo::with(["company"])
+            ->where("user_id", $this->getUser()->id)
+            ->where("company_id", $companyId)
+            ->first();
+
+        if (is_null($cbi)) {
+            $this->reply("Что-то пошло не так!");
+            return;
+        }
+
+        if ($cbi->value < $value) {
+            $this->reply("Недостаточно средств для списания!");
+            return;
+        }
+
+        $cbi->value -= $value;
+        $cbi->save();
+
+        CharityHistory::create([
+            'user_id' => $this->getUser()->id,
+            'charity_id' => $charityId,
+            'company_id' => $companyId,
+            'donated_money' => $value
+        ]);
+
+        $charity = Charity::find($charityId);
+
+        event(new AchievementEvent(
+            AchievementTriggers::MaxCashCharityDonated,
+            $value,
+            $this->getUser()
+        ));
+
+        $this->reply("Спасибо! Вы пожертвовали $value ₽ на " . $charity->title);
+
+    }
+
+    public function getCharity($charityId)
+    {
+        $charity = Charity::where("id", $charityId)
+            ->where("is_active", true)
+            ->first();
+
+        if (is_null($charity)) {
+            $this->reply("_Данная благотварительная акция отсутствует или в данный момент недоступна!_");
+            return;
+        }
+
+        $cbis = CashBackInfo::with(["company"])
+            ->where("user_id", $this->getUser()->id)
+            ->where("value", ">", 0)
+            ->get();
+
+        if (count($cbis) == 0) {
+            $this->reply("*У вас нет доступных средств для пожертвований!*");
+            return;
+        }
+
+        $this->sendPhoto(sprintf("*%s*\n_%s_\n*Выберите счет и сумму пожертвования*:",
+            $charity->title,
+            $charity->description
+        ), $charity->image_url);
+
+        foreach ($cbis as $cbi) {
+            $keyboard = [
+                [
+                    ["text" => "100", "callback_data" => "/donate " . $cbi->id . " " . $cbi->company->id . " 50"],
+                    ["text" => "100", "callback_data" => "/donate " . $cbi->id . " " . $cbi->company->id . " 100"],
+                    ["text" => "100", "callback_data" => "/donate " . $cbi->id . " " . $cbi->company->id . " 200"],
+                    ["text" => "100", "callback_data" => "/donate " . $cbi->id . " " . $cbi->company->id . " 500"],
+                ],
+                [
+                    ["text" => "100", "callback_data" => "/donate " . $cbi->id . " " . $cbi->company->id . " 1000"],
+                    ["text" => "100", "callback_data" => "/donate " . $cbi->id . " " . $cbi->company->id . " 2000"],
+                    ["text" => "100", "callback_data" => "/donate " . $cbi->id . " " . $cbi->company->id . " 5000"],
+                ]
+            ];
+
+            $this->sendMessage("\xF0\x9F\x94\xB8 " . $cbi->company->title . " " . $cbi->value, $keyboard);
+        }
+
+    }
+
+    public function getCharityList($page)
+    {
+        $charities = Charity::where("is_active", 1)
+            ->skip($page * config("bot.results_per_page"))
+            ->take(config("bot.results_per_page"))
+            ->orderBy('position', 'DESC')
+            ->get();
+
+
+        if (count($charities) == 0) {
+            $this->reply("К сожалению на данный момент нет доступных благотворительных акций!");
+            return;
+        }
+
+        foreach ($charities as $charity) {
+            $this->sendPhoto("*" . $charity->title . "*", $charity->image_url, [
+                [
+                    ["text" => "Подробнее", "callback_data" => "/get_charity_item " . $charity->id]
+                ]
+            ]);
+        }
+        $this->pagination("/charity", $charities, $page, __("messages.ask_action"));
     }
 }

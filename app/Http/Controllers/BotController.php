@@ -399,4 +399,22 @@ class BotController extends Controller
             ->setBot($bot)
             ->uploadImages($images);
     }
+
+    public function getCharityList($bot,$page=0){
+        $this->sdnbot
+            ->setBot($bot)
+            ->getCharityList($page);
+    }
+
+    public function getCharity($bot,$charityId){
+        $this->sdnbot
+            ->setBot($bot)
+            ->getCharity($charityId);
+    }
+
+    public function donateCharity($bot,$charityId,$value){
+        $this->sdnbot
+            ->setBot($bot)
+            ->donateCharity($charityId,$value);
+    }
 }

@@ -23,6 +23,10 @@ interface iSkidkiDNBot
     public function getPaymentMenu();
     public function getFriendsMenu();
 
+    public function donateCharity($charityId,$companyId,$value);
+    public function getCharity($charityId);
+    public function getCharityList($page);
+
     public function getRefLink();
 
     public function getFAQMenu();

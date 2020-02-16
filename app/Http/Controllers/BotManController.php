@@ -33,9 +33,6 @@ class BotManController extends Controller
         dd($activity);
     }
 
-    /**
-     * @return \Illuminate\Contracts\View\Factory|\Illuminate\View\View
-     */
     public function tinker()
     {
         return view('tinker');
@@ -80,4 +77,6 @@ class BotManController extends Controller
     {
         $bot->startConversation(new LotteryConversation($bot));
     }
+
+
 }

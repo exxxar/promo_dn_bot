@@ -21,4 +21,5 @@ final class AchievementTriggers extends Enum
     const MaxReferralBonusCount = 7;
     const AchievementActivatedCount = 8;
     const MaxCashBackRemoveBonus = 9;
+    const MaxCashCharityDonated = 10;
 }
