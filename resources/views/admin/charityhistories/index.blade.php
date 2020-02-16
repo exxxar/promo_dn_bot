@@ -40,7 +40,7 @@
                             <tr>
                                 <td>{{$key + 1}}</td>
                                 <td>
-                                    @isset($ch->sender)
+                                    @isset($ch->user)
                                         <a href="{{ route('users.show',$ch->user->id) }}">
                                             {{$ch->user->phone??$ch->user->name??$ch->user->telegram_chat_id}}</a>
                                     @endisset
