@@ -734,6 +734,7 @@ class SkidkiDNBot extends Bot implements iSkidkiDNBot
             __("messages.statistic_message_8"),
             __("messages.statistic_message_9"),
             __("messages.statistic_message_10"),
+            __("messages.statistic_message_11"),
         ];
 
         $stats = $this->getUser()->getStats();

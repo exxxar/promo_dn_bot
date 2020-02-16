@@ -151,6 +151,7 @@ return [
     'statistic_message_7' => "\xE2\x96\xAAКоличество переходов из других источников: *%d* раз.\n",
     'statistic_message_8' => "\xE2\x96\xAAМасимальный реферальный бонус: *%d* руб.\n",
     'statistic_message_9' => "\xE2\x96\xAAМаксимальное количество списанного CashBack: *%d* руб.\n",
+    'statistic_message_11' => "\xE2\x96\xAAМаксимальное количество доната за CashBack: *%d* руб.\n",
     'statistic_message_10' => "Статистика еще не ведется для вашего аккаунта!",
 
     'company_message_1' => "К сожалению, нет добавленных компаний:(",
