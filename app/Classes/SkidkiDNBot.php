@@ -1354,7 +1354,7 @@ class SkidkiDNBot extends Bot implements iSkidkiDNBot
             $this->getUser()
         ));
 
-        $this->reply("Спасибо! Вы пожертвовали $value ₽ на " . $charity->title);
+        $this->reply("Спасибо! Вы пожертвовали *$value ₽* на нужды *" . $charity->title."*");
 
     }
 
@@ -1394,7 +1394,7 @@ class SkidkiDNBot extends Bot implements iSkidkiDNBot
         ];
 
         $this->sendPhoto("*" . $charity->title . "*\n"
-            . $charity->description
+            . $charity->description."\n"
             . "Доступно для списания *$sum* ₽\n"
             . "\n*Выберите сумму пожертвования*:", $charity->image_url, $keyboard);
 
