@@ -1359,6 +1359,7 @@ class SkidkiDNBot extends Bot implements iSkidkiDNBot
             ],
         ];
 
+        $this->sendMessage($charity->description);
         $this->sendPhoto("*" . $charity->title . "*\n"
             //. $charity->description
             . "Доступно для списания *$sum* ₽\n"
