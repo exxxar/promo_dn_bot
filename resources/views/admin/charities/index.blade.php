@@ -43,7 +43,7 @@
                         @foreach($charities as $key => $charity)
                             <div class="col">
                                 <div class="wrapper" style="padding: 10px">
-                                    <div class="card" style="width:250px;">
+                                    <div class="card" style="width:300px;">
                                         <!-- Изображение -->
                                         <img class="card-img-top" src="{{$charity->image_url}}" style="width:100%;">
                                         <!-- Текстовый контент -->
