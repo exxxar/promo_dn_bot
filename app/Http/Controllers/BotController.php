@@ -415,6 +415,6 @@ class BotController extends Controller
     public function donateCharity($bot,$charityId,$value){
         $this->sdnbot
             ->setBot($bot)
-            ->donateCharity($charityIds,$value);
+            ->donateCharity($charityId,$value);
     }
 }
