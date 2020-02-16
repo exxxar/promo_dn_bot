@@ -1311,6 +1311,9 @@ class SkidkiDNBot extends Bot implements iSkidkiDNBot
         $tmp = $value;
         foreach ($cbis as $key=>$cbi){
             $module = $tmp;
+            if ($module==0)
+                break;
+
             Log::info("step $key value=>$module");
             if ($cbi->value<$module)
             {
@@ -1338,7 +1341,7 @@ class SkidkiDNBot extends Bot implements iSkidkiDNBot
                     'donated_money' =>$module
                 ]);
 
-                return;
+                break;
             }
         }
 
