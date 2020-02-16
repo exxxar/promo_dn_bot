@@ -38,7 +38,7 @@
                         <tbody>
                         @foreach($donates as $key => $donate)
                             <tr>
-                                <td>{{$donate->user->id}}</td>
+                                <td>{{$key+1}}</td>
                                 <td><a href="{{ route('users.show',$donate->user->id) }}">
                                         {{$donate->user->fio_from_telegram??$donate->user->email}}</a>
                                     <a class="btn btn-link" href="{{ route('users.edit',$donate->user->id) }}">

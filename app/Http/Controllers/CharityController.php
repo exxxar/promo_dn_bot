@@ -124,7 +124,7 @@ class CharityController extends Controller
         $charity->save();
 
         return redirect()
-            ->route('instapromos.index')
+            ->route('charities.index')
             ->with('success', 'Благотворительная акция успешно отредактирована');
     }
 

@@ -52,7 +52,7 @@
                                             <p>{{$charity->description}}</p>
                                             <p> Позиция в выдаче:<span>{{$charity->position}}</span></p>
                                             <p> Всего донатов по акции:<span><a
-                                                            href="{{route("charities.userson",$charity->id)}}"> {{$charity->donates}}</a></span>
+                                                            href="{{route("charities.userson",$charity->id)}}"> {{$charity->donates}}₽</a></span>
                                             </p>
                                             <a href="{{ route('charities.show',$charity->id) }}"
                                                class="btn btn-primary"><i class="fas fa-eye"></i></a>
