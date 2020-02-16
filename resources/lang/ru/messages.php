@@ -221,7 +221,9 @@ return [
     'lottery_menu_btn_3' => "\xF0\x9F\x8E\xB0Розыгрыш призов",
     'lottery_menu_btn_4' => "\xF0\x9F\x9A\xA9Розыгрыш за CashBack",
     'lottery_menu_btn_5' => "\xF0\x9F\x8E\x81Подарочный промокод",
-    'lottery_menu_btn_6' => "	\xF0\x9F\x8E\x80Участвовать в розыгрыше",
+    'lottery_menu_btn_6' => "\xF0\x9F\x8E\x80Участвовать в розыгрыше",
+
+    'charity_menu_btn_1' => "\xF0\x9F\x93\x84Условия благотворительности",
 
 
     'action_next_btn' => "\xE2\x8F\xA9Далее",

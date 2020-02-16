@@ -1409,6 +1409,19 @@ class SkidkiDNBot extends Bot implements iSkidkiDNBot
             ->orderBy('position', 'DESC')
             ->get();
 
+        $charityInfo = Article::where("part", Parts::Charity)
+            ->where("is_visible", 1)
+            ->orderBy("position", "DESC")
+            ->first();
+
+
+        if (!is_null($charityInfo))
+            $this->sendMessage("*Перед осуществлением пожертвований прочитайте детальнее условия!*",[
+                [
+                    ['text' => __("messages.charity_menu_btn_1"), 'url' => $charityInfo->url]
+                ]
+            ]);
+
 
         if (count($charities) == 0) {
             $this->reply("К сожалению на данный момент нет доступных благотворительных акций!");
