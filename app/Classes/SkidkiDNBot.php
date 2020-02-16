@@ -1347,11 +1347,11 @@ class SkidkiDNBot extends Bot implements iSkidkiDNBot
             return;
         }
 
-        $this->sendPhoto(sprintf("*%s*\n_%s_\n*Выберите счет и сумму пожертвования*:",
+        $this->sendPhoto("", $charity->image_url);
+        $this->sendMessage(sprintf("*%s*\n_%s_\n*Выберите счет и сумму пожертвования*:",
             $charity->title,
             $charity->description
-        ), $charity->image_url);
-
+        ));
         foreach ($cbis as $cbi) {
             $keyboard = [
                 [
@@ -1362,7 +1362,7 @@ class SkidkiDNBot extends Bot implements iSkidkiDNBot
                 ],
             ];
 
-            $this->sendMessage("\xF0\x9F\x94\xB8 " . $cbi->company->title . "=>" . $cbi->value."₽ CashBack", $keyboard);
+            $this->sendMessage("\xF0\x9F\x94\xB8 " . $cbi->company->title . "=>" . $cbi->value . "₽ CashBack", $keyboard);
         }
 
     }
