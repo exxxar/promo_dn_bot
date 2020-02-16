@@ -1316,6 +1316,7 @@ class SkidkiDNBot extends Bot implements iSkidkiDNBot
                 break;
 
             Log::info("step $key value=>$module");
+
             if ($cbi->value<$module)
             {
                 CharityHistory::create([
@@ -1328,12 +1329,15 @@ class SkidkiDNBot extends Bot implements iSkidkiDNBot
                 $cbi->value = 0;
                 $cbi->save();
                 $tmp -=$module;
-                continue;
+
+                Log::info("step $key tmp=>$tmp");
             }
 
             if ($cbi->value>=$module){
                 $cbi->value -=$module;
                 $cbi->save();
+
+                Log::info("step $key tmp=>$module");
 
                 CharityHistory::create([
                     'user_id' => $this->getUser()->id,
