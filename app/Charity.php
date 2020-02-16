@@ -18,7 +18,8 @@ class Charity extends Model
 
     public function getDonatesAttribute()
     {
-        return (CharityHistory::where("charity_id",$this->id)
-            ->first())->donated_money;
+        $ch = CharityHistory::where("charity_id",$this->id)
+            ->first()??null;
+        return is_null($ch)?0:$ch->donated_money;
     }
 }
