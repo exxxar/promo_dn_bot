@@ -1309,7 +1309,6 @@ class SkidkiDNBot extends Bot implements iSkidkiDNBot
         CharityHistory::create([
             'user_id' => $this->getUser()->id,
             'charity_id' => $charityId,
-            'company_id' => $companyId,
             'donated_money' => $value
         ]);
 
@@ -1360,9 +1359,9 @@ class SkidkiDNBot extends Bot implements iSkidkiDNBot
             ],
         ];
 
-        $this->sendPhoto("*" . $charity->title . "*\n_"
-            . $charity->description
-            . "_Доступно для списания *$sum* ₽\n"
+        $this->sendPhoto("*" . $charity->title . "*\n"
+            //. $charity->description
+            . "Доступно для списания *$sum* ₽\n"
             . "\n*Выберите сумму пожертвования*:", $charity->image_url, $keyboard);
 
     }
