@@ -49,7 +49,7 @@
         padding: 19px;
     }
 
-    .main-h1 {
+    header.masthead .header-content h1 {
         font-size: 40px;
         font-weight: 800;
     }
@@ -88,11 +88,11 @@
         <div class="row h-100">
             <div class="col-lg-7 my-auto">
                 <div class="header-content mx-auto">
-                    <h1 class="mb-5 main-h1">Ты из Донецка?</h1>
+                    <h1 class="mb-5">Ты из Донецка?</h1>
                     <h1>Новая уникальная система лояльности для нашего города!</h1>
                     <h1>Самые яркие акции, скидки,
                         мероприятия и многое другое уже внутри.</h1>
-                    <a href="#download" class="btn btn-outline btn-xl js-scroll-trigger mb-5">Поехали!</a>
+                    <a href="#download" class="btn btn-outline btn-xl js-scroll-trigger mt-5">Поехали!</a>
                 </div>
             </div>
             <div class="col-lg-5 my-auto">
