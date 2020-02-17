@@ -83,10 +83,11 @@
         <div class="row h-100">
             <div class="col-lg-7 my-auto">
                 <div class="header-content mx-auto">
-                    <h1 class="mb-5">Новая уникальная система лояльности города Донецка! Самые яркие акции, скидки,
-                        мероприятия и многое другое уже внутри. Поспеши стать участником грандиозного проекта и получи
-                        бонусыне деньги на свои покупки!</h1>
-                    <a href="#download" class="btn btn-outline btn-xl js-scroll-trigger">Начни уже сейчас</a>
+                    <h1 class="mb-5">Ты из Донецка?</h1>
+                    <h1>Новая уникальная система лояльности для нашего города!</h1>
+                    <h1>Самые яркие акции, скидки,
+                        мероприятия и многое другое уже внутри.</h1>
+                    <a href="#download" class="btn btn-outline btn-xl js-scroll-trigger">Поехали!</a>
                 </div>
             </div>
             <div class="col-lg-5 my-auto">
@@ -181,18 +182,77 @@
     </div>
 </section>
 
-<section class="download bg-primary text-center" id="download">
+@isset($companies)
+    <section class="bg-light page-section" id="portfolio">
+        <div class="container">
+
+            <div class="section-heading text-center">
+                <h2>Наши партнеры</h2>
+                <p class="text-muted">Список заведений постоянно расширяется!</p>
+                <hr>
+            </div>
+
+            <div class="row">
+                @foreach($companies as $company)
+                    <div class="col-md-4 col-sm-6 portfolio-item">
+                        <a class="portfolio-link" data-toggle="modal" href="#portfolioModal{{$company->id}}">
+                            <div class="portfolio-hover">
+                                <div class="portfolio-hover-content">
+                                    <i class="fas fa-plus fa-3x"></i>
+                                </div>
+                            </div>
+                            <img class="img-fluid"
+                                 src="{{$company->logo_url}}"
+                                 alt="">
+                        </a>
+                        <div class="portfolio-caption">
+                            <h4>{{$company->title}}</h4>
+                            <p class="text-muted">{{$company->uniqCategories()}}</p>
+                        </div>
+                    </div>
+                @endforeach
+            </div>
+        </div>
+    </section>
+@endisset
+
+<section class="contact bg-primary" id="contact" name="contact">
     <div class="container">
         <div class="row">
-            <div class="col-md-8 mx-auto">
-                <h2 class="section-heading">Узнайте, о чем идет речь!</h2>
-                <p>Наше приложение в Telegram! Скачай клиент и перейди по ссылке!</p>
-                <div class="badges">
-                    <a class="badge-link"
-                       href="https://play.google.com/store/apps/details?id=org.telegram.messenger"><img
-                                src="/img/google-play-badge.svg" alt=""></a>
-                    <a class="badge-link" href="https://t.me/skidki_dn_bot"><img src="/img/telegram.png" alt=""></a>
+            <div class="col">
+                <h2>Мы
+                    <i class="fas fa-heart"></i>
+                    новых друзей!</h2>
+                <div id="telegramLogin">
+                    <script async src="https://telegram.org/js/telegram-widget.js?7" data-telegram-login="skidki_dn_bot"
+                            data-size="medium" data-radius="5" data-onauth="onTelegramAuth(user)"></script>
+
                 </div>
+                <ul class="list-inline list-social hidden" id="socials">
+
+                    <li class="list-inline-item social-facebook">
+                        <a id="share" href="" target="_blank">
+                            <i class="fab fa-facebook-f"></i>
+                        </a>
+
+                    </li>
+                    <li class="list-inline-item social-vk">
+                        <a href="#" id="vkShare" target="_blank">
+                            <i class="fab fa-vk"></i>
+                        </a>
+                    </li>
+                </ul>
+            </div>
+        </div>
+
+        <div class="row mt-4">
+            <div class="col">
+                <h3>
+                    <em>
+                        Авторизируйся через Telegram и нажми на кнопку социальной сети, чтоб поделиться своей
+                        реферальной ссылкой с друзьями!
+                    </em>
+                </h3>
             </div>
         </div>
     </div>
@@ -265,6 +325,7 @@
     </div>
 </section>
 
+
 <section class="cta">
     <div class="cta-content">
         <div class="container">
@@ -274,39 +335,6 @@
     </div>
     <div class="overlay"></div>
 </section>
-@isset($companies)
-    <section class="bg-light page-section" id="portfolio">
-        <div class="container">
-
-            <div class="section-heading text-center">
-                <h2>Наши партнеры</h2>
-                <p class="text-muted">Список заведений постоянно расширяется!</p>
-                <hr>
-            </div>
-
-            <div class="row">
-                @foreach($companies as $company)
-                    <div class="col-md-4 col-sm-6 portfolio-item">
-                        <a class="portfolio-link" data-toggle="modal" href="#portfolioModal{{$company->id}}">
-                            <div class="portfolio-hover">
-                                <div class="portfolio-hover-content">
-                                    <i class="fas fa-plus fa-3x"></i>
-                                </div>
-                            </div>
-                            <img class="img-fluid"
-                                 src="{{$company->logo_url}}"
-                                 alt="">
-                        </a>
-                        <div class="portfolio-caption">
-                            <h4>{{$company->title}}</h4>
-                            <p class="text-muted">{{$company->uniqCategories()}}</p>
-                        </div>
-                    </div>
-                @endforeach
-            </div>
-        </div>
-    </section>
-@endisset
 {{--
 <section class="page-section portfolio" id="portfolio">
     <div class="container">
@@ -469,47 +497,23 @@
     </div>
 </section>--}}
 
-
-<section class="contact bg-primary" id="contact" name="contact">
+<section class="download bg-primary text-center" id="download">
     <div class="container">
         <div class="row">
-            <div class="col">
-                <h2>Мы
-                    <i class="fas fa-heart"></i>
-                    новых друзей!</h2>
-                <div id="telegramLogin">
-                    <script async src="https://telegram.org/js/telegram-widget.js?7" data-telegram-login="skidki_dn_bot"
-                            data-size="medium" data-radius="5" data-onauth="onTelegramAuth(user)"></script>
-
+            <div class="col-md-8 mx-auto">
+                <h2 class="section-heading">Узнайте, о чем идет речь!</h2>
+                <p>Наше приложение в Telegram! Скачай клиент и перейди по ссылке!</p>
+                <div class="badges">
+                    <a class="badge-link"
+                       href="https://play.google.com/store/apps/details?id=org.telegram.messenger"><img
+                                src="/img/google-play-badge.svg" alt=""></a>
+                    <a class="badge-link" href="https://t.me/skidki_dn_bot"><img src="/img/telegram.png" alt=""></a>
                 </div>
-                <ul class="list-inline list-social hidden" id="socials">
-
-                    <li class="list-inline-item social-facebook">
-                        <a id="share" href="" target="_blank">
-                            <i class="fab fa-facebook-f"></i>
-                        </a>
-
-                    </li>
-                    <li class="list-inline-item social-vk">
-                        <a href="#" id="vkShare" target="_blank">
-                            <i class="fab fa-vk"></i>
-                        </a>
-                    </li>
-                </ul>
-            </div>
-        </div>
-
-        <div class="row mt-4">
-            <div class="col">
-                <h3>
-                    <em>
-                        Авторизируйся через Telegram и нажми на кнопку социальной сети, чтоб поделиться своей реферальной ссылкой с друзьями!
-                    </em>
-                </h3>
             </div>
         </div>
     </div>
 </section>
+
 
 <footer>
     <div class="container">
@@ -678,33 +682,35 @@
                                     <div class="invalid-feedback"></div>
                                 </div>
                                 <!-- Капча -->
-                            {{--    <div class="form-group captcha">
-                                    <img class="img-captcha" src="/feedback/captcha/captcha.php"
-                                         data-src="/feedback/captcha/captcha.php">
-                                    <div class="btn btn-light position-relative refresh-captcha">Обновить</div>
-                                    <div class="form-group">
-                                        <label for="captcha" class="control-label">Код, показанный на
-                                            изображении</label>
-                                        <input type="text" name="captcha" maxlength="6" required="required" id="captcha"
-                                               class="form-control captcha" placeholder="******"
-                                               autocomplete="off" value="">
-                                        <div class="invalid-feedback"></div>
-                                    </div>
-                                </div>--}}
+                                {{--    <div class="form-group captcha">
+                                        <img class="img-captcha" src="/feedback/captcha/captcha.php"
+                                             data-src="/feedback/captcha/captcha.php">
+                                        <div class="btn btn-light position-relative refresh-captcha">Обновить</div>
+                                        <div class="form-group">
+                                            <label for="captcha" class="control-label">Код, показанный на
+                                                изображении</label>
+                                            <input type="text" name="captcha" maxlength="6" required="required" id="captcha"
+                                                   class="form-control captcha" placeholder="******"
+                                                   autocomplete="off" value="">
+                                            <div class="invalid-feedback"></div>
+                                        </div>
+                                    </div>--}}
                             <!-- Пользовательское солашение -->
                                 @isset($terms)
-                                <div class="form-group agreement">
-                                    <div class="custom-control custom-checkbox">
-                                        <input type="checkbox" name="agree" class="custom-control-input"
-                                               id="customCheck" required>
-                                        <label class="custom-control-label" for="customCheck">Нажимая кнопку, я принимаю
-                                            условия <a href="{{$terms}}" target="_blank">Пользовательского соглашения</a>
-                                            и даю своё согласие на
-                                            обработку моих персональных данных.</label>
+                                    <div class="form-group agreement">
+                                        <div class="custom-control custom-checkbox">
+                                            <input type="checkbox" name="agree" class="custom-control-input"
+                                                   id="customCheck" required>
+                                            <label class="custom-control-label" for="customCheck">Нажимая кнопку, я
+                                                принимаю
+                                                условия <a href="{{$terms}}" target="_blank">Пользовательского
+                                                    соглашения</a>
+                                                и даю своё согласие на
+                                                обработку моих персональных данных.</label>
+                                        </div>
                                     </div>
-                                </div>
-                                @endisset
-                                <!-- Сообщение при ошибке -->
+                            @endisset
+                            <!-- Сообщение при ошибке -->
                                 <div class="alert alert-danger form-error d-none">
                                     Исправьте данные и отправьте форму ещё раз.
                                 </div>
