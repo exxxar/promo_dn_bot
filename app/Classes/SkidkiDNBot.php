@@ -305,7 +305,8 @@ class SkidkiDNBot extends Bot implements iSkidkiDNBot
 
         $keyboard = [
             [
-                ["text" => "Поделиться с друзьями в ВК/Facebook", "url" => env("APP_URL") . "#contact"]
+                ["text" => "В VK\xE2\xA4\xB4", "url" => "https://vk.com/share.php?url=$url_link"],
+                ["text" => " В Facebook\xE2\xA4\xB4", "url" => "http://www.facebook.com/sharer.php?u=$url_link"]
             ],
         ];
 
