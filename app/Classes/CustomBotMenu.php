@@ -273,12 +273,12 @@ trait CustomBotMenu
                 ])
             ]);
 
-        try {
+     /*   try {
             $messageId = $this->bot->getMessage()->getPayload()["message_id"];
             Log::info($messageId ?? "EMPTY message");
         }catch (\Exception $e){
             Log::info("message error ".$e->getMessage()." ".$e->getLine());
-        }
+        }*/
 
 /*
 
@@ -313,9 +313,9 @@ trait CustomBotMenu
 
     protected function sendPhoto($message, $photoUrl, array $keyboard = [], $parseMode = 'Markdown')
     {
-        Log::info("send photo");
-        $messageId = $this->bot->getMessage()->getPayload()["message_id"];
-        if (!is_null($messageId)){
+        Log::info("send photo ".print_r($this->bot->getMessage()->getPayload(),true));
+       // $messageId = $this->bot->getMessage()->getPayload()["message_id"];
+       /* if (!is_null($messageId)){
             Telegram::editMessageReplyMarkup([
                 'chat_id' => $this->getChatId(),
                 "message_id"=>$messageId,
@@ -327,7 +327,7 @@ trait CustomBotMenu
                     ],
                 ])
             ]);
-        }
+        }*/
 
         $this->bot->sendRequest("sendPhoto",
             [
@@ -340,13 +340,13 @@ trait CustomBotMenu
                 ])
             ]);
 
-
+/*
         try {
             $messageId = $this->bot->getMessage()->getPayload()["message_id"];
             Log::info($messageId ?? "EMPTY message");
         }catch (\Exception $e){
             Log::info("photo error ".$e->getMessage()." ".$e->getLine());
-        }
+        }*/
     }
 
     protected function sendLocation($latitude, $longitude, array $keyboard = [])
