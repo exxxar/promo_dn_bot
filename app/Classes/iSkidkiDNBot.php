@@ -47,7 +47,7 @@ interface iSkidkiDNBot
 
     public function getLatestCashBack();
 
-    public function doPromotionEditData();
+    public function doPromotionEditData($messageId);
 
     public function getPromotionsByCategory($page);
     public function getPromotionsByCompany($page);
