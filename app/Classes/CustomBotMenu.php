@@ -314,6 +314,20 @@ trait CustomBotMenu
     protected function sendPhoto($message, $photoUrl, array $keyboard = [], $parseMode = 'Markdown')
     {
         Log::info("send photo");
+        $messageId = $this->bot->getMessage()->getPayload()["message_id"];
+        if (!is_null($messageId)){
+            Telegram::editMessageReplyMarkup([
+                'chat_id' => $this->getChatId(),
+                "message_id"=>$messageId,
+                'reply_markup' => json_encode([
+                    'inline_keyboard' => [
+                        [
+                            ["text"=>"test","callback_data"=>"/fff 0"]
+                        ]
+                    ],
+                ])
+            ]);
+        }
 
         $this->bot->sendRequest("sendPhoto",
             [
