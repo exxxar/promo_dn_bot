@@ -258,8 +258,16 @@ trait CustomBotMenu
 
     protected function sendMessage($message, array $keyboard = [], $parseMode = 'Markdown')
     {
+        $callback = Telegram::sendMessage([
+            "chat_id" => $this->getChatId(),
+            "text" => $message,
+            'parse_mode' => $parseMode,
+            'reply_markup' => json_encode([
+                'inline_keyboard' => $keyboard
+            ])
+        ]);
 
-        $this->bot->sendRequest("sendMessage",
+       /* $this->bot->sendRequest("sendMessage",
             [
                 "chat_id" => $this->getChatId(),
                 "text" => $message,
@@ -267,8 +275,13 @@ trait CustomBotMenu
                 'reply_markup' => json_encode([
                     'inline_keyboard' => $keyboard
                 ])
-            ]);
+            ]);*/
 
+        Telegram::editMessageReplyMarkup([
+            'chat_id' => $this->getChatId(),
+            "message_id" => $callback["message_id"],
+            'reply_markup' => json_encode([])
+        ]);
     }
 
     protected function editMessageText($text = "empty")

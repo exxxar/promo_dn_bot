@@ -16,7 +16,7 @@ class DriverServiceProvider extends ServiceProvider
      * @var array
      */
     protected $drivers = [
-        TelegramDriver::class,
+        //TelegramDriver::class,
         TelegramInlineQueryDriver::class
     ];
 
