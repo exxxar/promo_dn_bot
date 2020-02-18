@@ -18,7 +18,7 @@ class DriverServiceProvider extends ServiceProvider
      */
     protected $drivers = [
         CustomTelegramDriver::class,
-        TelegramInlineQueryDriver::class
+       // TelegramInlineQueryDriver::class
     ];
 
     /**
@@ -26,7 +26,7 @@ class DriverServiceProvider extends ServiceProvider
      */
     public function boot()
     {
-        parent::boot();
+       // parent::boot();
 
         foreach ($this->drivers as $driver) {
             DriverManager::loadDriver($driver);
