@@ -636,7 +636,7 @@ class SkidkiDNBot extends Bot implements iSkidkiDNBot
     public function doPromotionEditData($messageId){
         $keyboard = [
             [
-                ["text"=>"Test EDITED promotion btn(not click)","callback_data"=>"/promo_edit_data"]
+                ["text"=>"Test EDITED promotion btn(not click)","callback_data"=>"/promo_edit_data_test"]
             ]
         ];
         $id = $this->bot->getMessage()->getPayload()["message_id"];
