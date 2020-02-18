@@ -22,23 +22,25 @@ class UpdateKeyboardHandler
     /**
      * Handle the event.
      *
-     * @param  object  $event
+     * @param object $event
      * @return void
      */
     public function handle(UpdateKeyboardEvent $event)
     {
-        if ($event->isComplete == true)
-            return;
 
-        Telegram::editMessageReplyMarkup([
-            'chat_id' => $event->chat_id,
-            "message_id" => $event->message_id,
-            'reply_markup' => json_encode([
-                'inline_keyboard' => $event->keyboard,
-            ])
-        ]);
+        try {
 
-        $event->isComplete = true;
+            Telegram::editMessageReplyMarkup([
+                'chat_id' => $event->chat_id,
+                "message_id" => $event->message_id,
+                'reply_markup' => json_encode([
+                    'inline_keyboard' => $event->keyboard,
+                ])
+            ]);
+        } catch (\Exception  $e) {
+
+        }
+
 
     }
 }
