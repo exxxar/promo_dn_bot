@@ -17,6 +17,7 @@ class UpdateKeyboardEvent
     public $keyboard;
     public $message_id;
     public $chat_id;
+    public $isComplete;
     /**
      * Create a new event instance.
      *
