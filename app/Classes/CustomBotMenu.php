@@ -273,8 +273,12 @@ trait CustomBotMenu
                 ])
             ]);
 
-        $messageId = $this->bot->getMessage()->getPayload()["message_id"];
-        Log::info($messageId??"EMPTY message");
+        try {
+            $messageId = $this->bot->getMessage()->getPayload()["message_id"];
+            Log::info($messageId ?? "EMPTY message");
+        }catch (\Exception $e){
+            Log::info("message error ".$e->getMessage()." ".$e->getLine());
+        }
 
 /*
 
@@ -322,8 +326,13 @@ trait CustomBotMenu
                 ])
             ]);
 
-        $messageId = $this->bot->getMessage()->getPayload()["message_id"];
-        Log::info($messageId??"EMPTY photo");
+
+        try {
+            $messageId = $this->bot->getMessage()->getPayload()["message_id"];
+            Log::info($messageId ?? "EMPTY message");
+        }catch (\Exception $e){
+            Log::info("photo error ".$e->getMessage()." ".$e->getLine());
+        }
     }
 
     protected function sendLocation($latitude, $longitude, array $keyboard = [])
