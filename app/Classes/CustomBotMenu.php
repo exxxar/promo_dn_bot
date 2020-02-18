@@ -257,8 +257,11 @@ trait CustomBotMenu
 
     protected function sendMessage($message, array $keyboard = [], $parseMode = 'Markdown')
     {
-        $messageId = $this->bot->getMessage()->getPayload()["message_id"];
-        Log::info($messageId??"EMPTY message");
+       /* $messageId = $this->bot->getMessage()->getPayload()["message_id"];
+        Log::info($messageId??"EMPTY message");*/
+
+        Log::info("send message");
+
 
         $this->bot->sendRequest("sendMessage",
             [
@@ -269,6 +272,9 @@ trait CustomBotMenu
                     'inline_keyboard' => $keyboard
                 ])
             ]);
+
+        $messageId = $this->bot->getMessage()->getPayload()["message_id"];
+        Log::info($messageId??"EMPTY message");
 
 /*
 
@@ -303,6 +309,8 @@ trait CustomBotMenu
 
     protected function sendPhoto($message, $photoUrl, array $keyboard = [], $parseMode = 'Markdown')
     {
+        Log::info("send photo");
+
         $this->bot->sendRequest("sendPhoto",
             [
                 "chat_id" => $this->getChatId(),
