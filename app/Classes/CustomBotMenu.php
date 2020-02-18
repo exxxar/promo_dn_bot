@@ -285,9 +285,19 @@ trait CustomBotMenu
     {
         $messageId = $messageId?? $this->bot->getMessage()->getPayload()["message_id"];
 
-        Telegram::editMessageReplyMarkup([
+
+       /* Telegram::editMessageReplyMarkup([
             'chat_id' => $this->getChatId(),
-            "message_id" => $messageId,
+            "inline_message_id" => $messageId,
+            'reply_markup' => json_encode([
+                'inline_keyboard' => $keyboard,
+            ])
+        ]);*/
+
+        Telegram::editMessageCaption([
+            'chat_id' => $this->getChatId(),
+            "inline_message_id" => $messageId,
+            "caption" => "TEST TEST",
             'reply_markup' => json_encode([
                 'inline_keyboard' => $keyboard,
             ])
@@ -309,22 +319,6 @@ trait CustomBotMenu
 
     protected function sendPhoto($message, $photoUrl, array $keyboard = [], $parseMode = 'Markdown')
     {
-        Log::info("send photo " . print_r($this->bot->getMessage()->getPayload(), true));
-        // $messageId = $this->bot->getMessage()->getPayload()["message_id"];
-        /* if (!is_null($messageId)){
-             Telegram::editMessageReplyMarkup([
-                 'chat_id' => $this->getChatId(),
-                 "message_id"=>$messageId,
-                 'reply_markup' => json_encode([
-                     'inline_keyboard' => [
-                         [
-                             ["text"=>"test","callback_data"=>"/fff 0"]
-                         ]
-                     ],
-                 ])
-             ]);
-         }*/
-
         $this->bot->sendRequest("sendPhoto",
             [
                 "chat_id" => $this->getChatId(),
@@ -336,13 +330,6 @@ trait CustomBotMenu
                 ])
             ]);
 
-        /*
-                try {
-                    $messageId = $this->bot->getMessage()->getPayload()["message_id"];
-                    Log::info($messageId ?? "EMPTY message");
-                }catch (\Exception $e){
-                    Log::info("photo error ".$e->getMessage()." ".$e->getLine());
-                }*/
     }
 
     protected function sendLocation($latitude, $longitude, array $keyboard = [])
