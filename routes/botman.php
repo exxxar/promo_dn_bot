@@ -87,14 +87,7 @@ $botman->hears('/fff ([0-9]+)', function (\BotMan\BotMan\BotMan $bot,$calc){
             ["text"=>"test btn $calc","callback_data"=>"/fff $calc"]
         ]
     ];
-    Telegram::sendMessage([
-        'chat_id' => env("CHANNEL_ID"),
-        "reply_to_message_id"=>$messageId,
-        "text"=>"test X",
-        'reply_markup' => json_encode([
-            'inline_keyboard' => $keyboard,
-        ])
-    ]);
+
   /*  Telegram::editMessageReplyMarkup([
         'chat_id' => env("CHANNEL_ID"),
         "message_id"=>$messageId,
