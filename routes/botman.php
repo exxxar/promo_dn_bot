@@ -1,10 +1,17 @@
 <?php
+
+use App\Drivers\CustomTelegramDriver;
 use App\Http\Controllers\BotController;
 use App\Http\Controllers\BotManController;
+use BotMan\BotMan\BotManFactory;
+use BotMan\BotMan\Drivers\DriverManager;
 use Illuminate\Support\Facades\Log;
 use Telegram\Bot\Laravel\Facades\Telegram;
 
-$botman = resolve('botman');
+DriverManager::loadDriver(CustomTelegramDriver::class);
+
+
+$botman = BotManFactory::create(config('botman'));//resolve('botman');
 
 
 $botman->hears(".*Ввести код и начать|/lottery", BotController::class . '@lotteryConversation');
