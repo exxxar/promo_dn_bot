@@ -258,7 +258,7 @@ trait CustomBotMenu
     protected function sendMessage($message, array $keyboard = [], $parseMode = 'Markdown')
     {
         $messageId = $this->bot->getMessage()->getPayload()["message_id"];
-        Log::info($messageId);
+        Log::info($messageId??"EMPTY");
 
         $this->bot->sendRequest("sendMessage",
             [
