@@ -618,9 +618,6 @@ class SkidkiDNBot extends Bot implements iSkidkiDNBot
                         ['text' => __("messages.promo_btn_1"), 'callback_data' => $emptyHandler ? "/promotion " . $promo->id : $promo->handler . " " . $promo->id],
                         ["text" => __("messages.promo_btn_2"), 'switch_inline_query' => $promo->title]
                     ],
-                    [
-                        ["text"=>"Test promotion btn(not click)","callback_data"=>"/promo_edit_data"]
-                    ]
                 ];
 
                 $this->sendPhoto("*" . $promo->title . "*", $promo->promo_image_url, $keyboard);
@@ -635,7 +632,7 @@ class SkidkiDNBot extends Bot implements iSkidkiDNBot
     }
 
     public function doPromotionEditData(){
-        $keyboard = [
+       /* $keyboard = [
             [
                 ["text"=>"Test EDITED promotion btn(not click)","callback_data"=>"/promo_edit_data_test"]
             ]
@@ -643,7 +640,7 @@ class SkidkiDNBot extends Bot implements iSkidkiDNBot
 
         $messageId = $this->bot->getMessage()->getPayload()["message_id"];
 
-        $this->editMessageKeyboard($keyboard,$messageId);
+        $this->editMessageKeyboard($keyboard,$messageId);*/
     }
     public function getArticlesByPartId($partId, $page = 0)
     {
