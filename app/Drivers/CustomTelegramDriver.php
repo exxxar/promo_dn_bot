@@ -27,13 +27,27 @@ use Symfony\Component\HttpFoundation\Response;
 use Illuminate\Support\Collection;
 use Telegram\Bot\Laravel\Facades\Telegram;
 
-class CustomeTelegramDriver extends TelegramDriver
+class CustomTelegramDriver extends TelegramDriver
 {
 
 
     public function messagesHandled()
     {
         $callback = $this->payload->get('callback_query');
+        Log::info("TEST!!!");
+
+
+        $parameters = [
+            'chat_id' => $callback['message']['chat']['id'],
+            'message_id' => $callback['message']['message_id'],
+            'inline_keyboard' => [
+                [
+                    ["text"=>"Thank","callback_data"=>"/fff"]
+                ]
+            ],
+        ];
+
+        return $this->http->post($this->buildApiUrl('editMessageReplyMarkup'), [], $parameters);
     }
 
 }
