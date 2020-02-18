@@ -283,7 +283,7 @@ trait CustomBotMenu
 
     protected function editMessageKeyboard($keyboard = [],$messageId = null)
     {
-        $messageId = $messageId?? $this->bot->getMessage()->getPayload()["message_id"];
+      //  $messageId = $messageId?? $this->bot->getMessage()->getPayload()["message_id"];
 
 
      /*  $r =  Telegram::editMessageReplyMarkup([
@@ -298,6 +298,9 @@ trait CustomBotMenu
             'chat_id' => $this->getChatId(),
             "message_id" => $messageId,
             "caption" => "TEST TEST",
+            'reply_markup' => json_encode([
+                'inline_keyboard' => $keyboard,
+            ])
 
         ]);
     }
