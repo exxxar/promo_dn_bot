@@ -8,6 +8,7 @@ use App\Category;
 use App\Enums\AchievementTriggers;
 use App\Events\AchievementEvent;
 use App\User;
+use BotMan\Drivers\Telegram\TelegramDriver;
 use Carbon\Carbon;
 use Illuminate\Support\Facades\Log;
 use Telegram\Bot\FileUpload\InputFile;
@@ -320,7 +321,7 @@ trait CustomBotMenu
 
     protected function sendPhoto($message, $photoUrl, array $keyboard = [], $parseMode = 'Markdown')
     {
-      /*  $this->bot->sendRequest("sendPhoto",
+       $this->bot->sendRequest("sendPhoto",
             [
                 "chat_id" => $this->getChatId(),
                 "photo" => $photoUrl,
@@ -329,17 +330,9 @@ trait CustomBotMenu
                 'reply_markup' => json_encode([
                     'inline_keyboard' => $keyboard,
                 ])
-            ]);*/
+            ]);
 
-        Telegram::sendPhoto([
-            "chat_id" => $this->getChatId(),
-            "photo" => InputFile::create($photoUrl),
-            "caption" => $message,
-            'parse_mode' => $parseMode,
-            'reply_markup' => json_encode([
-                'inline_keyboard' => $keyboard,
-            ])
-        ]);
+
     }
 
     protected function sendLocation($latitude, $longitude, array $keyboard = [])
