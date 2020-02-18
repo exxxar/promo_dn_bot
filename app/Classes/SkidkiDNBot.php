@@ -643,7 +643,7 @@ class SkidkiDNBot extends Bot implements iSkidkiDNBot
 
         $messageId = $this->bot->getMessage()->getPayload()["message_id"];
 
-        event(new UpdateKeyboardEvent($this->getChatId(),$messageId,$keyboard));
+        $this->editMessageKeyboard($keyboard,$messageId);
     }
     public function getArticlesByPartId($partId, $page = 0)
     {

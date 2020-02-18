@@ -48,9 +48,7 @@ class EventServiceProvider extends ServiceProvider
         ActivateUserEvent::class => [
             UserStatusHandler::class
         ],
-        UpdateKeyboardEvent::class => [
-            UpdateKeyboardHandler::class
-        ],
+
     ];
 
     /**
