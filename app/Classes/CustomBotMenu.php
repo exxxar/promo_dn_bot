@@ -280,7 +280,6 @@ trait CustomBotMenu
         Telegram::editMessageReplyMarkup([
             'chat_id' => $this->getChatId(),
             "message_id" => $callback["message_id"],
-            'reply_markup' => json_encode([])
         ]);
     }
 
