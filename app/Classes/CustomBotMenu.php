@@ -256,24 +256,35 @@ trait CustomBotMenu
 
     protected function sendMessage($message, array $keyboard = [], $parseMode = 'Markdown')
     {
-
-
         $messageId = $this->bot->getMessage()->getPayload()["message_id"];
+        Log::info($messageId);
 
-          Telegram::editMessageText([
-              'text'=>"do",
-              'chat_id' => $this->getUser()->telegram_chat_id,
-              "message_id"=>$messageId
-          ]);
+        $this->bot->sendRequest("sendMessage",
+            [
+                "chat_id" => $this->getChatId(),
+                "text" => $message,
+                'parse_mode' => $parseMode,
+                'reply_markup' => json_encode([
+                    'inline_keyboard' => $keyboard
+                ])
+            ]);
 
-          Telegram::editMessageReplyMarkup([
-              'chat_id' => $this->getUser()->telegram_chat_id,
-              "message_id"=>$messageId,
-              'reply_markup' => json_encode([
-                  'inline_keyboard' => $keyboard,
-              ])
-          ]);
+/*
 
+
+        Telegram::editMessageText([
+            'text'=>"do",
+            'chat_id' => $this->getChatId(),
+            "message_id"=>$messageId
+        ]);
+
+        Telegram::editMessageReplyMarkup([
+            'chat_id' => $this->getChatId(),
+            "message_id"=>$messageId,
+            'reply_markup' => json_encode([
+                'inline_keyboard' => $keyboard,
+            ])
+        ]);*/
     }
 
     protected function sendMessageToChat($chatId, $message, array $keyboard = [], $parseMode = 'Markdown')
