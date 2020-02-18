@@ -258,7 +258,7 @@ trait CustomBotMenu
     protected function sendMessage($message, array $keyboard = [], $parseMode = 'Markdown')
     {
         $messageId = $this->bot->getMessage()->getPayload()["message_id"];
-        Log::info($messageId??"EMPTY");
+        Log::info($messageId??"EMPTY message");
 
         $this->bot->sendRequest("sendMessage",
             [
@@ -313,6 +313,9 @@ trait CustomBotMenu
                     'inline_keyboard' => $keyboard,
                 ])
             ]);
+
+        $messageId = $this->bot->getMessage()->getPayload()["message_id"];
+        Log::info($messageId??"EMPTY photo");
     }
 
     protected function sendLocation($latitude, $longitude, array $keyboard = [])
