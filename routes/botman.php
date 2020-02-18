@@ -73,6 +73,9 @@ $botman->receivesImages(BotController::class."@uploadImages");
 
 $botman->hears('/fff ([0-9]+)', function (\BotMan\BotMan\BotMan $bot,$calc){
     $messageId = $bot->getMessage()->getPayload()["message_id"];
+    $chatId = $bot->getMessage()->getPayload()["chat"]["id"];
+
+
     $calc++;
   /*  Telegram::editMessageText([
         'text'=>"do",
@@ -84,13 +87,20 @@ $botman->hears('/fff ([0-9]+)', function (\BotMan\BotMan\BotMan $bot,$calc){
             ["text"=>"test btn $calc","callback_data"=>"/fff $calc"]
         ]
     ];
-    Telegram::editMessageReplyMarkup([
+    Telegram::sendMessage([
+        'chat_id' => env("CHANNEL_ID"),
+        "reply_to_message_id"=>$messageId,
+        'reply_markup' => json_encode([
+            'inline_keyboard' => $keyboard,
+        ])
+    ]);
+  /*  Telegram::editMessageReplyMarkup([
         'chat_id' => env("CHANNEL_ID"),
         "message_id"=>$messageId,
         'reply_markup' => json_encode([
             'inline_keyboard' => $keyboard,
         ])
-    ]);
+    ]);*/
 
     Log::info("Test $messageId");
 });
