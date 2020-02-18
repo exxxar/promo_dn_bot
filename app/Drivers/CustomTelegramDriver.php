@@ -180,8 +180,8 @@ class CustomTelegramDriver extends HttpDriver
        /* if ($callback !== null) {
            // $callback['message']['chat']['id'];
             //Log::info(print_r(   $callback['message'],true));
-          /*  $this->removeInlineKeyboard($callback['message']['chat']['id'],
-                $callback['message']['message_id']);*/
+            $this->removeInlineKeyboard($callback['message']['chat']['id'],
+                $callback['message']['message_id']);
         }*/
     }
 
