@@ -277,10 +277,10 @@ trait CustomBotMenu
                 ])
             ]);*/
 
-        Telegram::editMessageReplyMarkup([
+      /*  Telegram::editMessageReplyMarkup([
             'chat_id' => $this->getChatId(),
             "message_id" => $callback["message_id"],
-        ]);
+        ]);*/
     }
 
     protected function editMessageText($text = "empty")
