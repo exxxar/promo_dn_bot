@@ -37,7 +37,7 @@ use Telegram\Bot\Laravel\Facades\Telegram;
 class CustomTelegramDriver extends HttpDriver
 {
 
-    const DRIVER_NAME = 'Telegram';
+    const DRIVER_NAME = 'CustomTelegram';
     const API_URL = 'https://api.telegram.org/bot';
     const FILE_API_URL = 'https://api.telegram.org/file/bot';
     const LOGIN_EVENT = 'telegram_login';
@@ -174,6 +174,7 @@ class CustomTelegramDriver extends HttpDriver
      */
     public function messagesHandled()
     {
+        Log::info("test driver");
         $callback = $this->payload->get('callback_query');
 
         if ($callback !== null) {
