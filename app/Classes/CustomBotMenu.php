@@ -288,7 +288,7 @@ trait CustomBotMenu
 
        $r =  Telegram::editMessageReplyMarkup([
             'chat_id' => $this->getChatId(),
-            "inline_message_id" => $messageId,
+            "message_id" => $messageId,
             'reply_markup' => json_encode([
                 'inline_keyboard' => $keyboard,
             ])
@@ -296,7 +296,7 @@ trait CustomBotMenu
 
         Telegram::editMessageCaption([
             'chat_id' => $this->getChatId(),
-            "message_id" => $messageId,
+            "message_id" => $r["message_id"],
             "caption" => "TEST TEST",
             'reply_markup' => json_encode([
                 'inline_keyboard' => $keyboard,
