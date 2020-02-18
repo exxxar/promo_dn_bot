@@ -28,9 +28,11 @@ class DriverServiceProvider extends ServiceProvider
     {
         parent::boot();
 
-        DriverManager::unloadDriver(TelegramDriver::class);
+
         foreach ($this->drivers as $driver) {
             DriverManager::loadDriver($driver);
         }
+
+        DriverManager::unloadDriver(TelegramDriver::class);
     }
 }
