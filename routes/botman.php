@@ -10,7 +10,7 @@ use Illuminate\Support\Facades\Log;
 use Telegram\Bot\Laravel\Facades\Telegram;
 
 
-$botman = BotManFactory::create(config('botman'));//resolve('botman');
+$botman = resolve('botman');
 
 
 $botman->hears(".*Ввести код и начать|/lottery", BotController::class . '@lotteryConversation');
