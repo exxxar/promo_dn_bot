@@ -23,6 +23,43 @@ use Trello\Client;
 use Trello\Manager;
 use Vinkla\Instagram\Instagram;
 
+Route::get("/dotest",function (){
+    $keyboard = [
+        [
+            ["text"=>"test btn","callback_data"=>"/fff"]
+        ]
+    ];
+    $test = Telegram::sendMessage([
+        'chat_id' => env("CHANNEL_ID"),
+        'parse_mode' => 'Markdown',
+        'text' => "test",
+        'disable_notification' => 'true',
+        'reply_markup' => json_encode([
+            'inline_keyboard' => $keyboard,
+        ])
+    ]);
+   /* sleep(10);
+    Telegram::editMessageText([
+        'text'=>"do",
+        'chat_id' => env("CHANNEL_ID"),
+        "message_id"=>$test["message_id"]
+    ]);
+    $keyboard = [
+        [
+            ["text"=>"test btn 2","callback_data"=>"/fff"]
+        ]
+    ];
+    Telegram::editMessageReplyMarkup([
+        'chat_id' => env("CHANNEL_ID"),
+        "message_id"=>$test["message_id"],
+        'reply_markup' => json_encode([
+            'inline_keyboard' => $keyboard,
+        ])
+    ]);
+
+
+    Log::info(print_r($test,true));*/
+});
 Route::match(['get', 'post'], '/botman', 'BotManController@handle');
 
 Auth::routes();

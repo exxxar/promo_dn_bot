@@ -1,6 +1,8 @@
 <?php
 use App\Http\Controllers\BotController;
 use App\Http\Controllers\BotManController;
+use Illuminate\Support\Facades\Log;
+use Telegram\Bot\Laravel\Facades\Telegram;
 
 $botman = resolve('botman');
 
@@ -68,3 +70,27 @@ $botman->hears(".*Главное меню", BotController::class . '@getMainMenu
 $botman->fallback(BotController::class . "@fallback");
 
 $botman->receivesImages(BotController::class."@uploadImages");
+
+$botman->hears('/fff', function (\BotMan\BotMan\BotMan $bot){
+    $messageId = $bot->getMessage()->getPayload()["message_id"];
+
+    Telegram::editMessageText([
+        'text'=>"do",
+        'chat_id' => env("CHANNEL_ID"),
+        "message_id"=>$messageId
+    ]);
+    $keyboard = [
+        [
+            ["text"=>"test btn 2","callback_data"=>"/fff"]
+        ]
+    ];
+    Telegram::editMessageReplyMarkup([
+        'chat_id' => env("CHANNEL_ID"),
+        "message_id"=>$messageId,
+        'reply_markup' => json_encode([
+            'inline_keyboard' => $keyboard,
+        ])
+    ]);
+
+    Log::info("Test $messageId");
+});
