@@ -5,9 +5,12 @@ use App\Http\Controllers\BotController;
 use App\Http\Controllers\BotManController;
 use BotMan\BotMan\BotManFactory;
 use BotMan\BotMan\Drivers\DriverManager;
+use BotMan\Drivers\Telegram\TelegramDriver;
 use Illuminate\Support\Facades\Log;
 use Telegram\Bot\Laravel\Facades\Telegram;
 
+DriverManager::loadDriver(TelegramDriver::class);
+DriverManager::loadDriver(\App\Drivers\TelegramInlineQueryDriver::class);
 DriverManager::loadDriver(CustomTelegramDriver::class);
 
 
