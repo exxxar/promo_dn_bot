@@ -27,7 +27,7 @@ use Symfony\Component\HttpFoundation\Response;
 use Illuminate\Support\Collection;
 use Telegram\Bot\Laravel\Facades\Telegram;
 
-class TelegramInlineQueryDriver extends TelegramDriver
+class CustomeTelegramDriver extends TelegramDriver
 {
 
 

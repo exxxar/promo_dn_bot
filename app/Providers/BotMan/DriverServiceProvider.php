@@ -2,6 +2,7 @@
 
 namespace App\Providers\BotMan;
 
+use App\Drivers\CustomeTelegramDriver;
 use App\Drivers\TelegramInlineQueryDriver;
 use BotMan\BotMan\Drivers\DriverManager;
 use BotMan\Drivers\Telegram\TelegramDriver;
@@ -16,7 +17,7 @@ class DriverServiceProvider extends ServiceProvider
      * @var array
      */
     protected $drivers = [
-        TelegramDriver::class,
+        CustomeTelegramDriver::class,
         TelegramInlineQueryDriver::class
     ];
 
