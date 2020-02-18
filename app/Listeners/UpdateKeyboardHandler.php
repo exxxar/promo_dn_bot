@@ -28,7 +28,7 @@ class UpdateKeyboardHandler
     public function handle(UpdateKeyboardEvent $event)
     {
 
-        try {
+
 
             Telegram::editMessageReplyMarkup([
                 'chat_id' => $event->chat_id,
@@ -37,9 +37,7 @@ class UpdateKeyboardHandler
                     'inline_keyboard' => $event->keyboard,
                 ])
             ]);
-        } catch (\Exception  $e) {
 
-        }
 
 
     }
