@@ -126,14 +126,21 @@ class BotController extends Controller
             ->getPaymentsAll($page);
     }
 
-    public function getPromoByCategories($bot, $page=0)
+    public function getPromoByCategories($bot, $page = 0)
     {
         $this->sdnbot
             ->setBot($bot)
             ->getPromotionsByCategory($page);
     }
 
-    public function getPromoByCompanies($bot, $page=0)
+    public function doPromotionEditData($bot)
+    {
+        $this->sdnbot
+            ->setBot($bot)
+            ->doPromotionEditData();
+    }
+
+    public function getPromoByCompanies($bot, $page = 0)
     {
         $this->sdnbot
             ->setBot($bot)
@@ -162,14 +169,15 @@ class BotController extends Controller
             ->getPromotionsMenu();
     }
 
-    public function getInstaPromosList($bot, $page=0)
+    public function getInstaPromosList($bot, $page = 0)
     {
         $this->sdnbot
             ->setBot($bot)
             ->getPromotionsByInstagram($page);
     }
 
-    public function getCashBackByCompanies($bot){
+    public function getCashBackByCompanies($bot)
+    {
         $this->sdnbot
             ->setBot($bot)
             ->getCashBackByCompanies();
@@ -280,14 +288,14 @@ class BotController extends Controller
             ->getLatestCashBack();
     }
 
-    public function getAchievementsAll($bot, $page=0)
+    public function getAchievementsAll($bot, $page = 0)
     {
         $this->sdnbot
             ->setBot($bot)
             ->getAchievementsAll($page);
     }
 
-    public function getAchievementsMy($bot, $page=0)
+    public function getAchievementsMy($bot, $page = 0)
     {
         $this->sdnbot
             ->setBot($bot)
@@ -394,27 +402,31 @@ class BotController extends Controller
             ->getFallback();
     }
 
-    public function uploadImages($bot,$images){
+    public function uploadImages($bot, $images)
+    {
         $this->sdnbot
             ->setBot($bot)
             ->uploadImages($images);
     }
 
-    public function getCharityList($bot,$page=0){
+    public function getCharityList($bot, $page = 0)
+    {
         $this->sdnbot
             ->setBot($bot)
             ->getCharityList($page);
     }
 
-    public function getCharity($bot,$charityId){
+    public function getCharity($bot, $charityId)
+    {
         $this->sdnbot
             ->setBot($bot)
             ->getCharity($charityId);
     }
 
-    public function donateCharity($bot,$charityId,$value){
+    public function donateCharity($bot, $charityId, $value)
+    {
         $this->sdnbot
             ->setBot($bot)
-            ->donateCharity($charityId,$value);
+            ->donateCharity($charityId, $value);
     }
 }

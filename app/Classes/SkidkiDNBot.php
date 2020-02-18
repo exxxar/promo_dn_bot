@@ -617,6 +617,9 @@ class SkidkiDNBot extends Bot implements iSkidkiDNBot
                         ['text' => __("messages.promo_btn_1"), 'callback_data' => $emptyHandler ? "/promotion " . $promo->id : $promo->handler . " " . $promo->id],
                         ["text" => __("messages.promo_btn_2"), 'switch_inline_query' => $promo->title]
                     ],
+                    [
+                        ["text"=>"Test promotion btn(not click)","callback_data"=>"/promo_edit_data"]
+                    ]
                 ];
 
                 $this->sendPhoto("*" . $promo->title . "*", $promo->promo_image_url, $keyboard);
@@ -630,6 +633,14 @@ class SkidkiDNBot extends Bot implements iSkidkiDNBot
         $this->pagination("/company $id", $promotions, $page, __("messages.ask_action"));
     }
 
+    public function doPromotionEditData(){
+        $keyboard = [
+            [
+                ["text"=>"Test EDITED promotion btn(not click)","callback_data"=>"/promo_edit_data"]
+            ]
+        ];
+        $this->editMessageKeyboard($keyboard);
+    }
     public function getArticlesByPartId($partId, $page = 0)
     {
         $articles = Article::where("part", $partId)

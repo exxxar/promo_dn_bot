@@ -97,9 +97,9 @@ trait CustomBotMenu
             [
                 "\xF0\x9F\x93\x8BСтатистика активности",
             ],
-             [
-                 "\xF0\x9F\x8C\xBCБлаготворительность"
-             ],
+            [
+                "\xF0\x9F\x8C\xBCБлаготворительность"
+            ],
             [
                 "\xF0\x9F\x94\x99Главное меню"
             ]
@@ -257,11 +257,6 @@ trait CustomBotMenu
 
     protected function sendMessage($message, array $keyboard = [], $parseMode = 'Markdown')
     {
-       /* $messageId = $this->bot->getMessage()->getPayload()["message_id"];
-        Log::info($messageId??"EMPTY message");*/
-
-        Log::info("send message");
-
 
         $this->bot->sendRequest("sendMessage",
             [
@@ -273,29 +268,30 @@ trait CustomBotMenu
                 ])
             ]);
 
-     /*   try {
-            $messageId = $this->bot->getMessage()->getPayload()["message_id"];
-            Log::info($messageId ?? "EMPTY message");
-        }catch (\Exception $e){
-            Log::info("message error ".$e->getMessage()." ".$e->getLine());
-        }*/
+    }
 
-/*
-
+    protected function editMessageText($text = "empty")
+    {
+        $messageId = $this->bot->getMessage()->getPayload()["message_id"];
 
         Telegram::editMessageText([
-            'text'=>"do",
+            'text' => $text,
             'chat_id' => $this->getChatId(),
-            "message_id"=>$messageId
+            "message_id" => $messageId
         ]);
+    }
+
+    protected function editMessageKeyboard($keyboard = [])
+    {
+        $messageId = $this->bot->getMessage()->getPayload()["message_id"];
 
         Telegram::editMessageReplyMarkup([
             'chat_id' => $this->getChatId(),
-            "message_id"=>$messageId,
+            "message_id" => $messageId,
             'reply_markup' => json_encode([
                 'inline_keyboard' => $keyboard,
             ])
-        ]);*/
+        ]);
     }
 
     protected function sendMessageToChat($chatId, $message, array $keyboard = [], $parseMode = 'Markdown')
@@ -313,21 +309,21 @@ trait CustomBotMenu
 
     protected function sendPhoto($message, $photoUrl, array $keyboard = [], $parseMode = 'Markdown')
     {
-        Log::info("send photo ".print_r($this->bot->getMessage()->getPayload(),true));
-       // $messageId = $this->bot->getMessage()->getPayload()["message_id"];
-       /* if (!is_null($messageId)){
-            Telegram::editMessageReplyMarkup([
-                'chat_id' => $this->getChatId(),
-                "message_id"=>$messageId,
-                'reply_markup' => json_encode([
-                    'inline_keyboard' => [
-                        [
-                            ["text"=>"test","callback_data"=>"/fff 0"]
-                        ]
-                    ],
-                ])
-            ]);
-        }*/
+        Log::info("send photo " . print_r($this->bot->getMessage()->getPayload(), true));
+        // $messageId = $this->bot->getMessage()->getPayload()["message_id"];
+        /* if (!is_null($messageId)){
+             Telegram::editMessageReplyMarkup([
+                 'chat_id' => $this->getChatId(),
+                 "message_id"=>$messageId,
+                 'reply_markup' => json_encode([
+                     'inline_keyboard' => [
+                         [
+                             ["text"=>"test","callback_data"=>"/fff 0"]
+                         ]
+                     ],
+                 ])
+             ]);
+         }*/
 
         $this->bot->sendRequest("sendPhoto",
             [
@@ -340,13 +336,13 @@ trait CustomBotMenu
                 ])
             ]);
 
-/*
-        try {
-            $messageId = $this->bot->getMessage()->getPayload()["message_id"];
-            Log::info($messageId ?? "EMPTY message");
-        }catch (\Exception $e){
-            Log::info("photo error ".$e->getMessage()." ".$e->getLine());
-        }*/
+        /*
+                try {
+                    $messageId = $this->bot->getMessage()->getPayload()["message_id"];
+                    Log::info($messageId ?? "EMPTY message");
+                }catch (\Exception $e){
+                    Log::info("photo error ".$e->getMessage()." ".$e->getLine());
+                }*/
     }
 
     protected function sendLocation($latitude, $longitude, array $keyboard = [])
