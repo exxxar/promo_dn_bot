@@ -9,6 +9,7 @@ use App\Enums\AchievementTriggers;
 use App\Events\AchievementEvent;
 use App\User;
 use Carbon\Carbon;
+use Illuminate\Support\Facades\Log;
 use Telegram\Bot\FileUpload\InputFile;
 use Telegram\Bot\Laravel\Facades\Telegram;
 
