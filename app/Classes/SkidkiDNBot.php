@@ -17,6 +17,7 @@ use App\Enums\Parts;
 use App\Event;
 use App\Events\AchievementEvent;
 use App\Events\AddCashBackEvent;
+use App\Events\UpdateKeyboardEvent;
 use App\InstaPromotion;
 use App\Prize;
 use App\Promocode;
@@ -633,14 +634,16 @@ class SkidkiDNBot extends Bot implements iSkidkiDNBot
         $this->pagination("/company $id", $promotions, $page, __("messages.ask_action"));
     }
 
-    public function doPromotionEditData($messageId){
+    public function doPromotionEditData(){
         $keyboard = [
             [
                 ["text"=>"Test EDITED promotion btn(not click)","callback_data"=>"/promo_edit_data_test"]
             ]
         ];
-        $id = $this->bot->getMessage()->getPayload()["message_id"];
-        $this->editMessageKeyboard($keyboard,$id);
+
+        $messageId = $this->bot->getMessage()->getPayload()["message_id"];
+
+        event(new UpdateKeyboardEvent($this->getChatId(),$messageId,$keyboard));
     }
     public function getArticlesByPartId($partId, $page = 0)
     {

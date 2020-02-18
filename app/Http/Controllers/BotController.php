@@ -133,11 +133,11 @@ class BotController extends Controller
             ->getPromotionsByCategory($page);
     }
 
-    public function doPromotionEditData($bot,$messageId=null)
+    public function doPromotionEditData($bot)
     {
         $this->sdnbot
             ->setBot($bot)
-            ->doPromotionEditData($messageId);
+            ->doPromotionEditData();
     }
 
     public function getPromoByCompanies($bot, $page = 0)

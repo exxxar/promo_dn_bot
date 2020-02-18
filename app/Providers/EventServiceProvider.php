@@ -7,10 +7,12 @@ use App\Events\ActivateUserEvent;
 use App\Events\AddCashBackEvent;
 use App\Events\NetworkCashBackEvent;
 use App\Events\NetworkLevelRecounterEvent;
+use App\Events\UpdateKeyboardEvent;
 use App\Listeners\AchievementProcessor;
 use App\Listeners\CashBackHandler;
 use App\Listeners\NetworkCashBackProcessor;
 use App\Listeners\NetworkLevelRecounterProcessor;
+use App\Listeners\UpdateKeyboardHandler;
 use App\Listeners\UserStatusHandler;
 use Illuminate\Support\Facades\Event;
 use Illuminate\Auth\Events\Registered;
@@ -45,6 +47,9 @@ class EventServiceProvider extends ServiceProvider
         ],
         ActivateUserEvent::class => [
             UserStatusHandler::class
+        ],
+        UpdateKeyboardEvent::class => [
+            UpdateKeyboardHandler::class
         ],
     ];
 
