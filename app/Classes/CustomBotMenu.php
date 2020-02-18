@@ -286,21 +286,19 @@ trait CustomBotMenu
         $messageId = $messageId?? $this->bot->getMessage()->getPayload()["message_id"];
 
 
-       $r =  Telegram::editMessageReplyMarkup([
+     /*  $r =  Telegram::editMessageReplyMarkup([
             'chat_id' => $this->getChatId(),
             "message_id" => $messageId,
             'reply_markup' => json_encode([
                 'inline_keyboard' => $keyboard,
             ])
-        ]);
+        ]);*/
 
         Telegram::editMessageCaption([
             'chat_id' => $this->getChatId(),
-            "message_id" => $r["message_id"],
+            "message_id" => $messageId,
             "caption" => "TEST TEST",
-            'reply_markup' => json_encode([
-                'inline_keyboard' => $keyboard,
-            ])
+
         ]);
     }
 
