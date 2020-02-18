@@ -71,17 +71,17 @@ $botman->fallback(BotController::class . "@fallback");
 
 $botman->receivesImages(BotController::class."@uploadImages");
 
-$botman->hears('/fff', function (\BotMan\BotMan\BotMan $bot){
+$botman->hears('/fff ([0-9]+)', function (\BotMan\BotMan\BotMan $bot,$calc){
     $messageId = $bot->getMessage()->getPayload()["message_id"];
-
-    Telegram::editMessageText([
+    $calc++;
+  /*  Telegram::editMessageText([
         'text'=>"do",
         'chat_id' => env("CHANNEL_ID"),
         "message_id"=>$messageId
-    ]);
+    ]);*/
     $keyboard = [
         [
-            ["text"=>"test btn 2","callback_data"=>"/fff"]
+            ["text"=>"test btn $calc","callback_data"=>"/fff $calc"]
         ]
     ];
     Telegram::editMessageReplyMarkup([

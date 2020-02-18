@@ -26,10 +26,10 @@ use Vinkla\Instagram\Instagram;
 Route::get("/dotest",function (){
     $keyboard = [
         [
-            ["text"=>"test btn","callback_data"=>"/fff"]
+            ["text"=>"test btn 0","callback_data"=>"/fff 0"]
         ]
     ];
-    $test = Telegram::sendMessage([
+   Telegram::sendMessage([
         'chat_id' => env("CHANNEL_ID"),
         'parse_mode' => 'Markdown',
         'text' => "test",
