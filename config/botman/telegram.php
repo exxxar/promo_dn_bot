@@ -12,4 +12,5 @@ return [
     |
     */
     'token' => env('TELEGRAM_TOKEN'),
+    'hideInlineKeyboard'=>false
 ];
