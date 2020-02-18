@@ -177,12 +177,12 @@ class CustomTelegramDriver extends HttpDriver
         Log::info("test driver");
         $callback = $this->payload->get('callback_query');
 
-        if ($callback !== null) {
+       /* if ($callback !== null) {
            // $callback['message']['chat']['id'];
-            Log::info(print_r(   $callback['message'],true));
+            //Log::info(print_r(   $callback['message'],true));
           /*  $this->removeInlineKeyboard($callback['message']['chat']['id'],
                 $callback['message']['message_id']);*/
-        }
+        }*/
     }
 
     /**
