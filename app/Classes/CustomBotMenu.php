@@ -333,7 +333,7 @@ trait CustomBotMenu
 
         Telegram::sendPhoto([
             "chat_id" => $this->getChatId(),
-            "photo" => $photoUrl,
+            "photo" => InputFile::create($photoUrl),
             "caption" => $message,
             'parse_mode' => $parseMode,
             'reply_markup' => json_encode([
