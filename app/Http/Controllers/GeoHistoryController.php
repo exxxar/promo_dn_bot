@@ -21,9 +21,9 @@ class GeoHistoryController extends Controller
     public function index(Request $request)
     {
         //
-        $geo_positions = GeoHistory::paginate(15);
+        $geo_histories = GeoHistory::paginate(15);
 
-        return view('admin.geo_positions.index', compact('geo_positions'))
+        return view('admin.geo_histories.index', compact('geo_histories'))
             ->with('i', ($request->get('page', 1) - 1) * 15);
     }
     /**
