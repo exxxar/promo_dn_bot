@@ -14,7 +14,7 @@ class CreateGeoQuestsTable extends Migration
     public function up()
     {
         Schema::create('geo_quests', function (Blueprint $table) {
-            $table->bigIncrements('id');
+            $table->increments('id');
             $table->string('title')->default('')->comment('Заголовок квеста');
             $table->string('description',1000)->default('')->comment('Описание квеста');
             $table->string('image_url',1000)->default('')->comment('Изображение к квесту');

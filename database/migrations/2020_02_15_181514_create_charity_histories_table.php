@@ -16,7 +16,7 @@ class CreateCharityHistoriesTable extends Migration
         try {
             Schema::disableForeignKeyConstraints();
             Schema::create('charity_histories', function (Blueprint $table) {
-                $table->bigIncrements('id');
+                $table->increments('id');
                 $table->unsignedInteger('user_id');
                 $table->unsignedInteger('charity_id');
                 $table->unsignedInteger('company_id');
@@ -32,7 +32,7 @@ class CreateCharityHistoriesTable extends Migration
             });
             Schema::enableForeignKeyConstraints();
         }catch (Exception $e){
-            
+
         }
     }
 

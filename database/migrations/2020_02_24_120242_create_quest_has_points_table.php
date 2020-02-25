@@ -14,7 +14,7 @@ class CreateQuestHasPointsTable extends Migration
     public function up()
     {
         Schema::create('quest_has_points', function (Blueprint $table) {
-            $table->bigIncrements('id');
+            $table->increments('id');
             $table->unsignedInteger('geo_quest_id');
             $table->unsignedInteger('geo_position_id');
             $table->integer('position')->default(0);

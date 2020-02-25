@@ -15,7 +15,7 @@ class CreateCharitiesTable extends Migration
     {
 
         Schema::create('charities', function (Blueprint $table) {
-            $table->bigIncrements('id');
+            $table->increments('id');
             $table->string('title',1000)->default('');
             $table->string('description',5000)->default('');
             $table->string('image_url',1000)->default('');

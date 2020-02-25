@@ -14,7 +14,7 @@ class CreateUserOnQuestsTable extends Migration
     public function up()
     {
         Schema::create('user_on_quests', function (Blueprint $table) {
-            $table->bigIncrements('id');
+            $table->increments('id');
             $table->unsignedInteger('geo_quest_id');
             $table->unsignedInteger('user_id');
 
