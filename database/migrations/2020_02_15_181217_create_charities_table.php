@@ -13,6 +13,7 @@ class CreateCharitiesTable extends Migration
      */
     public function up()
     {
+
         Schema::create('charities', function (Blueprint $table) {
             $table->bigIncrements('id');
             $table->string('title',1000)->default('');
