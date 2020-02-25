@@ -99,9 +99,9 @@ Route::prefix('admin')->group(function () {
         'cashbackinfos' => 'CashBackInfoController',
         'charities' => 'CharityController',
         'charityhistories' => 'CharityHistoryController',
-        'geo_quests' => 'GeoQuestsController',
-        'geo_positions' => 'GeoPositionsController',
-        'geo_histories' => 'GeoHistoriesController',
+        'geo_quests' => 'GeoQuestController',
+        'geo_positions' => 'GeoPositionController',
+        'geo_histories' => 'GeoHistoryController',
     ]);
 
     Route::name('users.')->prefix('users')->group(function () {
