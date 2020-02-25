@@ -168,10 +168,21 @@
 
         <li class="c-sidebar-nav-item">
             <a class="c-sidebar-nav-link" href="{{ route('geo_quests.index') }}">
-                <i class="cil-arrow-thick-to-bottom c-sidebar-nav-icon"></i>
+                <i class="cil-location-pin c-sidebar-nav-icon"></i>
                 Гое-задания</a>
         </li>
 
+        <li class="c-sidebar-nav-item">
+            <a class="c-sidebar-nav-link" href="{{ route('geo_positions.index') }}">
+                <i class="cil-share-boxed c-sidebar-nav-icon"></i>
+                Гое-позиции</a>
+        </li>
+
+        <li class="c-sidebar-nav-item">
+            <a class="c-sidebar-nav-link" href="{{ route('geo_positions.index') }}">
+                <i class="cil-share-boxed c-sidebar-nav-icon"></i>
+                История переходов по гео-точкам</a>
+        </li>
 
     </ul>
     <button class="c-sidebar-minimizer c-class-toggler" type="button" data-target="_parent"

@@ -3,20 +3,29 @@
 namespace App\Http\Controllers;
 
 use App\GeoHistory;
+use App\GeoPosition;
 use Illuminate\Http\Request;
 
 class GeoHistoryController extends Controller
 {
+    public function __construct()
+    {
+        $this->middleware('auth');
+    }
+
     /**
      * Display a listing of the resource.
      *
      * @return \Illuminate\Http\Response
      */
-    public function index()
+    public function index(Request $request)
     {
         //
-    }
+        $geo_positions = GeoHistory::paginate(15);
 
+        return view('admin.geo_positions.index', compact('geo_positions'))
+            ->with('i', ($request->get('page', 1) - 1) * 15);
+    }
     /**
      * Show the form for creating a new resource.
      *
