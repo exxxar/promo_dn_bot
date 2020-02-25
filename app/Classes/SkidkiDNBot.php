@@ -23,7 +23,7 @@ use App\Prize;
 use App\Promocode;
 use App\Promotion;
 use App\RefferalsPaymentHistory;
-use App\UplodedPhotos;
+use App\UplodedPhoto;
 use App\User;
 use BotMan\BotMan\BotMan;
 use BotMan\BotMan\Messages\Attachments\Image;
@@ -631,17 +631,19 @@ class SkidkiDNBot extends Bot implements iSkidkiDNBot
         $this->pagination("/company $id", $promotions, $page, __("messages.ask_action"));
     }
 
-    public function doPromotionEditData(){
-       /* $keyboard = [
-            [
-                ["text"=>"Test EDITED promotion btn(not click)","callback_data"=>"/promo_edit_data_test"]
-            ]
-        ];
+    public function doPromotionEditData()
+    {
+        /* $keyboard = [
+             [
+                 ["text"=>"Test EDITED promotion btn(not click)","callback_data"=>"/promo_edit_data_test"]
+             ]
+         ];
 
-        $messageId = $this->bot->getMessage()->getPayload()["message_id"];
+         $messageId = $this->bot->getMessage()->getPayload()["message_id"];
 
-        $this->editMessageKeyboard($keyboard,$messageId);*/
+         $this->editMessageKeyboard($keyboard,$messageId);*/
     }
+
     public function getArticlesByPartId($partId, $page = 0)
     {
         $articles = Article::where("part", $partId)
@@ -1245,7 +1247,7 @@ class SkidkiDNBot extends Bot implements iSkidkiDNBot
         $userId = ($this->getUser())->id;
 
         $instapromos = $instapromos->filter(function ($item) use ($userId) {
-            return is_null(UplodedPhotos::where("insta_promotions_id", $item->id)
+            return is_null(UplodedPhoto::where("insta_promotions_id", $item->id)
                 ->where("user_id", $userId)->first());
         });
 
@@ -1261,6 +1263,14 @@ class SkidkiDNBot extends Bot implements iSkidkiDNBot
         $this->pagination("/promo_by_category", $instapromos, $page, "Выберите действие");
 
 
+    }
+
+    public function receivesLocations($location)
+    {
+        $lat = $location->getLatitude();
+        $lng = $location->getLongitude();
+
+        Log::info("test location: $lat $lng");
     }
 
     public function uploadImages($images)
@@ -1280,7 +1290,7 @@ class SkidkiDNBot extends Bot implements iSkidkiDNBot
 
             $url = $image->getUrl(); // The direct url
 
-            $canAddPhoto = count(UplodedPhotos::where("activated", false)
+            $canAddPhoto = count(UplodedPhoto::where("activated", false)
                     ->get()) < env("USERS_INSTA_PROMOS_LIMIT");
 
             if (!$canAddPhoto) {
@@ -1288,7 +1298,7 @@ class SkidkiDNBot extends Bot implements iSkidkiDNBot
                 continue;
             }
 
-            UplodedPhotos::create([
+            UplodedPhoto::create([
                 'url' => $url,
                 'activated' => false,
                 'user_id' => $this->getUser()->id,
@@ -1305,10 +1315,10 @@ class SkidkiDNBot extends Bot implements iSkidkiDNBot
     {
         $cbis = CashBackInfo::with(["company"])
             ->where("user_id", $this->getUser()->id)
-            ->orderBy("value","DESC")
+            ->orderBy("value", "DESC")
             ->get();
 
-        if (count($cbis)==0) {
+        if (count($cbis) == 0) {
             $this->reply("У вас нет накопленного CashBack!");
             return;
         }
@@ -1317,26 +1327,25 @@ class SkidkiDNBot extends Bot implements iSkidkiDNBot
         foreach ($cbis as $cbi)
             $sum += $cbi->value;
 
-        if ($sum<$value) {
+        if ($sum < $value) {
             $this->reply("У вас недостаточно CashBack!");
             return;
         }
 
         $tmp = $value;
-        foreach ($cbis as $key=>$cbi){
+        foreach ($cbis as $key => $cbi) {
             $module = $tmp;
-            if ($module==0)
+            if ($module == 0)
                 break;
 
 
-            if ($cbi->value<$module)
-            {
-                $tmp -=$cbi->value;
+            if ($cbi->value < $module) {
+                $tmp -= $cbi->value;
 
                 CharityHistory::create([
                     'user_id' => $this->getUser()->id,
                     'charity_id' => $charityId,
-                    'company_id' =>$cbi->company_id,
+                    'company_id' => $cbi->company_id,
                     'donated_money' => $cbi->value
                 ]);
 
@@ -1345,15 +1354,15 @@ class SkidkiDNBot extends Bot implements iSkidkiDNBot
                 continue;
             }
 
-            if ($cbi->value>=$module){
-                $cbi->value -=$module;
+            if ($cbi->value >= $module) {
+                $cbi->value -= $module;
                 $cbi->save();
 
                 CharityHistory::create([
                     'user_id' => $this->getUser()->id,
                     'charity_id' => $charityId,
-                    'company_id' =>$cbi->company_id,
-                    'donated_money' =>$module
+                    'company_id' => $cbi->company_id,
+                    'donated_money' => $module
                 ]);
 
                 break;
@@ -1368,7 +1377,7 @@ class SkidkiDNBot extends Bot implements iSkidkiDNBot
             $this->getUser()
         ));
 
-        $this->reply("Спасибо! Вы пожертвовали *$value ₽* на нужды *" . $charity->title."*");
+        $this->reply("Спасибо! Вы пожертвовали *$value ₽* на нужды *" . $charity->title . "*");
 
     }
 
@@ -1395,7 +1404,7 @@ class SkidkiDNBot extends Bot implements iSkidkiDNBot
 
         $sum = 0;
         foreach ($cbis as $cbi) {
-            $sum +=$cbi->value;
+            $sum += $cbi->value;
         }
 
         $keyboard = [
@@ -1408,7 +1417,7 @@ class SkidkiDNBot extends Bot implements iSkidkiDNBot
         ];
 
         $this->sendPhoto("*" . $charity->title . "*\n"
-            . $charity->description."\n"
+            . $charity->description . "\n"
             . "Доступно для списания *$sum* ₽\n"
             . "\n*Выберите сумму пожертвования*:", $charity->image_url, $keyboard);
 
@@ -1429,7 +1438,7 @@ class SkidkiDNBot extends Bot implements iSkidkiDNBot
 
 
         if (!is_null($charityInfo))
-            $this->sendMessage("*Перед осуществлением пожертвований прочитайте детальнее условия!*",[
+            $this->sendMessage("*Перед осуществлением пожертвований прочитайте детальнее условия!*", [
                 [
                     ['text' => __("messages.charity_menu_btn_1"), 'url' => $charityInfo->url]
                 ]

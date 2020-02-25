@@ -23,7 +23,7 @@ class InstaPromotion extends Model
     }
 
     public function getSummaryAttribute(){
-        return UplodedPhotos::where("insta_promotions_id",$this->id)->count()??0;
+        return UplodedPhoto::where("insta_promotions_id",$this->id)->count()??0;
     }
 
 }

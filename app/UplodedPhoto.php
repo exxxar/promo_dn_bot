@@ -4,7 +4,7 @@ namespace App;
 
 use Illuminate\Database\Eloquent\Model;
 
-class UplodedPhotos extends Model
+class UplodedPhoto extends Model
 {
     protected $fillable = [
         'url',

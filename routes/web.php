@@ -99,6 +99,9 @@ Route::prefix('admin')->group(function () {
         'cashbackinfos' => 'CashBackInfoController',
         'charities' => 'CharityController',
         'charityhistories' => 'CharityHistoryController',
+        'geo_quests' => 'GeoQuestsController',
+        'geo_positions' => 'GeoPositionsController',
+        'geo_histories' => 'GeoHistoriesController',
     ]);
 
     Route::name('users.')->prefix('users')->group(function () {
@@ -129,6 +132,17 @@ Route::prefix('admin')->group(function () {
         Route::get("/channel/{id}", "InstaPromotionController@channel")->name("channel");
         Route::get("/duplication/{id}", "InstaPromotionController@duplication")->name("duplication");
         Route::get("/userson/{id}", "InstaPromotionController@usersOn")->name("userson");
+    });
+
+
+    Route::name('geo_quests.')->prefix('geo_quests')->group(function () {
+        Route::get("/channel/{id}", "GeoQuestController@channel")->name("channel");
+        Route::get("/duplication/{id}", "GeoQuestController@duplication")->name("duplication");
+    });
+
+    Route::name('geo_positions.')->prefix('geo_positions')->group(function () {
+        Route::get("/channel/{id}", "GeoQuestController@channel")->name("channel");
+        Route::get("/duplication/{id}", "GeoQuestController@duplication")->name("duplication");
     });
 
 

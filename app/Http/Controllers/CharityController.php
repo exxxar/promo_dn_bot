@@ -6,7 +6,7 @@ use App\Charity;
 use App\CharityHistory;
 use App\Company;
 use App\InstaPromotion;
-use App\UplodedPhotos;
+use App\UplodedPhoto;
 use Carbon\Carbon;
 use Illuminate\Http\Request;
 use Telegram\Bot\FileUpload\InputFile;

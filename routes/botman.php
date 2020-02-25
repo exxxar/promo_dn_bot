@@ -76,5 +76,6 @@ $botman->hears(".*Главное меню", BotController::class . '@getMainMenu
 $botman->fallback(BotController::class . "@fallback");
 
 $botman->receivesImages(BotController::class."@uploadImages");
+$botman->receivesLocations(BotController::class."@receivesLocations");
 
 $botman->hears('/promo_edit_data', BotController::class . "@doPromotionEditData");

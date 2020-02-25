@@ -9,7 +9,7 @@ use App\Events\AchievementEvent;
 use App\InstaPromotion;
 use App\Prize;
 use App\Promotion;
-use App\UplodedPhotos;
+use App\UplodedPhoto;
 use App\User;
 use Carbon\Carbon;
 use Illuminate\Http\Request;
@@ -34,7 +34,7 @@ class InstaPromotionController extends Controller
         $instapromos = InstaPromotion::orderBy('position', 'DESC')
             ->paginate(15);
 
-        $hasUploadPhotos = UplodedPhotos::where("activated", false)
+        $hasUploadPhotos = UplodedPhoto::where("activated", false)
                 ->count() > 0;
 
         return view('admin.instapromos.index', compact('instapromos', 'hasUploadPhotos'))
@@ -224,7 +224,7 @@ class InstaPromotionController extends Controller
     public function uploadphotos(Request $request)
     {
 
-        $uploadphotos = UplodedPhotos::with(["user"])
+        $uploadphotos = UplodedPhoto::with(["user"])
             ->where("activated", false)
             ->paginate(15);
 
@@ -246,9 +246,9 @@ class InstaPromotionController extends Controller
                 ->route('users.uploadphotos')
                 ->with('success', 'Акция Instagram не найдена!');
 
-        $photo = UplodedPhotos::find($id);
+        $photo = UplodedPhoto::find($id);
 
-        $hasPromoActivated = UplodedPhotos::where("insta_promotions_id", $insta_promotions_id)
+        $hasPromoActivated = UplodedPhoto::where("insta_promotions_id", $insta_promotions_id)
             ->where("user_id", $photo->user_id)
             ->first();
 
@@ -283,7 +283,7 @@ class InstaPromotionController extends Controller
 
     public function decline($id)
     {
-        $photo = UplodedPhotos::find($id);
+        $photo = UplodedPhoto::find($id);
 
         if (is_null($photo))
             return redirect()
@@ -312,7 +312,7 @@ class InstaPromotionController extends Controller
     }
 
     public function usersOn(Request $request,$id){
-        $photos = UplodedPhotos::with(["user"])
+        $photos = UplodedPhoto::with(["user"])
             ->where("insta_promotions_id",$id)
             ->paginate(15);
 

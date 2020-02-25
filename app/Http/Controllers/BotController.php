@@ -16,6 +16,7 @@ use App\Conversations\StartDataConversation;
 use App\Conversations\StopConversation;
 use App\Enums\Parts;
 use BotMan\BotMan\Facades\BotMan;
+use BotMan\BotMan\Messages\Attachments\Location;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Log;
 
@@ -402,6 +403,11 @@ class BotController extends Controller
             ->getFallback();
     }
 
+    public function receivesLocations($bot,Location $location){
+        $this->sdnbot
+            ->setBot($bot)
+            ->receivesLocations($location);
+    }
     public function uploadImages($bot, $images)
     {
         $this->sdnbot

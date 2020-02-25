@@ -68,4 +68,6 @@ interface iSkidkiDNBot
 
     public function uploadImages($images);
 
+    public function receivesLocations($location);
+
 }
