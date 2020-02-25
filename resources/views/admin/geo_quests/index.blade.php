@@ -83,7 +83,7 @@
                         @endforeach
                     </div>
 
-                    {{ $articles->links() }}
+                    {{ $geo_quests->links() }}
                 @endisset
             </div>
         </div>

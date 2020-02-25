@@ -31,7 +31,7 @@
                 </div>
 
                     <h1>Статьи</h1>
-                @isset($articles)
+                @isset($geo_positions)
                     <table class="table mt-2">
 
                         <thead class="thead-light">
@@ -46,7 +46,7 @@
                         </tr>
                         </thead>
                         <tbody>
-                        @foreach($articles as $key => $article)
+                        @foreach($geo_positions as $key => $article)
                             <tr>
                                 <td>{{$key + 1}}</td>
                                 <td><a href="{{ route('articles.show',$article->id) }}">
