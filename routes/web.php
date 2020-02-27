@@ -23,13 +23,13 @@ use Trello\Client;
 use Trello\Manager;
 use Vinkla\Instagram\Instagram;
 
-Route::get("/dotest",function (){
+Route::get("/dotest", function () {
     $keyboard = [
         [
-            ["text"=>"test btn 0","callback_data"=>"/fff 0"]
+            ["text" => "test btn 0", "callback_data" => "/fff 0"]
         ]
     ];
-   Telegram::sendMessage([
+    Telegram::sendMessage([
         'chat_id' => env("CHANNEL_ID"),
         'parse_mode' => 'Markdown',
         'text' => "test",
@@ -38,27 +38,27 @@ Route::get("/dotest",function (){
             'inline_keyboard' => $keyboard,
         ])
     ]);
-   /* sleep(10);
-    Telegram::editMessageText([
-        'text'=>"do",
-        'chat_id' => env("CHANNEL_ID"),
-        "message_id"=>$test["message_id"]
-    ]);
-    $keyboard = [
-        [
-            ["text"=>"test btn 2","callback_data"=>"/fff"]
-        ]
-    ];
-    Telegram::editMessageReplyMarkup([
-        'chat_id' => env("CHANNEL_ID"),
-        "message_id"=>$test["message_id"],
-        'reply_markup' => json_encode([
-            'inline_keyboard' => $keyboard,
-        ])
-    ]);
+    /* sleep(10);
+     Telegram::editMessageText([
+         'text'=>"do",
+         'chat_id' => env("CHANNEL_ID"),
+         "message_id"=>$test["message_id"]
+     ]);
+     $keyboard = [
+         [
+             ["text"=>"test btn 2","callback_data"=>"/fff"]
+         ]
+     ];
+     Telegram::editMessageReplyMarkup([
+         'chat_id' => env("CHANNEL_ID"),
+         "message_id"=>$test["message_id"],
+         'reply_markup' => json_encode([
+             'inline_keyboard' => $keyboard,
+         ])
+     ]);
 
 
-    Log::info(print_r($test,true));*/
+     Log::info(print_r($test,true));*/
 });
 Route::match(['get', 'post'], '/botman', 'BotManController@handle');
 
@@ -81,28 +81,6 @@ Route::prefix('admin')->group(function () {
     Route::get('/sender', 'HomeController@sender');
     Route::post('/sender', 'HomeController@announceCustom')->name("sender.announce");
     Route::get("/promocodes/change_status/{id}", "PromocodeController@change_status")->name("promocodes.changestatus");
-
-    Route::resources([
-        'articles' => 'ArticleController',
-        'users' => 'UsersController',
-        'categories' => 'CategoryController',
-        'companies' => 'CompanyController',
-        'promotions' => 'PromotionController',
-        'cashback' => 'CashbackHistoryController',
-        'refferals' => 'RefferalsHistoryController',
-        'payments' => 'RefferalsPaymentHistoryController',
-        'events' => 'EventsController',
-        'achievements' => 'AchievementsController',
-        'prizes' => 'PrizeController',
-        'promocodes' => 'PromocodeController',
-        'instapromos' => 'InstaPromotionController',
-        'cashbackinfos' => 'CashBackInfoController',
-        'charities' => 'CharityController',
-        'charityhistories' => 'CharityHistoryController',
-        'geo_quests' => 'GeoQuestController',
-        'geo_positions' => 'GeoPositionController',
-        'geo_histories' => 'GeoHistoryController',
-    ]);
 
     Route::name('users.')->prefix('users')->group(function () {
         Route::get("/promotions/{id}", "UsersController@getUserPromotions")->name("promotions");
@@ -169,6 +147,28 @@ Route::prefix('admin')->group(function () {
     Route::name('achievements.')->prefix('achievements')->group(function () {
         Route::get("/channel/{id}", "AchievementsController@channel")->name("channel");
     });
+
+    Route::resources([
+        'articles' => 'ArticleController',
+        'users' => 'UsersController',
+        'categories' => 'CategoryController',
+        'companies' => 'CompanyController',
+        'promotions' => 'PromotionController',
+        'cashback' => 'CashbackHistoryController',
+        'refferals' => 'RefferalsHistoryController',
+        'payments' => 'RefferalsPaymentHistoryController',
+        'events' => 'EventsController',
+        'achievements' => 'AchievementsController',
+        'prizes' => 'PrizeController',
+        'promocodes' => 'PromocodeController',
+        'instapromos' => 'InstaPromotionController',
+        'cashbackinfos' => 'CashBackInfoController',
+        'charities' => 'CharityController',
+        'charityhistories' => 'CharityHistoryController',
+        'geo_quests' => 'GeoQuestController',
+        'geo_positions' => 'GeoPositionController',
+        'geo_histories' => 'GeoHistoryController',
+    ]);
 });
 
 
