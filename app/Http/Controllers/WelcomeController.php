@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Enums\Parts;
 use App\Models\SkidkaServiceModels\Article;
 use App\Models\SkidkaServiceModels\Company;
 use App\Models\User;
@@ -18,13 +19,13 @@ class WelcomeController extends Controller
             ->where("is_active", true)
             ->get();
 
-        $terms = Article::where("part", Enums\Parts::Terms_of_use)->first() ?? null;
+        $terms = Article::where("part", Parts::Terms_of_use)->first() ?? null;
         $terms = $terms == null ? env("APP_URL") : ($terms)->url;
 
-        $faq = Article::where("part", Enums\Parts::How_to_use)->first() ?? null;
+        $faq = Article::where("part", Parts::How_to_use)->first() ?? null;
         $faq = $faq == null ? env("APP_URL") : ($faq)->url;
 
-        $suppliers = Article::where("part", Enums\Parts::Suppliers)->first() ?? null;
+        $suppliers = Article::where("part", Parts::Suppliers)->first() ?? null;
         $suppliers = $suppliers == null ? env("APP_URL") : ($suppliers)->url;
 
         return view('welcome', compact("companies", 'terms', 'faq', 'suppliers'));
