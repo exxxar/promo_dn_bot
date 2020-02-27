@@ -2,11 +2,8 @@
 
 namespace App\Http\Controllers;
 
-use App\Models\SkidkaServiceModels\Category;
 use App\Models\SkidkaServiceModels\Company;
 use App\Models\SkidkaServiceModels\Prize;
-use App\Models\SkidkaServiceModels\Promocode;
-use App\Models\SkidkaServiceModels\Promotion;
 use Carbon\Carbon;
 use Illuminate\Http\Request;
 use Telegram\Bot\FileUpload\InputFile;
@@ -65,12 +62,11 @@ class PrizeController extends Controller
             'title' => $request->get('title') ?? '',
             'description' => $request->get('description') ?? '',
             'image_url' => $request->get('image_url') ?? '',
-            'company_id' => $request->get('company_id') ?? '',
+            'company_id' => $request->get('company_id') ?? null,
 
-            'summary_activation_count' =>$request->get('summary_activation_count') ?? '',
+            'summary_activation_count' =>$request->get('summary_activation_count') ?? 0,
 
-            'is_active' =>$request->get('is_active') ?? false,
-
+            'is_active' =>$request->get('is_active')=="on",
 
             'created_at' => Carbon::now(),
             'updated_at' => Carbon::now(),
@@ -123,11 +119,11 @@ class PrizeController extends Controller
 
         ]);
         $prize = Prize::find($id);
-        $prize->title = $request->get("title");
-        $prize->description = $request->get("description");
-        $prize->image_url = $request->get("image_url");
-        $prize->summary_activation_count = $request->get("summary_activation_count");
-        $prize->is_active = $request->get("is_active")??false;
+        $prize->title = $request->get("title")??'';
+        $prize->description = $request->get("description")??'';
+        $prize->image_url = $request->get("image_url")??'';
+        $prize->summary_activation_count = $request->get("summary_activation_count")??0;
+        $prize->is_active = $request->get("is_active")=="on";
         $prize->updated_at = Carbon::now();
         $prize->save();
 
