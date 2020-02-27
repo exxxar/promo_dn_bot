@@ -97,7 +97,8 @@ class PrizeController extends Controller
     public function edit($id)
     {
         $prize = Prize::find($id);
-        return view('admin.prizes.edit', compact('prize'));
+        $companies = Company::all();
+        return view('admin.prizes.edit', compact('prize','companies'));
     }
 
     /**
