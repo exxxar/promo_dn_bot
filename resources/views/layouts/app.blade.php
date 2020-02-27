@@ -175,19 +175,19 @@
         <li class="c-sidebar-nav-item">
             <a class="c-sidebar-nav-link" href="{{ route('geo_positions.index') }}">
                 <i class="cil-share-boxed c-sidebar-nav-icon"></i>
-                Гео-позиции</a>
+                Квестовые гео-точки</a>
         </li>
 
         <li class="c-sidebar-nav-item">
             <a class="c-sidebar-nav-link" href="{{ route('geo_histories.index') }}">
                 <i class="cil-share-boxed c-sidebar-nav-icon"></i>
-                История выполнения квестов</a>
+                История выполнения<br>квестов</a>
         </li>
 
         <li class="c-sidebar-nav-item">
             <a class="c-sidebar-nav-link" href="{{ route('geo_histories.index') }}">
                 <i class="cil-share-boxed c-sidebar-nav-icon"></i>
-                Бонусы пользователей за квесты</a>
+                Бонусы пользователей<br>за квесты</a>
         </li>
 
     </ul>
