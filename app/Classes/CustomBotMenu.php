@@ -4,7 +4,7 @@
 namespace App\Classes;
 
 
-use App\Category;
+use App\Models\SkidkaServiceModels\Category;
 use App\Enums\AchievementTriggers;
 use App\Events\AchievementEvent;
 use App\User;
