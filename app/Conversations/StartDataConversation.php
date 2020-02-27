@@ -2,17 +2,17 @@
 
 namespace App\Conversations;
 
-use App\Achievement;
-use App\CashbackHistory;
+use App\Models\SkidkaServiceModels\Achievement;
+use App\Models\SkidkaServiceModels\CashbackHistory;
 use App\Classes\CustomBotMenu;
 use App\Enums\AchievementTriggers;
-use App\Event;
+use App\Models\SkidkaServiceModels\Event;
 use App\Events\AchievementEvent;
 use App\Events\NetworkLevelRecounterEvent;
-use App\Promotion;
-use App\RefferalsHistory;
+use App\Models\SkidkaServiceModels\Promotion;
+use App\Models\SkidkaServiceModels\RefferalsHistory;
 use App\User;
-use App\UserHasAchievement;
+use App\Models\SkidkaServiceModels\UserHasAchievement;
 use BotMan\BotMan\Messages\Attachments\Image;
 use BotMan\BotMan\Messages\Attachments\Location;
 use BotMan\BotMan\Messages\Outgoing\OutgoingMessage;

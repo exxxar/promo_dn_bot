@@ -4,9 +4,9 @@ namespace App\Conversations;
 
 use App\Classes\CustomBotMenu;
 use App\Events\ActivateUserEvent;
-use App\Promotion;
+use App\Models\SkidkaServiceModels\Promotion;
 use App\User;
-use App\UserHasPromo;
+use App\Models\SkidkaServiceModels\UserHasPromo;
 use BotMan\BotMan\Messages\Attachments\Image;
 use BotMan\BotMan\Messages\Attachments\Location;
 use BotMan\BotMan\Messages\Conversations\Conversation;

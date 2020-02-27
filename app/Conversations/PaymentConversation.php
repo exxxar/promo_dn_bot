@@ -2,16 +2,16 @@
 
 namespace App\Conversations;
 
-use App\CashbackHistory;
-use App\CashBackInfo;
+use App\Models\SkidkaServiceModels\CashbackHistory;
+use App\Models\SkidkaServiceModels\CashBackInfo;
 use App\Classes\CustomBotMenu;
-use App\Company;
+use App\Models\SkidkaServiceModels\Company;
 use App\Enums\AchievementTriggers;
 use App\Events\AchievementEvent;
 use App\Events\ActivateUserEvent;
 use App\Events\AddCashBackEvent;
 use App\Events\NetworkCashBackEvent;
-use App\RefferalsPaymentHistory;
+use App\Models\SkidkaServiceModels\RefferalsPaymentHistory;
 use App\User;
 use BotMan\BotMan\Messages\Conversations\Conversation;
 use BotMan\BotMan\Messages\Incoming\Answer;

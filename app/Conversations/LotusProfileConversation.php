@@ -5,7 +5,7 @@ namespace App\Conversations;
 use App\Classes\CustomBotMenu;
 use BotMan\BotMan\Messages\Conversations\Conversation;
 
-use App\Promotion;
+use App\Models\SkidkaServiceModels\Promotion;
 use App\User;
 use BotMan\BotMan\Messages\Incoming\Answer;
 use BotMan\BotMan\Messages\Outgoing\Actions\Button;

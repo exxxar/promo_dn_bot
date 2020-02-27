@@ -3,8 +3,8 @@
 namespace App\Conversations;
 
 use App\Classes\CustomBotMenu;
-use App\Prize;
-use App\Promocode;
+use App\Models\SkidkaServiceModels\Prize;
+use App\Models\SkidkaServiceModels\Promocode;
 use App\User;
 use BotMan\BotMan\Messages\Conversations\Conversation;
 use BotMan\BotMan\Messages\Incoming\Answer;

@@ -2,9 +2,9 @@
 
 namespace App\Conversations;
 
-use App\Category;
+use App\Models\SkidkaServiceModels\Category;
 use App\Classes\CustomBotMenu;
-use App\RefferalsHistory;
+use App\Models\SkidkaServiceModels\RefferalsHistory;
 use App\User;
 use Illuminate\Foundation\Inspiring;
 use BotMan\BotMan\Messages\Incoming\Answer;
