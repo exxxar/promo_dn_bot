@@ -125,6 +125,7 @@ class PrizeController extends Controller
         $prize->image_url = $request->get("image_url")??'';
         $prize->summary_activation_count = $request->get("summary_activation_count")??0;
         $prize->is_active = $request->get("is_active")=="on";
+        $prize->company_id = $request->get("company_id");
         $prize->updated_at = Carbon::now();
         $prize->save();
 
