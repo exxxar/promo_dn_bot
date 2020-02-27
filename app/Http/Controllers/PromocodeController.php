@@ -4,7 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Models\SkidkaServiceModels\Company;
 use App\Models\SkidkaServiceModels\Promocode;
-use App\Models\User;
+use App\User;
 use Carbon\Carbon;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;

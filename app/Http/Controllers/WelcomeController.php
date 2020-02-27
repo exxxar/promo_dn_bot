@@ -5,7 +5,7 @@ namespace App\Http\Controllers;
 use App\Enums\Parts;
 use App\Models\SkidkaServiceModels\Article;
 use App\Models\SkidkaServiceModels\Company;
-use App\Models\User;
+use App\User;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Log;
 use Telegram\Bot\Laravel\Facades\Telegram;

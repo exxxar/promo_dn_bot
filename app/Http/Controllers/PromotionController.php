@@ -5,7 +5,7 @@ namespace App\Http\Controllers;
 use App\Models\SkidkaServiceModels\Category;
 use App\Models\SkidkaServiceModels\Company;
 use App\Models\SkidkaServiceModels\Promotion;
-use App\Models\User;
+use App\User;
 use BotMan\BotMan\Messages\Attachments\Image;
 use Carbon\Carbon;
 use Illuminate\Http\Request;

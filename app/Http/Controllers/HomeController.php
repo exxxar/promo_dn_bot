@@ -5,7 +5,7 @@ namespace App\Http\Controllers;
 use App\Models\SkidkaServiceModels\CashbackHistory;
 use App\Models\SkidkaServiceModels\Company;
 use App\Models\SkidkaServiceModels\Promotion;
-use App\Models\User;
+use App\User;
 use Carbon\Carbon;
 use Facebook\Exceptions\FacebookResponseException;
 use Facebook\Exceptions\FacebookSDKException;

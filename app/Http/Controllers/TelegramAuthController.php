@@ -4,7 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Enums\AchievementTriggers;
 use App\Events\AchievementEvent;
-use App\Models\User;
+use App\User;
 use Azate\LaravelTelegramLoginAuth\TelegramLoginAuth;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;

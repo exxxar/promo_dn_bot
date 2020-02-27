@@ -10,7 +10,7 @@ use App\Models\SkidkaServiceModels\InstaPromotion;
 use App\Models\SkidkaServiceModels\Prize;
 use App\Models\SkidkaServiceModels\Promotion;
 use App\Models\SkidkaServiceModels\UplodedPhoto;
-use App\Models\User;
+use App\User;
 use Carbon\Carbon;
 use Illuminate\Http\Request;
 use Telegram\Bot\FileUpload\InputFile;

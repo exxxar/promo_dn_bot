@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Models;
+namespace App;
 
 use App\Enums\AchievementTriggers;
 use App\Models\SkidkaServiceModels\Achievement;
