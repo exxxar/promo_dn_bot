@@ -127,63 +127,69 @@
                 История оплаты баллами
             </a>
         </li>
-
-
-        <li class="c-sidebar-nav-dropdown c-show"><a class="c-sidebar-nav-dropdown-toggle" href="#">
+        <li class="c-sidebar-nav-item">
+            <a class="c-sidebar-nav-link" href="{{ route('articles.index') }}">
+                <i class="cil-newspaper c-sidebar-nav-icon"></i>
+                Статьи
+            </a>
+        </li>
+        <li class="c-sidebar-nav-item">
+            <a class="c-sidebar-nav-link" href="{{ route('promocodes.index') }}">
                 <i class="cil-font c-sidebar-nav-icon"></i>
-                Розыгрыши</a>
-            <ul class="c-sidebar-nav-dropdown-items">
-                <li class="c-sidebar-nav-item"><a class="c-sidebar-nav-link" href="{{ route('promocodes.index') }}">Промокоды</a>
-                </li>
-                <li class="c-sidebar-nav-item"><a class="c-sidebar-nav-link"
-                                                  href="{{ route('prizes.index') }}">Призы</a></li>
-            </ul>
+                Промокоды
+            </a>
         </li>
 
-        <li class="c-sidebar-nav-dropdown c-show"><a class="c-sidebar-nav-dropdown-toggle" href="#">
-                <svg class="c-sidebar-nav-icon">
-                    <use xlink:href="vendors/@coreui/icons/svg/free.svg#cil-puzzle"></use>
-                </svg>
-                Благотворительность</a>
-            <ul class="c-sidebar-nav-dropdown-items">
-                <li class="c-sidebar-nav-item"><a class="c-sidebar-nav-link"
-                                                  href="{{ route('charities.index') }}">Акции</a></li>
-                <li class="c-sidebar-nav-item"><a class="c-sidebar-nav-link"
-                                                  href="{{ route('charityhistories.index') }}">История пожертвований</a>
-                </li>
-            </ul>
+        <li class="c-sidebar-nav-item">
+            <a class="c-sidebar-nav-link" href="{{ route('prizes.index') }}">
+                <i class="cil-gift c-sidebar-nav-icon"></i>
+                Призы
+            </a>
         </li>
 
-
-        <li class="c-sidebar-nav-dropdown c-show"><a class="c-sidebar-nav-dropdown-toggle" href="#">
-                <svg class="c-sidebar-nav-icon">
-                    <use xlink:href="vendors/@coreui/icons/svg/free.svg#cil-puzzle"></use>
-                </svg>
-                Квесты</a>
-            <ul class="c-sidebar-nav-dropdown-items">
-                <li class="c-sidebar-nav-item"><a class="c-sidebar-nav-link" href="{{ route('geo_quests.index') }}">Гео-задания</a>
-                </li>
-                <li class="c-sidebar-nav-item"><a class="c-sidebar-nav-link" href="{{ route('geo_positions.index') }}">Гео-позиции</a>
-                </li>
-                <li class="c-sidebar-nav-item"><a class="c-sidebar-nav-link" href="{{ route('geo_histories.index') }}">
-                        История переходов по гео-точкам</a></li>
-                <li class="c-sidebar-nav-item"><a class="c-sidebar-nav-link" href="base/collapse.html">Баллы по
-                        заданиям</a></li>
-
-            </ul>
+        <li class="c-sidebar-nav-item">
+            <a class="c-sidebar-nav-link" href="{{ route('lang') }}">
+                <i class="cil-excerpt c-sidebar-nav-icon"></i>
+                Перевод
+            </a>
         </li>
 
-        <li class="c-sidebar-nav-dropdown c-show"><a class="c-sidebar-nav-dropdown-toggle" href="#">
-                <svg class="c-sidebar-nav-icon">
-                    <use xlink:href="vendors/@coreui/icons/svg/free.svg#cil-puzzle"></use>
-                </svg>
-                Настройки</a>
-            <ul class="c-sidebar-nav-dropdown-items">
-                <li class="c-sidebar-nav-item"><a class="c-sidebar-nav-link" href="{{ route('lang') }}">Перевод</a></li>
-                <li class="c-sidebar-nav-item"><a class="c-sidebar-nav-link"
-                                                  href="{{ route('articles.index') }}">Статьи</a></li>
-            </ul>
+        <li class="c-sidebar-nav-item">
+            <a class="c-sidebar-nav-link" href="{{ route('charities.index') }}">
+                <i class="cil-arrow-thick-to-bottom c-sidebar-nav-icon"></i>
+                Благотворительные акции</a>
         </li>
+
+        <li class="c-sidebar-nav-item">
+            <a class="c-sidebar-nav-link" href="{{ route('charityhistories.index') }}">
+                <i class="cil-action-redo c-sidebar-nav-icon"></i>
+                История донатов</a>
+        </li>
+
+        <li class="c-sidebar-nav-item">
+            <a class="c-sidebar-nav-link" href="{{ route('geo_quests.index') }}">
+                <i class="cil-location-pin c-sidebar-nav-icon"></i>
+                Гео-задания</a>
+        </li>
+
+        <li class="c-sidebar-nav-item">
+            <a class="c-sidebar-nav-link" href="{{ route('geo_positions.index') }}">
+                <i class="cil-share-boxed c-sidebar-nav-icon"></i>
+                Гео-позиции</a>
+        </li>
+
+        <li class="c-sidebar-nav-item">
+            <a class="c-sidebar-nav-link" href="{{ route('geo_histories.index') }}">
+                <i class="cil-share-boxed c-sidebar-nav-icon"></i>
+                История выполнения квестов</a>
+        </li>
+
+        <li class="c-sidebar-nav-item">
+            <a class="c-sidebar-nav-link" href="{{ route('geo_histories.index') }}">
+                <i class="cil-share-boxed c-sidebar-nav-icon"></i>
+                Бонусы пользователей за квесты</a>
+        </li>
+
     </ul>
     <button class="c-sidebar-minimizer c-class-toggler" type="button" data-target="_parent"
             data-class="c-sidebar-minimized"></button>

@@ -27,16 +27,38 @@
                             </div>
                         @endif
 
-                       {{-- @isset($instaURL)
-                                <a href="{{$instaURL}}">Обработать данные из Instagram</a>
-                        @endisset--}}
-                        @include("partials.cashback")
-                        <hr>
-                        @include("partials.search")
-                        <hr>
-                        @include("partials.announce")
-                        <hr>
-                        @include("partials.generate")
+                        <div class="card">
+                            <div class="card-header">Рассылки в боте</div>
+                            <div class="card-body">
+                                <div class="row bd-example2">
+                                    <div class="col-4">
+                                        <div class="list-group" id="list-example">
+                                            <a class="list-group-item list-group-item-action active"
+                                               href="#list-item-1">Начисления CashBack</a>
+                                            <a class="list-group-item list-group-item-action" href="#list-item-2">Оповещения</a>
+                                            <a class="list-group-item list-group-item-action" href="#list-item-3">Поиск
+                                                пользователя</a>
+                                            <a class="list-group-item list-group-item-action" href="#list-item-4">Генерация
+                                                QR-кода</a></div>
+                                    </div>
+                                    <div class="col-8">
+                                        <div id="spy-example2" data-spy="scroll" data-target="#list-example"
+                                             data-offset="0" style="height: 200px; overflow: auto">
+                                            <h4 id="list-item-1">Начисления CashBack</h4>
+                                            @include("partials.cashback")
+                                            <h4 id="list-item-2">Оповещения</h4>
+                                            @include("partials.announce")
+                                            <h4 id="list-item-3">Поиск пользователя</h4>
+                                            @include("partials.search")
+                                            <h4 id="list-item-4">Генерация QR-кода</h4>
+                                            @include("partials.generate")
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+
                     </div>
                 </div>
             </div>
