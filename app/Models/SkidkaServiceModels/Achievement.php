@@ -3,7 +3,7 @@
 namespace App\Models\SkidkaServiceModels;
 
 use App\Enums\AchievementTriggers;
-use App\Models\User;
+use App\User;
 use BenSampo\Enum\Traits\CastsEnums;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Notifications\Notifiable;

@@ -2,7 +2,7 @@
 
 namespace App\Models\SkidkaServiceModels;
 
-use App\Models\User;
+use App\User;
 use Illuminate\Database\Eloquent\Model;
 
 class Promocode extends Model

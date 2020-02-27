@@ -2,7 +2,7 @@
 
 namespace App\Models\SkidkaServiceModels;
 
-use App\Models\User;
+use App\User;
 use DateTime;
 use Illuminate\Database\Eloquent\Model;
 
