@@ -2,7 +2,7 @@
 
 namespace App\Http\Controllers;
 
-use App\RefferalsPaymentHistory;
+use App\Models\SkidkaServiceModels\RefferalsPaymentHistory;
 use Illuminate\Http\Request;
 
 class RefferalsPaymentHistoryController extends Controller

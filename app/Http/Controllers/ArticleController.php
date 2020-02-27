@@ -2,7 +2,7 @@
 
 namespace App\Http\Controllers;
 
-use App\Article;
+use App\Models\SkidkaServiceModels\Article;
 use App\Enums\Parts;
 use Carbon\Carbon;
 use Illuminate\Http\Request;

@@ -2,8 +2,8 @@
 
 namespace App\Http\Controllers;
 
-use App\Company;
-use App\Event;
+use App\Models\SkidkaServiceModels\Company;
+use App\Models\SkidkaServiceModels\Event;
 use Carbon\Carbon;
 use Illuminate\Http\Request;
 use Telegram\Bot\FileUpload\InputFile;

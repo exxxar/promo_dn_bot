@@ -2,8 +2,8 @@
 
 namespace App\Http\Controllers;
 
-use App\GeoPosition;
-use App\GeoQuest;
+use App\Models\SkidkaServiceModels\GeoPosition;
+use App\Models\SkidkaServiceModels\GeoQuest;
 use Carbon\Carbon;
 use Illuminate\Http\Request;
 use Telegram\Bot\FileUpload\InputFile;

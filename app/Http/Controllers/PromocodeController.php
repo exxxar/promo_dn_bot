@@ -2,9 +2,9 @@
 
 namespace App\Http\Controllers;
 
-use App\Company;
-use App\Promocode;
-use App\User;
+use App\Models\SkidkaServiceModels\Company;
+use App\Models\SkidkaServiceModels\Promocode;
+use App\Models\User;
 use Carbon\Carbon;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;

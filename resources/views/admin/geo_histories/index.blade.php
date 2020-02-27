@@ -22,42 +22,41 @@
                     </div>
                 @endif
 
-                <h1>История рефералов</h1>
-                @isset($refferals)
+                <h1>История прохождения квестов</h1>
+                @isset($geo_histories)
                     <table class="table mt-2">
 
                         <thead class="thead-light">
                         <tr>
                             <th scope="col">#</th>
-                            <th scope="col">Кто поделился</th>
-                            <th scope="col">Кто пришел</th>
-                            <th scope="col">Подтверждение</th>
+                            <th scope="col">Квест</th>
+                            <th scope="col">Позиция</th>
+                            <th scope="col">Пользователь</th>
 
                         </tr>
                         </thead>
                         <tbody>
-                        @foreach($refferals as $key => $refferal)
+                        @foreach($geo_histories as $key => $history)
                             <tr>
                                 <td>{{$key + 1}}</td>
                                 <td>
-                                    @isset($refferal->sender)
-                                        <a href="{{ route('users.show',$refferal->sender->id) }}">
-                                            {{$refferal->sender->phone??$refferal->sender->name??$refferal->sender->telegram_chat_id}}</a>
+                                    @isset($history->quest->title)
+                                        <a href="{{ route('geo_quests.show',$history->quest->id) }}">
+                                            {{$history->quest->title}}</a>
                                     @endisset
                                 </td>
 
                                 <td>
-                                    @isset($refferal->recipient)
-                                        <a href="{{ route('users.show',$refferal->recipient->id) }}">
-                                            {{$refferal->recipient->phone??$refferal->recipient->name??$refferal->recipient->telegram_chat_id}}</a>
+                                    @isset($history->recipient)
+                                        <a href="{{ route('get_positions.show',$history->position->id) }}">
+                                            {{$history->position->title}}</a>
                                     @endisset
-
-                                    @if(!$refferal->recipient)
-                                        <p>Пользователь удален или изменен администратором</p>
-                                    @endif
                                 </td>
                                 <td>
-                                    {{$refferal->activated?"Активирован":"Не активирован"}}
+                                    @isset($history->user)
+                                        <a href="{{ route('users.show',$history->user->id) }}">
+                                            {{$history->user->name??$history->user->telegram_chat_id}}</a>
+                                    @endisset
                                 </td>
 
                             </tr>
@@ -66,7 +65,7 @@
                         </tbody>
                     </table>
 
-                    {{ $refferals->links() }}
+                    {{ $geo_histories->links() }}
                 @endisset
             </div>
         </div>

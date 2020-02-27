@@ -2,11 +2,11 @@
 
 namespace App\Http\Controllers;
 
-use App\Category;
-use App\Company;
-use App\Prize;
-use App\Promocode;
-use App\Promotion;
+use App\Models\SkidkaServiceModels\Category;
+use App\Models\SkidkaServiceModels\Company;
+use App\Models\SkidkaServiceModels\Prize;
+use App\Models\SkidkaServiceModels\Promocode;
+use App\Models\SkidkaServiceModels\Promotion;
 use Carbon\Carbon;
 use Illuminate\Http\Request;
 use Telegram\Bot\FileUpload\InputFile;

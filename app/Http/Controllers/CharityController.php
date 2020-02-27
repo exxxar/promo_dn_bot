@@ -2,11 +2,11 @@
 
 namespace App\Http\Controllers;
 
-use App\Charity;
-use App\CharityHistory;
-use App\Company;
-use App\InstaPromotion;
-use App\UplodedPhoto;
+use App\Models\SkidkaServiceModels\Charity;
+use App\Models\SkidkaServiceModels\CharityHistory;
+use App\Models\SkidkaServiceModels\Company;
+use App\Models\SkidkaServiceModels\InstaPromotion;
+use App\Models\SkidkaServiceModels\UplodedPhoto;
 use Carbon\Carbon;
 use Illuminate\Http\Request;
 use Telegram\Bot\FileUpload\InputFile;

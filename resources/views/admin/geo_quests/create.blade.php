@@ -92,7 +92,6 @@
                                 <input  type="radio" name="is_active" value="1" required id="is_active_2">
                                 <label for="is_active_2">Отображать</label>
 
-
                             </td>
                         </tr>
 

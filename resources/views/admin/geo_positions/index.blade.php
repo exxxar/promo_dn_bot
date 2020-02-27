@@ -46,12 +46,12 @@
                         </tr>
                         </thead>
                         <tbody>
-                        @foreach($geo_positions as $key => $article)
+                        @foreach($geo_positions as $key => $position)
                             <tr>
                                 <td>{{$key + 1}}</td>
-                                <td><a href="{{ route('articles.show',$article->id) }}">
-                                        {{$article->url}}</a>
-                                    <a class="btn btn-link" href="{{ route('articles.edit',$article->id) }}">
+                                <td><a href="{{ route('articles.show',$position->id) }}">
+                                        {{$position->url}}</a>
+                                    <a class="btn btn-link" href="{{ route('articles.edit',$position->id) }}">
                                         <i class="fas fa-edit"></i>
                                     </a>
 
@@ -71,7 +71,7 @@
                                 </td>
 
                                 <td>
-                                    <form action="{{ route('articles.destroy', $article->id)}}" method="post">
+                                    <form action="{{ route('geo_positions.destroy', $article->id)}}" method="post">
                                         @csrf
                                         @method('DELETE')
                                         <button class="btn btn-link" type="submit"><i class="fas fa-times"></i></button>
@@ -83,7 +83,7 @@
                         </tbody>
                     </table>
 
-                    {{ $articles->links() }}
+                    {{ $geo_positions->links() }}
                 @endisset
             </div>
         </div>

@@ -6,7 +6,7 @@ namespace App\Http\Controllers;
 use App\Classes\SkidkiDNBot;
 use App\Conversations\FillInfoConversation;
 use App\Conversations\FillInstagramConversation;
-use App\Conversations\LotteryCashbackConversation;
+//use App\Conversations\LotteryCashbackConversation;
 use App\Conversations\LotteryConversation;
 use App\Conversations\LotusProfileConversation;
 use App\Conversations\PaymentConversation;

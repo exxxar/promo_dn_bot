@@ -2,15 +2,15 @@
 
 namespace App\Http\Controllers;
 
-use App\Company;
+use App\Models\SkidkaServiceModels\Company;
 use App\Enums\AchievementTriggers;
-use App\Event;
+use App\Models\SkidkaServiceModels\Event;
 use App\Events\AchievementEvent;
-use App\InstaPromotion;
-use App\Prize;
-use App\Promotion;
-use App\UplodedPhoto;
-use App\User;
+use App\Models\SkidkaServiceModels\InstaPromotion;
+use App\Models\SkidkaServiceModels\Prize;
+use App\Models\SkidkaServiceModels\Promotion;
+use App\Models\SkidkaServiceModels\UplodedPhoto;
+use App\Models\User;
 use Carbon\Carbon;
 use Illuminate\Http\Request;
 use Telegram\Bot\FileUpload\InputFile;

@@ -2,10 +2,10 @@
 
 namespace App\Http\Controllers;
 
-use App\Category;
-use App\Company;
-use App\Promotion;
-use App\User;
+use App\Models\SkidkaServiceModels\Category;
+use App\Models\SkidkaServiceModels\Company;
+use App\Models\SkidkaServiceModels\Promotion;
+use App\Models\User;
 use BotMan\BotMan\Messages\Attachments\Image;
 use Carbon\Carbon;
 use Illuminate\Http\Request;
