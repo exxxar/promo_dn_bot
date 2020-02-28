@@ -47,9 +47,11 @@ class GeoQuestController extends Controller
 
         $promotions = Promotion::all();
 
-        $current = Carbon::now();
+        $current = Carbon::now('+3:00');
+        $tomorrow = Carbon::now('+3:00')->addDays(1);
 
-        return view('admin.geo_quests.create', compact('companies', 'promotions','current'));
+        return view('admin.geo_quests.create',
+            compact('companies', 'promotions', 'current', 'tomorrow'));
     }
 
     /**
@@ -73,15 +75,15 @@ class GeoQuestController extends Controller
             'title' => $request->get('title') ?? '',
             'description' => $request->get('description') ?? '',
             'image_url' => $request->get('image_url') ?? '',
-            'is_active' => $request->get('is_active') ??false,
+            'is_active' => $request->get('is_active') ?? false,
             'promotion_id' => $request->get('promotion_id') ?? null,
             'company_id' => $request->get('company_id') ?? null,
             'reward_bonus' => $request->get('reward_bonus') ?? 0,
             'position' => $request->get('position') ?? 0,
-            'start_at' => $request->get('start_at') ?? Carbon::now(),
-            'end_at' => $request->get('end_at') ?? Carbon::now(),
-            'created_at' => Carbon::now(),
-            'updated_at' => Carbon::now(),
+            'start_at' => $request->get('start_at') ?? Carbon::now('+3:00'),
+            'end_at' => $request->get('end_at') ?? Carbon::now('+3:00'),
+            'created_at' => Carbon::now('+3:00'),
+            'updated_at' => Carbon::now('+3:00'),
         ]);
 
         return redirect()
@@ -145,8 +147,8 @@ class GeoQuestController extends Controller
         $quest->is_active = $request->get("is_active") ?? false;
         $quest->reward_bonus = $request->get("reward_bonus") ?? '';
         $quest->position = $request->get("position") ?? 0;
-        $quest->start_at = $request->get("start_at") ?? Carbon::now();
-        $quest->end_at = $request->get("end_at") ?? Carbon::now();
+        $quest->start_at = $request->get("start_at") ?? Carbon::now('+3:00');
+        $quest->end_at = $request->get("end_at") ?? Carbon::now('+3:00');
         $quest->promotion_id = $request->get("promotion_id") ?? null;
         $quest->company_id = $request->get("company_id") ?? null;
 
