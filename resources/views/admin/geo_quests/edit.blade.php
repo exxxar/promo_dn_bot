@@ -79,7 +79,7 @@
                             <td>Бонус за выолнение</td>
                             <td>
                                 <input type="number" class="form-control" name="reward_bonus"
-                                       alue="{{$quest->reward_bonus}}" required>
+                                       value="{{$quest->reward_bonus}}" required>
                             </td>
                         </tr>
 
