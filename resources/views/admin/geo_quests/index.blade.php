@@ -45,6 +45,29 @@
                                         <div class="card-body">
                                             <h5>{{$quest->title}}</h5>
                                             <p>{{$quest->description}}</p>
+                                            <p>Точек в цепочке {{$quest->quest_sequence_count}}</p>
+                                            <ul class="list-group list-group-flush">
+                                                <li class="list-group-item">Доступно с {{$quest->start_at}}
+                                                    до {{$quest->end_at}}
+                                                </li>
+                                                <li class="list-group-item">Победный бонус {{$quest->reward_bonus}}
+                                                    баллов
+                                                </li>
+                                                @if ($quest->promotion!=null)
+                                                    <li class="list-group-item">
+                                                        <a class="btn btn-link"
+                                                           href="{{route("promotions.show",$quest->promotion->id)}}">{{$quest->promotion->title}}</a>
+                                                    </li>
+                                                @endif
+
+                                                @if ($quest->company!=null)
+                                                    <li class="list-group-item">
+                                                        <a class="btn btn-link"
+                                                           href="{{route("companies.show",$quest->company->id)}}">{{$quest->company->title}}</a>
+                                                    </li>
+                                                @endif
+                                            </ul>
+
                                             <a href="{{ route('geo_quests.show',$quest->id) }}" class="btn btn-primary"><i
                                                         class="fas fa-eye"></i></a>
                                             <a href="{{ route('geo_quests.edit',$quest->id) }}" class="btn btn-info"><i

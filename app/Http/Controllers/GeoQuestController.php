@@ -26,7 +26,8 @@ class GeoQuestController extends Controller
     public function index(Request $request)
     {
         //
-        $geo_quests = GeoQuest::orderBy('position', 'DESC')
+        $geo_quests = GeoQuest::with(["promotion", "company"])
+            ->orderBy('position', 'DESC')
             ->paginate(15);
 
         return view('admin.geo_quests.index', compact('geo_quests'))
@@ -41,7 +42,12 @@ class GeoQuestController extends Controller
     public function create()
     {
 
-        return view('admin.geo_quests.create');
+        $companies = Company::where("is_active", true)
+            ->get();
+
+        $promotions = Promotion::all();
+
+        return view('admin.geo_quests.create', compact('companies', 'promotions'));
     }
 
     /**
@@ -55,20 +61,23 @@ class GeoQuestController extends Controller
         $request->validate([
             'title' => 'required',
             'description' => 'required',
+            'image_url' => 'required',
             'start_at' => 'required',
             'end_at' => 'required',
+            'company_id' => 'required',
         ]);
 
         GeoQuest::create([
             'title' => $request->get('title') ?? '',
             'description' => $request->get('description') ?? '',
             'image_url' => $request->get('image_url') ?? '',
-            'is_active' => $request->get('is_active')??false,
+            'is_active' => $request->get('is_active') == "on",
             'promotion_id' => $request->get('promotion_id') ?? null,
+            'company_id' => $request->get('company_id') ?? null,
             'reward_bonus' => $request->get('reward_bonus') ?? 0,
             'position' => $request->get('position') ?? 0,
-            'start_at' => $request->get('start_at')??Carbon::now(),
-            'end_at' => $request->get('end_at')??Carbon::now(),
+            'start_at' => $request->get('start_at') ?? Carbon::now(),
+            'end_at' => $request->get('end_at') ?? Carbon::now(),
             'created_at' => Carbon::now(),
             'updated_at' => Carbon::now(),
         ]);
@@ -121,19 +130,23 @@ class GeoQuestController extends Controller
         $request->validate([
             'title' => 'required',
             'description' => 'required',
+            'image_url' => 'required',
             'start_at' => 'required',
             'end_at' => 'required',
+            'company_id' => 'required',
         ]);
 
         $quest = GeoQuest::find($id);
         $quest->title = $request->get("title") ?? '';
         $quest->description = $request->get("description") ?? '';
         $quest->image_url = $request->get("image_url") ?? '';
-        $quest->is_active = $request->get("is_active") ?? false;
+        $quest->is_active = $request->get("is_active") == "on";
         $quest->reward_bonus = $request->get("reward_bonus") ?? '';
         $quest->position = $request->get("position") ?? 0;
         $quest->start_at = $request->get("start_at") ?? Carbon::now();
         $quest->end_at = $request->get("end_at") ?? Carbon::now();
+        $quest->promotion_id = $request->get("promotion_id") ?? null;
+        $quest->company_id = $request->get("company_id") ?? null;
 
         $quest->is_visible = $request->get('is_visible') ?? 0;
         $quest->position = $request->get('position') ?? 0;
@@ -160,12 +173,13 @@ class GeoQuestController extends Controller
             ->with('success', 'Квест успешно удален');
     }
 
-    public function copy($id){
+    public function copy($id)
+    {
 
         $quest = GeoQuest::find($id);
 
         $quest = $quest->replicate();
-        $quest->title = "[Копия]".$quest->title;
+        $quest->title = "[Копия]" . $quest->title;
         $quest->save();
 
         return redirect()
@@ -174,13 +188,14 @@ class GeoQuestController extends Controller
 
     }
 
-    public function channel($id){
+    public function channel($id)
+    {
         $quest = GeoQuest::find($id);
 
         Telegram::sendPhoto([
             'chat_id' => "-1001392337757",
             'parse_mode' => 'Markdown',
-            "photo"=>InputFile::create($quest->image_url),
+            "photo" => InputFile::create($quest->image_url),
             'disable_notification' => 'true'
         ]);
 

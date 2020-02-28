@@ -17,6 +17,10 @@ class CashBackInfo extends Model
         'quest_reset_at'
     ];
 
+    protected $hidden = ['quest_bonus', 'quest_begin_at', 'quest_reset_at'];
+
+    protected $appends = ['current_quest_bonus'];
+
     public function company()
     {
         return $this->hasOne(Company::class, 'id', 'company_id');
@@ -27,11 +31,22 @@ class CashBackInfo extends Model
         return $this->hasOne(User::class, 'id', 'user_id');
     }
 
-    public function isExpired()
+    private function isExpired()
     {
         $time_0 = (date_timestamp_get(new DateTime($this->quest_begin_at)));
         $time_1 = (date_timestamp_get(new DateTime($this->quest_reset_at)));
         $time_2 = date_timestamp_get(now());
         return !($time_2 >= $time_0 && $time_2 < $time_1);
     }
+
+    public function getCurrentQuestBonusAttribute()
+    {
+        if ($this->isExpired()) {
+            $this->quest_bonus = 0;
+            $this->save();
+        }
+        
+        return $this->quest_bonus;
+    }
+
 }

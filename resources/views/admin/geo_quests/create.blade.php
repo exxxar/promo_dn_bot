@@ -59,21 +59,33 @@
                         <tr>
                             <td>Позиция в выдаче</td>
                             <td>
-                                <input type="number" class="form-control" name="position"  required>
+                                <input type="number" class="form-control" name="position" required>
                             </td>
                         </tr>
                         <tr>
                             <td>Бонус за выолнение</td>
                             <td>
-                                <input type="number" class="form-control" name="reward_bonus"  required>
+                                <input type="number" class="form-control" min="0" value="0" name="reward_bonus"
+                                       required>
                             </td>
                         </tr>
 
                         <tr>
-                        <td>Дата и время начала гео-задания</td>
-                        <td>
-                            <input type="datetime-local" value="" name="start_at" class="form-control" required>
-                        </td>
+                            <td>Бонус из акции</td>
+                            <td>
+                                <select class="form-control" name="promotion_id" id="promotion_id">
+                                    @foreach($promotions as $promotion)
+                                        <option value="{{$promotion->id}}">{{$promotion->title}}</option>
+                                    @endforeach
+                                </select>
+                            </td>
+                        </tr>
+
+                        <tr>
+                            <td>Дата и время начала гео-задания</td>
+                            <td>
+                                <input type="datetime-local" value="" name="start_at" class="form-control" required>
+                            </td>
                         </tr>
                         <tr>
                             <td>Дата и время окончания гео-задания</td>
@@ -89,11 +101,23 @@
                                 <input type="radio" name="is_active" value="0" required id="is_active_1">
                                 <label for="is_active_1">Не отображать</label>
 
-                                <input  type="radio" name="is_active" value="1" required id="is_active_2">
+                                <input type="radio" name="is_active" value="1" required id="is_active_2">
                                 <label for="is_active_2">Отображать</label>
 
                             </td>
                         </tr>
+
+                        <tr>
+                            <td>Компания, от которой квест</td>
+                            <td>
+                                <select class="form-control" name="company_id" id="company_id" required>
+                                    @foreach($companies as $company)
+                                        <option value="{{$company->id}}">{{$company->title}}</option>
+                                    @endforeach
+                                </select>
+                            </td>
+                        </tr>
+
 
                         <tr>
                             <td></td>

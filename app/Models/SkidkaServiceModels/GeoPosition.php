@@ -34,26 +34,50 @@ class GeoPosition extends Model
             strtotime(date("G:i")) >= strtotime($this->time_start);
     }
 
-    public function inRange($latitude,$longitude){
+    public static function getNearestQuestPoints($latitude, $longitude)
+    {
+        $dist = env('GEO_QUEST_GLOBAL_DISTANCE'); #дистанция 20 км
+
+        $lon1 = $longitude - $dist / abs(cos(rad2deg($latitude)) * 111.0); # 1 градус широты = 111 км
+        $lon2 = $longitude + $dist / abs(cos(rad2deg($latitude)) * 111.0);
+        $lat1 = $latitude - ($dist / 111.0);
+        $lat2 = $latitude + ($dist / 111.0);
+
+        return GeoPosition::whereBetween('latitude', [$lat1, $lat2])
+            ->whereBetween('longitude', [$lon1, $lon2])
+            ->get();
 
 
-  /*      dist = 20 #дистанция 20 км
-        mylon = 51.5289156201 # долгота центра
-        mylat = 46.0209384922 # широта
-        lon1 = mylon-dist/abs(math.cos(math.radians(mylat))*111.0) # 1 градус широты = 111 км
-        lon2 = mylon+dist/abs(math.cos(math.radians(mylat))*111.0)
-        lat1 = mylat-(dist/111.0)
-        lat2 = mylat+(dist/111.0)
-        profiles = UserProfile.objects.filter(lat__range=(lat1, lat2)).filter(lon__range=(lon1, lon2))
+    }
 
-        SET @lat = 51.526613503445766; # дано в условии
-SET @lng = 46.02093849218558;
-SET @half= [10 км в радианах] / 2 ;
+    public function inRange($latitude, $longitude)
+    {
+
+        $dist = $this->radius;
+
+        $lon1 = $longitude - $dist / abs(cos(rad2deg($latitude)) * 111.0); # 1 градус широты = 111 км
+        $lon2 = $longitude + $dist / abs(cos(rad2deg($latitude)) * 111.0);
+        $lat1 = $latitude - ($dist / 111.0);
+        $lat2 = $latitude + ($dist / 111.0);
+
+        $position = GeoPosition::whereBetween('latitude', [$lat1, $lat2])
+            ->whereBetween('longitude', [$lon1, $lon2])
+            ->where('id', $this->id)
+            ->first();
+
+        return !is_null($position);
+
+        /// $profiles = UserProfile.objects.filter(lat__range=(lat1, lat2)).filter(lon__range=(lon1, lon2))
+
+                /*
+                SET @lat = 51.526613503445766; # дано в условии
+        SET @lng = 46.02093849218558;
+        SET @half= [10 км в радианах] / 2 ;
 
 
-SELECT id
-FROM points
-WHERE lat BETWEEN @lat - @half AND @lat + @half
-        AND lng BETWEEN @lng - @half AND @lng + @half;*/
+        SELECT id
+        FROM points
+        WHERE lat BETWEEN @lat - @half AND @lat + @half
+                AND lng BETWEEN @lng - @half AND @lng + @half;*/
     }
 }
