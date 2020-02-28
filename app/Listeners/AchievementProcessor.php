@@ -2,11 +2,11 @@
 
 namespace App\Listeners;
 
-use App\Achievement;
+use App\Models\SkidkaServiceModels\Achievement;
 use App\Events\AchievementEvent;
-use App\Stat;
+use App\Models\SkidkaServiceModels\Stat;
 use App\User;
-use App\UserHasAchievement;
+use App\Models\SkidkaServiceModels\UserHasAchievement;
 use Illuminate\Queue\InteractsWithQueue;
 use Illuminate\Contracts\Queue\ShouldQueue;
 use Illuminate\Support\Facades\Log;

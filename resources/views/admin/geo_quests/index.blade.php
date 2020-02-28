@@ -44,7 +44,7 @@
                                         <!-- Текстовый контент -->
                                         <div class="card-body">
                                             <h5>{{$quest->title}}</h5>
-                                            <p>{{$quest->description}}</p>
+                                            <p><em>{{$quest->description}}</em></p>
                                             <p>Точек в цепочке {{$quest->quest_sequence_count}}</p>
                                             <ul class="list-group list-group-flush">
                                                 <li class="list-group-item">Доступно с
@@ -66,7 +66,7 @@
                                                     <li class="list-group-item">
                                                         <div class="row justify-content-center">
                                                             <div class="col-sm-8">
-                                                                <a class="btn btn-link"
+                                                                <a class="btn btn-info"
                                                                    href="{{route("companies.show",$quest->company->id)}}">{{$quest->company->title}}</a>
                                                             </div>
                                                         </div>

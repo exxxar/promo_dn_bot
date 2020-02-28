@@ -60,7 +60,8 @@
                                 @endif
                             </td>
                             <td>
-                                <input type="url" class="form-control" name="image_url" value="{{$quest->image_url??''}}"
+                                <input type="url" class="form-control" name="image_url"
+                                       value="{{$quest->image_url??''}}"
                                        required>
 
                             </td>
@@ -68,13 +69,15 @@
                         <tr>
                             <td>Позиция в выдаче</td>
                             <td>
-                                <input type="number" class="form-control" name="position" value="{{$quest->position}}" required>
+                                <input type="number" class="form-control" name="position" value="{{$quest->position}}"
+                                       required>
                             </td>
                         </tr>
                         <tr>
                             <td>Бонус за выолнение</td>
                             <td>
-                                <input type="number" class="form-control" name="reward_bonus" alue="{{$quest->reward_bonus}}" required>
+                                <input type="number" class="form-control" name="reward_bonus"
+                                       alue="{{$quest->reward_bonus}}" required>
                             </td>
                         </tr>
 
@@ -104,16 +107,11 @@
                             <td>
 
 
-                                <input type="radio" name="is_visible" value="0" required
-                                       {{!$quest->is_active?'checked':''}}
-                                       id="is_visible_1">
-                                <label for="is_visible_1">Не отображать</label>
-
-                                <input type="radio" name="is_visible" value="1" required
-                                       {{$quest->is_active?'checked':''}}
-                                       id="is_visible_2">
-                                <label for="is_visible_2">Отображать</label>
-
+                                <label class="c-switch c-switch-label c-switch-pill c-switch-opposite-primary">
+                                    <input class="c-switch-input" type="checkbox"
+                                           name="is_active" {{!$quest->is_active?'checked':''}}>
+                                    <span class="c-switch-slider" data-checked="✓" data-unchecked="✕"></span>
+                                </label>
 
                             </td>
                         </tr>

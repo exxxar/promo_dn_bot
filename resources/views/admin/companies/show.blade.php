@@ -120,12 +120,14 @@
                         </td>
                     </tr>
 
-                    <tr>
-                        <td>Акционное меню (в виде статьи)</td>
-                        <td>
-                            <a href="{{$company->menu_url}}" target="_blank">Посмотреть статью</a>
-                        </td>
-                    </tr>
+                    @if($company->menu_url!=null)
+                        <tr>
+                            <td>Акционное меню (в виде статьи)</td>
+                            <td>
+                                <a href="{{$company->menu_url}}" target="_blank">Посмотреть статью</a>
+                            </td>
+                        </tr>
+                    @endif
                     <tr>
                         <td></td>
                         <td>

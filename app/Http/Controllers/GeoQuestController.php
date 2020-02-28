@@ -145,7 +145,7 @@ class GeoQuestController extends Controller
         $quest->description = $request->get("description") ?? '';
         $quest->image_url = $request->get("image_url") ?? '';
         $quest->is_active = $request->get("is_active") == "on";
-        $quest->reward_bonus = $request->get("reward_bonus") ?? '';
+        $quest->reward_bonus = $request->get("reward_bonus") ?? 0;
         $quest->position = $request->get("position") ?? 0;
         $quest->start_at = $request->get("start_at") ?? Carbon::now('+3:00');
         $quest->end_at = $request->get("end_at") ?? Carbon::now('+3:00');

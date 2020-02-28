@@ -2,8 +2,8 @@
 
 namespace App\Listeners;
 
-use App\CashBackInfo;
-use App\Company;
+use App\Models\SkidkaServiceModels\CashBackInfo;
+use App\Models\SkidkaServiceModels\Company;
 use App\Enums\AchievementTriggers;
 use App\Events\AchievementEvent;
 use App\Events\ActivateUserEvent;
