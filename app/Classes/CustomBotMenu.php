@@ -11,6 +11,7 @@ use App\User;
 use BotMan\Drivers\Telegram\TelegramDriver;
 use Carbon\Carbon;
 use Illuminate\Support\Facades\Log;
+use Intervention\Image\Facades\Image;
 use Telegram\Bot\FileUpload\InputFile;
 use Telegram\Bot\Laravel\Facades\Telegram;
 
@@ -333,10 +334,16 @@ trait CustomBotMenu
 
     protected function sendPhoto($message, $photoUrl, array $keyboard = [], $parseMode = 'Markdown')
     {
+        $resizedImage = Image::make($photoUrl);
+        $resizedImage->resize(800, 600, function($constraint) {
+            $constraint->aspectRatio();
+            $constraint->upsize();
+        });
+
        $this->bot->sendRequest("sendPhoto",
             [
                 "chat_id" => $this->getChatId(),
-                "photo" => $photoUrl,
+                "photo" =>  $resizedImage->response('jpg'),
                 "caption" => $message,
                 'parse_mode' => $parseMode,
                 'reply_markup' => json_encode([

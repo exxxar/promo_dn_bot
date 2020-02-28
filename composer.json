@@ -25,6 +25,7 @@
         "fideloper/proxy": "^4.0",
         "gregoriohc/laravel-trello": "^0.3.0",
         "grkamil/laravel-telegram-logging": "^1.1",
+        "intervention/image": "^2.5",
         "irazasyed/telegram-bot-sdk": "^3.0",
         "kyslik/column-sortable": "^6.2",
         "laravel/framework": "5.8.*",

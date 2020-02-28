@@ -164,7 +164,7 @@ class InstaPromotionController extends Controller
     public function destroy($id)
     {
         $instapromo = InstaPromotion::find($id);
-        if ($instapromo->summary==0) {
+        if ($instapromo->summary == 0) {
             $instapromo->delete();
 
             return redirect()
@@ -212,7 +212,7 @@ class InstaPromotionController extends Controller
         $instapromo = $instapromo->replicate();
         $instapromo->save();
 
-        $instapromo->title = $instapromo->title."#".$instapromo->id."(copy)";
+        $instapromo->title = $instapromo->title . "#" . $instapromo->id . "(copy)";
         $instapromo->save();
 
         return redirect()
@@ -223,6 +223,19 @@ class InstaPromotionController extends Controller
 
     public function uploadphotos(Request $request)
     {
+        $uploadphotos_tmp = UplodedPhoto::with(["user"])
+            ->where("activated", false)
+            ->get();
+
+        foreach ($uploadphotos_tmp as $photo) {
+            try {
+                if (strlen(file_get_contents($photo->url)) == 0)
+                    $photo->delete();
+
+            } catch (\Exception $e) {
+                $photo->delete();
+            }
+        }
 
         $uploadphotos = UplodedPhoto::with(["user"])
             ->where("activated", false)
@@ -311,9 +324,10 @@ class InstaPromotionController extends Controller
             ->with('success', 'Скриншот к акции отклонен для пользователя!');
     }
 
-    public function usersOn(Request $request,$id){
+    public function usersOn(Request $request, $id)
+    {
         $photos = UplodedPhoto::with(["user"])
-            ->where("insta_promotions_id",$id)
+            ->where("insta_promotions_id", $id)
             ->paginate(15);
 
         return view('admin.instapromos.userson', compact('photos'))

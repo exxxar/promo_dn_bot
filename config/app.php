@@ -151,6 +151,7 @@ return [
         BenSampo\Enum\EnumServiceProvider::class,
         Barryvdh\TranslationManager\ManagerServiceProvider::class,
         Gregoriohc\LaravelTrello\TrelloServiceProvider::class,
+        Intervention\Image\ImageServiceProvider::class,
         //GoogleDriveServiceProvider::class ,
 
         /*
@@ -220,7 +221,8 @@ return [
         'QrCode' => SimpleSoftwareIO\QrCode\Facades\QrCode::class,
         'Telegram' => Telegram\Bot\Laravel\Facades\Telegram::class,
         'SkidkiDNBot' => App\Helpers\Facades\SkidkiDNBot::class,
-        'Trello' => Gregoriohc\LaravelTrello\Facades\Wrapper::class
+        'Trello' => Gregoriohc\LaravelTrello\Facades\Wrapper::class,
+        'Image' => Intervention\Image\Facades\Image::class
 
     ],
 

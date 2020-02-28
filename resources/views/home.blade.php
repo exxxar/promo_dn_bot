@@ -29,7 +29,7 @@
 
                         <div class="nav-tabs-boxed">
                             <ul class="nav nav-tabs" role="tablist">
-                                <li class="nav-item"><a class="nav-link" data-toggle="tab" href="#cashback" role="tab"
+                                <li class="nav-item"><a class="nav-link active" data-toggle="tab" href="#cashback" role="tab"
                                                         aria-controls="cashback">Начисления CashBack</a></li>
                                 <li class="nav-item"><a class="nav-link" data-toggle="tab" href="#announce" role="tab"
                                                         aria-controls="announce">Рассылки</a></li>

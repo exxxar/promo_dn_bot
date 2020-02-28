@@ -305,6 +305,7 @@ class UsersController extends Controller
 
     public function getUserPromotions(Request $request, $id)
     {
+
         $promotions = (User::with(["promos"])->find($id))
             ->promos()
             ->orderBy('position', 'DESC')
