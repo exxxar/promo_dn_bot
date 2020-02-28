@@ -80,8 +80,8 @@ class GeoQuestController extends Controller
             'company_id' => $request->get('company_id') ?? null,
             'reward_bonus' => $request->get('reward_bonus') ?? 0,
             'position' => $request->get('position') ?? 0,
-            'start_at' => $request->get('start_at') ?? Carbon::now('+3:00'),
-            'end_at' => $request->get('end_at') ?? Carbon::now('+3:00'),
+            'start_at' => Carbon::createFromFormat('Y-m-d\TH:i', $request->get('start_at') ),//?? Carbon::now('+3:00'),
+            'end_at' => Carbon::createFromFormat('Y-m-d\TH:i', $request->get('end_at')) ,//?? Carbon::now('+3:00'),
          //   'created_at' => Carbon::now('+3:00'),
            // 'updated_at' => Carbon::now('+3:00'),
         ]);
