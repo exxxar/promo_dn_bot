@@ -256,7 +256,7 @@ class InstaPromotionController extends Controller
         $insta_promotions_id = $request->get("insta_promotions_id") ?? null;
         if (is_null($insta_promotions_id))
             return redirect()
-                ->route('users.uploadphotos')
+                ->route('users.uploadphotos.index')
                 ->with('success', 'Акция Instagram не найдена!');
 
         $photo = UplodedPhoto::find($id);
@@ -267,7 +267,7 @@ class InstaPromotionController extends Controller
 
         if (!is_null($hasPromoActivated))
             return redirect()
-                ->route('users.uploadphotos')
+                ->route('users.uploadphotos.index')
                 ->with('success', 'Пользователь уже активировал данную акцию!');
 
 
@@ -290,7 +290,7 @@ class InstaPromotionController extends Controller
         ]);
 
         return redirect()
-            ->route('users.uploadphotos')
+            ->route('users.uploadphotos.index')
             ->with('success', 'Акция успешно подтверждена!');
     }
 
@@ -300,14 +300,14 @@ class InstaPromotionController extends Controller
 
         if (is_null($photo))
             return redirect()
-                ->route('users.uploadphotos')
+                ->route('users.uploadphotos.index')
                 ->with('success', 'Скриншот не найден!');
 
         $user = User::find($photo->user_id);
 
         if (is_null($user))
             return redirect()
-                ->route('users.uploadphotos')
+                ->route('users.uploadphotos.index')
                 ->with('success', 'Пользователь не найден!');
 
         Telegram::sendPhoto([
@@ -320,7 +320,7 @@ class InstaPromotionController extends Controller
         $photo->delete();
 
         return redirect()
-            ->route('users.uploadphotos')
+            ->route('users.uploadphotos.index')
             ->with('success', 'Скриншот к акции отклонен для пользователя!');
     }
 
