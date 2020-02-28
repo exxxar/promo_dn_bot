@@ -20,6 +20,9 @@ class CreateCashBackInfosTable extends Migration
             $table->integer('value')->default(0);
             $table->integer('quest_bonus')->default(0);
 
+            $table->dateTime('quest_begin_at')->nullable();
+            $table->dateTime('quest_reset_at')->nullable();
+
             if (env("DB_CONNECTION")=='mysql') {
                 $table->foreign('user_id')->references('id')->on('users');
                 $table->foreign('company_id')->references('id')->on('companies');

@@ -27,6 +27,7 @@ class CreateCompaniesTable extends Migration
             $table->integer('position')->default(0);
             $table->integer('lottery_start_price')->default(1000);
             $table->string('menu_url',1000)->nullable();
+            $table->integer('quest_expire_time')->default(0);
             $table->timestamps();
         });
         Schema::enableForeignKeyConstraints();

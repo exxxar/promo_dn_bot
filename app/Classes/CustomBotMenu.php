@@ -334,16 +334,16 @@ trait CustomBotMenu
 
     protected function sendPhoto($message, $photoUrl, array $keyboard = [], $parseMode = 'Markdown')
     {
-        $resizedImage = Image::make($photoUrl);
+       /* $resizedImage = Image::make($photoUrl);
         $resizedImage->resize(800, 600, function($constraint) {
             $constraint->aspectRatio();
             $constraint->upsize();
-        });
+        });*/
 
        $this->bot->sendRequest("sendPhoto",
             [
                 "chat_id" => $this->getChatId(),
-                "photo" =>  $resizedImage->response('jpg'),
+                "photo" =>  $photoUrl,
                 "caption" => $message,
                 'parse_mode' => $parseMode,
                 'reply_markup' => json_encode([

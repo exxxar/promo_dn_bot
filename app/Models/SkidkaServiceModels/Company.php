@@ -21,7 +21,8 @@ class Company extends Model
         'telegram_bot_url',
         'is_active',
         'menu_url',
-        'lottery_start_price'
+        'lottery_start_price',
+        'quest_expire_time'
     ];
 
     public function getPromotionsSortedByPosition()
