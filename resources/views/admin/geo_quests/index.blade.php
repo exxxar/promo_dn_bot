@@ -48,9 +48,9 @@
                                             <p>Точек в цепочке {{$quest->quest_sequence_count}}</p>
                                             <ul class="list-group list-group-flush">
                                                 <li class="list-group-item">Доступно с
-                                                    <span>{{$quest->start_at}}</span>
+                                                    <strong>{{$quest->start_at}}</strong>
                                                     до
-                                                    <span>{{$quest->end_at}}</span>
+                                                    <strong>{{$quest->end_at}}</strong>
                                                 </li>
                                                 <li class="list-group-item">Победный бонус {{$quest->reward_bonus}}
                                                     баллов
@@ -64,14 +64,19 @@
 
                                                 @if ($quest->company!=null)
                                                     <li class="list-group-item">
-                                                        <a class="btn btn-link"
-                                                           href="{{route("companies.show",$quest->company->id)}}">{{$quest->company->title}}</a>
+                                                        <div class="row justify-content-center">
+                                                            <div class="col-sm-8">
+                                                                <a class="btn btn-link"
+                                                                   href="{{route("companies.show",$quest->company->id)}}">{{$quest->company->title}}</a>
+                                                            </div>
+                                                        </div>
+
                                                     </li>
                                                 @endif
                                             </ul>
 
-                                            <div class="row">
-                                                <div class="col-sm-12">
+                                            <div class="row mt-2 justify-content-center">
+                                                <div class="col-sm-9">
                                                     <a href="{{ route('geo_quests.show',$quest->id) }}"
                                                        class="btn btn-primary"><i
                                                                 class="fas fa-eye"></i></a>
