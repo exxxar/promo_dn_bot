@@ -114,10 +114,10 @@ class GeoQuestController extends Controller
      */
     public function edit($id)
     {
-        $geo_quests = GeoQuest::find($id);
+        $quest = GeoQuest::find($id);
 
 
-        return view('admin.geo_quests.edit', compact('geo_quests'));
+        return view('admin.geo_quests.edit', compact('quest'));
 
     }
 
