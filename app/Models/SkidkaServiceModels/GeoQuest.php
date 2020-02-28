@@ -7,7 +7,7 @@ use Illuminate\Database\Eloquent\Model;
 class GeoQuest extends Model
 {
     //
-    protected $dates = ['start_at', 'end_at'];
+    protected $dates = ['start_at', 'end_at','created_at','updated_at'];
 
     protected $fillable = [
         'title',
