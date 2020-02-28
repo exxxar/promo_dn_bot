@@ -82,8 +82,8 @@ class GeoQuestController extends Controller
             'position' => $request->get('position') ?? 0,
             'start_at' => $request->get('start_at') ?? Carbon::now('+3:00'),
             'end_at' => $request->get('end_at') ?? Carbon::now('+3:00'),
-            'created_at' => Carbon::now('+3:00'),
-            'updated_at' => Carbon::now('+3:00'),
+         //   'created_at' => Carbon::now('+3:00'),
+           // 'updated_at' => Carbon::now('+3:00'),
         ]);
 
         return redirect()
