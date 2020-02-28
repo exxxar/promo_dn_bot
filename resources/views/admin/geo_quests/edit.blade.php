@@ -30,7 +30,7 @@
                 </div>
 
 
-                <form method="post" action="{{ route('geo_quests.update',$article->id) }}">
+                <form method="post" action="{{ route('geo_quests.update',$quest->id) }}">
                     @csrf
                     <input name="_method" type="hidden" value="PUT">
 
@@ -55,11 +55,13 @@
                         </tr>
                         <tr>
                             <td>Изображение к квесту (опционально)
-                                @if($quest->image_url!=null)
-                                    <img src="{{$quest->image_url}}" class="img-thumbnail" alt="">
-                                @endif
+
                             </td>
                             <td>
+                                @if($quest->image_url!=null)
+                                    <img src="{{$quest->image_url}}" class="img-thumbnail"
+                                         style="width: 200px;height:200px;object-fit: contain" alt="">
+                                @endif
                                 <input type="url" class="form-control" name="image_url"
                                        value="{{$quest->image_url??''}}"
                                        required>
