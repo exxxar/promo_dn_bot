@@ -47,7 +47,9 @@ class GeoQuestController extends Controller
 
         $promotions = Promotion::all();
 
-        return view('admin.geo_quests.create', compact('companies', 'promotions'));
+        $current = Carbon::now();
+
+        return view('admin.geo_quests.create', compact('companies', 'promotions','current'));
     }
 
     /**

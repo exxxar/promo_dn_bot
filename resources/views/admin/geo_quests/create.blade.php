@@ -59,7 +59,7 @@
                         <tr>
                             <td>Позиция в выдаче</td>
                             <td>
-                                <input type="number" class="form-control" name="position" required>
+                                <input type="number" class="form-control" min="0" value="0" name="position" required>
                             </td>
                         </tr>
                         <tr>
@@ -74,6 +74,7 @@
                             <td>Бонус из акции</td>
                             <td>
                                 <select class="form-control" name="promotion_id" id="promotion_id">
+                                    <option value="" selected>Не выбрано</option>
                                     @foreach($promotions as $promotion)
                                         <option value="{{$promotion->id}}">{{$promotion->title}}</option>
                                     @endforeach
@@ -84,13 +85,13 @@
                         <tr>
                             <td>Дата и время начала гео-задания</td>
                             <td>
-                                <input type="datetime-local" value="" name="start_at" class="form-control" required>
+                                <input type="datetime-local" value="{{$current->format("Y-m-d").'T'.$current->format("H:m:s")}}" name="start_at" class="form-control" required>
                             </td>
                         </tr>
                         <tr>
                             <td>Дата и время окончания гео-задания</td>
                             <td>
-                                <input type="datetime-local" value="" name="end_at" class="form-control" required>
+                                <input type="datetime-local" value="{{$current->format("Y-m-d").'T'.$current->format("H:m:s")}}" name="end_at" class="form-control" required>
                             </td>
                         </tr>
 
@@ -99,8 +100,8 @@
                             <td>
 
                                 <label class="c-switch c-switch-label c-switch-pill c-switch-opposite-primary">
-                                    <input class="c-switch-input" type="checkbox" name="is_active" checked><span
-                                            class="c-switch-slider" data-checked="Активно" data-unchecked="Не активно"></span>
+                                    <input class="c-switch-input" type="checkbox" name="is_active" checked>
+                                    <span class="c-switch-slider" data-checked="✓" data-unchecked="✕"></span>
                                 </label>
 
                             </td>
