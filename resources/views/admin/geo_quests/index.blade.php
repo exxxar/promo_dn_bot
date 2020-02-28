@@ -38,7 +38,7 @@
                         @foreach($geo_quests as $key => $quest)
                             <div class="col">
                                 <div class="wrapper" style="padding: 10px">
-                                    <div class="card" style="width:220px;">
+                                    <div class="card" style="width:350px;">
                                         <!-- Изображение -->
                                         <img class="card-img-top" src="{{$quest->image_url}}" style="width:100%;">
                                         <!-- Текстовый контент -->
@@ -47,8 +47,10 @@
                                             <p>{{$quest->description}}</p>
                                             <p>Точек в цепочке {{$quest->quest_sequence_count}}</p>
                                             <ul class="list-group list-group-flush">
-                                                <li class="list-group-item">Доступно с {{$quest->start_at}}
-                                                    до {{$quest->end_at}}
+                                                <li class="list-group-item">Доступно с
+                                                    <span>{{$quest->start_at}}</span>
+                                                    до
+                                                    <span>{{$quest->end_at}}</span>
                                                 </li>
                                                 <li class="list-group-item">Победный бонус {{$quest->reward_bonus}}
                                                     баллов
@@ -68,27 +70,38 @@
                                                 @endif
                                             </ul>
 
-                                            <a href="{{ route('geo_quests.show',$quest->id) }}" class="btn btn-primary"><i
-                                                        class="fas fa-eye"></i></a>
-                                            <a href="{{ route('geo_quests.edit',$quest->id) }}" class="btn btn-info"><i
-                                                        class="fas fa-edit"></i></a>
+                                            <div class="row">
+                                                <div class="col-sm-12">
+                                                    <a href="{{ route('geo_quests.show',$quest->id) }}"
+                                                       class="btn btn-primary"><i
+                                                                class="fas fa-eye"></i></a>
+                                                    <a href="{{ route('geo_quests.edit',$quest->id) }}"
+                                                       class="btn btn-info"><i
+                                                                class="fas fa-edit"></i></a>
 
-                                            <a class="btn btn-info"
-                                               href="{{ route('geo_quests.duplication',$quest->id) }}"
-                                               title="Дублировать">
-                                                <i class="far fa-copy"></i>
-                                            </a>
+                                                    <a class="btn btn-info"
+                                                       href="{{ route('geo_quests.duplication',$quest->id) }}"
+                                                       title="Дублировать">
+                                                        <i class="far fa-copy"></i>
+                                                    </a>
 
-                                            <a class="btn btn-info" href="{{ route('geo_quests.channel',$quest->id) }}"
-                                               title="Отправить в канал">
-                                                <i class="fab fa-telegram"></i>
-                                            </a>
+                                                    <a class="btn btn-info"
+                                                       href="{{ route('geo_quests.channel',$quest->id) }}"
+                                                       title="Отправить в канал">
+                                                        <i class="fab fa-telegram"></i>
+                                                    </a>
 
-                                            <form action="{{ route('geo_quests.destroy', $quest->id)}}" method="post">
-                                                @csrf
-                                                @method('DELETE')
-                                                <button class="btn btn-link" type="submit">Удалить</button>
-                                            </form>
+                                                    <form class="btn btn-warning"
+                                                          action="{{ route('geo_quests.destroy', $quest->id)}}"
+                                                          method="post">
+                                                        @csrf
+                                                        @method('DELETE')
+                                                        <button class="btn btn-link" type="submit"><i
+                                                                    class="fas fa-times"></i></button>
+                                                    </form>
+                                                </div>
+                                            </div>
+
                                             @isset($quest->promotion)
                                                 <div class="row">
                                                     <div class="col">
