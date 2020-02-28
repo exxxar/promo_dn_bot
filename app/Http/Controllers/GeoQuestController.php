@@ -71,7 +71,7 @@ class GeoQuestController extends Controller
             'title' => $request->get('title') ?? '',
             'description' => $request->get('description') ?? '',
             'image_url' => $request->get('image_url') ?? '',
-            'is_active' => $request->get('is_active') == "on",
+            'is_active' => $request->get('is_active') ??false,
             'promotion_id' => $request->get('promotion_id') ?? null,
             'company_id' => $request->get('company_id') ?? null,
             'reward_bonus' => $request->get('reward_bonus') ?? 0,
@@ -140,7 +140,7 @@ class GeoQuestController extends Controller
         $quest->title = $request->get("title") ?? '';
         $quest->description = $request->get("description") ?? '';
         $quest->image_url = $request->get("image_url") ?? '';
-        $quest->is_active = $request->get("is_active") == "on";
+        $quest->is_active = $request->get("is_active") ?? false;
         $quest->reward_bonus = $request->get("reward_bonus") ?? '';
         $quest->position = $request->get("position") ?? 0;
         $quest->start_at = $request->get("start_at") ?? Carbon::now();

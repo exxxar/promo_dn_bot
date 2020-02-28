@@ -98,11 +98,10 @@
                             <td>Отображение</td>
                             <td>
 
-                                <input type="radio" name="is_active" value="0" required id="is_active_1">
-                                <label for="is_active_1">Не отображать</label>
-
-                                <input type="radio" name="is_active" value="1" required id="is_active_2">
-                                <label for="is_active_2">Отображать</label>
+                                <label class="c-switch c-switch-label c-switch-pill c-switch-opposite-primary">
+                                    <input class="c-switch-input" type="checkbox" name="is_active" checked><span
+                                            class="c-switch-slider" data-checked="Активно" data-unchecked="Не активно"></span>
+                                </label>
 
                             </td>
                         </tr>
