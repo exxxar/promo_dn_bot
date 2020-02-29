@@ -8,7 +8,7 @@
                 <div class="row">
                     <div class="col-lg-12 margin-tb">
                         <div class="pull-left">
-                            <h2>Изменение акции</h2>
+                            <h2>Изменение гео-задания</h2>
                         </div>
                         <div class="pull-right">
                             <a class="btn btn-primary" href="{{ route('geo_quests.index') }}"> Назад</a>
@@ -62,7 +62,7 @@
                                     <img src="{{$quest->image_url}}" class="img-thumbnail"
                                          style="width: 200px;height:200px;object-fit: contain" alt="">
                                 @endif
-                                <input type="url" class="form-control" name="image_url"
+                                <input type="url" class="form-control mt-2" name="image_url"
                                        value="{{$quest->image_url??''}}"
                                        required>
 
@@ -75,6 +75,23 @@
                                        required>
                             </td>
                         </tr>
+
+                        <tr>
+                            <td>Бонус из акции</td>
+                            <td>
+                                <select class="form-control" name="promotion_id" id="promotion_id">
+                                    <option value="" selected>Не выбрано</option>
+                                    @foreach($promotions as $promotion)
+                                        @if($promotion->id==$quest->promotion->id)
+                                            <option value="{{$promotion->id}}" selected>{{$promotion->title}}</option>
+                                        @else
+                                            <option value="{{$promotion->id}}">{{$promotion->title}}</option>
+                                        @endif
+                                    @endforeach
+                                </select>
+                            </td>
+                        </tr>
+
                         <tr>
                             <td>Бонус за выолнение</td>
                             <td>
@@ -117,6 +134,22 @@
 
                             </td>
                         </tr>
+
+                        <tr>
+                            <td>Компания, от которой квест</td>
+                            <td>
+                                <select class="form-control" name="company_id" id="company_id" required>
+                                    @foreach($companies as $company)
+                                        @if ($company->id==$quest->company->id)
+                                            <option value="{{$company->id}}" selected>{{$company->title}}</option>
+                                        @else
+                                            <option value="{{$company->id}}">{{$company->title}}</option>
+                                        @endif
+                                    @endforeach
+                                </select>
+                            </td>
+                        </tr>
+
                         <tr>
                             <td></td>
                             <td>

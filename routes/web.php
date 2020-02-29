@@ -117,6 +117,8 @@ Route::prefix('admin')->group(function () {
     Route::name('geo_quests.')->prefix('geo_quests')->group(function () {
         Route::get("/channel/{id}", "GeoQuestController@channel")->name("channel");
         Route::get("/duplication/{id}", "GeoQuestController@duplication")->name("duplication");
+        Route::get("/points/append/{id}", "GeoQuestController@append")->name("points.append");
+        Route::post("/points/store/{id}", "GeoQuestController@storePoints")->name("points.store");
     });
 
     Route::name('geo_positions.')->prefix('geo_positions')->group(function () {

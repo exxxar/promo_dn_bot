@@ -26,11 +26,11 @@
 
                 <div class="row">
                     <div class="col-sm-4">
-                        <a class="btn btn-primary" href="{{route("geo_quests.create")}}">Новое Гео-заданиеt</a>
+                        <a class="btn btn-primary" href="{{route("geo_quests.create")}}">Новое Гео-задание</a>
                     </div>
                 </div>
 
-                <h1>Geo Quest</h1>
+                <h1>Список Гео-заданий</h1>
                 @isset($geo_quests)
                     <div class="row">
 
@@ -64,8 +64,8 @@
 
                                                 @if ($quest->company!=null)
                                                     <li class="list-group-item">
-                                                        <div class="row justify-content-center">
-                                                            <div class="col-sm-8">
+                                                        <div class="row">
+                                                            <div class="col-sm-12">
                                                                 <a class="btn btn-info"
                                                                    href="{{route("companies.show",$quest->company->id)}}">{{$quest->company->title}}</a>
                                                             </div>
@@ -75,8 +75,8 @@
                                                 @endif
                                             </ul>
 
-                                            <div class="row mt-2 justify-content-center">
-                                                <div class="col-sm-9">
+                                            <div class="row mt-2">
+                                                <div class="col-sm-12">
                                                     <a href="{{ route('geo_quests.show',$quest->id) }}"
                                                        class="btn btn-primary"><i
                                                                 class="fas fa-eye"></i></a>
@@ -94,6 +94,12 @@
                                                        href="{{ route('geo_quests.channel',$quest->id) }}"
                                                        title="Отправить в канал">
                                                         <i class="fab fa-telegram"></i>
+                                                    </a>
+
+                                                    <a class="btn btn-info"
+                                                       href="{{ route('geo_quests.points.append',$quest->id) }}"
+                                                       title="Гео-точки">
+                                                        <i class="fas fa-map-marker-alt"></i>
                                                     </a>
 
                                                     <form class="btn btn-warning"
