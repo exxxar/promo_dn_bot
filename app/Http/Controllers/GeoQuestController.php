@@ -115,7 +115,7 @@ class GeoQuestController extends Controller
      */
     public function edit($id)
     {
-        $quest = GeoQuest::find($id);
+        $quest = GeoQuest::with(["promotion", "company"])->find($id);
 
 
         $promotions = Promotion::all();

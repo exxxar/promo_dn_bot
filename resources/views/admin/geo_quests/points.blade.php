@@ -35,13 +35,13 @@
                     <table class="table mt-2">
                         <thead class="thead-light ">
                         <th>Квестовая точка</th>
-                        <th>Номер квеста по порядку</th>
+                        <th>Номер точки в квесте</th>
                         </thead>
                         <tbody>
                         @for($i=0;$i<10;$i++)
                             <tr>
                                 <td>
-                                    <select class="form-control" id="point-{{$i}}" name="point[]" required>
+                                    <select class="form-control" id="point-{{$i}}" name="point[]">
 
                                         @foreach($points as $point)
                                             <option value="{{$point->id}}">{{$point->title}}</option>
