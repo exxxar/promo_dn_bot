@@ -41,14 +41,17 @@
                         @for($i=0;$i<10;$i++)
                             <tr>
                                 <td>
-                                    <select class="form-control" id="point-{{$id}}" name="point[]">
+                                    <select class="form-control" id="point-{{$i}}" name="point[]" required>
+
                                         @foreach($points as $point)
                                             <option value="{{$point->id}}">{{$point->title}}</option>
                                         @endforeach
+
                                     </select>
                                 </td>
                                 <td>
-                                    <input type="text" class="form-control" id="position-{{$id}}" name="position[]" value="0">
+                                    <input type="text" class="form-control" id="position-{{$i}}" name="position[]"
+                                           value="0">
                                 </td>
                             </tr>
                         @endfor

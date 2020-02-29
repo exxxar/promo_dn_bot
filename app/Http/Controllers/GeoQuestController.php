@@ -118,7 +118,9 @@ class GeoQuestController extends Controller
         $quest = GeoQuest::find($id);
 
 
-        return view('admin.geo_quests.edit', compact('quest'));
+        $promotions = Promotion::all();
+
+        return view('admin.geo_quests.edit', compact('quest','promotions'));
 
     }
 

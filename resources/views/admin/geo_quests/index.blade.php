@@ -28,6 +28,9 @@
                     <div class="col-sm-4">
                         <a class="btn btn-primary" href="{{route("geo_quests.create")}}">Новое Гео-задание</a>
                     </div>
+                    <div class="col-sm-4">
+                        <a class="btn btn-primary" href="{{route("geo_points.create")}}">Новая Гео-точка</a>
+                    </div>
                 </div>
 
                 <h1>Список Гео-заданий</h1>
