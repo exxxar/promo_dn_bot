@@ -117,10 +117,12 @@ class GeoQuestController extends Controller
     {
         $quest = GeoQuest::with(["promotion", "company"])->find($id);
 
+        $companies = Company::where("is_active", true)
+            ->get();
 
         $promotions = Promotion::all();
 
-        return view('admin.geo_quests.edit', compact('quest','promotions'));
+        return view('admin.geo_quests.edit', compact('quest','promotions','companies'));
 
     }
 
