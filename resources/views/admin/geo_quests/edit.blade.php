@@ -82,8 +82,13 @@
                                 <select class="form-control" name="promotion_id" id="promotion_id">
                                     <option value="" selected>Не выбрано</option>
                                     @foreach($promotions as $promotion)
-                                        @if($promotion->id==$quest->promotion->id)
-                                            <option value="{{$promotion->id}}" selected>{{$promotion->title}}</option>
+                                        @if ($quest->promotion!=null)
+                                            @if($promotion->id==$quest->promotion->id)
+                                                <option value="{{$promotion->id}}"
+                                                        selected>{{$promotion->title}}</option>
+                                            @else
+                                                <option value="{{$promotion->id}}">{{$promotion->title}}</option>
+                                            @endif
                                         @else
                                             <option value="{{$promotion->id}}">{{$promotion->title}}</option>
                                         @endif
