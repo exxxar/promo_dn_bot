@@ -83,8 +83,8 @@ class GeoQuestController extends Controller
             'position' => $request->get('position') ?? 0,
             'start_at' => Carbon::createFromFormat('Y-m-d\TH:i:s', $request->get('start_at')),//?? Carbon::now('+3:00'),
             'end_at' => Carbon::createFromFormat('Y-m-d\TH:i:s', $request->get('end_at')),//?? Carbon::now('+3:00'),
-            //   'created_at' => Carbon::now('+3:00'),
-            // 'updated_at' => Carbon::now('+3:00'),
+            'created_at' => Carbon::now('+3:00'),
+            'updated_at' => Carbon::now('+3:00'),
         ]);
 
         return redirect()
@@ -122,7 +122,7 @@ class GeoQuestController extends Controller
 
         $promotions = Promotion::all();
 
-        return view('admin.geo_quests.edit', compact('quest','promotions','companies'));
+        return view('admin.geo_quests.edit', compact('quest', 'promotions', 'companies'));
 
     }
 
@@ -154,11 +154,17 @@ class GeoQuestController extends Controller
         $quest->position = $request->get("position") ?? 0;
         $quest->start_at = $request->get("start_at") ?? Carbon::now('+3:00');
         $quest->end_at = $request->get("end_at") ?? Carbon::now('+3:00');
+
+        $quest->start_at = Carbon::createFromFormat('Y-m-d\TH:i:s', $request->get('start_at'));//?? Carbon::now('+3:00'),
+        $quest->end_at = Carbon::createFromFormat('Y-m-d\TH:i:s', $request->get('end_at'));//?? Carbon::now('+3:00'),
+
         $quest->promotion_id = $request->get("promotion_id") ?? null;
         $quest->company_id = $request->get("company_id") ?? null;
 
         $quest->is_visible = $request->get('is_visible') ?? 0;
         $quest->position = $request->get('position') ?? 0;
+
+        $quest->updated_at = Carbon::now('+3:00');
         $quest->save();
 
         return redirect()
@@ -213,12 +219,13 @@ class GeoQuestController extends Controller
             ->with('success', 'Квест успешно добавлен в канал');
     }
 
-    public function append($id){
+    public function append($id)
+    {
         $quest = GeoQuest::find($id);
 
         $points = GeoPosition::all();
 
-        return view('admin.geo_quests.points', compact('quest','points'));
+        return view('admin.geo_quests.points', compact('quest', 'points'));
 
     }
 

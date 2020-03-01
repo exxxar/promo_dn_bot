@@ -26,11 +26,11 @@
 
                 <div class="row">
                     <div class="col-sm-4">
-                        <a class="btn btn-primary" href="{{route("articles.create")}}">Новая статья</a>
+                        <a class="btn btn-primary" href="{{route("geo_positions.create")}}">Добавить новые точки гео-заданий</a>
                     </div>
                 </div>
 
-                    <h1>Статьи</h1>
+                    <h1>Гео-точки</h1>
                 @isset($geo_positions)
                     <table class="table mt-2">
 
