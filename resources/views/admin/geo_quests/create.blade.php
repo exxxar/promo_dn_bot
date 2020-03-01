@@ -85,13 +85,13 @@
                         <tr>
                             <td>Дата и время начала гео-задания</td>
                             <td>
-                                <input type="date" value="{{$current->format("Y-m-d").'T'.$current->format("H:m:s")}}" name="start_at" class="form-control" required>
+                                <input type="datetime-local" value="{{$current->format("Y-m-d").'T'.$current->format("H:m:s")}}" name="start_at" class="form-control" required>
                             </td>
                         </tr>
                         <tr>
                             <td>Дата и время окончания гео-задания</td>
                             <td>
-                                <input type="date" value="{{$tomorrow->format("Y-m-d").'T'.$tomorrow->format("H:m:s")}}" name="end_at" class="form-control" required>
+                                <input type="datetime-local" value="{{$tomorrow->format("Y-m-d").'T'.$tomorrow->format("H:m:s")}}" name="end_at" class="form-control" required>
                             </td>
                         </tr>
 
