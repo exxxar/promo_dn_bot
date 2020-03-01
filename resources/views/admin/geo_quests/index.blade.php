@@ -48,7 +48,7 @@
                                         <div class="card-body">
                                             <h5>{{$quest->title}}</h5>
                                             <p><em>{{$quest->description}}</em></p>
-                                            <p>Точек в цепочке {{$quest->quest_sequence_count}}</p>
+                                            <p>Точек в цепочке {{count($quest->quest_points_list)}}</p>
                                             <ul class="list-group list-group-flush">
                                                 <li class="list-group-item">Доступно с
                                                     <strong>{{$quest->start_at}}</strong>
@@ -60,6 +60,7 @@
                                                 </li>
                                                 @if ($quest->promotion!=null)
                                                     <li class="list-group-item">
+                                                        Бонус из акции:
                                                         <a class="btn btn-link"
                                                            href="{{route("promotions.show",$quest->promotion->id)}}">{{$quest->promotion->title}}</a>
                                                     </li>
@@ -116,14 +117,6 @@
                                                 </div>
                                             </div>
 
-                                            @isset($quest->promotion)
-                                                <div class="row">
-                                                    <div class="col">
-                                                        <a href="{{route("promotions.index",$quest->promotion->id)}}">{{$quest->promotion->title}}</a>
-
-                                                    </div>
-                                                </div>
-                                            @endisset
                                         </div>
 
                                     </div>

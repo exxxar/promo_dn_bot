@@ -24,12 +24,12 @@ class GeoQuest extends Model
         'updated_at'
     ];
 
-    protected $appends = ["quest_sequence_count"];
+    protected $appends = ["quest_points_list"];
 
-    public function getQuestSequenceCountAttribute()
-    {
+
+    public function getQuestPointsListAttribute(){
         return QuestHasPoints::where("geo_quest_id", $this->id)
-            ->count();
+            ->get();
     }
 
     public function promotion()
