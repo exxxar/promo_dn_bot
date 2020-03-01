@@ -152,8 +152,6 @@ class GeoQuestController extends Controller
         $quest->is_active = $request->get("is_active") == "on";
         $quest->reward_bonus = $request->get("reward_bonus") ?? 0;
         $quest->position = $request->get("position") ?? 0;
-        $quest->start_at = $request->get("start_at") ?? Carbon::now('+3:00');
-        $quest->end_at = $request->get("end_at") ?? Carbon::now('+3:00');
 
         $quest->start_at = Carbon::createFromFormat('Y-m-d\TH:i:s', $request->get('start_at'));//?? Carbon::now('+3:00'),
         $quest->end_at = Carbon::createFromFormat('Y-m-d\TH:i:s', $request->get('end_at'));//?? Carbon::now('+3:00'),
