@@ -159,7 +159,6 @@ class GeoQuestController extends Controller
         $quest->promotion_id = $request->get("promotion_id") ?? null;
         $quest->company_id = $request->get("company_id") ?? null;
 
-        $quest->is_visible = $request->get('is_visible') ?? 0;
         $quest->position = $request->get('position') ?? 0;
 
         $quest->updated_at = Carbon::now('+3:00');
