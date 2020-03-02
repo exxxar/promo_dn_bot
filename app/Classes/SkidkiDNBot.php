@@ -17,6 +17,7 @@ use App\Enums\Parts;
 use App\Models\SkidkaServiceModels\Event;
 use App\Events\AchievementEvent;
 use App\Events\AddCashBackEvent;
+use App\Models\SkidkaServiceModels\GeoQuest;
 use App\Models\SkidkaServiceModels\InstaPromotion;
 use App\Models\SkidkaServiceModels\Prize;
 use App\Models\SkidkaServiceModels\Promocode;
@@ -1461,8 +1462,40 @@ class SkidkiDNBot extends Bot implements iSkidkiDNBot
 
     public function getGeoQuestList($page)
     {
-        // TODO: Implement getGeoQuestList() method.
-        $this->reply("Раздел Гео-квестов в стадии разработки");
+        $quests = GeoQuest::where("is_active", 1)
+            ->skip($page * config("bot.results_per_page"))
+            ->take(config("bot.results_per_page"))
+            ->orderBy('position', 'DESC')
+            ->get();
+
+        $questInfo = Article::where("part", Parts::GeoQuest)
+            ->where("is_visible", 1)
+            ->orderBy("position", "DESC")
+            ->first();
+
+
+        if (!is_null($questInfo))
+            $this->sendMessage("*Перед началом участия в квестах прочитайте детальнее условия!*", [
+                [
+                    ['text' => __("messages.charity_menu_btn_1"), 'url' => $questInfo->url]
+                ]
+            ]);
+
+
+        if (count($quests) == 0) {
+            $this->reply("К сожалению на данный момент нет доступных гео-квестов!");
+            return;
+        }
+
+        foreach ($quests as $quest) {
+
+            $this->sendPhoto("*" . $quest->title . "*", $quest->image_url, [
+                [
+                    ["text" => "Список квестовых точек (".count($quest->quest_points_list).")", "callback_data" => "/geo_positions_list " . $quest->id]
+                ]
+            ]);
+        }
+        $this->pagination("/geo_quest", $quests, $page, __("messages.ask_action"));
     }
 
     public function getGeoPositionsList($questId)
