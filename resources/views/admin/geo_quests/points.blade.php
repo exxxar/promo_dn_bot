@@ -56,7 +56,7 @@
                                 </td>
                                 <td>
                                     <input type="text" class="form-control" name="position[]"
-                                           value="{{$position->position}}">
+                                           value="{{$position->position??0}}">
                                 </td>
                                 <td>
                                     <label class="c-switch c-switch-label c-switch-pill c-switch-opposite-primary">

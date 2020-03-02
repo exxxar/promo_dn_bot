@@ -233,7 +233,15 @@ class GeoQuestController extends Controller
         $positions_in_sequence = $request->get("position");
         $is_last_sequence = $request->get("is_last");
 
-        $quest = GeoQuest::find($id);
+
+        $quest = GeoQuest::with(["positions"])->find($id);
+
+        $cur_ids = array();
+        foreach ($quest->positions as $list) {
+            $cur_ids[] = $list->id;
+        }
+
+        $quest->positions()->detach($cur_ids);
 
         foreach ($points as $key => $point) {
             if (!empty($point)) {
@@ -241,7 +249,7 @@ class GeoQuestController extends Controller
                     json_decode(json_encode($is_last_sequence), true)[$key] == "on" :
                     false;
 
-                $quest->positions()->sync($point, [
+                $quest->positions()->attach($point, [
                     'position' => json_decode(json_encode($positions_in_sequence), true)[$key],
                     'is_last' => $is_last
                 ]);
