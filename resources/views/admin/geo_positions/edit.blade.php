@@ -129,7 +129,7 @@
                             <td>Временной промежуток активации (в минутах от 1 до 60)</td>
                             <td>
                                 <input type="number" class="form-control" min="1" max="60"
-                                       value="{{$promotion->range_time_value}}"
+                                       value="{{$position->range_time_value}}"
                                        name="range_time_value"
                                        required>
                             </td>
@@ -140,11 +140,11 @@
                             <td>
                                 <div class="row">
                                     <div class="col-md-6 col-sm-12">
-                                        <input type="text" value="{{$promotion->time_start}}" name="time_start"
+                                        <input type="time" value="{{date('H:i', $position->time_start)}}" name="time_start"
                                                class="form-control" required>
                                     </div>
                                     <div class="col-md-6 col-sm-12">
-                                        <input type="text" value="{{ $promotion->time_end}}" name="time_end"
+                                        <input type="time" value="{{date('H:i', $position->time_end)}}" name="time_end"
                                                class="form-control" required>
                                     </div>
                                 </div>
