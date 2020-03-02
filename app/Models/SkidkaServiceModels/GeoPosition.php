@@ -23,6 +23,8 @@ class GeoPosition extends Model
         'time_start',
     ];
 
+    protected $appends = ["is_assigned"];
+
     public function promotion()
     {
         return $this->hasOne(Promotion::class, 'id', 'local_promotion_id');
@@ -32,6 +34,10 @@ class GeoPosition extends Model
     {
         return strtotime(date("G:i")) <= strtotime($this->time_end) &&
             strtotime(date("G:i")) >= strtotime($this->time_start);
+    }
+
+    public function getIsAssignedAttribute(){
+        return QuestHasPoints::where("geo_point_id",$this->id)->count()>0;
     }
 
     public static function getNearestQuestPoints($latitude, $longitude)

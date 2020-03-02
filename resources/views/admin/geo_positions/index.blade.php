@@ -32,15 +32,16 @@
 
                     <h1>Гео-точки</h1>
                 @isset($geo_positions)
+                    <h5>Глобальный радиус в системе = {{env('GEO_QUEST_GLOBAL_DISTANCE')}}км.</h5>
                     <table class="table mt-2">
 
                         <thead class="thead-light">
                         <tr>
                             <th scope="col">#</th>
-                            <th scope="col">Ссылка</th>
-                            <th scope="col">Позиция</th>
-                            <th scope="col">Раздел</th>
-                            <th scope="col">Состояние</th>
+                            <th scope="col">Название точки</th>
+                            <th scope="col">latitude & longitude</th>
+                            <th scope="col">Радиус активации</th>
+                            <th scope="col">Связано с квестом</th>
                             <th scope="col">Действие</th>
 
                         </tr>
@@ -49,29 +50,29 @@
                         @foreach($geo_positions as $key => $position)
                             <tr>
                                 <td>{{$key + 1}}</td>
-                                <td><a href="{{ route('articles.show',$position->id) }}">
-                                        {{$position->url}}</a>
-                                    <a class="btn btn-link" href="{{ route('articles.edit',$position->id) }}">
+                                <td><a href="{{ route('geo_positions.show',$position->id) }}">
+                                        {{$position->title}}</a>
+                                    <a class="btn btn-link" href="{{ route('geo_positions.edit',$position->id) }}">
                                         <i class="fas fa-edit"></i>
                                     </a>
 
                                 </td>
-                                <td>{{$article->position}}</td>
+                                <td>{{$position->latitude}} & {{$position->longitude}}</td>
                                 <td>
 
-                                    {{$article->part->key}}
+                                    {{$position->radius}}
                                 </td>
                                 <td>
-                                    @if ($article->is_visible==0)
-                                        <i class="fas fa-eye-slash"></i>
+                                    @if ($position->is_assigned==false)
+                                        <i class="fas fa-unlink"></i>
                                     @else
-                                        <i class="fas fa-eye"></i>
+                                        <i class="fas fa-link"></i>
                                     @endif
 
                                 </td>
 
                                 <td>
-                                    <form action="{{ route('geo_positions.destroy', $article->id)}}" method="post">
+                                    <form action="{{ route('geo_positions.destroy', $position->id)}}" method="post">
                                         @csrf
                                         @method('DELETE')
                                         <button class="btn btn-link" type="submit"><i class="fas fa-times"></i></button>
