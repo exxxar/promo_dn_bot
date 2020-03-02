@@ -238,13 +238,13 @@ class GeoQuestController extends Controller
         foreach ($points as $key => $point) {
             if (!empty($point)) {
                 Log::info(json_decode(json_encode($positions_in_sequence), true)[$key]);
-                array_push($tmp_attached, [$point => ['position' => json_decode(json_encode($positions_in_sequence), true)[$key]]]);
+               // array_push($tmp_attached, [$point => ['position' => json_decode(json_encode($positions_in_sequence), true)[$key]]]);
+                $quest->positions()->attach($point,['position' => json_decode(json_encode($positions_in_sequence), true)[$key]]);
             }
         }
 
-        Log::info("after array " . print_r($tmp_attached, true));
 
-        $quest->positions()->attach($tmp_attached);
+
 
         return redirect()
             ->back();
