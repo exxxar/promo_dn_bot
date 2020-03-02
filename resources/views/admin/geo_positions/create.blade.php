@@ -116,7 +116,7 @@
                         <tr>
                             <td>Временной промежуток активации (в минутах от 1 до 60)</td>
                             <td>
-                                <input type="number" class="form-control" min="1" max="60" value="0" name="range_time_value"
+                                <input type="number" class="form-control" min="0" max="60" value="0" name="range_time_value"
                                        required>
                             </td>
                         </tr>

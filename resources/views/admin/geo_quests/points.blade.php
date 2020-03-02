@@ -42,7 +42,7 @@
                             <tr>
                                 <td>
                                     <select class="form-control" id="point-{{$i}}" name="point[]">
-
+                                        <option value="">Не задано</option>
                                         @foreach($points as $point)
                                             <option value="{{$point->id}}">{{$point->title}}</option>
                                         @endforeach

@@ -11,7 +11,7 @@
                             <h2>Изменение квестовой точки</h2>
                         </div>
                         <div class="pull-right">
-                            <a class="btn btn-primary" href="{{ route('geo_points.index') }}">Назад</a>
+                            <a class="btn btn-primary" href="{{ route('geo_positions.index') }}">Назад</a>
                         </div>
 
                         @if (count($errors) > 0)
@@ -30,7 +30,7 @@
                 </div>
 
 
-                <form method="post" action="{{ route('geo_points.update',$point->id) }}">
+                <form method="post" action="{{ route('geo_positions.update',$position->id) }}">
                     @csrf
                     <input name="_method" type="hidden" value="PUT">
 
@@ -43,20 +43,20 @@
                         <tr>
                             <td>Название точки</td>
                             <td>
-                                <input type="text" class="form-control" name="title" value="{{$point->title}}" required>
+                                <input type="text" class="form-control" name="title" value="{{$position->title}}" required>
                             </td>
                         </tr>
                         <tr>
                             <td>Краткое описание положения</td>
                             <td>
                                 <textarea type="text" maxlength="1000" class="form-control" name="description"
-                                          required>{{$point->description}}</textarea>
+                                          required>{{$position->description}}</textarea>
                             </td>
                         </tr>
                         <tr>
                             <td>Фотография квестовой точки</td>
                             <td>
-                                <img src="{{$point->url}}" class="img-thumbnail mb-2"
+                                <img src="{{$position->url}}" class="img-thumbnail mb-2"
                                      style="width:200px;height: 200px;object-fit: cover;" alt="">
                                 <input type="url" class="form-control" name="image_url" value="{{$point->image_url}}" required>
                             </td>
@@ -72,7 +72,7 @@
                                     </div>
                                     <div class="col-md-6 col-sm-12">
                                         <input type="number" class="form-control" name="longitude"
-                                               value="{{$point->longitude}}" required>
+                                               value="{{$position->longitude}}" required>
                                     </div>
                                 </div>
 
@@ -82,7 +82,7 @@
                         <tr>
                             <td>Локальный радиус видимости, км (1м = 0.001км)</td>
                             <td>
-                                <input type="number" class="form-control" name="radius" value="{{$point->radius}}"
+                                <input type="number" class="form-control" name="radius" value="{{$position->radius}}"
                                        required>
                             </td>
                         </tr>
@@ -90,7 +90,7 @@
                         <tr>
                             <td>Бонус за прохождение текущей точки</td>
                             <td>
-                                <input type="number" class="form-control" min="0" value="{{$point->local_reward}}"
+                                <input type="number" class="form-control" min="0" value="{{$position->local_reward}}"
                                        name="local_reward"
                                        required>
                             </td>
@@ -102,7 +102,7 @@
                                 <select class="form-control" name="local_promotion_id" id="local_promotion_id">
                                     <option value="" selected>Не выбрано</option>
                                     @foreach($promotions as $promotion)
-                                        @if ($promotion->id==$point->local_promotion_id)
+                                        @if ($promotion->id==$position->local_promotion_id)
                                             <option value="{{$promotion->id}}" selected>{{$promotion->title}}</option>
                                         @else
                                             <option value="{{$promotion->id}}">{{$promotion->title}}</option>
@@ -118,7 +118,7 @@
 
                                 <label class="c-switch c-switch-label c-switch-pill c-switch-opposite-primary">
                                     <input class="c-switch-input" type="checkbox"
-                                           name="in_time_range" {{$point->in_time_range?"checked":""}}>
+                                           name="in_time_range" {{$position->in_time_range?"checked":""}}>
                                     <span class="c-switch-slider" data-checked="✓" data-unchecked="✕"></span>
                                 </label>
 
