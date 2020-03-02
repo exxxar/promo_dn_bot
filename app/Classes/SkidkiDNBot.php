@@ -1511,7 +1511,7 @@ class SkidkiDNBot extends Bot implements iSkidkiDNBot
     {
         $quest = GeoQuest::find($questId);
 
-        $this->sendMessage("Новые точки открываются по мере прохождения! Всего *" . count($quest->quest_points_list) . "* точек.", [
+        $this->sendMessage("Новые точки открываются по мере прохождения! Всего точек - *" . count($quest->quest_points_list) . "*.", [
             [
                 ['text' => "	\xF0\x9F\x93\x8BМои результаты прохождения", 'callback_data' => "/geo_quest_completion " . $quest->id]
             ]

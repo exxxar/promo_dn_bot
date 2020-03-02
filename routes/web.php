@@ -24,6 +24,10 @@ use Trello\Client;
 use Trello\Manager;
 use Vinkla\Instagram\Instagram;
 
+Route::get("/artest", function () {
+   return view("ar");
+});
+
 Route::get("/dotest", function () {
     $keyboard = [
         [
