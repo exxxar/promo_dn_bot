@@ -17,6 +17,7 @@ use App\Enums\Parts;
 use App\Models\SkidkaServiceModels\Event;
 use App\Events\AchievementEvent;
 use App\Events\AddCashBackEvent;
+use App\Models\SkidkaServiceModels\GeoPosition;
 use App\Models\SkidkaServiceModels\GeoQuest;
 use App\Models\SkidkaServiceModels\InstaPromotion;
 use App\Models\SkidkaServiceModels\Prize;
@@ -1270,7 +1271,10 @@ class SkidkiDNBot extends Bot implements iSkidkiDNBot
         $lat = $location->getLatitude();
         $lng = $location->getLongitude();
 
-        Log::info("test location: $lat $lng");
+
+        foreach (GeoPosition::getNearestQuestPoints($lat, $lng) as $pos) ;
+            $this->reply("Вы поблизости точки " . $pos->title);
+       // Log::info("test location: $lat $lng");
     }
 
     public function uploadImages($images)
