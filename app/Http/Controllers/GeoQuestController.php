@@ -240,6 +240,8 @@ class GeoQuestController extends Controller
             array_push($tmp_attached,[$point=>['position'=>json_decode(json_encode($positions_in_sequence),true)[$key]]]);
         }
 
+        Log::info("after array ".print_r($tmp_attached,true));
+
         $quest->positions()->attach($tmp_attached);
 
         return redirect()
