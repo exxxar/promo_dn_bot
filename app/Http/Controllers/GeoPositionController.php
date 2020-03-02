@@ -113,8 +113,9 @@ class GeoPositionController extends Controller
 
         $promotions = Promotion::all();
 
+        dd($position);
 
-        return view('admin.geo_positions.edit', compact('position','promotions'));
+        //return view('admin.geo_positions.edit', compact('position','promotions'));
 
     }
 
