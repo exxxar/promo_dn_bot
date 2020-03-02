@@ -1463,6 +1463,7 @@ class SkidkiDNBot extends Bot implements iSkidkiDNBot
     public function getGeoQuestList($page)
     {
         $quests = GeoQuest::where("is_active", 1)
+            ->where("quest_points_list",">","0")
             ->skip($page * config("bot.results_per_page"))
             ->take(config("bot.results_per_page"))
             ->orderBy('position', 'DESC')
@@ -1491,7 +1492,7 @@ class SkidkiDNBot extends Bot implements iSkidkiDNBot
 
             $this->sendPhoto("*" . $quest->title . "*\n_".$quest->description."_", $quest->image_url, [
                 [
-                    ["text" => "Список квестовых точек (".count($quest->quest_points_list)."\xF0\x9F\x93\x8D)", "callback_data" => "/geo_positions_list " . $quest->id]
+                    ["text" => "\xF0\x9F\x93\x8DСписок квестовых точек (".count($quest->quest_points_list).")", "callback_data" => "/geo_positions_list " . $quest->id]
                 ]
             ]);
 
