@@ -403,11 +403,13 @@ class BotController extends Controller
             ->getFallback();
     }
 
-    public function receivesLocations($bot,Location $location){
+    public function receivesLocations($bot, Location $location)
+    {
         $this->sdnbot
             ->setBot($bot)
             ->receivesLocations($location);
     }
+
     public function uploadImages($bot, $images)
     {
         $this->sdnbot
@@ -436,7 +438,7 @@ class BotController extends Controller
             ->donateCharity($charityId, $value);
     }
 
-    public function getGeoQuestList($bot, $page=0)
+    public function getGeoQuestList($bot, $page = 0)
     {
         $this->sdnbot
             ->setBot($bot)
@@ -456,4 +458,13 @@ class BotController extends Controller
             ->setBot($bot)
             ->getGeoPositionInfo($positionId);
     }
+
+    public function getGeoQuestCompletion($bot, $questId)
+    {
+        $this->sdnbot
+            ->setBot($bot)
+            ->getGeoQuestCompletion($questId);
+    }
+
+
 }

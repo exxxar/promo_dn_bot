@@ -37,6 +37,7 @@ $botman->hears('/donate ([0-9]+) ([0-9]{2,5})', BotController::class . '@donateC
 $botman->hears('.*Система Гео-квестов|/geo_quest ([0-9]+)', BotController::class . '@getGeoQuestList');
 $botman->hears('/geo_positions_list ([0-9]+)', BotController::class . '@getGeoPositionsList');
 $botman->hears('/geo_position ([0-9]+)', BotController::class . '@getGeoPosition');
+$botman->hears('/geo_quest_completion ([0-9]+)', BotController::class . '@getGeoQuestCompletion');
 
 $botman->hears('/category ([0-9]+) ([0-9]+)', BotController::class . '@getCategoryById');
 $botman->hears('/company ([0-9]+) ([0-9]+)', BotController::class . '@getCompanyById');

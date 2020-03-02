@@ -1489,17 +1489,28 @@ class SkidkiDNBot extends Bot implements iSkidkiDNBot
 
         foreach ($quests as $quest) {
 
-            $this->sendPhoto("*" . $quest->title . "*", $quest->image_url, [
+            $this->sendPhoto("*" . $quest->title . "*\n_".$quest->description."_", $quest->image_url, [
                 [
-                    ["text" => "Список квестовых точек (".count($quest->quest_points_list).")", "callback_data" => "/geo_positions_list " . $quest->id]
+                    ["text" => "Список квестовых точек (".count($quest->quest_points_list)."\xF0\x9F\x93\x8D)", "callback_data" => "/geo_positions_list " . $quest->id]
                 ]
             ]);
+
+
         }
         $this->pagination("/geo_quest", $quests, $page, __("messages.ask_action"));
     }
 
     public function getGeoPositionsList($questId)
     {
+        $quest = GeoQuest::find($questId);
+
+        $this->sendMessage("Новые точки открываются по мере прохождения! Всего *".count($quest->quest_points_list)."* точек.", [
+            [
+                ['text' =>"	\xF0\x9F\x93\x8BМои результаты прохождения", 'callback_data' => "/geo_quest_completion ".$quest->id]
+            ]
+        ]);
+
+
         // TODO: Implement getGeoPositionsList() method.
         $this->reply("Раздел Гео-квестов в стадии разработки");
     }
@@ -1507,6 +1518,11 @@ class SkidkiDNBot extends Bot implements iSkidkiDNBot
     public function getGeoPositionInfo($positionId)
     {
         // TODO: Implement getGeoPositionInfo() method.
+        $this->reply("Раздел Гео-квестов в стадии разработки");
+    }
+
+    public function getGeoQuestCompletion($questId)
+    {
         $this->reply("Раздел Гео-квестов в стадии разработки");
     }
 }

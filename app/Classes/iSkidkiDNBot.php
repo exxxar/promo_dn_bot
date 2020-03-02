@@ -72,6 +72,7 @@ interface iSkidkiDNBot
 
     public function getGeoQuestList($page);
     public function getGeoPositionsList($questId);
+    public function getGeoQuestCompletion($questId);
     public function getGeoPositionInfo($positionId);
 
 }
