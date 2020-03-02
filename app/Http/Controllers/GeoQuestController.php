@@ -247,7 +247,7 @@ class GeoQuestController extends Controller
         foreach ($points as $key => $point) {
             if (!empty($point)) {
                 $is_last = isset(json_decode(json_encode($is_last_sequence), true)[$key]) ?
-                    json_decode(json_encode($is_last_sequence), true)[$key] == "on" :
+                    json_decode(json_encode($is_last_sequence), true)[$key] == "1" :
                     false;
 
                 $quest->positions()->attach($point, [
