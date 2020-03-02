@@ -88,7 +88,7 @@
                                     <td>
                                         <label class="c-switch c-switch-label c-switch-pill c-switch-opposite-primary">
                                             <input class="c-switch-input" type="checkbox"
-                                                   name="is_last[]">
+                                                   name="is_last[]" value="0">
                                             <span class="c-switch-slider" data-checked="✓" data-unchecked="✕"></span>
                                         </label>
                                     </td>

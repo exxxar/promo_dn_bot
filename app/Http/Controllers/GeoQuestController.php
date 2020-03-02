@@ -234,6 +234,7 @@ class GeoQuestController extends Controller
         $is_last_sequence = $request->get("is_last");
 
 
+        Log::info(print_r($is_last_sequence, true));
         $quest = GeoQuest::with(["positions"])->find($id);
 
         $cur_ids = array();
