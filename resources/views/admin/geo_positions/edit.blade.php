@@ -117,7 +117,8 @@
                             <td>
 
                                 <label class="c-switch c-switch-label c-switch-pill c-switch-opposite-primary">
-                                    <input class="c-switch-input" type="checkbox" name="in_time_range" {{$point->in_time_range?"checked":""}}>
+                                    <input class="c-switch-input" type="checkbox"
+                                           name="in_time_range" {{$point->in_time_range?"checked":""}}>
                                     <span class="c-switch-slider" data-checked="✓" data-unchecked="✕"></span>
                                 </label>
 
@@ -127,7 +128,8 @@
                         <tr>
                             <td>Временной промежуток активации (в минутах от 1 до 60)</td>
                             <td>
-                                <input type="number" class="form-control" min="1" max="60" value="{{$promotion->range_time_value}}"
+                                <input type="number" class="form-control" min="1" max="60"
+                                       value="{{$promotion->range_time_value}}"
                                        name="range_time_value"
                                        required>
                             </td>
@@ -136,14 +138,16 @@
                         <tr>
                             <td>Время начала доступности точки</td>
                             <td>
-                                <input type="time" value="{{$promotion->time_start}}" name="time_start" class="form-control" required>
-                            </td>
-                        </tr>
-
-                        <tr>
-                            <td>Время окончания доступности точки</td>
-                            <td>
-                                <input type="time" value="{{$promotion->time_end}}" name="time_end" class="form-control" required>
+                                <div class="row">
+                                    <div class="col-md-6 col-sm-12">
+                                        <input type="time" value="{{$promotion->time_start}}" name="time_start"
+                                               class="form-control" required>
+                                    </div>
+                                    <div class="col-md-6 col-sm-12">
+                                        <input type="time" value="{{$promotion->time_end}}" name="time_end"
+                                               class="form-control" required>
+                                    </div>
+                                </div>
                             </td>
                         </tr>
 

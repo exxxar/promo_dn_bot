@@ -63,10 +63,10 @@
                             <td>
                                 <div class="row">
                                     <div class="col-md-6 col-sm-12">
-                                        <input type="number" class="form-control" name="latitude" value="" required>
+                                        <input type="number" step="0.000000001" min="0.000000001" class="form-control" name="latitude" value="" required>
                                     </div>
                                     <div class="col-md-6 col-sm-12">
-                                        <input type="number" class="form-control" name="longitude" value="" required>
+                                        <input type="number" step="0.000000001" min="0.000000001" class="form-control" name="longitude" value="" required>
                                     </div>
                                 </div>
 
@@ -76,7 +76,7 @@
                         <tr>
                             <td>Локальный радиус видимости, км (1м = 0.001км)</td>
                             <td>
-                                <input type="number" class="form-control" name="radius" value="" required>
+                                <input type="number" step="0.001" min="0.001" class="form-control" name="radius" value="" required>
                             </td>
                         </tr>
 
@@ -104,6 +104,7 @@
                             <td>Активация через временной промежуток</td>
                             <td>
 
+
                                 <label class="c-switch c-switch-label c-switch-pill c-switch-opposite-primary">
                                     <input class="c-switch-input" type="checkbox" name="in_time_range" checked>
                                     <span class="c-switch-slider" data-checked="✓" data-unchecked="✕"></span>
@@ -123,16 +124,20 @@
                         <tr>
                             <td>Время начала доступности точки</td>
                             <td>
-                                <input type="time" value="10:00" name="time_start" class="form-control" required>
+                                <div class="row">
+                                    <div class="col-md-6 col-sm-12">
+                                        <input type="time" value="10:00" name="time_start" class="form-control" required>
+                                    </div>
+                                    <div class="col-md-6 col-sm-12">
+                                        <input type="time" value="22:00" name="time_end" class="form-control" required>
+                                    </div>
+                                </div>
+
+
                             </td>
                         </tr>
 
-                        <tr>
-                            <td>Время окончания доступности точки</td>
-                            <td>
-                                <input type="time" value="22:00" name="time_end" class="form-control" required>
-                            </td>
-                        </tr>
+
 
                         <tr>
                             <td></td>
