@@ -9,6 +9,7 @@ use App\Models\SkidkaServiceModels\GeoQuest;
 use App\Models\SkidkaServiceModels\Promotion;
 use Carbon\Carbon;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Log;
 use Telegram\Bot\FileUpload\InputFile;
 use Telegram\Bot\Laravel\Facades\Telegram;
 
@@ -229,13 +230,14 @@ class GeoQuestController extends Controller
     public function storePoints(Request $request, $id)
     {
         $points = $request->get("point");
-        $positions_in_sequence = print_r($request->get("position"), true);
+        $positions_in_sequence = $request->get("position");
 
         $quest = GeoQuest::find($id);
 
         $tmp_attached = [];
         foreach($points as $key=>$point){
-            array_push($tmp_attached,[$point=>['position'=>$positions_in_sequence[$key]]]);
+            Log::info(json_decode(json_encode($positions_in_sequence),true)[$key]);
+            array_push($tmp_attached,[$point=>['position'=>json_decode(json_encode($positions_in_sequence),true)[$key]]]);
         }
 
         $quest->positions()->attach($tmp_attached);

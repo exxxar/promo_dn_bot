@@ -44,6 +44,7 @@ class GeoQuest extends Model
 
     public function positions()
     {
-        return $this->belongsToMany(GeoPosition::class);
+        return $this->belongsToMany(GeoPosition::class, 'quest_has_points', 'geo_quest_id', 'geo_position_id')
+            ->withTimestamps();
     }
 }
