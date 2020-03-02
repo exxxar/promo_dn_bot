@@ -13,7 +13,7 @@
 
 <body style='margin : 0px; overflow: hidden;'>
 <a-scene embedded arjs='sourceType: webcam;'>
-    <!-- handle marker with your own pattern -->
+   {{-- <!-- handle marker with your own pattern -->
     <a-marker type='pattern' patternUrl='1.patt'>
         <a-box position='0 0.5 0' material='color: red;'></a-box>
     </a-marker>
@@ -27,6 +27,11 @@
     <a-marker type='barcode' value='5'>
         <a-box position='0 0.5 0' material='color: blue;'></a-box>
     </a-marker>
+--}}
+    <a-marker-camera type='pattern' patternUrl='{{asset('1.patt')}}'>
+
+        <a-box position='0 0.5 0' material='color: green;'></a-box>
+    </a-marker-camera>
 
     <!-- add a simple camera -->
     <a-entity camera></a-entity>
