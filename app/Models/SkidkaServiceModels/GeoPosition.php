@@ -37,7 +37,7 @@ class GeoPosition extends Model
     }
 
     public function getIsAssignedAttribute(){
-        return QuestHasPoints::where("geo_point_id",$this->id)->count()>0;
+        return QuestHasPoints::where("geo_position_id",$this->id)->count()>0;
     }
 
     public static function getNearestQuestPoints($latitude, $longitude)
