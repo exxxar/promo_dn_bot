@@ -231,10 +231,7 @@ class GeoQuestController extends Controller
     {
         $points = $request->get("point");
         $positions_in_sequence = $request->get("position");
-        $is_last_sequence = $request->get("is_last");
 
-
-        Log::info(print_r($is_last_sequence, true));
         $quest = GeoQuest::with(["positions"])->find($id);
 
         $cur_ids = array();
@@ -256,7 +253,6 @@ class GeoQuestController extends Controller
                 ]);
             }
         }
-
 
         return redirect()
             ->back();

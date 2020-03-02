@@ -1458,4 +1458,22 @@ class SkidkiDNBot extends Bot implements iSkidkiDNBot
         }
         $this->pagination("/charity", $charities, $page, __("messages.ask_action"));
     }
+
+    public function getGeoQuestList($page)
+    {
+        // TODO: Implement getGeoQuestList() method.
+        $this->reply("Раздел Гео-квестов в стадии разработки");
+    }
+
+    public function getGeoPositionsList($questId)
+    {
+        // TODO: Implement getGeoPositionsList() method.
+        $this->reply("Раздел Гео-квестов в стадии разработки");
+    }
+
+    public function getGeoPositionInfo($positionId)
+    {
+        // TODO: Implement getGeoPositionInfo() method.
+        $this->reply("Раздел Гео-квестов в стадии разработки");
+    }
 }

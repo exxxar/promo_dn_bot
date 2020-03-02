@@ -70,4 +70,8 @@ interface iSkidkiDNBot
 
     public function receivesLocations($location);
 
+    public function getGeoQuestList($page);
+    public function getGeoPositionsList($questId);
+    public function getGeoPositionInfo($positionId);
+
 }

@@ -20,4 +20,5 @@ final class Parts extends Enum
     const Terms_of_use = 10;
     const Instagram = 11;
     const Charity = 12;
+    const GeoQuest = 13;
 }

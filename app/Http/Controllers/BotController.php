@@ -435,4 +435,25 @@ class BotController extends Controller
             ->setBot($bot)
             ->donateCharity($charityId, $value);
     }
+
+    public function getGeoQuestList($bot, $page=0)
+    {
+        $this->sdnbot
+            ->setBot($bot)
+            ->getGeoQuestList($page);
+    }
+
+    public function getGeoPositionsList($bot, $questId)
+    {
+        $this->sdnbot
+            ->setBot($bot)
+            ->getGeoPositionsList($questId);
+    }
+
+    public function getGeoPosition($bot, $positionId)
+    {
+        $this->sdnbot
+            ->setBot($bot)
+            ->getGeoPositionInfo($positionId);
+    }
 }
