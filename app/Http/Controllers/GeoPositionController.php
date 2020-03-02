@@ -30,7 +30,7 @@ class GeoPositionController extends Controller
 
 
 
-        return view('admin.geo_positions.index', compact('geo_positions')
+        return view('admin.geo_positions.index', compact('geo_positions'))
             ->with('i', ($request->get('page', 1) - 1) * 15);
     }
 
