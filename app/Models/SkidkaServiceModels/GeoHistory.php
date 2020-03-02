@@ -14,12 +14,12 @@ class GeoHistory extends Model
         'user_id'
     ];
 
-    public function geoPosition()
+    public function position()
     {
         return $this->hasOne(GeoPosition::class,'id','geo_position_id');
     }
 
-    public function geoQuest()
+    public function quest()
     {
         return $this->hasOne(GeoQuest::class,'id','geo_quest_id');
     }

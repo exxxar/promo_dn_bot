@@ -40,14 +40,14 @@
                             <tr>
                                 <td>{{$key + 1}}</td>
                                 <td>
-                                    @isset($history->quest->title)
+                                    @isset($history->quest)
                                         <a href="{{ route('geo_quests.show',$history->quest->id) }}">
                                             {{$history->quest->title}}</a>
                                     @endisset
                                 </td>
 
                                 <td>
-                                    @isset($history->recipient)
+                                    @isset($history->position)
                                         <a href="{{ route('get_positions.show',$history->position->id) }}">
                                             {{$history->position->title}}</a>
                                     @endisset
