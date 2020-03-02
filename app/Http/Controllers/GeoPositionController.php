@@ -28,9 +28,9 @@ class GeoPositionController extends Controller
         $geo_positions = GeoPosition::orderBy('position', 'DESC')
             ->paginate(15);
 
-        $promotions = Promotion::all();
 
-        return view('admin.geo_positions.index', compact('geo_positions', 'promotions'))
+
+        return view('admin.geo_positions.index', compact('geo_positions')
             ->with('i', ($request->get('page', 1) - 1) * 15);
     }
 
@@ -41,7 +41,9 @@ class GeoPositionController extends Controller
      */
     public function create()
     {
-        return view('admin.geo_positions.create');
+        $promotions = Promotion::all();
+
+        return view('admin.geo_positions.create', compact('promotions'));
     }
 
     /**
@@ -110,8 +112,10 @@ class GeoPositionController extends Controller
     {
         $geo_position = GeoPosition::find($id);
 
+        $promotions = Promotion::all();
 
-        return view('admin.geo_positions.edit', compact('geo_position'));
+
+        return view('admin.geo_positions.edit', compact('geo_position','promotions'));
 
     }
 
