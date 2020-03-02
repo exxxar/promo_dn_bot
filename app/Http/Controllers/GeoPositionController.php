@@ -109,12 +109,12 @@ class GeoPositionController extends Controller
      */
     public function edit($id)
     {
-        $geo_position = GeoPosition::find($id);
+        $position = GeoPosition::find($id);
 
         $promotions = Promotion::all();
 
 
-        return view('admin.geo_positions.edit', compact('geo_position','promotions'));
+        return view('admin.geo_positions.edit', compact('position','promotions'));
 
     }
 
