@@ -10,11 +10,11 @@
 <body tyle='margin : 0px; overflow: hidden;'>
 <!-- AR.js by @jerome_etienne - github: https://github.com/jeromeetienne/ar.js - info: https://medium.com/arjs/augmented-reality-in-10-lines-of-html-4e193ea9fdbf -->
 
-<body s>
+<body style='margin : 0px; overflow: hidden;'>
 <a-scene embedded arjs='sourceType: webcam;'>
     <a-box position='0 0.5 0' material='opacity: 0.5;'></a-box>
-    <a-marker preset='custom' url='1.patt'>
-        <a-image src="1.png" position="0 0 0" rotation="90 180 0 "/>
+    <a-marker preset='custom' url='{{asset('1.patt')}}'>
+        <a-image src="{{asset('1.png')}}" position="0 0 0" rotation="90 180 0 "/>
     </a-marker>
 </a-scene>
 
