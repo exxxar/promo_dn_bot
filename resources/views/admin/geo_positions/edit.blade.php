@@ -140,11 +140,11 @@
                             <td>
                                 <div class="row">
                                     <div class="col-md-6 col-sm-12">
-                                        <input type="time" value="{{strtotime($promotion->time_start)}}" name="time_start"
+                                        <input type="time" value="{{strtotime("".$promotion->time_start)}}" name="time_start"
                                                class="form-control" required>
                                     </div>
                                     <div class="col-md-6 col-sm-12">
-                                        <input type="time" value="{{strtotime($promotion->time_end)}}" name="time_end"
+                                        <input type="time" value="{{strtotime("".$promotion->time_end)}}" name="time_end"
                                                class="form-control" required>
                                     </div>
                                 </div>

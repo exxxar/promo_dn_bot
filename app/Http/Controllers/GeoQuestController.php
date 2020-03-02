@@ -228,8 +228,20 @@ class GeoQuestController extends Controller
 
     public function storePoints(Request $request, $id)
     {
-        $points = $request->get("point");
-        $positions_in_sequence = $request->get("position");
+        $points = print_r($request->get("point"), true);
+        $positions_in_sequence = print_r($request->get("position"), true);
+
+        $quest = GeoQuest::find($id);
+
+        $tmp_attached = [];
+        foreach($points as $key=>$point){
+            array_push($tmp_attached,[$point=>['position'=>$positions_in_sequence[$key]]]);
+        }
+
+        $quest->positions()->attach($tmp_attached);
+
+        return redirect()
+            ->back();
     }
 
 }
