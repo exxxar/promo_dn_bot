@@ -13,26 +13,11 @@
 
 <body style='margin : 0px; overflow: hidden;'>
 <a-scene embedded arjs='sourceType: webcam;'>
-   <!-- handle marker with your own pattern -->
-    <a-marker type='pattern' patternUrl='http://skidka-service.ru/1.patt'>
-        <a-box position='0 0.5 0' material='color: red;'></a-box>
+
+
+    <a-marker preset="pattern" type="pattern" url="http://skidka-service.ru/1.patt">
+        <a-box position='0 0.5 0' material='color: black;' soundhandler></a-box>
     </a-marker>
-
-    <!-- handle marker with hiro preset -->
-    <a-marker preset='hiro'>
-        <a-box position='0 0.5 0' material='color: green;'></a-box>
-    </a-marker>
-
-    <!-- handle barcode marker -->
-    <a-marker type='barcode' value='5'>
-        <a-box position='0 0.5 0' material='color: blue;'></a-box>
-    </a-marker>
-
-    <a-marker-camera type='pattern' patternUrl='http://skidka-service.ru/1.patt'>
-
-        <a-box position='0 0.5 0' material='color: green;'></a-box>
-    </a-marker-camera>
-
     <!-- add a simple camera -->
     <a-entity camera></a-entity>
 </a-scene>
