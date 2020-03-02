@@ -26,10 +26,7 @@ class GeoPositionController extends Controller
     public function index(Request $request)
     {
         //
-        $geo_positions = GeoPosition::orderBy('position', 'DESC')
-            ->paginate(15);
-
-
+        $geo_positions = GeoPosition::paginate(15);
 
         return view('admin.geo_positions.index', compact('geo_positions'))
             ->with('i', ($request->get('page', 1) - 1) * 15);
