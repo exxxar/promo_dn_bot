@@ -36,6 +36,7 @@
                         <thead class="thead-light ">
                         <th>Квестовая точка</th>
                         <th>Номер точки в квесте</th>
+                        <th>Последний в цепочке</th>
                         </thead>
                         <tbody>
                         @for($i=0;$i<10;$i++)
@@ -52,6 +53,13 @@
                                 <td>
                                     <input type="text" class="form-control" id="position-{{$i}}" name="position[]"
                                            value="0">
+                                </td>
+                                <td>
+                                    <label class="c-switch c-switch-label c-switch-pill c-switch-opposite-primary">
+                                        <input class="c-switch-input" type="checkbox"
+                                               name="is_last[]">
+                                        <span class="c-switch-slider" data-checked="✓" data-unchecked="✕"></span>
+                                    </label>
                                 </td>
                             </tr>
                         @endfor
