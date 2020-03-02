@@ -54,7 +54,7 @@
                         <tr>
                             <td>Фотография квестовой точки</td>
                             <td>
-                                <input type="url" class="form-control" name="title" value="" required>
+                                <input type="url" class="form-control" name="image_url" value="" required>
                             </td>
                         </tr>
 

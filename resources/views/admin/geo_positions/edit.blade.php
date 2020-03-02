@@ -58,7 +58,7 @@
                             <td>
                                 <img src="{{$point->url}}" class="img-thumbnail mb-2"
                                      style="width:200px;height: 200px;object-fit: cover;" alt="">
-                                <input type="url" class="form-control" name="title" value="{{$point->url}}" required>
+                                <input type="url" class="form-control" name="image_url" value="{{$point->image_url}}" required>
                             </td>
                         </tr>
 
