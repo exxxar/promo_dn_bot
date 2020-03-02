@@ -115,7 +115,7 @@
 
         let geometry1 = new THREE.PlaneBufferGeometry(1,1, 4,4);
         let loader = new THREE.TextureLoader();
-        let texture = loader.load( 'https://sun9-37.userapi.com/c858136/v858136935/9cdb1/A1wBdYwaVYA.jpg', render );
+        let texture = loader.load( 'https://sun9-25.userapi.com/c639631/v639631900/290ac/r0kPNGRw6Rw.jpg', render );
         let material1 = new THREE.MeshBasicMaterial( { map: texture } );
 
         mesh1 = new THREE.Mesh( geometry1, material1 );
