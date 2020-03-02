@@ -8,10 +8,10 @@
                 <div class="row">
                     <div class="col-lg-12 margin-tb">
                         <div class="pull-left">
-                            <h2>Добавление новой акции</h2>
+                            <h2>Добавление новой квестовой точки</h2>
                         </div>
                         <div class="pull-right">
-                            <a class="btn btn-primary" href="{{ route('articles.index') }}"> Назад</a>
+                            <a class="btn btn-primary" href="{{ route('geo_positions.index') }}"> Назад</a>
                         </div>
 
                         @if (count($errors) > 0)
@@ -30,7 +30,7 @@
                 </div>
 
 
-                <form method="post" action="{{ route('articles.store') }}">
+                <form method="post" action="{{ route('geo_positions.store') }}">
                     @csrf
                     <table class="table mt-2">
                         <thead class="thead-light ">
@@ -39,42 +39,100 @@
                         </thead>
                         <tbody>
                         <tr>
-                            <td>Ссылка</td>
+                            <td>Название точки</td>
                             <td>
-                                <input type="text" class="form-control" name="url" value="" required>
+                                <input type="text" class="form-control" name="title" value="" required>
                             </td>
                         </tr>
                         <tr>
-                            <td>Позиция в выдаче</td>
+                            <td>Краткое описание положения</td>
                             <td>
-                                <input type="number" class="form-control" name="position"  required>
+                                <textarea type="text" maxlength="1000" class="form-control" name="description"
+                                          required></textarea>
                             </td>
                         </tr>
                         <tr>
-                            <td>Раздел</td>
+                            <td>Фотография квестовой точки</td>
                             <td>
-                                <select name="part" id="part" class="form-control">
-                                    @foreach($parts as $part)
-                                        <option value="{{$part->value}}">{{$part->key}}</option>
-                                        @endforeach
+                                <input type="url" class="form-control" name="title" value="" required>
+                            </td>
+                        </tr>
+
+                        <tr>
+                            <td>latitude & longitude</td>
+                            <td>
+                                <div class="row">
+                                    <div class="col-md-6 col-sm-12">
+                                        <input type="number" class="form-control" name="latitude" value="" required>
+                                    </div>
+                                    <div class="col-md-6 col-sm-12">
+                                        <input type="number" class="form-control" name="longitude" value="" required>
+                                    </div>
+                                </div>
+
+                            </td>
+                        </tr>
+
+                        <tr>
+                            <td>Локальный радиус видимости, км (1м = 0.001км)</td>
+                            <td>
+                                <input type="number" class="form-control" name="radius" value="" required>
+                            </td>
+                        </tr>
+
+                        <tr>
+                            <td>Бонус за прохождение текущей точки</td>
+                            <td>
+                                <input type="number" class="form-control" min="0" value="0" name="local_reward"
+                                       required>
+                            </td>
+                        </tr>
+
+                        <tr>
+                            <td>Локальный бонус из акции</td>
+                            <td>
+                                <select class="form-control" name="local_promotion_id" id="local_promotion_id">
+                                    <option value="" selected>Не выбрано</option>
+                                    @foreach($promotions as $promotion)
+                                        <option value="{{$promotion->id}}">{{$promotion->title}}</option>
+                                    @endforeach
                                 </select>
                             </td>
                         </tr>
 
                         <tr>
-                            <td>Отображение</td>
+                            <td>Активация через временной промежуток</td>
                             <td>
 
-                                <input type="radio" name="is_visible" value="0" required id="is_visible_1">
-                                <label for="is_visible_1">Не отображать</label>
-
-                                <input  type="radio" name="is_visible" value="1" required id="is_visible_2">
-                                <label for="is_visible_2">Отображать</label>
-
+                                <label class="c-switch c-switch-label c-switch-pill c-switch-opposite-primary">
+                                    <input class="c-switch-input" type="checkbox" name="in_time_range" checked>
+                                    <span class="c-switch-slider" data-checked="✓" data-unchecked="✕"></span>
+                                </label>
 
                             </td>
                         </tr>
 
+                        <tr>
+                            <td>Временной промежуток активации (в минутах от 1 до 60)</td>
+                            <td>
+                                <input type="number" class="form-control" min="1" max="60" value="0" name="range_time_value"
+                                       required>
+                            </td>
+                        </tr>
+
+                        <tr>
+                            <td>Время начала доступности точки</td>
+                            <td>
+                                <input type="time" value="10:00" name="time_start" class="form-control" required>
+                            </td>
+                        </tr>
+
+                        <tr>
+                            <td>Время окончания доступности точки</td>
+                            <td>
+                                <input type="time" value="22:00" name="time_end" class="form-control" required>
+                            </td>
+                        </tr>
 
                         <tr>
                             <td></td>
@@ -82,7 +140,6 @@
                                 <button class="btn btn-primary">Добавить</button>
                             </td>
                         </tr>
-
 
 
                         </tbody>

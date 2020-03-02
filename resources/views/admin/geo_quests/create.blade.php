@@ -63,7 +63,7 @@
                             </td>
                         </tr>
                         <tr>
-                            <td>Бонус за выолнение</td>
+                            <td>Бонус за выполнение</td>
                             <td>
                                 <input type="number" class="form-control" min="0" value="0" name="reward_bonus"
                                        required>

@@ -20,7 +20,7 @@ class CreateGeoPositionsTable extends Migration
             $table->string('image_url', 1000)->default('')->comment('Изображение локации');
             $table->double('latitude')->default(0.0)->comment("Широта");
             $table->double('longitude')->default(0.0)->comment("Долгота");
-            $table->integer('radius')->default(0)->comment("Радиус активации точки");
+            $table->double('radius')->default(0)->comment("Радиус активации точки");
 
             $table->integer('local_promotion_id')->nullable()->comment("Можно добавить локальную акционную плюшку");
 
