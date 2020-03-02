@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\SkidkaServiceModels\Company;
 use App\Models\SkidkaServiceModels\GeoPosition;
 use App\Models\SkidkaServiceModels\GeoQuest;
 use App\Models\SkidkaServiceModels\Promotion;
@@ -43,6 +44,7 @@ class GeoPositionController extends Controller
     {
         $promotions = Promotion::all();
 
+
         return view('admin.geo_positions.create', compact('promotions'));
     }
 
@@ -65,7 +67,7 @@ class GeoPositionController extends Controller
 
         ]);
 
-        GeoQuest::create([
+        GeoPosition::create([
             'title' => $request->get('title') ?? '',
             'description' => $request->get('description') ?? '',
             'image_url' => $request->get('image_url') ?? '',
