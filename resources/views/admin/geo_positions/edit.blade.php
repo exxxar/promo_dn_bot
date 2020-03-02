@@ -58,7 +58,7 @@
                             <td>
                                 <img src="{{$position->url}}" class="img-thumbnail mb-2"
                                      style="width:200px;height: 200px;object-fit: cover;" alt="">
-                                <input type="url" class="form-control" name="image_url" value="{{$point->image_url}}" required>
+                                <input type="url" class="form-control" name="image_url" value="{{$position->image_url}}" required>
                             </td>
                         </tr>
 
@@ -68,7 +68,7 @@
                                 <div class="row">
                                     <div class="col-md-6 col-sm-12">
                                         <input type="number" class="form-control" name="latitude"
-                                               value="{{$point->latitude}}" required>
+                                               value="{{$position->latitude}}" required>
                                     </div>
                                     <div class="col-md-6 col-sm-12">
                                         <input type="number" class="form-control" name="longitude"
