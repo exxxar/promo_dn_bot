@@ -219,7 +219,7 @@ class GeoQuestController extends Controller
 
     public function append($id)
     {
-        $quest = GeoQuest::find($id);
+        $quest = GeoQuest::with(["positions"])->find($id);
 
         $points = GeoPosition::all();
 
@@ -241,7 +241,7 @@ class GeoQuestController extends Controller
                     json_decode(json_encode($is_last_sequence), true)[$key] == "on" :
                     false;
 
-                $quest->positions()->attach($point, [
+                $quest->positions()->sync($point, [
                     'position' => json_decode(json_encode($positions_in_sequence), true)[$key],
                     'is_last' => $is_last
                 ]);

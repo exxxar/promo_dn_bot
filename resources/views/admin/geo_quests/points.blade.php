@@ -39,30 +39,62 @@
                         <th>Последний в цепочке</th>
                         </thead>
                         <tbody>
-                        @for($i=0;$i<10;$i++)
+                        @foreach($quest->positions as $position)
                             <tr>
                                 <td>
-                                    <select class="form-control" id="point-{{$i}}" name="point[]">
+                                    <select class="form-control" name="point[]">
                                         <option value="">Не задано</option>
                                         @foreach($points as $point)
-                                            <option value="{{$point->id}}">{{$point->title}}</option>
+                                            @if ($position->id==$point->id)
+                                                <option value="{{$point->id}}" selected>{{$point->title}}</option>
+                                            @else
+                                                <option value="{{$point->id}}">{{$point->title}}</option>
+                                            @endif
                                         @endforeach
 
                                     </select>
                                 </td>
                                 <td>
-                                    <input type="text" class="form-control" id="position-{{$i}}" name="position[]"
-                                           value="0">
+                                    <input type="text" class="form-control" name="position[]"
+                                           value="{{$position->position}}">
                                 </td>
                                 <td>
                                     <label class="c-switch c-switch-label c-switch-pill c-switch-opposite-primary">
                                         <input class="c-switch-input" type="checkbox"
-                                               name="is_last[]">
+                                               name="is_last[]" {{$position->is_last?"checked":""}}>
                                         <span class="c-switch-slider" data-checked="✓" data-unchecked="✕"></span>
                                     </label>
                                 </td>
                             </tr>
-                        @endfor
+                        @endforeach
+
+                        @if (count($quest->positions)<10)
+                            @for($i=0;$i<10-count($quest->positions);$i++)
+                                <tr>
+                                    <td>
+                                        <select class="form-control" name="point[]">
+                                            <option value="">Не задано</option>
+                                            @foreach($points as $point)
+                                                <option value="{{$point->id}}">{{$point->title}}</option>
+
+                                            @endforeach
+
+                                        </select>
+                                    </td>
+                                    <td>
+                                        <input type="text" class="form-control" name="position[]"
+                                               value="0">
+                                    </td>
+                                    <td>
+                                        <label class="c-switch c-switch-label c-switch-pill c-switch-opposite-primary">
+                                            <input class="c-switch-input" type="checkbox"
+                                                   name="is_last[]">
+                                            <span class="c-switch-slider" data-checked="✓" data-unchecked="✕"></span>
+                                        </label>
+                                    </td>
+                                </tr>
+                            @endfor
+                        @endif
                         <tr>
                             <td></td>
                             <td>
