@@ -140,11 +140,11 @@
                             <td>
                                 <div class="row">
                                     <div class="col-md-6 col-sm-12">
-                                        <input type="time" value="{{$promotion->time_start->format('H:i')}}" name="time_start"
+                                        <input type="time" value="{{date('H:i', $promotion->time_start)}}" name="time_start"
                                                class="form-control" required>
                                     </div>
                                     <div class="col-md-6 col-sm-12">
-                                        <input type="time" value="{{$promotion->time_end->format('H:i')}}" name="time_end"
+                                        <input type="time" value="{{date('H:i', $promotion->time_end)}}" name="time_end"
                                                class="form-control" required>
                                     </div>
                                 </div>

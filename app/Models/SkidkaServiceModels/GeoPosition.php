@@ -25,7 +25,6 @@ class GeoPosition extends Model
 
     protected $appends = ["is_assigned"];
 
-    protected $dates = ["time_end","time_start"];
 
     public function promotion()
     {
