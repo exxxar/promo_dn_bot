@@ -1463,7 +1463,6 @@ class SkidkiDNBot extends Bot implements iSkidkiDNBot
     public function getGeoQuestList($page)
     {
         $quests = GeoQuest::where("is_active", 1)
-            ->where("quest_points_list",">","0")
             ->skip($page * config("bot.results_per_page"))
             ->take(config("bot.results_per_page"))
             ->orderBy('position', 'DESC')
@@ -1488,15 +1487,22 @@ class SkidkiDNBot extends Bot implements iSkidkiDNBot
             return;
         }
 
+        $hasActiveQuests = false;
         foreach ($quests as $quest) {
 
-            $this->sendPhoto("*" . $quest->title . "*\n_".$quest->description."_", $quest->image_url, [
-                [
-                    ["text" => "\xF0\x9F\x93\x8DСписок квестовых точек (".count($quest->quest_points_list).")", "callback_data" => "/geo_positions_list " . $quest->id]
-                ]
-            ]);
+            if (count($quest->quest_points_list) > 0) {
+                $hasActiveQuests = true;
+                $this->sendPhoto("*" . $quest->title . "*\n_" . $quest->description . "_", $quest->image_url, [
+                    [
+                        ["text" => "\xF0\x9F\x93\x8DСписок квестовых точек (" . count($quest->quest_points_list) . ")", "callback_data" => "/geo_positions_list " . $quest->id]
+                    ]
+                ]);
+            }
+        }
 
-
+        if (!$hasActiveQuests) {
+            $this->reply("Нет ни одного активного квеста или все квесты выполнены!");
+            return;
         }
         $this->pagination("/geo_quest", $quests, $page, __("messages.ask_action"));
     }
@@ -1505,9 +1511,9 @@ class SkidkiDNBot extends Bot implements iSkidkiDNBot
     {
         $quest = GeoQuest::find($questId);
 
-        $this->sendMessage("Новые точки открываются по мере прохождения! Всего *".count($quest->quest_points_list)."* точек.", [
+        $this->sendMessage("Новые точки открываются по мере прохождения! Всего *" . count($quest->quest_points_list) . "* точек.", [
             [
-                ['text' =>"	\xF0\x9F\x93\x8BМои результаты прохождения", 'callback_data' => "/geo_quest_completion ".$quest->id]
+                ['text' => "	\xF0\x9F\x93\x8BМои результаты прохождения", 'callback_data' => "/geo_quest_completion " . $quest->id]
             ]
         ]);
 
