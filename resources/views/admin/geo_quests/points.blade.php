@@ -61,7 +61,8 @@
                                 <td>
                                     <label class="c-switch c-switch-label c-switch-pill c-switch-opposite-primary">
                                         <input class="c-switch-input" type="checkbox"
-                                               name="is_last[]" {{$position->pivot->is_last?"checked":""}}>
+                                               name="is_last[]"
+                                               value="{{$position->pivot->is_last?"":"0"}}" {{$position->pivot->is_last?"checked":""}}>
                                         <span class="c-switch-slider" data-checked="✓" data-unchecked="✕"></span>
                                     </label>
                                 </td>
