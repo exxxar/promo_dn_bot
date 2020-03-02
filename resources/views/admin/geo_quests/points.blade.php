@@ -36,7 +36,6 @@
                         <thead class="thead-light ">
                         <th>Квестовая точка</th>
                         <th>Номер точки в квесте</th>
-                        <th>Последний в цепочке</th>
                         </thead>
                         <tbody>
                         @foreach($quest->positions as $position)
@@ -58,14 +57,7 @@
                                     <input type="text" class="form-control" name="position[]"
                                            value="{{$position->pivot->position??0}}">
                                 </td>
-                                <td>
-                                    <label class="c-switch c-switch-label c-switch-pill c-switch-opposite-primary">
-                                        <input class="c-switch-input" type="checkbox"
-                                               name="is_last[]"
-                                               value="{{$position->pivot->is_last?"1":"0"}}" {{$position->pivot->is_last?"checked":""}}>
-                                        <span class="c-switch-slider" data-checked="✓" data-unchecked="✕"></span>
-                                    </label>
-                                </td>
+
                             </tr>
                         @endforeach
 
@@ -85,13 +77,6 @@
                                     <td>
                                         <input type="text" class="form-control" name="position[]"
                                                value="0">
-                                    </td>
-                                    <td>
-                                        <label class="c-switch c-switch-label c-switch-pill c-switch-opposite-primary">
-                                            <input class="c-switch-input" type="checkbox"
-                                                   name="is_last[]" value="0">
-                                            <span class="c-switch-slider" data-checked="✓" data-unchecked="✕"></span>
-                                        </label>
                                     </td>
                                 </tr>
                             @endfor
