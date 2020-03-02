@@ -1272,8 +1272,15 @@ class SkidkiDNBot extends Bot implements iSkidkiDNBot
         $lng = $location->getLongitude();
 
 
-        foreach (GeoPosition::getNearestQuestPoints($lat, $lng) as $pos) ;
+        foreach (GeoPosition::getNearestQuestPoints($lat, $lng) as $pos) {
             $this->reply("Вы поблизости точки " . $pos->title);
+            if ($pos->inRange($lat, $lng)) {
+                $this->reply("Точка " . $pos->title . " в шаговой доступности! Дерзай!");
+
+            }
+        }
+
+
        // Log::info("test location: $lat $lng");
     }
 
