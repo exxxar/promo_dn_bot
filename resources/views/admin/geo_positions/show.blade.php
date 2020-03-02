@@ -55,7 +55,7 @@
                         <td>
                             <div class="row">
                                 <div class="col-md-6 col-sm-12">
-                                    <p>{{$point->latitude}}</p>
+                                    <p>{{$position->latitude}}</p>
                                 </div>
                                 <div class="col-md-6 col-sm-12">
                                     <p>{{$position->longitude}}</p>
@@ -98,7 +98,7 @@
                     <tr>
                         <td>Временной промежуток активации (в минутах от 1 до 60)</td>
                         <td>
-                            <p>{{$promotion->range_time_value}}</p>
+                            <p>{{$position->range_time_value}}</p>
                         </td>
                     </tr>
 
@@ -107,10 +107,10 @@
                         <td>
                             <div class="row">
                                 <div class="col-md-6 col-sm-12">
-                                    <p>{{$promotion->time_start}}</p>
+                                    <p>{{$position->time_start}}</p>
                                 </div>
                                 <div class="col-md-6 col-sm-12">
-                                    <p>{{$promotion->time_end}}</p>
+                                    <p>{{$position->time_end}}</p>
                                 </div>
                             </div>
                         </td>
