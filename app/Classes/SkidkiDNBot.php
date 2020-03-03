@@ -1475,6 +1475,8 @@ class SkidkiDNBot extends Bot implements iSkidkiDNBot
     {
         $this->questMenu("Гео-квесты");
 
+        Log::info("Test 1");
+
         $quests = GeoQuest::where("is_active", 1)
             ->skip($page * config("bot.results_per_page"))
             ->take(config("bot.results_per_page"))
