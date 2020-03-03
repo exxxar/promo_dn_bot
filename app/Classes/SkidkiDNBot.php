@@ -1271,21 +1271,29 @@ class SkidkiDNBot extends Bot implements iSkidkiDNBot
         $lat = $location->getLatitude();
         $lng = $location->getLongitude();
 
+        $tmp_text = "*Ближайшие точки (~" . env("GEO_QUEST_GLOBAL_DISTANCE") . "км):*\n";
+
         $findLocation = false;
         foreach (GeoPosition::getNearestQuestPoints($lat, $lng) as $pos) {
-            $this->reply("Вы поблизости точки " . $pos->title);
+            $tmp_text .= "\xF0\x9F\x94\xB6 " . $pos->title . "\n";
+
             $findLocation = true;
             if ($pos->inRange($lat, $lng)) {
-                $this->reply("Точка " . $pos->title . " в шаговой доступности! Дерзай!");
-
+                $tmp_text .= "	\xF0\x9F\x94\xB7Точка " . $pos->title . " находится в " . $pos->radius . "км от вас!\n";
             }
         }
 
-        if (!$findLocation){
-            $this->reply("К сожалению нет ни одного задания поблизости:(");
+
+        if (!$findLocation) {
+            $tmp_text .= "Не найдено ни одной ближайшей к вам точки:(";
+            $this->reply($tmp_text);
+            return;
         }
 
-       // Log::info("test location: $lat $lng");
+        $this->reply($tmp_text);
+
+
+        // Log::info("test location: $lat $lng");
     }
 
     public function uploadImages($images)
