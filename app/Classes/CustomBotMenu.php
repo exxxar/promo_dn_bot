@@ -92,14 +92,17 @@ trait CustomBotMenu
         ];
 
         $this->keyboard_geo_quest = [
-            /*[
-                "text"=>"\xF0\x9F\x8C\x8DОтправить мою гео-локацию", "request_location"=>"true"
-            ],*/
+            [
+                ["text"=>"\xF0\x9F\x8C\x8DОтправить мою гео-локацию","request_location"=>true]
+            ],
             [
                 "\xF0\x9F\x94\x9BБлижайшие ко мне квесты",
             ],
             [
                 "\xF0\x9F\x93\x9CМоё прохождение квестов",
+            ],
+            [
+                "\xF0\x9F\x94\x99Акции, скидки и мероприятия"
             ],
             [
                 "\xF0\x9F\x94\x99Главное меню"
