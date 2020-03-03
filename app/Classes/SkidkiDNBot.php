@@ -1271,17 +1271,19 @@ class SkidkiDNBot extends Bot implements iSkidkiDNBot
         $lat = $location->getLatitude();
         $lng = $location->getLongitude();
 
-        Log::info("test location $lat $lng");
-
-
+        $findLocation = false;
         foreach (GeoPosition::getNearestQuestPoints($lat, $lng) as $pos) {
             $this->reply("Вы поблизости точки " . $pos->title);
+            $findLocation = true;
             if ($pos->inRange($lat, $lng)) {
                 $this->reply("Точка " . $pos->title . " в шаговой доступности! Дерзай!");
 
             }
         }
 
+        if (!$findLocation){
+            $this->reply("К сожалению нет ни одного задания поблизости:(");
+        }
 
        // Log::info("test location: $lat $lng");
     }
