@@ -77,7 +77,7 @@ class EventsController extends Controller
             'promo_id' => $request->get('promo_id') ?? null,
             'category_id' => $request->get('category_id'),
             'position' => $request->get('position') ?? 0,
-            'need_qr' => $request->get('need_qr') ?? false,
+            'need_qr' => $request->get('need_qr') == "on",
 
             'created_at' => Carbon::now(),
             'updated_at' => Carbon::now(),
@@ -152,7 +152,7 @@ class EventsController extends Controller
 
         $promotion->promo_id = $request->get("promo_id") ?? null;
 
-        $promotion->need_qr = $request->get("need_qr") ?? false;
+        $promotion->need_qr = $request->get("need_qr")=="on" ;
 
         $promotion->save();
 
