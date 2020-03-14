@@ -106,7 +106,7 @@
                             <td>
                                 <label class="c-switch c-switch-label c-switch-pill c-switch-opposite-primary">
                                     <input class="c-switch-input" type="checkbox"
-                                           name="need_qr" {{!$event->need_qr?'checked':''}}>
+                                           name="need_qr" {{$event->need_qr?'checked':''}}>
                                     <span class="c-switch-slider" data-checked="✓" data-unchecked="✕"></span>
                                 </label>
 
