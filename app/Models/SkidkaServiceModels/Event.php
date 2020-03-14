@@ -18,7 +18,8 @@ class Event extends Model
         'start_at',
         'end_at',
         'company_id',
-        'position'
+        'position',
+        'need_qr'
     ];
 
     public function company()

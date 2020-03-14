@@ -109,6 +109,16 @@
                             </td>
                         </tr>
 
+                        <tr>
+                            <td>Показывать QR-код</td>
+                            <td>
+                                <label class="c-switch c-switch-label c-switch-pill c-switch-opposite-primary">
+                                    <input class="c-switch-input" type="checkbox"
+                                           name="need_qr">
+                                    <span class="c-switch-slider" data-checked="✓" data-unchecked="✕"></span>
+                                </label>
+                            </td>
+                        </tr>
 
                         <tr>
                             <td></td>

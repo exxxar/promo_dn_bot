@@ -29,13 +29,15 @@ class Promotion extends Model
         'created_at',
         'updated_at',
         'handler',
-        'position'
+        'position',
+        'user_can_activate_count'
     ];
 
     public function users()
     {
         return $this->belongsToMany(User::class, 'user_has_promos', 'promotion_id', 'user_id')
-            ->withTimestamps();
+            ->withTimestamps()
+            ->withPivot('user_activation_count');
     }
 
     public function getPromoUrl(){
@@ -64,7 +66,7 @@ class Promotion extends Model
     public function onPromo($chatId)
     {
         $on_promo = $this->users()->where('telegram_chat_id', "$chatId")->first();
-        return ($on_promo != null);
+        return ($on_promo != null)&&$on_promo->pivot->user_activation_count==0;
     }
 
     public function isActive()

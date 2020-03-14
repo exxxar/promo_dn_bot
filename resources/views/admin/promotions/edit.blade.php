@@ -63,6 +63,14 @@
                         </tr>
 
                         <tr>
+                            <td>Колличество активаций для одного пользователя</td>
+                            <td>
+                                <input type="number" min="1" max="1000000" value="{{$promotion->user_can_activate_count}}" name="user_can_activate_count" class="form-control" required>
+                            </td>
+                        </tr>
+
+
+                        <tr>
                             <td>Ссылка на изображение к акции</td>
                             <td>
                                 <input type="url" name="promo_image_url" value="{{$promotion->promo_image_url}}"

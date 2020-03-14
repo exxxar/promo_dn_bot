@@ -2,7 +2,8 @@
 
 namespace App\Conversations;
 
-use App\Classes\CustomBotMenu;
+use App\Classes\BaseBot;
+use App\Classes\SkidkiBotMenu;
 use App\Events\ActivateUserEvent;
 use App\Models\SkidkaServiceModels\Promotion;
 use App\User;
@@ -19,9 +20,10 @@ use Illuminate\Support\Facades\Log;
 
 class PromoConversation extends Conversation
 {
-    use CustomBotMenu;
+    use BaseBot;
 
     protected $data;
+    protected $on_promo;
 
 
     public function __construct($bot, $data)
@@ -29,17 +31,18 @@ class PromoConversation extends Conversation
 
         $this->setBot($bot);
         $this->data = $data;
+        $this->on_promo = null;
     }
 
     public function run()
     {
 
-        $on_promo = $this->getUser(["promos"])->promos()
+        $this->on_promo = $this->getUser(["promos"])->promos()
             ->where("promotion_id", "=", intval($this->data))
             ->first();
 
-        if ($on_promo) {
-            $this->reply(__("messages.ask_promotions_error_1"));
+        if ($this->on_promo && $this->on_promo->pivot->user_activation_count == 0) {
+            $this->reply(__("messages.promo_message_3"));
             return;
         }
 
@@ -267,6 +270,7 @@ class PromoConversation extends Conversation
 
         $promo = Promotion::find(intval($this->data));
 
+
         if ($promo->current_activation_count < $promo->activation_count) {
 
             if ($promo->immediately_activate == 1) {
@@ -274,7 +278,17 @@ class PromoConversation extends Conversation
                 $user->referral_bonus_count += $promo->refferal_bonus;
                 $this->reply($promo->activation_text);
 
-                $user->promos()->attach($promo->id);
+                if (is_null($this->on_promo)) {
+                    $user->promos()->attach($promo->id, ["user_activation_count" => $promo->user_can_activate_count - 1]);
+                } else {
+                    if ($this->on_promo->pivot->user_activation_count > 0) {
+                        $this->on_promo->pivot->user_activation_count -= 1;
+                        $this->on_promo->pivot->save();
+
+                        $this->reply("У вас осталось *" . $this->on_promo->pivot->user_activation_count . "* активаций.");
+
+                    }
+                }
                 $user->updated_at = Carbon::now();
                 $user->save();
 

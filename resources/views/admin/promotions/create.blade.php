@@ -86,6 +86,16 @@
                                 <input type="number" min="0" max="1000000" name="activation_count" class="form-control" required>
                             </td>
                         </tr>
+
+                        <tr>
+                            <td>Колличество активаций для одного пользователя</td>
+                            <td>
+                                <input type="number" min="1" max="1000000" name="user_can_activate_count" class="form-control" required>
+                            </td>
+                        </tr>
+
+
+
                         <tr>
                             <td>Адрес расположения</td>
                             <td>

@@ -2,7 +2,8 @@
 
 namespace App\Conversations;
 
-use App\Classes\CustomBotMenu;
+use App\Classes\BaseBot;
+use App\Classes\SkidkiBotMenu;
 use App\User;
 use BotMan\BotMan\Messages\Conversations\Conversation;
 use BotMan\BotMan\Messages\Incoming\Answer;
@@ -12,7 +13,7 @@ use Illuminate\Support\Facades\Log;
 
 class FillInfoConversation extends Conversation
 {
-    use CustomBotMenu;
+    use BaseBot;
 
 
     public function __construct($bot)

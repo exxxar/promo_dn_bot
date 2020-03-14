@@ -22,7 +22,9 @@ class CreateEventsTable extends Migration
             $table->string('event_image_url', 1000)->nullable();
             $table->dateTime('start_at');
             $table->dateTime('end_at');
-            $table->boolean('is_active')->default(false);
+           // $table->boolean('is_active')->default(false);
+            $table->boolean('need_info')->default(false);
+            $table->boolean('need_qr')->default(false);
 
             $table->unsignedInteger('company_id')->nullable();
             $table->unsignedInteger('promo_id')->nullable();

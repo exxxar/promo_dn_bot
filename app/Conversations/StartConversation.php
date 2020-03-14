@@ -2,8 +2,9 @@
 
 namespace App\Conversations;
 
+use App\Classes\BaseBot;
 use App\Models\SkidkaServiceModels\Category;
-use App\Classes\CustomBotMenu;
+use App\Classes\SkidkiBotMenu;
 use App\Models\SkidkaServiceModels\RefferalsHistory;
 use App\User;
 use Illuminate\Foundation\Inspiring;
@@ -15,7 +16,7 @@ use Illuminate\Support\Facades\Log;
 
 class StartConversation extends Conversation
 {
-    use CustomBotMenu;
+    use BaseBot;
 
     protected $bot;
 

@@ -2,9 +2,10 @@
 
 namespace App\Conversations;
 
+use App\Classes\BaseBot;
 use App\Models\SkidkaServiceModels\Achievement;
 use App\Models\SkidkaServiceModels\CashbackHistory;
-use App\Classes\CustomBotMenu;
+use App\Classes\SkidkiBotMenu;
 use App\Enums\AchievementTriggers;
 use App\Models\SkidkaServiceModels\Event;
 use App\Events\AchievementEvent;
@@ -28,7 +29,7 @@ use Telegram\Bot\Laravel\Facades\Telegram;
 
 class StartDataConversation extends Conversation
 {
-    use CustomBotMenu;
+    use BaseBot;
 
     protected $data;
 
@@ -100,6 +101,11 @@ class StartDataConversation extends Conversation
                 $canBeRefferal = false;
             }
 
+            if ($this->code == "200") {
+                $this->activateEvent();
+                $canBeRefferal = false;
+            }
+
         }
 
         if ($canBeRefferal) {
@@ -160,13 +166,25 @@ class StartDataConversation extends Conversation
             ->where("promotion_id", "=", $promo->id)//promotion_id
             ->first();
 
-        if ($on_promo) {
+        if ($on_promo && $on_promo->pivot->user_activation_count == 0) {
             $this->reply(__("messages.promo_message_3"));
             return;
         }
 
-        if ($on_promo == null && $promo->current_activation_count < $promo->activation_count) {
-            $remote_user->promos()->attach($promo->id);
+
+        if ($promo->current_activation_count < $promo->activation_count) {
+
+            if (is_null($on_promo)) {
+                $remote_user->promos()->attach($promo->id, ["user_activation_count" => $promo->user_can_activate_count - 1]);
+            } else {
+                if ($on_promo->pivot->user_activation_count > 0) {
+                    $on_promo->pivot->user_activation_count -= 1;
+                    $on_promo->pivot->save();
+
+                    $this->reply("У вас осталось *" . $on_promo->pivot->user_activation_count . "* активаций.");
+
+                }
+            }
 
             $promo->current_activation_count += 1;
             $promo->save();
@@ -225,6 +243,32 @@ class StartDataConversation extends Conversation
 
     }
 
+    protected function activateEvent()
+    {
+
+        if ($this->getUser()->is_admin == 0)
+            return;
+
+        $event = Event::find(intval($this->promo_id));
+
+        if (is_null($event)) {
+            $this->reply("Мероприятие не найдено!");
+            return;
+        }
+
+        $remote_user = User::with(["promos"])
+            ->where("telegram_chat_id", intval($this->request_user_id))
+            ->first();
+
+        event(new AchievementEvent(AchievementTriggers::EventActivationCount, 1, $remote_user));
+
+        $this->reply("*Статистика активаций мероприятия обновлена*\nПользователь воспользовался *" . $event->title . "* акцией.");
+        $this->sendMessageToChat($remote_user->telegram_chat_id,
+            "Вы успешно воспользовались акцией! ");
+
+
+    }
+
     protected function activateRefferal()
     {
         $sender_user = User::where("telegram_chat_id", intval($this->request_user_id))
@@ -240,7 +284,7 @@ class StartDataConversation extends Conversation
 
         $on_refferal = RefferalsHistory::where("user_recipient_id", $this->getUser()->id)->first();
 
-        if ($sender_user && !$on_refferal) {
+        if (!is_null($sender_user) && is_null($on_refferal)) {
             $sender_user->referrals_count += 1;
             $sender_user->save();
 

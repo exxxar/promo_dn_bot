@@ -33,8 +33,9 @@ use Illuminate\Http\UploadedFile;
 use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Facades\Storage;
 
-class SkidkiDNBot extends Bot implements iSkidkiDNBot
+class SkidkiDNBot implements iSkidkiDNBot
 {
+    use BaseBot;
 
     public function getEventsAll($page)
     {
@@ -56,12 +57,17 @@ class SkidkiDNBot extends Bot implements iSkidkiDNBot
                 $keyboard = [];
 
                 if (!is_null($event->promo_id)) {
-                    $keyboard = [
-                        [
-                            ["text" => __('messages.get_all_events_btn'), "callback_data" => "/promotion " . $event->promo_id]
-                        ]
-                    ];
+                    array_push($keyboard, [
+                        ["text" => __('messages.get_all_events_btn'), "callback_data" => "/promotion " . $event->promo_id]
+                    ]);
                 }
+
+                if ($event->need_qr&&is_null($event->promo_id)){
+                    array_push($keyboard, [
+                        ["text" => "\xE2\x98\x95Активировать акцию", "callback_data" => "/activate_event " . $event->id]
+                    ]);
+                }
+
                 $found = true;
                 $this->sendPhoto(
                     "*" . $event->title . "*\n" . $event->description,
@@ -279,7 +285,6 @@ class SkidkiDNBot extends Bot implements iSkidkiDNBot
         $this->sendPhoto(__("messages.achievements_message_6"), $qr_url);
 
     }
-
 
     public function getRefLink()
     {
@@ -1283,7 +1288,6 @@ class SkidkiDNBot extends Bot implements iSkidkiDNBot
             }
         }
 
-
         if (!$findLocation) {
             $tmp_text .= "Не найдено ни одной ближайшей к вам точки:(";
             $this->reply($tmp_text);
@@ -1540,7 +1544,7 @@ class SkidkiDNBot extends Bot implements iSkidkiDNBot
 
         $this->sendMessage("Новые точки открываются по мере прохождения! Всего точек - *" . count($quest->quest_points_list) . "*.", [
             [
-                ['text' => "	\xF0\x9F\x93\x8BМои результаты прохождения", 'callback_data' => "/geo_quest_completion " . $quest->id]
+                ['text' => "\xF0\x9F\x93\x8BМои результаты прохождения", 'callback_data' => "/geo_quest_completion " . $quest->id]
             ]
         ]);
 
@@ -1558,5 +1562,34 @@ class SkidkiDNBot extends Bot implements iSkidkiDNBot
     public function getGeoQuestCompletion($questId)
     {
         $this->reply("Раздел Гео-квестов в стадии разработки");
+    }
+
+    public function getEventQRCode($eventId){
+
+        $event = Event::find($eventId);
+
+        if (is_null($event))
+        {
+            $this->reply("К сожалению Акция не найдена:(");
+            return;
+        }
+
+        $tmp_id = (string)$this->getChatId();
+
+        while (strlen($tmp_id) < 10)
+            $tmp_id = "0" . $tmp_id;
+
+        $tmp_event_id = (string)$eventId;
+
+        while (strlen($tmp_event_id) < 10)
+            $tmp_event_id = "0" . $tmp_event_id;
+
+
+
+        $code = base64_encode("200" . $tmp_id . $tmp_event_id);
+
+        $qr_url = env("QR_URL") . "https://t.me/" . env("APP_BOT_NAME") . "?start=$code";
+
+        $this->sendPhoto("*Для активации акции покажите QR-код сотруднику!*", $qr_url);
     }
 }

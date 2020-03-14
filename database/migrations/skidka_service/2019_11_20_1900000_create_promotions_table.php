@@ -22,6 +22,8 @@ class CreatePromotionsTable extends Migration
 
             $table->string('handler')->nullable();
 
+            $table->integer('user_can_activate_count')->default(1);
+
             $table->dateTime('start_at');
             $table->dateTime('end_at');
             $table->integer('activation_count')->default(0);

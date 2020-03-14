@@ -7,6 +7,8 @@ namespace App\Classes;
 interface iSkidkiDNBot
 {
     public function getEventsAll($page);
+    public function getEventQRCode($eventId);
+
     public function getPaymentsAll($page);
     public function getCashBacksAll($page);
 

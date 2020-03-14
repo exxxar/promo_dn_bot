@@ -2,7 +2,8 @@
 
 namespace App\Conversations;
 
-use App\Classes\CustomBotMenu;
+use App\Classes\BaseBot;
+use App\Classes\SkidkiBotMenu;
 use App\Models\SkidkaServiceModels\Prize;
 use App\Models\SkidkaServiceModels\Promocode;
 use App\User;
@@ -13,7 +14,7 @@ use Illuminate\Support\Facades\Log;
 
 class LotteryConversation extends Conversation
 {
-    use CustomBotMenu;
+    use BaseBot;
 
     public function __construct($bot)
     {

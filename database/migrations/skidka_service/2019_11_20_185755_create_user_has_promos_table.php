@@ -18,6 +18,8 @@ class CreateUserHasPromosTable extends Migration
             $table->increments('id');
             $table->unsignedInteger("user_id");
 
+            $table->integer('user_activation_count')->default(1);
+
             $table->unsignedInteger("promotion_id");
 
             if (env("DB_CONNECTION") == 'mysql') {

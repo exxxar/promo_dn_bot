@@ -102,6 +102,18 @@
                         </tr>
 
                         <tr>
+                            <td>Показывать QR-код</td>
+                            <td>
+                                <label class="c-switch c-switch-label c-switch-pill c-switch-opposite-primary">
+                                    <input class="c-switch-input" type="checkbox"
+                                           name="is_active" {{!$event->need_qr?'checked':''}}>
+                                    <span class="c-switch-slider" data-checked="✓" data-unchecked="✕"></span>
+                                </label>
+
+                            </td>
+                        </tr>
+
+                        <tr>
                             <td>Выбрать компанию</td>
                             <td>
                                 <select name="company_id" class="form-control" required>

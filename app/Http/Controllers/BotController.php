@@ -466,5 +466,10 @@ class BotController extends Controller
             ->getGeoQuestCompletion($questId);
     }
 
-
+    public function getEventQRCode($bot, $eventId)
+    {
+        $this->sdnbot
+            ->setBot($bot)
+            ->getEventQRCode($eventId);
+    }
 }

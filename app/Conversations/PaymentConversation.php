@@ -2,9 +2,10 @@
 
 namespace App\Conversations;
 
+use App\Classes\BaseBot;
 use App\Models\SkidkaServiceModels\CashbackHistory;
 use App\Models\SkidkaServiceModels\CashBackInfo;
-use App\Classes\CustomBotMenu;
+use App\Classes\SkidkiBotMenu;
 use App\Models\SkidkaServiceModels\Company;
 use App\Enums\AchievementTriggers;
 use App\Events\AchievementEvent;
@@ -24,7 +25,7 @@ use Telegram\Bot\Laravel\Facades\Telegram;
 
 class PaymentConversation extends Conversation
 {
-    use CustomBotMenu;
+    use BaseBot;
 
     protected $request_id;
     protected $company_id;

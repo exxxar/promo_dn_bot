@@ -2,14 +2,15 @@
 
 namespace App\Conversations;
 
-use App\Classes\CustomBotMenu;
+use App\Classes\BaseBot;
+use App\Classes\SkidkiBotMenu;
 use BotMan\BotMan\Messages\Conversations\Conversation;
 use Illuminate\Support\Facades\Log;
 
 class StopConversation extends Conversation
 {
 
-    use CustomBotMenu;
+    use BaseBot;
 
     public function __construct($bot)
     {

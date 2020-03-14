@@ -70,6 +70,7 @@ class PromotionController extends Controller
             'category_id'=> 'required|integer',
             'refferal_bonus'=> 'integer',
             'position'=> 'required',
+            'user_can_activate_count'=> 'required',
         ]);
 
         $promotions = Promotion::create([
@@ -89,6 +90,7 @@ class PromotionController extends Controller
             'immediately_activate'=>$request->get('immediately_activate')??false,
             'refferal_bonus'=>$request->get('refferal_bonus')??0,
             'position'=>$request->get('position')??0,
+            'user_can_activate_count'=>$request->get('user_can_activate_count')??1,
             'created_at' => Carbon::now(),
             'updated_at' => Carbon::now(),
         ]);
@@ -153,6 +155,7 @@ class PromotionController extends Controller
             'company_id'=> 'required|integer',
             'category_id'=> 'required|integer',
             'refferal_bonus'=> 'integer',
+            'user_can_activate_count'=> 'required',
         ]);
 
 
@@ -172,6 +175,7 @@ class PromotionController extends Controller
         $promotion->category_id = $request->get("category_id");
         $promotion->refferal_bonus = $request->get("refferal_bonus");
         $promotion->position = $request->get("position")??0;
+        $promotion->user_can_activate_count = $request->get("user_can_activate_count")??1;
         $promotion->save();
 
         return redirect()

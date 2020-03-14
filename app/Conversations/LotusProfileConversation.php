@@ -2,7 +2,8 @@
 
 namespace App\Conversations;
 
-use App\Classes\CustomBotMenu;
+use App\Classes\BaseBot;
+use App\Classes\SkidkiBotMenu;
 use BotMan\BotMan\Messages\Conversations\Conversation;
 
 use App\Models\SkidkaServiceModels\Promotion;
@@ -16,7 +17,7 @@ use Telegram\Bot\Laravel\Facades\Telegram;
 
 class LotusProfileConversation extends Conversation
 {
-    use CustomBotMenu;
+    use BaseBot;
 
     protected $about;
     protected $model_name;
