@@ -7,6 +7,7 @@ use App\Models\SkidkaServiceModels\Event;
 use App\Models\SkidkaServiceModels\Promotion;
 use Carbon\Carbon;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Log;
 use Telegram\Bot\FileUpload\InputFile;
 use Telegram\Bot\Laravel\Facades\Telegram;
 
@@ -140,6 +141,7 @@ class EventsController extends Controller
         ]);
 
 
+        Log::info(print_r($request->get("need_qr"),true));
         $promotion = Event::find($id);
         $promotion->title = $request->get("title");
         $promotion->description = $request->get("description");
