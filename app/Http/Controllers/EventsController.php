@@ -140,8 +140,6 @@ class EventsController extends Controller
 
         ]);
 
-
-        Log::info(print_r($request->get("need_qr"),true));
         $promotion = Event::find($id);
         $promotion->title = $request->get("title");
         $promotion->description = $request->get("description");
