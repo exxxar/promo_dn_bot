@@ -293,8 +293,9 @@ trait BaseBot
 
         ];
 
-        $this->TradeKeyboardInit(100);
-        array_push($this->keyboard,$this->keyboard_basket[0]);
+        $this->SkidkiKeyboardInit();
+      //  $this->TradeKeyboardInit(100);
+       // array_push($this->keyboard,$this->keyboard_basket[0]);
     }
 
     public function mainMenu($message)
