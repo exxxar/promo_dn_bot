@@ -24,8 +24,17 @@ trait ApiBot
         $bot = BotHub::where("bot_url", $botName)
             ->first();
 
+
+
         try {
             $this->bot = new Api(config("app.debug") ? $bot->token_dev : $bot->token_prod,true);
+
+            if ($bot->is_active==false){
+                $this->sendMenu("Бот в данный момент недоступен!",[
+                    ["Попробовать опять"]
+                ]);
+                $this->bot = null;
+            }
            //$this->bot = new Api(env("TELEGRAM_LOGGER_BOT_TOKEN"),true);
         } catch (TelegramSDKException $e) {
             Log::error($e->getMessage() . " " . $e->getLine());
@@ -43,6 +52,9 @@ trait ApiBot
     public function sendMessage($message, $keyboard = [], $parseMode = 'Markdown')
     {
 
+        if (is_null($this->bot))
+            return;
+
         $this->bot->sendMessage([
             "chat_id" => $this->chatId,
             "text" => $message,
@@ -56,6 +68,9 @@ trait ApiBot
 
     public function sendPhoto($message, $photoUrl, $parseMode = 'Markdown')
     {
+        if (is_null($this->bot))
+            return;
+
         $this->bot->sendPhoto([
             'chat_id' =>$this->chatId,
             'parse_mode' => $parseMode,
@@ -67,6 +82,9 @@ trait ApiBot
 
     public function sendMenu($message, $keyboard)
     {
+        if (is_null($this->bot))
+            return;
+
         $this->bot->sendMessage( [
             "chat_id" => $this->chatId,
             "text" => $message,
