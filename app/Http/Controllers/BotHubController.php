@@ -136,7 +136,7 @@ class BotHubController extends Controller
             'token_prod' => 'required',
             'token_dev' => 'required',
             'bot_pic' => 'required',
-            'bot_url' => 'required|unique:bot_hubs',
+            'bot_url' => 'required',
             'description' => 'required',
             'money' => 'required|numeric',
             'money_per_day' => 'required|numeric',
