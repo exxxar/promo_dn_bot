@@ -255,7 +255,7 @@ class BotHubController extends Controller
         $botName = $request->get("bot_url");
         $query = $request->get("query");
 
-        Log::info("test");
+        Log::info($query);
 
         $objects = [
             [
