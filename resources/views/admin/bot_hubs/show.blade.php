@@ -39,7 +39,18 @@
                     <tr>
                         <td>WebHook url</td>
                         <td>
-                           <p>{{$bot->webhook_url}}</p>
+                            <div class="row">
+                                <div class="col-sm-4">
+                                    <p>{{$bot->webhook_url}}</p>
+                                </div>
+                                <div class="col-sm-4">
+                                    <a class="btn btn-info" href="{{route("bot_hubs.setwebhook",$bot->id)}}">Установить</a>
+                                </div>
+                                <div class="col-sm-4">
+                                    <a class="btn btn-info" href="{{route("bot_hubs.unsetwebhook",$bot->id)}}">Убрать</a>
+                                </div>
+                            </div>
+
                         </td>
                     </tr>
 

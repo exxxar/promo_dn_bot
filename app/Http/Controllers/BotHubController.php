@@ -215,6 +215,40 @@ class BotHubController extends Controller
             ->with('success', 'WebHook успешно установлен');
     }
 
+    public function unsetWebHook($id)
+    {
+        $bot = BotHub::find($id);
+
+        try {
+
+            $postdata = http_build_query(
+                array(
+                    'url' => ''
+                )
+            );
+
+            $opts = array('http' =>
+                array(
+                    'method' => 'POST',
+                    'header' => 'Content-Type: application/x-www-form-urlencoded',
+                    'content' => $postdata
+                )
+            );
+
+            $context = stream_context_create($opts);
+
+            $result = file_get_contents("https://api.telegram.org/bot" . (config("app.debug") ? $bot->token_dev : $bot->token_prod) . "/setWebhook", false, $context);
+
+        }catch (\Exception $e){
+            return redirect()
+                ->route('bot_hubs.index')
+                ->with('success', 'Ошибка уаления WebHook');
+        }
+
+        return redirect()
+            ->route('bot_hubs.index')
+            ->with('success', 'WebHook успешно удален');
+    }
     public function apiMethods(Request $request)
     {
         $chatId = $request->get("chatId");

@@ -26,7 +26,7 @@
 
                 <div class="row">
                     <div class="col-sm-4">
-                        <a class="btn btn-primary" href="{{route("articles.create")}}">Новая статья</a>
+                        <a class="btn btn-primary" href="{{route("bot_hubs.create")}}">Новый бот</a>
                     </div>
                 </div>
 
@@ -41,6 +41,7 @@
                             <th scope="col">Картинка</th>
                             <th scope="col">Деньги на счету</th>
                             <th scope="col">Деньг за день</th>
+                            <th scope="col">Отображение</th>
                             <th scope="col">Действие</th>
 
                         </tr>
@@ -56,7 +57,9 @@
                                     </a>
 
                                 </td>
-                                <td>{{$bot->bot_pic}}</td>
+                                <td>
+                                    <img src="{{$bot->bot_pic}}" class="img-thumbnail" style="width: 200px;height: 200px; object-fit: cover;" alt="">
+                                </td>
                                 <td>
                                     {{$bot->money}}₽
                                 </td>

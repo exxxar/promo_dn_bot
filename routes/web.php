@@ -156,7 +156,8 @@ Route::prefix('admin')->group(function () {
     });
 
     Route::name('bot_hubs.')->prefix('bot_hubs')->group(function () {
-        Route::get("/set_webhook/{id}", "BotHubController@setWebHook")->name("webhook");
+        Route::get("/set_webhook/{id}", "BotHubController@setWebHook")->name("setwebhook");
+        Route::get("/un_set_webhook/{id}", "BotHubController@unsetWebHook")->name("unsetwebhook");
     });
 
 
