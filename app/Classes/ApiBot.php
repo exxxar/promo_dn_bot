@@ -19,20 +19,21 @@ trait ApiBot
 
     protected $chatId;
 
+    protected $keyboard_fallback = [
+        [
+            "Попробовать снова"
+        ],
+    ];
+
     public function setBot($botName)
     {
         $bot = BotHub::where("bot_url", $botName)
             ->first();
-
-
-
         try {
             $this->bot = new Api(config("app.debug") ? $bot->token_dev : $bot->token_prod,true);
 
-            if ($bot->is_active==false){
-                $this->sendMenu("Бот в данный момент недоступен!",[
-                    ["Попробовать снова"]
-                ]);
+            if ($bot->is_active==0){
+                $this->sendMenu("Бот в данный момент недоступен!",$this->keyboard_fallback);
                 $this->bot = null;
             }
            //$this->bot = new Api(env("TELEGRAM_LOGGER_BOT_TOKEN"),true);
