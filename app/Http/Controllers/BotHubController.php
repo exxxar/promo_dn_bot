@@ -259,6 +259,7 @@ class BotHubController extends Controller
             return;
 
         Log::info("TEST $query");
+
         $objects = [
             [
                 "class" => TestApiBot::class,
