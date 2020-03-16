@@ -190,6 +190,12 @@
                 Бонусы пользователей<br>за квесты</a>
         </li>
 
+        <li class="c-sidebar-nav-item">
+            <a class="c-sidebar-nav-link" href="{{ route('bot_hubs.index') }}">
+                <i class="cil-share-boxed c-sidebar-nav-icon"></i>
+                Управление ботами</a>
+        </li>
+
     </ul>
     <button class="c-sidebar-minimizer c-class-toggler" type="button" data-target="_parent"
             data-class="c-sidebar-minimized"></button>
@@ -197,7 +203,7 @@
 
 @include('dashboard.shared.header')
 
-<div class="c-body">
+<div class="c-body" id="app">
 
     <main class="c-main">
 

@@ -513,6 +513,7 @@
                        href="https://play.google.com/store/apps/details?id=org.telegram.messenger"><img
                                 src="/img/google-play-badge.svg" alt=""></a>
                     <a class="badge-link" href="https://t.me/skidki_dn_bot"><img src="/img/telegram.png" alt=""></a>
+                    <a href="//showstreams.tv/" class="badge-link"><img src="//www.free-kassa.ru/img/fk_btn/6.png" title="Бесплатный видеохостинг"></a>
                 </div>
             </div>
         </div>

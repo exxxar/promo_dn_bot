@@ -169,7 +169,8 @@ return [
         App\Providers\RouteServiceProvider::class,
         App\Providers\BotMan\DriverServiceProvider::class,
         App\Providers\SkidkiDNServiceProvider::class,
-        \App\Providers\BotMan\DriverServiceProvider::class
+        \App\Providers\BotMan\DriverServiceProvider::class,
+        Spatie\Permission\PermissionServiceProvider::class,
     ],
 
     /*

@@ -439,12 +439,11 @@ class SkidkiDNBot implements iSkidkiDNBot
                 }
             }
 
-        $this->reply(strlen($tmp) > 0 ? $tmp : "У вас нет друзей:(");
+        $this->reply(strlen($tmp) > 0 ? $tmp : "У вас еще нет друзей:(");
         $this->pagination('/friends', $refs, $page, "Ваши действия");
     }
 
 
-    //todo: реализовать благотворительность
     public function getStatisticMenu()
     {
         $keyboard = [

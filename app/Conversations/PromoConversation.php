@@ -41,7 +41,9 @@ class PromoConversation extends Conversation
             ->where("promotion_id", "=", intval($this->data))
             ->first();
 
-        if ($this->on_promo && $this->on_promo->pivot->user_activation_count == 0) {
+        $promo = Promotion::where("id", intval($this->data))->first();
+
+        if ($this->on_promo && $this->on_promo->pivot->user_activation_count <= $promo->user_can_activate_count) {
             $this->reply(__("messages.promo_message_3"));
             return;
         }
@@ -279,13 +281,13 @@ class PromoConversation extends Conversation
                 $this->reply($promo->activation_text);
 
                 if (is_null($this->on_promo)) {
-                    $user->promos()->attach($promo->id, ["user_activation_count" => $promo->user_can_activate_count - 1]);
+                    $user->promos()->attach($promo->id, ["user_activation_count" => 1]);
                 } else {
-                    if ($this->on_promo->pivot->user_activation_count > 0) {
-                        $this->on_promo->pivot->user_activation_count -= 1;
+                    if ($this->on_promo->pivot->user_activation_count <= $promo->user_can_activate_count) {
+                        $this->on_promo->pivot->user_activation_count += 1;
                         $this->on_promo->pivot->save();
 
-                        $this->reply("У вас осталось *" . $this->on_promo->pivot->user_activation_count . "* активаций.");
+                        $this->reply("У вас осталось *" . ($promo->user_can_activate_count - $this->on_promo->pivot->user_activation_count) . "* активаций.");
 
                     }
                 }

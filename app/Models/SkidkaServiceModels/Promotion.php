@@ -66,7 +66,7 @@ class Promotion extends Model
     public function onPromo($chatId)
     {
         $on_promo = $this->users()->where('telegram_chat_id', "$chatId")->first();
-        return ($on_promo != null)&&$on_promo->pivot->user_activation_count==0;
+        return ($on_promo != null)&&$on_promo->pivot->user_activation_count==$this->user_can_activate_count;
     }
 
     public function isActive()

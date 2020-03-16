@@ -175,13 +175,13 @@ class StartDataConversation extends Conversation
         if ($promo->current_activation_count < $promo->activation_count) {
 
             if (is_null($on_promo)) {
-                $remote_user->promos()->attach($promo->id, ["user_activation_count" => $promo->user_can_activate_count - 1]);
+                $remote_user->promos()->attach($promo->id, ["user_activation_count" => 1]);
             } else {
-                if ($on_promo->pivot->user_activation_count > 0) {
-                    $on_promo->pivot->user_activation_count -= 1;
+                if ($on_promo->pivot->user_activation_count <= $promo->user_can_activate_count) {
+                    $on_promo->pivot->user_activation_count += 1;
                     $on_promo->pivot->save();
 
-                    $this->reply("У вас осталось *" . $on_promo->pivot->user_activation_count . "* активаций.");
+                    $this->reply("У вас осталось *" . ($promo->user_can_activate_count - $on_promo->pivot->user_activation_count) . "* активаций.");
 
                 }
             }

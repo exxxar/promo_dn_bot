@@ -32,6 +32,7 @@ class LotusProfileConversation extends Conversation
     protected $education;
     protected $wish_learn;
     protected $data;
+    protected $on_promo;
 
     public function __construct($bot, $data)
     {
@@ -56,12 +57,14 @@ class LotusProfileConversation extends Conversation
         $this->wish_learn = null;
 
 
-        $on_promo = $this->getUser(["promos"])->promos()
+        $this->on_promo = $this->getUser(["promos"])->promos()
             ->where("promotion_id", "=", intval($this->data))
             ->first();
 
-        if ($on_promo) {
-            $this->reply(__("messages.ask_promotions_error_1"));
+        $promo = Promotion::where("id", intval($this->data))->first();
+
+        if ($this->on_promo && $this->on_promo->pivot->user_activation_count <= $promo->user_can_activate_count) {
+            $this->reply(__("messages.promo_message_3"));
             return;
         }
 
@@ -496,7 +499,20 @@ class LotusProfileConversation extends Conversation
                 $user->updated_at = Carbon::now();
 
                 $this->reply($promo->activation_text);
-                $user->promos()->attach($promo->id);
+                $user->promos()->attach($promo->id,[]);
+
+                if (is_null($this->on_promo)) {
+                    $user->promos()->attach($promo->id, ["user_activation_count" => 1]);
+                } else {
+                    if ($this->on_promo->pivot->user_activation_count <= $promo->user_can_activate_count) {
+                        $this->on_promo->pivot->user_activation_count += 1;
+                        $this->on_promo->pivot->save();
+
+                        $this->reply("У вас осталось *" . ($promo->user_can_activate_count - $this->on_promo->pivot->user_activation_count) . "* активаций.");
+
+                    }
+                }
+
                 $user->save();
                 $promo->current_activation_count += 1;
                 $promo->save();

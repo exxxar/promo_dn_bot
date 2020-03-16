@@ -17,10 +17,11 @@ use Illuminate\Contracts\Auth\MustVerifyEmail;
 use Illuminate\Foundation\Auth\User as Authenticatable;
 use Illuminate\Support\Facades\Log;
 use Kyslik\ColumnSortable\Sortable;
+use Laravel\Passport\HasApiTokens;
 
 class User extends Authenticatable
 {
-    use Notifiable, Sortable;
+    use Notifiable, Sortable,HasApiTokens;
 
     public $sortable = ['id'];
 
@@ -84,12 +85,6 @@ class User extends Authenticatable
         return $this->belongsToMany(Promotion::class, 'user_has_promos', 'user_id', 'promotion_id')
             ->withTimestamps()
             ->withPivot('user_activation_count');
-    }
-
-    public function onPromos()
-    {
-        //todo: on promos
-        return $this->promos()->count()>0&&$this->promos()->first()->pivot->user_activation_count==0;
     }
 
     public function companies()

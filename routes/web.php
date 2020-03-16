@@ -155,6 +155,11 @@ Route::prefix('admin')->group(function () {
         Route::get("/channel/{id}", "AchievementsController@channel")->name("channel");
     });
 
+    Route::name('bot_hubs.')->prefix('bot_hubs')->group(function () {
+        Route::get("/set_webhook/{id}", "BotHubController@setWebHook")->name("webhook");
+    });
+
+
     Route::resources([
         'articles' => 'ArticleController',
         'users' => 'UsersController',
@@ -175,6 +180,7 @@ Route::prefix('admin')->group(function () {
         'geo_quests' => 'GeoQuestController',
         'geo_positions' => 'GeoPositionController',
         'geo_histories' => 'GeoHistoryController',
+        'bot_hubs' => 'BotHubController',
     ]);
 });
 
