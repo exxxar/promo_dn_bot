@@ -252,7 +252,7 @@ class BotHubController extends Controller
     public function apiMethods(Request $request)
     {
         $chatId = $request->get("chatId");
-        $botName = $request->get("bot_name");
+        $botName = $request->get("bot_url");
         $query = $request->get("query");
 
         Log::info("test");
