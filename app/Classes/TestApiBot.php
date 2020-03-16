@@ -36,7 +36,8 @@ class TestApiBot
     }
 
     public function menu(){
-        $this->sendMessage("Главное меню");
+       // $this->sendMessage("Главное меню");
+        $this->sendMenu("Главное меню системы",$this->business_school_main_keyboard);
     }
 
     public function menu2($arg1,$arg2,$arg3){
