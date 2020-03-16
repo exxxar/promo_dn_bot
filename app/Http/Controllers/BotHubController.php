@@ -255,11 +255,10 @@ class BotHubController extends Controller
         $botName = $request->get("bot_url");
         $query = $request->get("query");
 
-        Log::info($query);
-
         if (is_null($query))
             return;
 
+        Log::info("TEST $query");
         $objects = [
             [
                 "class" => TestApiBot::class,
