@@ -31,7 +31,7 @@ trait ApiBot
 
             if ($bot->is_active==false){
                 $this->sendMenu("Бот в данный момент недоступен!",[
-                    ["Попробовать опять"]
+                    ["Попробовать снова"]
                 ]);
                 $this->bot = null;
             }

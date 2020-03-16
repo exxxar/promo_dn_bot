@@ -2,7 +2,7 @@
 
 return [
     'test_api_bot'=>[
-        "/start" => "menu",
+        "/start|Попробовать снова" => "menu",
         "/start ([0-9]+) ([0-9]+)" => "menu2",
         "/.*Про Школу бизнеса" => "getAboutBusinessSchoolPage",
         "/.*Мероприятия" => "getEventsPage",
