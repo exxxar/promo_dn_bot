@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "55f228b35e3094808204583131751d40",
+    "content-hash": "f4c132e3c1fc7943f2ca59d8f09e76a7",
     "packages": [
         {
             "name": "azate/laravel-telegram-login-auth",
@@ -160,16 +160,16 @@
         },
         {
             "name": "bensampo/laravel-enum",
-            "version": "v1.34",
+            "version": "v1.35",
             "source": {
                 "type": "git",
                 "url": "https://github.com/BenSampo/laravel-enum.git",
-                "reference": "d4d72561fd4cb83f1e2c33e6e0362bd503bfddbe"
+                "reference": "439065e8145fc217884d7e1ca1ca8766a1a89968"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/BenSampo/laravel-enum/zipball/d4d72561fd4cb83f1e2c33e6e0362bd503bfddbe",
-                "reference": "d4d72561fd4cb83f1e2c33e6e0362bd503bfddbe",
+                "url": "https://api.github.com/repos/BenSampo/laravel-enum/zipball/439065e8145fc217884d7e1ca1ca8766a1a89968",
+                "reference": "439065e8145fc217884d7e1ca1ca8766a1a89968",
                 "shasum": ""
             },
             "require": {
@@ -227,7 +227,7 @@
                 "package",
                 "validation"
             ],
-            "time": "2020-03-13T17:39:38+00:00"
+            "time": "2020-03-16T09:17:29+00:00"
         },
         {
             "name": "botman/botman",
@@ -3259,6 +3259,59 @@
                 "server"
             ],
             "time": "2019-05-05T09:22:01+00:00"
+        },
+        {
+            "name": "maksa988/laravel-freekassa",
+            "version": "v1.0.5",
+            "source": {
+                "type": "git",
+                "url": "https://github.com/maksa988/laravel-freekassa.git",
+                "reference": "885ec323b68aca65684906939548f567e00030a1"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://api.github.com/repos/maksa988/laravel-freekassa/zipball/885ec323b68aca65684906939548f567e00030a1",
+                "reference": "885ec323b68aca65684906939548f567e00030a1",
+                "shasum": ""
+            },
+            "require": {
+                "guzzlehttp/guzzle": "~6.2",
+                "laravel/framework": "^5.5",
+                "php": ">=7.1"
+            },
+            "require-dev": {
+                "orchestra/testbench": "^3.5",
+                "phpunit/phpunit": "^6.0"
+            },
+            "type": "library",
+            "extra": {
+                "laravel": {
+                    "providers": [
+                        "Maksa988\\FreeKassa\\FreeKassaServiceProvider"
+                    ],
+                    "aliases": {
+                        "FreeKassa": "Maksa988\\FreeKassa\\Facades\\FreeKassa"
+                    }
+                }
+            },
+            "autoload": {
+                "psr-4": {
+                    "Maksa988\\FreeKassa\\Facades\\": "src/Facades",
+                    "Maksa988\\FreeKassa\\": "src"
+                }
+            },
+            "notification-url": "https://packagist.org/downloads/",
+            "license": [
+                "MIT"
+            ],
+            "authors": [
+                {
+                    "name": "maksa988",
+                    "email": "maksa988ua@gmail.com"
+                }
+            ],
+            "description": "FreeKassa payments for Laravel",
+            "time": "2020-01-28T09:16:09+00:00"
         },
         {
             "name": "monolog/monolog",

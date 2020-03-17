@@ -37,7 +37,8 @@
         "simplesoftwareio/simple-qrcode": "^2.0",
         "spatie/laravel-db-snapshots": "^1.4",
         "spatie/laravel-permission": "^3.11",
-        "vinkla/instagram": "^9.3"
+        "vinkla/instagram": "^9.3",
+        "maksa988/laravel-freekassa": "1.x"
     },
     "require-dev": {
         "beyondcode/laravel-dump-server": "^1.0",

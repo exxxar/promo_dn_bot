@@ -1,32 +1,17 @@
 <?php
 
 
-namespace App\Classes;
+namespace App\Classes\BusinessSchool;
 
 
+use App\Classes\ApiBot;
 use Illuminate\Support\Facades\Log;
 use Telegram\Bot\Api;
 use Telegram\Bot\Laravel\Facades\Telegram;
 
-class TestApiBot
+class BusinessSchoolBot implements iBusinessSchoolBot
 {
-    use ApiBot;
-
-    protected $business_school_main_keyboard = [
-        [
-            "Про Школу бизнеса", "Мероприятия"
-        ],
-        [
-            "Боты для Вашего бизнеса", "Маркетинг 2.0"
-        ],
-        [
-            "Бизнес и личностный рост", "Личностный рост 4+1"
-        ],
-        [
-            "Обо мне", "Rest Service"
-        ]
-
-    ];
+    use ApiBot, tBusinessSchoolMenu;
 
     public function __construct($botName, $chatId)
     {
@@ -35,13 +20,8 @@ class TestApiBot
             ->setChatId($chatId);
     }
 
-    public function menu(){
-       // $this->sendMessage("Главное меню");
-        $this->sendMenu("Главное меню системы",$this->business_school_main_keyboard);
-    }
-
-    public function menu2($arg1,$arg2,$arg3){
-        $this->sendMessage("data $arg2 $arg3");
+    public function start(){
+        $this->mainMenu("Главное меню");
     }
 
     public function getAboutBusinessSchoolPage(){
@@ -76,8 +56,4 @@ class TestApiBot
         $this->sendMessage("getRestServicePage");
     }
 
-    public function mainMenu()
-    {
-        $this->sendMenu("*Главное меню*", $this->business_school_main_keyboard);
-    }
 }

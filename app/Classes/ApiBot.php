@@ -19,7 +19,7 @@ trait ApiBot
 
     protected $chatId;
 
-    protected $is_active;
+    protected $bot_params;
 
     protected $keyboard_fallback = [
         [
@@ -29,13 +29,11 @@ trait ApiBot
 
     public function setBot($botName)
     {
-        $bot = BotHub::where("bot_url", $botName)
+        $this->bot_params = BotHub::where("bot_url", $botName)
             ->first();
 
-        $this->is_active = $bot->is_active;
-
         try {
-            $this->bot = new Api(config("app.debug") ? $bot->token_dev : $bot->token_prod, true);
+            $this->bot = new Api(config("app.debug") ? $this->bot_params->token_dev : $this->bot_params->token_prod, true);
         } catch (TelegramSDKException $e) {
             Log::error($e->getMessage() . " " . $e->getLine());
         }
@@ -47,12 +45,16 @@ trait ApiBot
     {
         $this->chatId = $chatId;
 
-        if ($this->is_active == 0) {
-            $this->sendPhoto('', 'https://sun9-29.userapi.com/c858232/v858232349/173635/lTlP7wMcZEA.jpg',[
+        if ($this->bot_params->is_active == 0) {
+
+            $keyboard = [
                 [
                     ["text"=>"\xF0\x9F\x92\xB3Оплатить услуги сервиса","url"=>"https://www.free-kassa.ru/merchant/cash.php?m=169322&oa=200&s=c6fbd62b3825c451c1d6eabb22b34a5d&o=2005849"]
                 ]
-            ]);
+            ];
+
+
+            $this->sendPhoto('', 'https://sun9-29.userapi.com/c858232/v858232349/173635/lTlP7wMcZEA.jpg',$keyboard);
             $this->sendMenu("Бот в данный момент недоступен!", $this->keyboard_fallback);
             $this->bot = null;
         }

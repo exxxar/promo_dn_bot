@@ -171,6 +171,7 @@ return [
         App\Providers\SkidkiDNServiceProvider::class,
         \App\Providers\BotMan\DriverServiceProvider::class,
         Spatie\Permission\PermissionServiceProvider::class,
+        Maksa988\FreeKassa\FreeKassaServiceProvider::class,
     ],
 
     /*
@@ -223,7 +224,8 @@ return [
         'Telegram' => Telegram\Bot\Laravel\Facades\Telegram::class,
         'SkidkiDNBot' => App\Helpers\Facades\SkidkiDNBot::class,
         'Trello' => Gregoriohc\LaravelTrello\Facades\Wrapper::class,
-        'Image' => Intervention\Image\Facades\Image::class
+        'Image' => Intervention\Image\Facades\Image::class,
+        'FreeKassa' => Maksa988\FreeKassa\Facades\FreeKassa::class,
 
     ],
 

@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\BotHub;
+use App\Classes\BusinessSchool\BusinessSchoolBot;
 use App\Classes\TestApiBot;
 use App\Enums\Parts;
 use App\Models\SkidkaServiceModels\Article;
@@ -262,9 +263,9 @@ class BotHubController extends Controller
 
         $objects = [
             [
-                "class" => TestApiBot::class,
-                "object" => new TestApiBot($botName, $chatId),
-                "methods" => config("bot_api_routes.test_api_bot")
+                "class" => BusinessSchoolBot::class,
+                "object" => new BusinessSchoolBot($botName, $chatId),
+                "methods" => config("bot_api_routes.business_school_bot")
             ]
         ];
 

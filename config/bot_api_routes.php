@@ -1,9 +1,8 @@
 <?php
 
 return [
-    'test_api_bot'=>[
-        "/start|Попробовать снова" => "menu",
-        "/start ([0-9]+) ([0-9]+)" => "menu2",
+    'business_school_bot'=>[
+        "/start|Попробовать снова" => "start",
         "/.*Про Школу бизнеса" => "getAboutBusinessSchoolPage",
         "/.*Мероприятия" => "getEventsPage",
         "/.*Боты для Вашего бизнеса" => "getBotForBusinessPage",
