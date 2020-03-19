@@ -149,7 +149,8 @@ trait ApiBot
         if (is_null($this->bot))
             return;
 
-        $this->bot->editMessageCaption([
+        Log::info("test");
+     /*   $this->bot->editMessageCaption([
             'chat_id' => $this->getChatId(),
             "message_id" => $this->message_id,
             "caption" => $text,
@@ -157,7 +158,7 @@ trait ApiBot
                 'inline_keyboard' => $keyboard,
             ])
 
-        ]);
+        ]);*/
     }
 
     public function sendPhoto($message, $photoUrl, $keyboard = [], $parseMode = 'Markdown')
