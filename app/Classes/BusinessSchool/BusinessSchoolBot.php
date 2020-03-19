@@ -27,7 +27,7 @@ class BusinessSchoolBot implements iBusinessSchoolBot
 
     public function getAboutBusinessSchoolPage(){
         $this->sendMessage("getAboutBusinessSchoolPage");
-        $this->editMessageText("DDDD");
+      //  $this->editMessageText("DDDD");
     }
 
     public function getEventsPage(){
