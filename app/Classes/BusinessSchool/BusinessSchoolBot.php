@@ -30,8 +30,7 @@ class BusinessSchoolBot implements iBusinessSchoolBot
     {
         $this->sendMessage("getAboutBusinessSchoolPage");
         $this->reply("message id" . ($this->message_id ?? 'empty'));
-        if (!is_null($this->message_id))
-            $this->editMessageText("DDDD");
+
     }
 
     public function getEventsPage()
