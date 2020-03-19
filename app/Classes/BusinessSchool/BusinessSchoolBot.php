@@ -31,7 +31,7 @@ class BusinessSchoolBot implements iBusinessSchoolBot
         $this->sendMessage("getAboutBusinessSchoolPage");
         $this->reply("message id" . ($this->message_id ?? 'empty'));
 
-        $this->editMessageText("TEST");
+       //$this->editMessageText("TEST");
 
     }
 
