@@ -156,6 +156,20 @@ trait ApiBot
         ]);
     }
 
+    public function editReplyKeyboard($keyboard=[]){
+
+        if (is_null($this->bot))
+            return;
+
+        $this->bot->editMessageReplyMarkup([
+            'chat_id' => $this->getChatId(),
+            "message_id" => $this->message_id,
+            'reply_markup' => json_encode([
+                'inline_keyboard' => $keyboard,
+            ])
+        ]);
+    }
+
     public function sendPhoto($message, $photoUrl, $keyboard = [], $parseMode = 'Markdown')
     {
         if (is_null($this->bot))

@@ -11,5 +11,6 @@ return [
         "/.*Личностный рост 4\+1" => "getPersonalGrowthPage",
         "/.*Обо мне" => "getAboutMePage",
         "/.*Rest Service" => "getRestServicePage",
+        "/edit_events_page ([0-9]+)" => "editEventsPage",
     ]
 ];

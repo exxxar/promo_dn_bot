@@ -41,7 +41,19 @@ class BusinessSchoolBot implements iBusinessSchoolBot
 
     public function getEventsPage()
     {
-        $this->sendMessage("getEventsPage");
+        $this->sendMessage("getEventsPage",[
+            [
+                ["text"=>"EDIT ME","/edit_events_page 1"]
+            ]
+        ]);
+    }
+
+    public function editEventsPage($arg0,$page){
+        $this->editReplyKeyboard([
+            [
+                ["text"=>"EDITED! $page","callback_data"=>"/edit_events_page ".($page+1)]
+            ]
+        ]);
     }
 
     public function getBotForBusinessPage()
