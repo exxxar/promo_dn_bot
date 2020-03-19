@@ -56,7 +56,7 @@ trait ApiBot
         $this->sendMessage($message);
     }
 
-    public function setLastMessageId($message_id){
+    public function setLastMessageId($message_id = null){
         $this->message_id = $message_id;
         return $this;
     }

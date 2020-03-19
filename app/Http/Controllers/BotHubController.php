@@ -255,7 +255,7 @@ class BotHubController extends Controller
     {
         $telegram_user = $request->get("user");
         $botName = $request->get("bot_url");
-        $message_id = $request->get("message_id") ?? null;
+        $message_id = $request->has("message_id") ? $request->get('message_id') : null;
         $query = $request->get("query");
 
         if (is_null($query))

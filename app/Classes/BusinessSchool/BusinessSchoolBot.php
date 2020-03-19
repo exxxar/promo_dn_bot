@@ -13,7 +13,7 @@ class BusinessSchoolBot implements iBusinessSchoolBot
 {
     use ApiBot, tBusinessSchoolMenu;
 
-    public function __construct($botName, $telegram_user,$message_id=null)
+    public function __construct($botName, $telegram_user, $message_id = null)
     {
         $this
             ->setBot($botName)
@@ -21,40 +21,50 @@ class BusinessSchoolBot implements iBusinessSchoolBot
             ->setLastMessageId($message_id);
     }
 
-    public function start(){
+    public function start()
+    {
         $this->mainMenu("Главное меню");
     }
 
-    public function getAboutBusinessSchoolPage(){
+    public function getAboutBusinessSchoolPage()
+    {
         $this->sendMessage("getAboutBusinessSchoolPage");
-      //  $this->editMessageText("DDDD");
+        if (!is_null($this->message_id))
+            $this->editMessageText("DDDD");
     }
 
-    public function getEventsPage(){
+    public function getEventsPage()
+    {
         $this->sendMessage("getEventsPage");
     }
 
-    public function getBotForBusinessPage(){
+    public function getBotForBusinessPage()
+    {
         $this->sendMessage("getBotForBusinessPage");
     }
 
-    public function aboutBusinessSchool(){
+    public function aboutBusinessSchool()
+    {
         $this->sendMessage("aboutBusinessSchool");
     }
 
-    public function getBusinessPersonalGrowthPage(){
+    public function getBusinessPersonalGrowthPage()
+    {
         $this->sendMessage("getBusinessPersonalGrowthPage");
     }
 
-    public function getPersonalGrowthPage(){
+    public function getPersonalGrowthPage()
+    {
         $this->sendMessage("getPersonalGrowthPage");
     }
 
-    public function getAboutMePage(){
+    public function getAboutMePage()
+    {
         $this->sendMessage("getAboutMePage");
     }
 
-    public function getRestServicePage(){
+    public function getRestServicePage()
+    {
         $this->sendMessage("getRestServicePage");
     }
 
