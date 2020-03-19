@@ -261,7 +261,7 @@ class BotHubController extends Controller
         if (is_null($query))
             return;
 
-        Log::info("TEST $query " . print_r($telegram_user, true));
+        Log::info("TEST $query $message_id");
 
         $objects = [
             [
