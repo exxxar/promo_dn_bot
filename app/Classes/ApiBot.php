@@ -150,15 +150,15 @@ trait ApiBot
             return;
 
         Log::info("test");
-     /*   $this->bot->editMessageCaption([
+       $this->bot->editMessageCaption([
             'chat_id' => $this->getChatId(),
-            "message_id" => $this->message_id,
+            "message_id" => $this->message_id-1,
             "caption" => $text,
             'reply_markup' => json_encode([
                 'inline_keyboard' => $keyboard,
             ])
 
-        ]);*/
+        ]);
     }
 
     public function sendPhoto($message, $photoUrl, $keyboard = [], $parseMode = 'Markdown')
