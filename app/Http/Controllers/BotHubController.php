@@ -205,7 +205,7 @@ class BotHubController extends Controller
 
             $result = file_get_contents("https://api.telegram.org/bot" . (config("app.debug") ? $bot->token_dev : $bot->token_prod) . "/setWebhook", false, $context);
 
-        }catch (\Exception $e){
+        } catch (\Exception $e) {
             return redirect()
                 ->route('bot_hubs.index')
                 ->with('success', 'Ошибка установки WebHook');
@@ -240,7 +240,7 @@ class BotHubController extends Controller
 
             $result = file_get_contents("https://api.telegram.org/bot" . (config("app.debug") ? $bot->token_dev : $bot->token_prod) . "/setWebhook", false, $context);
 
-        }catch (\Exception $e){
+        } catch (\Exception $e) {
             return redirect()
                 ->route('bot_hubs.index')
                 ->with('success', 'Ошибка уаления WebHook');
@@ -250,21 +250,23 @@ class BotHubController extends Controller
             ->route('bot_hubs.index')
             ->with('success', 'WebHook успешно удален');
     }
+
     public function apiMethods(Request $request)
     {
         $telegram_user = $request->get("user");
         $botName = $request->get("bot_url");
+        $message_id = $request->get("message_id") ?? null;
         $query = $request->get("query");
 
         if (is_null($query))
             return;
 
-        Log::info("TEST $query ".print_r($telegram_user,true));
+        Log::info("TEST $query " . print_r($telegram_user, true));
 
         $objects = [
             [
                 "class" => BusinessSchoolBot::class,
-                "object" => new BusinessSchoolBot($botName, $telegram_user),
+                "object" => new BusinessSchoolBot($botName, $telegram_user, $message_id),
                 "methods" => config("bot_api_routes.business_school_bot")
             ]
         ];
@@ -285,7 +287,7 @@ class BotHubController extends Controller
 
                         $find = true;
                     } catch (\ReflectionException $e) {
-                        Log::error($e->getMessage()." ".$e->getLine());
+                        Log::error($e->getMessage() . " " . $e->getLine());
                     }
 
                     break;

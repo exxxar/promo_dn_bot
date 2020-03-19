@@ -13,11 +13,12 @@ class BusinessSchoolBot implements iBusinessSchoolBot
 {
     use ApiBot, tBusinessSchoolMenu;
 
-    public function __construct($botName, $telegram_user)
+    public function __construct($botName, $telegram_user,$message_id=null)
     {
         $this
             ->setBot($botName)
-            ->setTelegramUser($telegram_user);
+            ->setTelegramUser($telegram_user)
+            ->setLastMessageId($message_id);
     }
 
     public function start(){

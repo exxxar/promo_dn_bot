@@ -24,6 +24,8 @@ trait ApiBot
 
     protected $bot_params;
 
+    protected $message_id;
+
     protected $keyboard_fallback = [
         [
             "Попробовать снова"
@@ -54,6 +56,10 @@ trait ApiBot
         $this->sendMessage($message);
     }
 
+    public function setLastMessageId($message_id){
+        $this->message_id = $message_id;
+        return $this;
+    }
     public function setTelegramUser($telegram_user)
     {
         $this->telegram_user = json_decode($telegram_user)->user;
