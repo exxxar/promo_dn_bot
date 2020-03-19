@@ -25,4 +25,6 @@ trait tBusinessSchoolMenu
     public function mainMenu($message){
         $this->sendMenu($message,$this->business_school_main_keyboard);
     }
+
+    
 }

@@ -9,15 +9,15 @@ use Illuminate\Support\Facades\Log;
 use Telegram\Bot\Api;
 use Telegram\Bot\Laravel\Facades\Telegram;
 
-class BusinessSchoolBot implements iBrainAuctionBot
+class BrainAuctionBot implements iBrainAuctionBot
 {
-    use ApiBot, tBusinessSchoolMenu;
+    use ApiBot, tBrainAuctionMenu;
 
-    public function __construct($botName, $telegram_user)
+    public function __construct($botName, $chatId)
     {
         $this
             ->setBot($botName)
-            ->setTelegramUser($telegram_user);
+            ->setChatId($chatId);
     }
 
     public function start(){

@@ -5,6 +5,9 @@ namespace App\Classes;
 
 
 use App\BotHub;
+use App\Enums\AchievementTriggers;
+use App\Events\AchievementEvent;
+use App\User;
 use Illuminate\Support\Facades\Log;
 use Telegram\Bot\Api;
 use Telegram\Bot\Exceptions\TelegramSDKException;
@@ -17,7 +20,7 @@ trait ApiBot
 
     protected $bot;
 
-    protected $chatId;
+    protected $telegram_user;
 
     protected $bot_params;
 
@@ -41,9 +44,9 @@ trait ApiBot
         return $this;
     }
 
-    public function setChatId($chatId)
+    public function setTelegramUser($telegram_user)
     {
-        $this->chatId = $chatId;
+        $this->telegram_user = $telegram_user;
 
         if ($this->bot_params->is_active == 0) {
 
@@ -62,6 +65,52 @@ trait ApiBot
         return $this;
     }
 
+   /* public function createNewUser()
+    {
+
+        $id = $this->bot->getUser()->getId() ?? null;
+        $username = $this->bot->getUser()->getUsername();
+        $lastName = $this->bot->getUser()->getLastName();
+        $firstName = $this->bot->getUser()->getFirstName();
+
+        if ($id == null)
+            return false;
+
+        if ($this->getUser() == null) {
+            $user = User::create([
+                'name' => $username ?? "$id",
+                'email' => "$id@t.me",
+                'password' => bcrypt($id),
+                'fio_from_telegram' => "$firstName $lastName",
+                'source' => "000",
+                'telegram_chat_id' => $id,
+                'referrals_count' => 0,
+                'referral_bonus_count' => 10,
+                'cashback_bonus_count' => 0,
+                'is_admin' => false,
+            ]);
+
+            event(new AchievementEvent(AchievementTriggers::MaxReferralBonusCount, 10, $user));
+            return true;
+
+
+        }
+
+        if (!$this->getUser()->onRefferal()) {
+            $skidobot = User::where("email", "skidobot@gmail.com")->first();
+            if ($skidobot) {
+                $skidobot->referrals_count += 1;
+                $skidobot->save();
+
+                $user = $this->getUser();
+                $user->parent_id = $skidobot->id;
+                $user->save();
+            }
+
+        }
+        return false;
+    }*/
+
     public function sendMessage($message, $keyboard = [], $parseMode = 'Markdown')
     {
 
@@ -69,7 +118,7 @@ trait ApiBot
             return;
 
         $this->bot->sendMessage([
-            "chat_id" => $this->chatId,
+            "chat_id" => $this->telegram_user->id,
             "text" => $message,
             'parse_mode' => $parseMode,
             'reply_markup' => json_encode([
@@ -85,7 +134,7 @@ trait ApiBot
             return;
 
         $this->bot->sendPhoto([
-            'chat_id' => $this->chatId,
+            'chat_id' => $this->telegram_user->id,
             'parse_mode' => $parseMode,
             'caption' => $message,
             'photo' => InputFile::create($photoUrl),
@@ -102,7 +151,7 @@ trait ApiBot
             return;
 
         $this->bot->sendMessage([
-            "chat_id" => $this->chatId,
+            "chat_id" =>$this->telegram_user->id,
             "text" => $message,
             'parse_mode' => 'Markdown',
             'reply_markup' => json_encode([

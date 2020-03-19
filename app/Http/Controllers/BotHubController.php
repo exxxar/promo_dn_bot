@@ -252,19 +252,19 @@ class BotHubController extends Controller
     }
     public function apiMethods(Request $request)
     {
-        $chatId = $request->get("chatId");
+        $telegram_user = $request->get("user");
         $botName = $request->get("bot_url");
         $query = $request->get("query");
 
         if (is_null($query))
             return;
 
-        Log::info("TEST $query");
+        Log::info("TEST $query ".print_r($telegram_user,true));
 
         $objects = [
             [
                 "class" => BusinessSchoolBot::class,
-                "object" => new BusinessSchoolBot($botName, $chatId),
+                "object" => new BusinessSchoolBot($botName, $telegram_user),
                 "methods" => config("bot_api_routes.business_school_bot")
             ]
         ];
