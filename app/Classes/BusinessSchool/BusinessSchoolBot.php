@@ -43,7 +43,7 @@ class BusinessSchoolBot implements iBusinessSchoolBot
     {
         $this->sendMessage("getEventsPage",[
             [
-                ["text"=>"EDIT ME","/edit_events_page 1"]
+                ["text"=>"EDIT ME","callback_data"=>"/edit_events_page 1"]
             ]
         ]);
     }
