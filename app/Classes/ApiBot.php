@@ -44,6 +44,16 @@ trait ApiBot
         return $this;
     }
 
+    public function getChatId()
+    {
+        return $this->telegram_user->id;
+    }
+
+    public function reply($message)
+    {
+        $this->sendMessage($message);
+    }
+
     public function setTelegramUser($telegram_user)
     {
         $this->telegram_user = json_decode($telegram_user)->user;
@@ -117,7 +127,7 @@ trait ApiBot
         if (is_null($this->bot))
             return;
 
-        $this->bot->sendMessage([
+        $callback = $this->bot->sendMessage([
             "chat_id" => $this->telegram_user->id,
             "text" => $message,
             'parse_mode' => $parseMode,
@@ -125,6 +135,8 @@ trait ApiBot
                 'inline_keyboard' => $keyboard
             ])
         ]);
+
+        Log::info(print_r($callback,true));
 
     }
 
