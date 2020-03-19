@@ -133,7 +133,7 @@ trait ApiBot
         if (is_null($this->bot))
             return;
 
-        $callback = $this->bot->sendMessage([
+        $this->bot->sendMessage([
             "chat_id" => $this->telegram_user->id,
             "text" => $message,
             'parse_mode' => $parseMode,
@@ -142,8 +142,21 @@ trait ApiBot
             ])
         ]);
 
-        Log::info(print_r($callback,true));
+    }
 
+    public function editMessageText($text = "empty",$keyboard=[])
+    {
+        if (is_null($this->bot))
+            return;
+
+        $this->bot->editMessageText([
+            'text' => $text,
+            'chat_id' => $this->getChatId(),
+            "message_id" => $this->message_id,
+            'reply_markup' => json_encode([
+                'inline_keyboard' => $keyboard
+            ])
+        ]);
     }
 
     public function sendPhoto($message, $photoUrl, $keyboard = [], $parseMode = 'Markdown')
