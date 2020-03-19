@@ -9,7 +9,7 @@ use Illuminate\Support\Facades\Log;
 use Telegram\Bot\Api;
 use Telegram\Bot\Laravel\Facades\Telegram;
 
-class BusinessSchoolBot implements iBrainAuctionBot
+class BusinessSchoolBot implements iBusinessSchoolBot
 {
     use ApiBot, tBusinessSchoolMenu;
 
