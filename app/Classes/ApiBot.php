@@ -144,7 +144,7 @@ trait ApiBot
 
     }
 
-    public function editMessageText($text = "empty",$keyboard=[])
+    public function editMessageText($text = "empty")
     {
         if (is_null($this->bot))
             return;
@@ -152,10 +152,7 @@ trait ApiBot
         $this->bot->editMessageText([
             'text' => $text,
             'chat_id' => $this->getChatId(),
-            "message_id" => $this->message_id,
-            'reply_markup' => json_encode([
-                'inline_keyboard' => $keyboard
-            ])
+            "message_id" => $this->message_id
         ]);
     }
 
