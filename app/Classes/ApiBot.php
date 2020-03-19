@@ -152,7 +152,7 @@ trait ApiBot
         $this->bot->editMessageText([
             'text' => $text,
             'chat_id' => $this->getChatId(),
-            "message_id" => $this->message_id
+            "message_id" => 679
         ]);
     }
 
