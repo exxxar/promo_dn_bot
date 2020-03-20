@@ -5,8 +5,9 @@ namespace App\Classes\BusinessSchool;
 
 
 use App\Classes\ApiBot;
-use Illuminate\Contracts\Session\Session;
+
 use Illuminate\Support\Facades\Log;
+use Illuminate\Support\Facades\Session;
 use Telegram\Bot\Api;
 use Telegram\Bot\Laravel\Facades\Telegram;
 
