@@ -59,10 +59,12 @@ trait ApiBot
         $this->sendMessage($message);
     }
 
-    public function setLastMessageId($message_id = null){
+    public function setLastMessageId($message_id = null)
+    {
         $this->message_id = $message_id;
         return $this;
     }
+
     public function setTelegramUser($telegram_user)
     {
         $this->telegram_user = json_decode($telegram_user);
@@ -71,12 +73,12 @@ trait ApiBot
 
             $keyboard = [
                 [
-                    ["text"=>"\xF0\x9F\x92\xB3Оплатить услуги сервиса","url"=>"https://www.free-kassa.ru/merchant/cash.php?m=169322&oa=200&s=c6fbd62b3825c451c1d6eabb22b34a5d&o=2005849"]
+                    ["text" => "\xF0\x9F\x92\xB3Оплатить услуги сервиса", "url" => "https://www.free-kassa.ru/merchant/cash.php?m=169322&oa=200&s=c6fbd62b3825c451c1d6eabb22b34a5d&o=2005849"]
                 ]
             ];
 
 
-            $this->sendPhoto('', 'https://sun9-29.userapi.com/c858232/v858232349/173635/lTlP7wMcZEA.jpg',$keyboard);
+            $this->sendPhoto('', 'https://sun9-29.userapi.com/c858232/v858232349/173635/lTlP7wMcZEA.jpg', $keyboard);
             $this->sendMenu("Бот в данный момент недоступен!", $this->keyboard_fallback);
             $this->bot = null;
         }
@@ -84,51 +86,51 @@ trait ApiBot
         return $this;
     }
 
-   /* public function createNewUser()
-    {
+    /* public function createNewUser()
+     {
 
-        $id = $this->bot->getUser()->getId() ?? null;
-        $username = $this->bot->getUser()->getUsername();
-        $lastName = $this->bot->getUser()->getLastName();
-        $firstName = $this->bot->getUser()->getFirstName();
+         $id = $this->bot->getUser()->getId() ?? null;
+         $username = $this->bot->getUser()->getUsername();
+         $lastName = $this->bot->getUser()->getLastName();
+         $firstName = $this->bot->getUser()->getFirstName();
 
-        if ($id == null)
-            return false;
+         if ($id == null)
+             return false;
 
-        if ($this->getUser() == null) {
-            $user = User::create([
-                'name' => $username ?? "$id",
-                'email' => "$id@t.me",
-                'password' => bcrypt($id),
-                'fio_from_telegram' => "$firstName $lastName",
-                'source' => "000",
-                'telegram_chat_id' => $id,
-                'referrals_count' => 0,
-                'referral_bonus_count' => 10,
-                'cashback_bonus_count' => 0,
-                'is_admin' => false,
-            ]);
+         if ($this->getUser() == null) {
+             $user = User::create([
+                 'name' => $username ?? "$id",
+                 'email' => "$id@t.me",
+                 'password' => bcrypt($id),
+                 'fio_from_telegram' => "$firstName $lastName",
+                 'source' => "000",
+                 'telegram_chat_id' => $id,
+                 'referrals_count' => 0,
+                 'referral_bonus_count' => 10,
+                 'cashback_bonus_count' => 0,
+                 'is_admin' => false,
+             ]);
 
-            event(new AchievementEvent(AchievementTriggers::MaxReferralBonusCount, 10, $user));
-            return true;
+             event(new AchievementEvent(AchievementTriggers::MaxReferralBonusCount, 10, $user));
+             return true;
 
 
-        }
+         }
 
-        if (!$this->getUser()->onRefferal()) {
-            $skidobot = User::where("email", "skidobot@gmail.com")->first();
-            if ($skidobot) {
-                $skidobot->referrals_count += 1;
-                $skidobot->save();
+         if (!$this->getUser()->onRefferal()) {
+             $skidobot = User::where("email", "skidobot@gmail.com")->first();
+             if ($skidobot) {
+                 $skidobot->referrals_count += 1;
+                 $skidobot->save();
 
-                $user = $this->getUser();
-                $user->parent_id = $skidobot->id;
-                $user->save();
-            }
+                 $user = $this->getUser();
+                 $user->parent_id = $skidobot->id;
+                 $user->save();
+             }
 
-        }
-        return false;
-    }*/
+         }
+         return false;
+     }*/
 
     public function sendMessage($message, $keyboard = [], $parseMode = 'Markdown')
     {
@@ -152,25 +154,36 @@ trait ApiBot
         if (is_null($this->bot))
             return;
 
-        $this->bot->editMessageText([
-            'text' => $text,
-            'chat_id' => $this->getChatId(),
-            "message_id" => $this->message_id
-        ]);
+        try {
+            $this->bot->editMessageText([
+                'text' => $text,
+                'chat_id' => $this->getChatId(),
+                "message_id" => $this->message_id
+            ]);
+        }
+        catch (\Exception $e){
+
+        }
     }
 
-    public function editReplyKeyboard($keyboard=[]){
+    public function editReplyKeyboard($keyboard = [])
+    {
 
         if (is_null($this->bot))
             return;
 
-        $this->bot->editMessageReplyMarkup([
-            'chat_id' => $this->getChatId(),
-            "message_id" => $this->message_id,
-            'reply_markup' => json_encode([
-                'inline_keyboard' => $keyboard,
-            ])
-        ]);
+        try {
+            $this->bot->editMessageReplyMarkup([
+                'chat_id' => $this->getChatId(),
+                "message_id" => $this->message_id,
+                'reply_markup' => json_encode([
+                    'inline_keyboard' => $keyboard,
+                ])
+            ]);
+        } catch (\Exception $e) {
+
+        }
+
     }
 
     public function sendPhoto($message, $photoUrl, $keyboard = [], $parseMode = 'Markdown')
@@ -196,7 +209,7 @@ trait ApiBot
             return;
 
         $this->bot->sendMessage([
-            "chat_id" =>$this->telegram_user->id,
+            "chat_id" => $this->telegram_user->id,
             "text" => $message,
             'parse_mode' => 'Markdown',
             'reply_markup' => json_encode([
