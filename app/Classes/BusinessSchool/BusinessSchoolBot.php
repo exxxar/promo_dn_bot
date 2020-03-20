@@ -29,13 +29,7 @@ class BusinessSchoolBot implements iBusinessSchoolBot
     public function getAboutBusinessSchoolPage()
     {
         $this->sendMessage("getAboutBusinessSchoolPage");
-        $this->reply("message id" . ($this->message_id ?? 'empty'));
 
-        try {
-            $this->editMessageText("TEST");
-        }catch (\Exception $e){
-            Log::info($e->getMessage()." ".$e->getLine());
-        }
 
     }
 
