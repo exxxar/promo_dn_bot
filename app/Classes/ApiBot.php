@@ -17,6 +17,7 @@ use Telegram\Bot\TelegramClient;
 
 trait ApiBot
 {
+    use tBotStorage;
 
     protected $bot;
 
@@ -219,4 +220,6 @@ trait ApiBot
             ])
         ]);
     }
+
+
 }

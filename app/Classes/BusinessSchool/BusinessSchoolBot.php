@@ -33,8 +33,8 @@ class BusinessSchoolBot implements iBusinessSchoolBot
     {
         $this->sendMessage("getAboutBusinessSchoolPage");
 
-        if (!Cache::has('conversation'))
-            Cache::put('conversation','true');
+        if ($this->hasInStorage("conversation"))
+            $this->addToStorage('conversation','true');
 
     }
 
@@ -89,7 +89,7 @@ class BusinessSchoolBot implements iBusinessSchoolBot
         $this->sendMessage("getRestServicePage");
 
        // if (Session::has('conversation'))
-            $this->sendMessage("c:".Cache::get('conversation','false'));
+            $this->sendMessage("c:".$this->getFromStorage('conversation','false'));
 
     }
 
