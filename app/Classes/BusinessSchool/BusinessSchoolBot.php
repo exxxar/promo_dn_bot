@@ -32,7 +32,7 @@ class BusinessSchoolBot implements iBusinessSchoolBot
         $this->sendMessage("getAboutBusinessSchoolPage");
 
         if (!Session::has('conversation'))
-            Session::put('conversation',true);
+            Session::put('conversation','true');
 
     }
 
@@ -86,8 +86,8 @@ class BusinessSchoolBot implements iBusinessSchoolBot
     {
         $this->sendMessage("getRestServicePage");
 
-        if (Session::has('conversation'))
-            $this->sendMessage("c:".Session::get('conversation',false));
+       // if (Session::has('conversation'))
+            $this->sendMessage("c:".Session::get('conversation','false'));
 
     }
 
