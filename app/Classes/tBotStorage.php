@@ -10,14 +10,23 @@ use Illuminate\Support\Facades\Log;
 trait tBotStorage
 {
 
+    public function clearStorage(){
+        Cache::forget($this->telegram_user->id);
+    }
+
     public function addToStorage($key, $value)
     {
         $tmp = json_decode(Cache::get($this->telegram_user->id, "[]"), true);
-        if (!array_key_exists("$key", $tmp)) {
+
+        $items = array_filter($tmp, function ($item) use ($key) {
+            return isset($item[$key]);
+        });
+
+        if (count($items)==0) {
             array_push($tmp, ["$key" => $value]);
-        } else {
-            $tmp[$key] = $value;
-        }
+        } else
+            $items[0][$key] = $value;
+
 
         Cache::forget($this->telegram_user->id);
         Cache::add($this->telegram_user->id, json_encode($tmp));

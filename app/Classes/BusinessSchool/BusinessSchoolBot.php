@@ -82,6 +82,7 @@ class BusinessSchoolBot implements iBusinessSchoolBot
     public function getAboutMePage()
     {
         $this->sendMessage("getAboutMePage");
+        $this->clearStorage();
     }
 
     public function getRestServicePage()
