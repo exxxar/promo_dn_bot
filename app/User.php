@@ -87,6 +87,12 @@ class User extends Authenticatable
             ->withPivot('user_activation_count');
     }
 
+    public function onPromos()
+    {
+        //todo: on promos
+        return $this->promos()->count()>0&&$this->promos()->first()->pivot->user_activation_count==0;
+    }
+
     public function companies()
     {
         return $this->belongsToMany(Company::class, 'user_in_companies', 'user_id', 'company_id')
