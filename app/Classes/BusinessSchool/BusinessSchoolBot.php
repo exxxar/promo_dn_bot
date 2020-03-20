@@ -59,6 +59,10 @@ class BusinessSchoolBot implements iBusinessSchoolBot
     public function getBotForBusinessPage()
     {
         $this->sendMessage("getBotForBusinessPage");
+
+       /* $this->startConversation([
+
+        ]);*/
     }
 
     public function aboutBusinessSchool()
