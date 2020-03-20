@@ -33,7 +33,7 @@ class BusinessSchoolBot implements iBusinessSchoolBot
     {
         $this->sendMessage("getAboutBusinessSchoolPage");
 
-        if ($this->hasInStorage("conversation"))
+        if (!$this->hasInStorage("conversation"))
             $this->addToStorage('conversation','true');
 
     }
