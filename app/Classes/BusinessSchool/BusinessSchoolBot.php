@@ -15,7 +15,7 @@ class BusinessSchoolBot implements iBusinessSchoolBot
 
     public function __construct($botName, $telegram_user, $message_id = null)
     {
-        Log::info(print_r($telegram_user,true));
+        Log::info("bot: $botName $message_id ".print_r($telegram_user,true));
         $this
             ->setBot($botName)
             ->setTelegramUser($telegram_user)
