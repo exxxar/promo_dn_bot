@@ -47,6 +47,6 @@ trait tBotStorage
 
         Log::info(Cache::get($this->telegram_user->id, 'empty'));
 
-        return array_key_exists("$key", $tmp) ? $tmp[$key] : $default;
+        return array_key_exists("$key", $tmp) ? $tmp[0][$key] : $default;
     }
 }
