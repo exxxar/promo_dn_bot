@@ -5,6 +5,7 @@ namespace App\Classes;
 
 
 use Illuminate\Support\Facades\Cache;
+use Illuminate\Support\Facades\Log;
 
 trait tBotStorage
 {
@@ -23,6 +24,8 @@ trait tBotStorage
             Cache::forget($this->telegram_user->id);
             Cache::add($this->telegram_user->id, json_decode($tmp));
         }
+
+        Log::info(Cache::get($this->telegram_user->id,'empty'));
     }
 
     public function hasInStorage($key)
