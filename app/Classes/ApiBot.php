@@ -37,6 +37,9 @@ trait ApiBot
         $this->bot_params = BotHub::where("bot_url", $botName)
             ->first();
 
+        if (is_null($this->bot_params))
+            return;
+
         try {
             $this->bot = new Api(config("app.debug") ? $this->bot_params->token_dev : $this->bot_params->token_prod, true);
         } catch (TelegramSDKException $e) {

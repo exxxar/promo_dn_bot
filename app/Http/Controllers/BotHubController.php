@@ -254,7 +254,7 @@ class BotHubController extends Controller
     public function apiMethods(Request $request)
     {
         $telegram_user = $request->get("user");
-        $botName = $request->get("bot_url");
+        $botName = $request->get("bot_name");
         $message_id = $request->has("message_id") ? $request->get('message_id') : null;
         $query = $request->get("query");
 
