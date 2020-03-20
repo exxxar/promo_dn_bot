@@ -18,13 +18,14 @@ trait tBotStorage
         } else {
             $tmp[$key] = $value;
         }
+
         if (!Cache::has($this->telegram_user->id))
             Cache::add($this->telegram_user->id, json_decode($tmp));
         else {
             Cache::forget($this->telegram_user->id);
             Cache::add($this->telegram_user->id, json_decode($tmp));
         }
-
+        Log::info($this->telegram_user->id);
         Log::info(Cache::get($this->telegram_user->id,'empty'));
     }
 
