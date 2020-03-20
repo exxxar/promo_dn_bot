@@ -65,7 +65,7 @@ trait ApiBot
     }
     public function setTelegramUser($telegram_user)
     {
-        $this->telegram_user = json_decode($telegram_user)->user;
+        $this->telegram_user = json_decode($telegram_user);
 
         if ($this->bot_params->is_active == 0) {
 
