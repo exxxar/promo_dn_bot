@@ -166,7 +166,7 @@ trait ApiBot
 
         $this->bot->editMessageReplyMarkup([
             'chat_id' => $this->getChatId(),
-            "message_id" => $this->message_id-1,
+            "message_id" => $this->message_id,
             'reply_markup' => json_encode([
                 'inline_keyboard' => $keyboard,
             ])

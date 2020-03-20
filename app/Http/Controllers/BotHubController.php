@@ -261,8 +261,6 @@ class BotHubController extends Controller
         if (is_null($query))
             return;
 
-        Log::info("TEST $query $message_id");
-
         $objects = [
             [
                 "class" => BusinessSchoolBot::class,
