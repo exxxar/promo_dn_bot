@@ -13,34 +13,31 @@ trait tBotStorage
     public function addToStorage($key, $value)
     {
         $tmp = json_decode(Cache::get($this->telegram_user->id, "[]"), true);
-        if (!array_key_exists("$key",$tmp)) {
+        if (!array_key_exists("$key", $tmp)) {
             array_push($tmp, ["$key" => $value]);
         } else {
             $tmp[$key] = $value;
         }
 
-        if (!Cache::has($this->telegram_user->id))
-            Cache::add($this->telegram_user->id, json_encode($tmp));
-        else {
-            Cache::forget($this->telegram_user->id);
-            Cache::add($this->telegram_user->id, json_encode($tmp));
-        }
-        Log::info(Cache::get($this->telegram_user->id,'empty'));
+        Cache::forget($this->telegram_user->id);
+        Cache::add($this->telegram_user->id, json_encode($tmp));
+
+        Log::info(Cache::get($this->telegram_user->id, 'empty'));
     }
 
     public function hasInStorage($key)
     {
         $tmp = json_decode(Cache::get($this->telegram_user->id, "[]"), true);
 
-        return array_key_exists("$key",$tmp);
+        return array_key_exists("$key", $tmp);
     }
 
     public function getFromStorage($key, $default)
     {
         $tmp = json_decode(Cache::get($this->telegram_user->id, "[]"), true);
 
-        Log::info(Cache::get($this->telegram_user->id,'empty'));
+        Log::info(Cache::get($this->telegram_user->id, 'empty'));
 
-        return array_key_exists("$key",$tmp) ? $tmp[$key] : $default;
+        return array_key_exists("$key", $tmp) ? $tmp[$key] : $default;
     }
 }
