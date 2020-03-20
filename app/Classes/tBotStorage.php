@@ -27,14 +27,14 @@ trait tBotStorage
 
     public function hasInStorage($key)
     {
-        $tmp = json_decode(Cache::get($this->telegram_user->id, []), true);
+        $tmp = json_decode(Cache::get($this->telegram_user->id, "[]"), true);
 
         return array_key_exists("$key",$tmp);
     }
 
     public function getFromStorage($key, $default)
     {
-        $tmp = json_decode(Cache::get($this->telegram_user->id, []), true);
+        $tmp = json_decode(Cache::get($this->telegram_user->id, "[]"), true);
 
         return array_key_exists("$key",$tmp) ? $tmp[$key] : $default;
     }
