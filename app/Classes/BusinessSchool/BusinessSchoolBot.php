@@ -5,6 +5,7 @@ namespace App\Classes\BusinessSchool;
 
 
 use App\Classes\ApiBot;
+use Illuminate\Contracts\Session\Session;
 use Illuminate\Support\Facades\Log;
 use Telegram\Bot\Api;
 use Telegram\Bot\Laravel\Facades\Telegram;
@@ -30,6 +31,8 @@ class BusinessSchoolBot implements iBusinessSchoolBot
     {
         $this->sendMessage("getAboutBusinessSchoolPage");
 
+        if (!Session::has('conversation'))
+            Session::put('conversation',true);
 
     }
 
@@ -82,6 +85,10 @@ class BusinessSchoolBot implements iBusinessSchoolBot
     public function getRestServicePage()
     {
         $this->sendMessage("getRestServicePage");
+
+        if (Session::has('conversation'))
+            $this->sendMessage("c:".Session::get('conversation',false));
+
     }
 
 }
