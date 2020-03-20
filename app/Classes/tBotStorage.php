@@ -13,7 +13,7 @@ trait tBotStorage
     public function addToStorage($key, $value)
     {
         Log::info($this->telegram_user->id);
-        $tmp = json_decode(Cache::get($this->telegram_user->id, []), true);
+        $tmp = json_decode(Cache::get($this->telegram_user->id, "[]"), true);
         if (!array_key_exists("$key",$tmp)) {
             array_push($tmp, ["$key" => $value]);
         } else {
