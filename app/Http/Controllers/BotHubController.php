@@ -3,6 +3,8 @@
 namespace App\Http\Controllers;
 
 use App\BotHub;
+use App\Classes\BusinessSchool\BusinessSchoolBot;
+use App\Classes\BusinessSchool\ItRSBot;
 use App\Classes\tBotConversation;
 use App\Enums\Parts;
 use App\Models\SkidkaServiceModels\Article;
