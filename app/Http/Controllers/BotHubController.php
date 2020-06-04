@@ -267,19 +267,23 @@ class BotHubController extends Controller
         Log::info("apiMethods");
         $objects = [
             [
+                "name" => "it_rest_service_bot",
                 "class" => ItRSBot::class,
                 "object" => new ItRSBot($botName, $telegram_user, $message_id),
-                "methods" => config("bot_api_routes.$botName")
+                "methods" => config("bot_api_routes.it_rest_service_bot")
             ],
             [
+                "name" => "bs_dn_bot",
                 "class" => BusinessSchoolBot::class,
                 "object" => new BusinessSchoolBot($botName, $telegram_user, $message_id),
-                "methods" => config("bot_api_routes.$botName")
+                "methods" => config("bot_api_routes.bs_dn_bot")
             ]
         ];
 
         $find = false;
         foreach ($objects as $object) {
+            if ($botName !== $object["name"])
+                continue;
             $matches = [];
             $arguments = [];
             foreach ($object["methods"] as $key => $method) {
