@@ -12,7 +12,7 @@ use Illuminate\Support\Facades\Session;
 use Telegram\Bot\Api;
 use Telegram\Bot\Laravel\Facades\Telegram;
 
-class BusinessSchoolBot implements iItRSBot
+class BusinessSchoolBot implements iBusinessSchoolBot
 {
     use ApiBot, tBusinessSchoolMenu;
 
