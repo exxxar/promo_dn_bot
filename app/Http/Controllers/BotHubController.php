@@ -264,6 +264,7 @@ class BotHubController extends Controller
         if (is_null($query))
             return;
 
+        Log::info("apiMethods");
         $objects = [
             [
                 "class" => ItRSBot::class,
