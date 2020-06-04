@@ -13,7 +13,7 @@ return [
         "/.*Rest Service" => "getRestServicePage",
         "/edit_events_page ([0-9]+)" => "editEventsPage",
     ],
-    'it_rs_bot'=>[
+    'it_rest_service_bot'=>[
         "/start|Попробовать снова" => "start",
         "/.*Про Школу бизнеса" => "getAboutBusinessSchoolPage",
         "/.*Мероприятия" => "getEventsPage",
