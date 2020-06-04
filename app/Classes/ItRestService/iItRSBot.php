@@ -1,7 +1,7 @@
 <?php
 
 
-namespace App\Classes\BusinessSchool;
+namespace App\Classes\ItRestService;
 
 
 interface iItRSBot
