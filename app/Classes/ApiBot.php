@@ -17,7 +17,7 @@ use Telegram\Bot\TelegramClient;
 
 trait ApiBot
 {
-    use tBotStorage;
+    use tBotConversation;
 
     protected $bot;
 
@@ -43,6 +43,9 @@ trait ApiBot
 
         try {
             $this->bot = new Api(config("app.debug") ? $this->bot_params->token_dev : $this->bot_params->token_prod, true);
+
+
+
         } catch (TelegramSDKException $e) {
             Log::error($e->getMessage() . " " . $e->getLine());
         }
@@ -70,6 +73,8 @@ trait ApiBot
     {
         $this->telegram_user = json_decode($telegram_user);
 
+        $this->createNewUser();
+
         if ($this->bot_params->is_active == 0) {
 
             $keyboard = [
@@ -78,22 +83,31 @@ trait ApiBot
                 ]
             ];
 
-
             $this->sendPhoto('', 'https://sun9-29.userapi.com/c858232/v858232349/173635/lTlP7wMcZEA.jpg', $keyboard);
             $this->sendMenu("Бот в данный момент недоступен!", $this->keyboard_fallback);
             $this->bot = null;
+            return $this;
         }
 
         return $this;
+
     }
 
-    /* public function createNewUser()
+    public function getUser(array $params = [])
+    {
+        return (count($params) == 0 ?
+                User::where("telegram_chat_id", $this->telegram_user->id)->first() :
+                User::with($params)->where("telegram_chat_id", $this->telegram_user->id)->first()) ?? null;
+
+    }
+
+     public function createNewUser()
      {
 
-         $id = $this->bot->getUser()->getId() ?? null;
-         $username = $this->bot->getUser()->getUsername();
-         $lastName = $this->bot->getUser()->getLastName();
-         $firstName = $this->bot->getUser()->getFirstName();
+         $id = $this->telegram_user->id;
+         $username = $this->telegram_user->username;
+         $lastName = $this->telegram_user->last_name;
+         $firstName = $this->telegram_user->first_name;
 
          if ($id == null)
              return false;
@@ -112,7 +126,7 @@ trait ApiBot
                  'is_admin' => false,
              ]);
 
-             event(new AchievementEvent(AchievementTriggers::MaxReferralBonusCount, 10, $user));
+            // event(new AchievementEvent(AchievementTriggers::MaxReferralBonusCount, 10, $user));
              return true;
 
 
@@ -131,7 +145,7 @@ trait ApiBot
 
          }
          return false;
-     }*/
+     }
 
     public function sendMessage($message, $keyboard = [], $parseMode = 'Markdown')
     {

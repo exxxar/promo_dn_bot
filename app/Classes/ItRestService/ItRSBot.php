@@ -12,9 +12,9 @@ use Illuminate\Support\Facades\Session;
 use Telegram\Bot\Api;
 use Telegram\Bot\Laravel\Facades\Telegram;
 
-class BusinessSchoolBot implements iItRSBot
+class ItRSBot implements iItRSBot
 {
-    use ApiBot, tBusinessSchoolMenu;
+    use ApiBot, tItRSMenu;
 
     public function __construct($botName, $telegram_user, $message_id = null)
     {

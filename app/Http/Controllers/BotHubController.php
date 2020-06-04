@@ -4,6 +4,8 @@ namespace App\Http\Controllers;
 
 use App\BotHub;
 use App\Classes\BusinessSchool\BusinessSchoolBot;
+use App\Classes\BusinessSchool\ItRSBot;
+use App\Classes\tBotConversation;
 use App\Classes\TestApiBot;
 use App\Enums\Parts;
 use App\Models\SkidkaServiceModels\Article;
@@ -15,6 +17,7 @@ use ReflectionMethod;
 
 class BotHubController extends Controller
 {
+
     public function __construct()
     {
         $this->middleware('auth')->except(['apiMethods']);
@@ -263,9 +266,14 @@ class BotHubController extends Controller
 
         $objects = [
             [
+                "class" => ItRSBot::class,
+                "object" => new ItRSBot($botName, $telegram_user, $message_id),
+                "methods" => config("bot_api_routes.$botName")
+            ],
+            [
                 "class" => BusinessSchoolBot::class,
                 "object" => new BusinessSchoolBot($botName, $telegram_user, $message_id),
-                "methods" => config("bot_api_routes.business_school_bot")
+                "methods" => config("bot_api_routes.$botName")
             ]
         ];
 
