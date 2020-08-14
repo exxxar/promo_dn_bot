@@ -2,9 +2,8 @@
 
 namespace App\Http\Controllers;
 
-use App\Achievement;
 use App\Enums\AchievementTriggers;
-use App\Event;
+use App\Models\SkidkaServiceModels\Achievement;
 use Carbon\Carbon;
 use Illuminate\Http\Request;
 use Telegram\Bot\FileUpload\InputFile;
@@ -17,17 +16,6 @@ class AchievementsController extends Controller
         $this->middleware('auth');
     }
 
-    /*    public function index(){
-
-
-        $title=urlencode('Заголовок вашей вкладки или веб-страницы');
-        $url=urlencode('https://t.me/skidki_dn_bot?start=MDAxMDQ4NDY5ODcwMzAwMDAwMDAwMDA=');
-        $summary=urlencode('Текстовое описание, которое вкратце рассказывает, зачем пользователям переходить по этой ссылке.');
-        $image=urlencode('http://www.vash-web-site.ru/images/share-icon.jpg');
-
-
-        return view("achievements",compact('url','title','summary','image'));
-    }*/
 
     public function index(Request $request)
     {
@@ -57,7 +45,7 @@ class AchievementsController extends Controller
     /**
      * Store a newly created resource in storage.
      *
-     * @param  \Illuminate\Http\Request $request
+     * @param \Illuminate\Http\Request $request
      * @return \Illuminate\Http\Response
      */
     public function store(Request $request)
@@ -70,7 +58,7 @@ class AchievementsController extends Controller
             'trigger_value' => 'required',
             'prize_description' => 'required',
             'prize_image_url' => 'required',
-           // 'position' => 'required',
+            // 'position' => 'required',
         ]);
 
         $achievement = Achievement::create([
@@ -95,7 +83,7 @@ class AchievementsController extends Controller
     /**
      * Display the specified resource.
      *
-     * @param  \App\Event $events
+     * @param \App\Event $events
      * @return \Illuminate\Http\Response
      */
     public function show($id)
@@ -110,7 +98,7 @@ class AchievementsController extends Controller
     /**
      * Show the form for editing the specified resource.
      *
-     * @param  \App\Event $events
+     * @param \App\Event $events
      * @return \Illuminate\Http\Response
      */
     public function edit($id)
@@ -126,8 +114,8 @@ class AchievementsController extends Controller
     /**
      * Update the specified resource in storage.
      *
-     * @param  \Illuminate\Http\Request $request
-     * @param  \App\Event $events
+     * @param \Illuminate\Http\Request $request
+     * @param \App\Event $events
      * @return \Illuminate\Http\Response
      */
     public function update(Request $request, $id)
@@ -154,7 +142,7 @@ class AchievementsController extends Controller
         $achievement->prize_description = $request->get("prize_description") ?? '';
         $achievement->prize_image_url = $request->get("prize_image_url") ?? '';
         $achievement->position = $request->get("position") ?? 0;
-        $achievement->is_active = true;
+        $achievement->is_active = $request->get("is_active") ? true : false;
 
         $achievement->save();
 
@@ -166,7 +154,7 @@ class AchievementsController extends Controller
     /**
      * Remove the specified resource from storage.
      *
-     * @param  \App\Event $events
+     * @param \App\Event $events
      * @return \Illuminate\Http\Response
      */
     public function destroy($id)
@@ -181,21 +169,22 @@ class AchievementsController extends Controller
             ->with('success', 'Достижение успешно удалено');
     }
 
-    public function channel($id){
+    public function channel($id)
+    {
         $achievement = Achievement::find($id);
 
 
         $keyboard = [
             [
-                ['text' => "\xF0\x9F\x91\x89Переход в бота", 'url' =>"https://t.me/" . env("APP_BOT_NAME") ],
+                ['text' => "\xF0\x9F\x91\x89Переход в бота", 'url' => "https://t.me/" . env("APP_BOT_NAME")],
             ],
         ];
 
         Telegram::sendPhoto([
             'chat_id' => "-1001392337757",
             'parse_mode' => 'Markdown',
-            "photo"=>InputFile::create($achievement->ach_image_url),
-            "caption"=>"Новое достижение уже доступно для вас! Дерзайте!\n*".$achievement->title."*\n_".$achievement->description."_",
+            "photo" => InputFile::create($achievement->ach_image_url),
+            "caption" => "Новое достижение уже доступно для вас! Дерзайте!\n*" . $achievement->title . "*\n_" . $achievement->description . "_",
             'disable_notification' => 'true',
             'reply_markup' => json_encode([
                 'inline_keyboard' =>

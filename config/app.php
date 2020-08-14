@@ -78,7 +78,7 @@ return [
     |
     */
 
-    'locale' => 'en',
+    'locale' => 'ru',
 
     /*
     |--------------------------------------------------------------------------
@@ -149,6 +149,10 @@ return [
         SimpleSoftwareIO\QrCode\QrCodeServiceProvider::class,
         Telegram\Bot\Laravel\TelegramServiceProvider::class,
         BenSampo\Enum\EnumServiceProvider::class,
+        Barryvdh\TranslationManager\ManagerServiceProvider::class,
+        Gregoriohc\LaravelTrello\TrelloServiceProvider::class,
+        Intervention\Image\ImageServiceProvider::class,
+        //GoogleDriveServiceProvider::class ,
 
         /*
          * Package Service Providers...
@@ -164,6 +168,10 @@ return [
         App\Providers\EventServiceProvider::class,
         App\Providers\RouteServiceProvider::class,
         App\Providers\BotMan\DriverServiceProvider::class,
+        App\Providers\SkidkiDNServiceProvider::class,
+        \App\Providers\BotMan\DriverServiceProvider::class,
+        Spatie\Permission\PermissionServiceProvider::class,
+        Maksa988\FreeKassa\FreeKassaServiceProvider::class,
     ],
 
     /*
@@ -214,6 +222,10 @@ return [
         'View' => Illuminate\Support\Facades\View::class,
         'QrCode' => SimpleSoftwareIO\QrCode\Facades\QrCode::class,
         'Telegram' => Telegram\Bot\Laravel\Facades\Telegram::class,
+        'SkidkiDNBot' => App\Helpers\Facades\SkidkiDNBot::class,
+        'Trello' => Gregoriohc\LaravelTrello\Facades\Wrapper::class,
+        'Image' => Intervention\Image\Facades\Image::class,
+        'FreeKassa' => Maksa988\FreeKassa\Facades\FreeKassa::class,
 
     ],
 

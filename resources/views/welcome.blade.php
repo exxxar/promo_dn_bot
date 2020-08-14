@@ -1,77 +1,831 @@
 <!DOCTYPE html>
-<html lang="{{ app()->getLocale() }}">
+<html lang="en">
+
 <head>
+
     <meta charset="utf-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+    <meta name="description" content="">
+    <meta name="author" content="">
 
-    <title>BotMan Studio</title>
+    <title>Skidka Serivce</title>
 
-    <!-- Fonts -->
-    <link href="https://fonts.googleapis.com/css?family=Varela+Round" rel="stylesheet" type="text/css">
+    <!-- Bootstrap core CSS -->
+    <link href="/vendor/bootstrap/css/bootstrap.min.css" rel="stylesheet">
 
-    <!-- Styles -->
-    <style>
-        body {
-            font-family: "Varela Round", sans-serif;
-            margin: 0;
-            padding: 0;
-            background: #fff;
-        }
+    <!-- Custom fonts for this template -->
+    <link href="/vendor/fontawesome-free/css/all.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="/vendor/simple-line-icons/css/simple-line-icons.css">
+    <link href="https://fonts.googleapis.com/css?family=Lato" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css?family=Open+Sans:300,400,600,700,800&display=swap&subset=cyrillic"
+          rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css?family=Muli" rel="stylesheet">
 
-        .container {
-            display: flex;
-            height: 100vh;
-            align-items: center;
-            justify-content: center;
-        }
+    <!-- Plugin CSS -->
+    <link rel="stylesheet" href="/device-mockups/device-mockups.min.css">
 
-        .content {
-            text-align: center;
-        }
+    <link rel="icon" href="logo.png">
 
-        .logo {
-            margin-right: 40px;
-            margin-bottom: 20px;
-        }
+    <!-- Custom styles for this template -->
+    <link href="/css/new-age.css" rel="stylesheet">
 
-        .links a {
-            font-size: 1.25rem;
-            text-decoration: none;
-            color: white;
-            margin: 10px;
-        }
-
-        @media all and (max-width: 500px) {
-
-            .links {
-                display: flex;
-                flex-direction: column;
-            }
-        }
-    </style>
 </head>
+<style>
+    .hidden {
+        display: none;
+    }
 
-<body>
-<div class="container">
-    <div class="content">
-        <div class="logo">
-            <svg viewBox="0 0 225 212" width="300" height="300" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink"><style>.st0{fill:url(#SVGID_1_);} .st1{fill:url(#SVGID_2_);} .st2{fill:url(#SVGID_3_);} .st3{fill:url(#SVGID_4_);} .st5{fill:#FDD800;} .st6{fill:none;stroke:#231F20;stroke-width:7;stroke-linecap:round;stroke-linejoin:round;stroke-miterlimit:10;} .st7{fill:none;stroke:#EB0D8C;stroke-width:7;stroke-linecap:round;stroke-linejoin:round;stroke-miterlimit:10;} .st8{fill:none;stroke:#4EC3C8;stroke-width:7;stroke-linecap:round;stroke-linejoin:round;stroke-miterlimit:10;} .st9{fill:#FFFFFF;stroke:#4EC3C8;stroke-width:7;stroke-linecap:round;stroke-linejoin:round;stroke-miterlimit:10;} .st10{fill:#4EC3C8;} .st11{fill:none;stroke:#49C8F5;stroke-width:7;stroke-linecap:round;stroke-linejoin:round;stroke-miterlimit:10;} .st12{fill:none;stroke:#FEDA00;stroke-width:7;stroke-linecap:round;stroke-linejoin:round;stroke-miterlimit:10;} .st13{fill:#231F20;} .st14{fill:#DBDAD9;stroke:#193946;stroke-width:7;stroke-linecap:round;stroke-linejoin:round;stroke-miterlimit:10;} .st15{fill:none;stroke:#193946;stroke-width:7;stroke-linecap:round;stroke-linejoin:round;stroke-miterlimit:10;} .st16{fill:#F8B232;stroke:#193946;stroke-width:7;stroke-linecap:round;stroke-linejoin:round;stroke-miterlimit:10;} .st17{fill:#FFFFFF;stroke:#193946;stroke-width:7;stroke-linecap:round;stroke-linejoin:round;stroke-miterlimit:10;} .st18{fill:#193946;} .st19{fill:none;stroke:#F1F2F2;stroke-width:4;stroke-linecap:round;stroke-linejoin:round;stroke-miterlimit:10;} .st20{clip-path:url(#XMLID_10_);fill:none;stroke:#E4E5E6;stroke-width:33;stroke-linecap:round;stroke-linejoin:round;stroke-miterlimit:10;} .st21{clip-path:url(#XMLID_11_);fill:none;stroke:#E4E5E6;stroke-width:33;stroke-linecap:round;stroke-linejoin:round;stroke-miterlimit:10;} .st22{clip-path:url(#XMLID_11_);fill:none;stroke:#E4E5E6;stroke-width:25;stroke-linecap:round;stroke-linejoin:round;stroke-miterlimit:10;} .st23{clip-path:url(#XMLID_12_);fill:none;stroke:#BE8A25;stroke-width:4;stroke-linecap:round;stroke-linejoin:round;stroke-miterlimit:10;} .st24{clip-path:url(#XMLID_13_);fill:none;stroke:#BE8A25;stroke-width:5;stroke-linecap:round;stroke-linejoin:round;stroke-miterlimit:10;} .st25{fill:none;stroke:#F1F2F2;stroke-width:3;stroke-linecap:round;stroke-linejoin:round;stroke-miterlimit:10;} .st26{fill:none;stroke:#F8B232;stroke-width:7;stroke-linecap:round;stroke-linejoin:round;stroke-miterlimit:10;} .st27{clip-path:url(#XMLID_14_);fill:none;stroke:#E4E5E6;stroke-width:33;stroke-linecap:round;stroke-linejoin:round;stroke-miterlimit:10;} .st28{clip-path:url(#XMLID_15_);fill:none;stroke:#E4E5E6;stroke-width:33;stroke-linecap:round;stroke-linejoin:round;stroke-miterlimit:10;} .st29{clip-path:url(#XMLID_15_);fill:none;stroke:#E4E5E6;stroke-width:25;stroke-linecap:round;stroke-linejoin:round;stroke-miterlimit:10;} .st30{clip-path:url(#XMLID_16_);fill:none;stroke:#BE8A25;stroke-width:4;stroke-linecap:round;stroke-linejoin:round;stroke-miterlimit:10;} .st31{clip-path:url(#XMLID_17_);fill:none;stroke:#BE8A25;stroke-width:5;stroke-linecap:round;stroke-linejoin:round;stroke-miterlimit:10;} .st32{fill:#FEDA00;} .st33{fill:#FFFFFF;stroke:#FEDA00;stroke-width:7;stroke-linecap:round;stroke-linejoin:round;stroke-miterlimit:10;} .st34{fill:#49C8F5;} .st35{fill:#EB0D8C;} .st36{fill:#FFFFFF;stroke:#EB0D8C;stroke-width:7;stroke-linecap:round;stroke-linejoin:round;stroke-miterlimit:10;} .st37{fill:#F8B232;} .st38{fill:#FFFFFF;stroke:#F8B232;stroke-width:7;stroke-linecap:round;stroke-linejoin:round;stroke-miterlimit:10;} .st39{fill:#DBDAD9;} .st40{fill:none;stroke:#DBDAD9;stroke-width:7;stroke-linecap:round;stroke-linejoin:round;stroke-miterlimit:10;} .st41{fill:#FFFFFF;stroke:#DBDAD9;stroke-width:7;stroke-linecap:round;stroke-linejoin:round;stroke-miterlimit:10;} .st42{fill:#DBDAD9;stroke:#193946;stroke-width:6;stroke-linecap:round;stroke-linejoin:round;stroke-miterlimit:10;}</style><title>background</title><path fill="none" id="canvas_background" d="M-1-1h227v214H-1z"/><title>Layer 1</title><g id="Layer_2"><path id="svg_2" d="M62.9 40.3c1.6-5 7.9-8.6 13.5-7.6" class="st15"/><path id="svg_3" d="M184.6 34.1c4.9-2 11.7.5 14.5 5.4" class="st15"/><path id="svg_4" d="M165.9 117.9c.7-.1 1.2-.2 2-.2 6.2 0 11.2 5 11.2 11.2 0 6.2-5 11.2-11.2 11.2-.7 0-1.3-.1-2-.2" class="st14"/><path id="svg_5" d="M94.2 117.9c-.7-.1-1.2-.2-2-.2-6.2 0-11.2 5-11.2 11.2 0 6.2 5 11.2 11.2 11.2.7 0 1.3-.1 2-.2" class="st14"/><path id="svg_17" d="M109.2 45.4c.2-14.6 3.8-20 9.5-24.5" class="st14"/><circle id="svg_18" r="7.7" cy="13.3" cx="126.3" class="st16"/><g id="svg_19"><defs transform="translate(-62 -82.5)"><path d="M218.5 246.9h-53.2c-4.8 0-8.7-3.9-8.7-8.7v-42.3h70.6v42.3c0 4.8-3.9 8.7-8.7 8.7z" id="XMLID_4_"/></defs><use x="-62" y="-82.5" id="svg_20" fill="#DBDAD9" xlink:href="#XMLID_4_"/><clipPath transform="translate(-62 -82.5)" id="XMLID_10_"><use id="svg_21" xlink:href="#XMLID_4_"/></clipPath><use x="-62" y="-82.5" id="svg_23" fill="none" stroke="#193946" stroke-width="7" stroke-linecap="round" stroke-linejoin="round" stroke-miterlimit="10" xlink:href="#XMLID_4_"/></g><path id="svg_24" class="st14" d="M146 133.2l10.8.1"/><path id="svg_25" d="M179.6 127.8c16.6 0 20.8 20.1 20.8 20.1" class="st15"/><path id="svg_26" class="st15" d="M215.9 163l-.2-11.1-15.2-4-11.9 11.2 8.6 11.1"/><path id="svg_27" d="M80.8 132c-14.6 7.9-29-9.6-29-9.6" class="st15"/><path id="svg_28" class="st15" d="M31.1 116.6l5.4 9.6 15.3-3.7 5.1-15.6-12.9-5.5"/><path id="svg_29" class="st14" d="M108.1 164.4h15v26.8h-15z"/><path id="svg_30" class="st14" d="M138.6 164.4h15v26.8h-15z"/><path id="svg_31" d="M168.2 203.8h-29.6v-12.6h22.1c4.1 0 7.5 3.3 7.5 7.5v5.1z" class="st14"/><path id="svg_32" d="M93.3 203.8h29.8v-12.6h-22.3c-4.1 0-7.5 3.3-7.5 7.5v5.1z" class="st14"/><g id="svg_33"><g id="svg_34"><defs transform="translate(-62 -82.5)"><path d="M246.8 184.5H139.7c-2.8 0-5.1-2.3-5.1-5.1v-46.3c0-2.8 2.3-5.1 5.1-5.1h107.2c2.8 0 5.1 2.3 5.1 5.1v46.3c0 2.8-2.3 5.1-5.2 5.1z" id="XMLID_3_"/></defs><use x="-62" y="-82.5" id="svg_35" fill="#DBDAD9" xlink:href="#XMLID_3_"/><clipPath transform="translate(-62 -82.5)" id="XMLID_11_"><use id="svg_36" xlink:href="#XMLID_3_"/></clipPath><use x="-62" y="-82.5" id="svg_39" fill="none" stroke="#193946" stroke-width="7" stroke-linecap="round" stroke-linejoin="round" stroke-miterlimit="10" xlink:href="#XMLID_3_"/></g><path id="svg_40" d="M147.4 74.5c-3.8 4.5-9.5 7.3-15.9 7.3-6.7 0-12.7-3.1-16.5-8" class="st15"/></g><g id="svg_45"><path id="svg_46" d="M53.9 65.6c7.1 8.2 6.3 20.7-1.9 27.8l-1.5 1.2c-.4.3-.8.6-1.3.8-2.2 1.3-3.6 3.4-4.1 5.9l-4.7 28.1c-.4 2.5.3 5 1.9 6.9 7 8.3 5.9 20.8-2.5 27.7-.4.3-.8.7-1.3 1-.5.4-1.1.7-1.6 1-1.3.7-2.9.7-4.1-.2-1.3-.9-1.9-2.4-1.6-3.9l1.4-8c.3-1.7-.8-3.3-2.5-3.5l-6.1-1c-1.7-.2-3.2.9-3.5 2.5l-1.4 8c-.3 2.1-2.3 3.6-4.5 3.3-.9-.1-1.7-.6-2.3-1.3-7.1-8.2-6.2-20.7 2-27.8l1.5-1.2c.4-.3.8-.6 1.3-.8 2.2-1.3 3.6-3.4 4.1-5.9l4.7-28.1c.4-2.5-.3-5-1.9-6.9-7-8.3-5.9-20.8 2.5-27.7.9-.7 1.8-1.4 2.9-2 1.3-.8 2.9-.7 4.1.2 1.3.9 1.9 2.4 1.6 3.9l-1.4 8.1c-.3 1.7.8 3.2 2.5 3.5l6.1 1c1.7.2 3.2-.9 3.5-2.5l1.4-8c.3-2.1 2.3-3.6 4.5-3.3.8.1 1.6.5 2.2 1.2z" class="st7"/></g><path id="svg_47" class="st14" d="M56.9 106.9L44 101.4"/><g id="svg_51"><defs transform="translate(-62 -82.5)"><path id="XMLID_2_" d="M201.9 195.9l-8.7 5.3-8-5.3 1.7-11.4h13.5z"/></defs><use x="-62" y="-82.5" id="svg_52" fill="#F8B232" xlink:href="#XMLID_2_"/><clipPath transform="translate(-62 -82.5)" id="XMLID_12_"><use id="svg_53" xlink:href="#XMLID_2_"/></clipPath><use x="-62" y="-82.5" id="svg_55" fill="none" stroke="#193946" stroke-width="7" stroke-linecap="round" stroke-linejoin="round" stroke-miterlimit="10" xlink:href="#XMLID_2_"/></g><g id="svg_56"><defs transform="translate(-62 -82.5)"><path id="XMLID_1_" d="M193.2 200.4l9.3 27.4-9.3 11.1-10-11.1z"/></defs><use x="-62" y="-82.5" id="svg_57" fill="#F8B232" xlink:href="#XMLID_1_"/><clipPath transform="translate(-62 -82.5)" id="XMLID_13_"><use id="svg_58" xlink:href="#XMLID_1_"/></clipPath><use x="-62" y="-82.5" id="svg_61" fill="none" stroke="#193946" stroke-width="7" stroke-linecap="round" stroke-linejoin="round" stroke-miterlimit="10" xlink:href="#XMLID_1_"/></g><path id="svg_62" class="st19" d="M142.9 156.4h-1.1"/><path id="svg_63" class="st25" d="M147.4 177.8v-7.6"/><path id="svg_64" d="M157.1 143.6v9.1c0 2-1.7 3.7-3.7 3.7h-4.9" class="st19"/><path id="svg_65" class="st19" d="M108.1 121.4H103v4.1"/></g><g id="svg_68"><path id="svg_67" d="M173.4 68.8c0 6.3-.6 11.5-6.4 11.5s-6.4-5.1-6.4-11.5 1.2-11.5 6.4-11.5c5.2.1 6.4 5.2 6.4 11.5z" class="st18"/></g><g id="svg_70"><path id="svg_69" d="M102.4 69.8c0 6.3-.6 11.5-6.4 11.5s-6.4-5.1-6.4-11.5 1.2-11.5 6.4-11.5c5.2.1 6.4 5.2 6.4 11.5z" class="st18"/></g></svg>
+    .social-vk {
+        background: white;
+        border-radius: 50%;
+    }
+
+    .social-vk i {
+        color: #3b5998;
+    }
+
+    .social-vk img {
+        width: 100%;
+        padding: 19px;
+    }
+
+    header.masthead .header-content h1.main-h1 {
+        font-size: 40px;
+        font-weight: 800;
+    }
+</style>
+
+<body id="page-top">
+
+<!-- Navigation -->
+<nav class="navbar navbar-expand-lg navbar-light fixed-top" id="mainNav">
+    <div class="container">
+        <a class="navbar-brand js-scroll-trigger logo-title" href="#page-top">Skidka Service</a>
+        <button class="navbar-toggler navbar-toggler-right" type="button" data-toggle="collapse"
+                data-target="#navbarResponsive" aria-controls="navbarResponsive" aria-expanded="false"
+                aria-label="Toggle navigation">
+            Menu
+            <i class="fas fa-bars"></i>
+        </button>
+        <div class="collapse navbar-collapse" id="navbarResponsive">
+            <ul class="navbar-nav ml-auto">
+                <li class="nav-item">
+                    <a class="nav-link js-scroll-trigger" href="#download">Как начать?</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link js-scroll-trigger" href="#features">Наши возможности</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link js-scroll-trigger" href="#contact">Связь с нами</a>
+                </li>
+            </ul>
+        </div>
+    </div>
+</nav>
+
+<header class="masthead">
+    <div class="container h-100">
+        <div class="row h-100">
+            <div class="col-lg-7 my-auto">
+                <div class="header-content mx-auto">
+                    <h1 class="mb-5 main-h1">Ты из Донецка?</h1>
+                    <h1>Новая уникальная система лояльности для нашего города!</h1>
+                    <h1>Самые яркие акции, скидки,
+                        мероприятия и многое другое уже внутри.</h1>
+                    <a href="#download" class="btn btn-outline btn-xl js-scroll-trigger mt-5">Поехали!</a>
+                </div>
+            </div>
+            <div class="col-lg-5 my-auto">
+                <div class="device-container">
+                    <div class="device-mockup iphone6_plus portrait white">
+                        <div class="device">
+                            <div class="screen">
+                                <!-- Demo image for screen mockup, you can put an image here, some HTML, an animation, video, or anything else! -->
+                                <img src="img/demo-screen-1.jpg" class="img-fluid" alt="">
+                            </div>
+                            <div class="button">
+                                <!-- You can hook the "home button" to some JavaScript events or just remove it -->
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</header>
+
+<section id="reviwes">
+    <div class="container">
+        <h2 class="text-center">Наши уникальные возможности</h2>
+        <h4 class="text-center my-5 pb-5">То что выбирают клиенты</h4>
+        <div id="carouselReviews" class="carousel slide" data-ride="carousel">
+            <ol class="carousel-indicators">
+                <li data-target="#carouselReviews" data-slide-to="0" class="active"></li>
+                <li data-target="#carouselReviews" data-slide-to="1"></li>
+                <li data-target="#carouselReviews" data-slide-to="2"></li>
+                <li data-target="#carouselReviews" data-slide-to="3"></li>
+            </ol>
+            <div class="carousel-inner">
+                <div class="carousel-item active">
+                    <div class="row">
+                        <div class="offset-sm-2 col-sm-3 col-md-2 review-logo"><i class="fas fa-trophy"></i></div>
+                        <div class="offset-md-1 col-md-5 col-sm-5">
+                            <div class="review">
+                                <h1>Система достижений</h1>
+                                Вы выполняете условия достижений, которые можно обменять на
+                                вкусные призы!
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="carousel-item">
+                    <div class="row">
+                        <div class="offset-sm-2 col-sm-3 col-md-2 review-logo"><i class="fas fa-piggy-bank"></i></div>
+                        <div class="offset-md-1 col-md-5 col-sm-5">
+                            <div class="review">
+                                <h1>Система CashBack</h1>
+                                Пользователи могут накапливать и использовать CashBack в разных заведения в системе
+                                SKIDKA SERVICE!
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="carousel-item">
+                    <div class="row">
+                        <div class="offset-sm-2 col-sm-3 col-md-2 review-logo"><i class="fas fa-users"></i></div>
+                        <div class="offset-md-1 col-md-5 col-sm-5">
+                            <div class="review">
+                                <h1>Система рефералов</h1>
+                                Приглашая друзей пользователь накапливает реферальные баллы, которые можно обменять на
+                                акционную продукцию!
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="carousel-item">
+                    <div class="row">
+                        <div class="offset-sm-2 col-sm-3 col-md-2 review-logo"><i class="fas fa-award"></i></div>
+                        <div class="offset-md-1 col-md-5 col-sm-5">
+                            <div class="review">
+                                <h1>Система промокодов</h1>
+                                Совершая крупные покупки вы получаете уникальную возможность 100% выиграть еще больше
+                                призов по индивидуальному промокоду!
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <a class="carousel-control-prev" href="#carouselReviews" role="button" data-slide="prev">
+                <span class="carousel-control-prev-icon" aria-hidden="true"></span>
+                <span class="sr-only">Previous</span>
+            </a>
+            <a class="carousel-control-next" href="#carouselReviews" role="button" data-slide="next">
+                <span class="carousel-control-next-icon" aria-hidden="true"></span>
+                <span class="sr-only">Next</span>
+            </a>
+        </div>
+    </div>
+</section>
+
+@isset($companies)
+    <section class="bg-light page-section" id="portfolio">
+        <div class="container">
+
+            <div class="section-heading text-center">
+                <h2>Наши партнеры</h2>
+                <p class="text-muted">Список заведений постоянно расширяется!</p>
+                <hr>
+            </div>
+
+            <div class="row">
+                @foreach($companies as $company)
+                    <div class="col-md-4 col-sm-6 portfolio-item">
+                        <a class="portfolio-link" data-toggle="modal" href="#portfolioModal{{$company->id}}">
+                            <div class="portfolio-hover">
+                                <div class="portfolio-hover-content">
+                                    <i class="fas fa-plus fa-3x"></i>
+                                </div>
+                            </div>
+                            <img class="img-fluid"
+                                 src="{{$company->logo_url}}"
+                                 alt="">
+                        </a>
+                        <div class="portfolio-caption">
+                            <h4>{{$company->title}}</h4>
+                            <p class="text-muted">{{$company->uniqCategories()}}</p>
+                        </div>
+                    </div>
+                @endforeach
+            </div>
+        </div>
+    </section>
+@endisset
+
+<section class="contact bg-primary" id="contact" name="contact">
+    <div class="container">
+        <div class="row">
+            <div class="col">
+                <h2>Мы
+                    <i class="fas fa-heart"></i>
+                    новых друзей!</h2>
+                <div id="telegramLogin">
+                    <script async src="https://telegram.org/js/telegram-widget.js?7" data-telegram-login="skidki_dn_bot"
+                            data-size="medium" data-radius="5" data-onauth="onTelegramAuth(user)"></script>
+
+                </div>
+                <ul class="list-inline list-social hidden" id="socials">
+
+                    <li class="list-inline-item social-facebook">
+                        <a id="share" href="" target="_blank">
+                            <i class="fab fa-facebook-f"></i>
+                        </a>
+
+                    </li>
+                    <li class="list-inline-item social-vk">
+                        <a href="#" id="vkShare" target="_blank">
+                            <i class="fab fa-vk"></i>
+                        </a>
+                    </li>
+                </ul>
+            </div>
         </div>
 
-        <div class="links">
-            <script async src="https://telegram.org/js/telegram-widget.js?7" data-telegram-login="promo_dn_bot" data-size="large" data-onauth="onTelegramAuth(user)" data-request-access="write"></script>
-            <script type="text/javascript">
-                function onTelegramAuth(user) {
-                    alert('Logged in as ' + user.first_name + ' ' + user.last_name + ' (' + user.id + (user.username ? ', @' + user.username : '') + ')');
-                }
-            </script>
-            <a href="/botman/tinker">Tinker</a>
-            <a href="https://botman.io/docs" target="_blank">Documentation</a>
-            <a href="https://twitter.com/botman_io" target="_blank">News</a>
-            <a href="https://rauchg-slackin-jtdkltstsj.now.sh/" target="_blank">Slack</a>
-            <a href="https://github.com/botman/botman" target="_blank">GitHub</a>
+        <div class="row mt-4">
+            <div class="col">
+                <h3>
+                    <em>
+                        Авторизируйся через Telegram и нажми на кнопку социальной сети, чтоб поделиться своей
+                        реферальной ссылкой с друзьями!
+                    </em>
+                </h3>
+            </div>
+        </div>
+    </div>
+</section>
+
+<section class="features" id="features">
+    <div class="container">
+        <div class="section-heading text-center">
+            <h2>Безграничные возможности!<br>Море акций и скидок!</h2>
+            <p class="text-muted">Выбери что тебе по душе и наслаждайся!</p>
+            <hr>
+        </div>
+        <div class="row">
+            <div class="col-lg-4 my-auto">
+                <div class="device-container">
+                    <div class="device-mockup iphone6_plus portrait white">
+                        <div class="device">
+                            <div class="screen">
+                                <!-- Demo image for screen mockup, you can put an image here, some HTML, an animation, video, or anything else! -->
+                                <img src="/img/demo-screen-2.jpg" class="img-fluid" alt="">
+                            </div>
+                            <div class="button">
+                                <!-- You can hook the "home button" to some JavaScript events or just remove it -->
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="col-lg-8 my-auto">
+                <div class="container-fluid">
+                    <div class="row">
+                        <div class="col-lg-6">
+                            <div class="feature-item">
+                                <i class="icon-screen-smartphone text-primary"></i>
+                                <h3>Удобство и простота использования</h3>
+                                <p class="text-muted">Простой и понятный интерфейс в любимом и общедоступном мессенджере
+                                    Telegram</p>
+                            </div>
+                        </div>
+                        <div class="col-lg-6">
+                            <div class="feature-item">
+                                <i class="icon-camera text-primary"></i>
+                                <h3>Самые выгодные скидки</h3>
+                                <p class="text-muted">Регулярные акции с предоставлением скидочных предложений от лучших
+                                    заведений региона</p>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="col-lg-6">
+                            <div class="feature-item">
+                                <i class="icon-present text-primary"></i>
+                                <h3>Уникальная система лояльности</h3>
+                                <p class="text-muted">Начисление CashBack за каждую покупку, бонусы за приглашенных
+                                    друзей и конкурсы с ценными призами</p>
+                            </div>
+                        </div>
+                        <div class="col-lg-6">
+                            <div class="feature-item">
+                                <i class="icon-lock text-primary"></i>
+                                <h3>Всегда свежие акции и мероприятия</h3>
+                                <p class="text-muted">Интересные и познавательные мероприятия от разных компаний со
+                                    всего города!</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+
+
+<section class="cta">
+    <div class="cta-content">
+        <div class="container">
+            <h2>Удобный сервис<br>выгодных скидок</h2><br>
+            <a href="https://t.me/skidki_dn_bot" class="btn btn-outline btn-xl js-scroll-trigger">Поехали!</a>
+        </div>
+    </div>
+    <div class="overlay"></div>
+</section>
+{{--
+<section class="page-section portfolio" id="portfolio">
+    <div class="container">
+
+        <div class="section-heading text-center">
+            <h2>Наши партнеры</h2>
+            <p class="text-muted">Список заведений постоянно расшиярется!</p>
+            <hr>
+        </div>
+
+        <!-- Portfolio Grid Items -->
+        <div class="row">
+
+            <!-- Portfolio Item 1 -->
+            <div class="col-md-6 col-lg-4">
+                <div class="portfolio-item mx-auto" data-toggle="modal" data-target="#portfolioModal1">
+                    <div class="portfolio-item-caption d-flex align-items-center justify-content-center h-100 w-100">
+                        <div class="portfolio-item-caption-content text-center text-white">
+                            <i class="fas fa-plus fa-3x"></i>
+                        </div>
+                    </div>
+                    <img class="img-fluid" src="https://sun1-26.userapi.com/dwtbpJt83giwVqfO4UPB9EsTM0P6JQQBUT5owA/DfAVAvUUNnI.jpg" alt="">
+                </div>
+            </div>
+
+            <!-- Portfolio Item 2 -->
+            <div class="col-md-6 col-lg-4">
+                <div class="portfolio-item mx-auto" data-toggle="modal" data-target="#portfolioModal2">
+                    <div class="portfolio-item-caption d-flex align-items-center justify-content-center h-100 w-100">
+                        <div class="portfolio-item-caption-content text-center text-white">
+                            <i class="fas fa-plus fa-3x"></i>
+                        </div>
+                    </div>
+                    <img class="img-fluid" src="https://sun1-21.userapi.com/PVY0rAmSX6D9xkLB-URRwy4SdXOXbLtEXlj5Hw/PCoaYIDw9Hk.jpg" alt="">
+                </div>
+            </div>
+
+            <!-- Portfolio Item 3 -->
+            <div class="col-md-6 col-lg-4">
+                <div class="portfolio-item mx-auto" data-toggle="modal" data-target="#portfolioModal3">
+                    <div class="portfolio-item-caption d-flex align-items-center justify-content-center h-100 w-100">
+                        <div class="portfolio-item-caption-content text-center text-white">
+                            <i class="fas fa-plus fa-3x"></i>
+                        </div>
+                    </div>
+                    <img class="img-fluid" src="https://sun9-71.userapi.com/c857616/v857616932/1020f8/QnT5gPlPRmQ.jpg" alt="">
+                </div>
+            </div>
+
+            <!-- Portfolio Item 4 -->
+            <div class="col-md-6 col-lg-4">
+                <div class="portfolio-item mx-auto" data-toggle="modal" data-target="#portfolioModal4">
+                    <div class="portfolio-item-caption d-flex align-items-center justify-content-center h-100 w-100">
+                        <div class="portfolio-item-caption-content text-center text-white">
+                            <i class="fas fa-plus fa-3x"></i>
+                        </div>
+                    </div>
+                    <img class="img-fluid" src="https://sun1-26.userapi.com/JnTfKeKgeHYrEAxXDG6ABPQfqLULTvet_gRcMg/7mtke6u8g1o.jpg" alt="">
+                </div>
+            </div>
+
+            <!-- Portfolio Item 5 -->
+            <div class="col-md-6 col-lg-4">
+                <div class="portfolio-item mx-auto" data-toggle="modal" data-target="#portfolioModal5">
+                    <div class="portfolio-item-caption d-flex align-items-center justify-content-center h-100 w-100">
+                        <div class="portfolio-item-caption-content text-center text-white">
+                            <i class="fas fa-plus fa-3x"></i>
+                        </div>
+                    </div>
+                    <img class="img-fluid" src="https://sun1-83.userapi.com/7sOSmQKa2lc461AhqXjzQE9_SLdvqKGY6NArHQ/nGitxk-PAus.jpg" alt="">
+                </div>
+            </div>
+
+            <!-- Portfolio Item 6 -->
+            <div class="col-md-6 col-lg-4">
+                <div class="portfolio-item mx-auto" data-toggle="modal" data-target="#portfolioModal6">
+                    <div class="portfolio-item-caption d-flex align-items-center justify-content-center h-100 w-100">
+                        <div class="portfolio-item-caption-content text-center text-white">
+                            <i class="fas fa-plus fa-3x"></i>
+                        </div>
+                    </div>
+                    <img class="img-fluid" src="https://sun9-29.userapi.com/c846416/v846416159/b4ed1/b5mgMoEh8oE.jpg" alt="">
+                </div>
+            </div>
+
+
+
+        </div>
+        <!-- /.row -->
+
+    </div>
+</section>--}}
+
+
+{{--<section>
+    <div class="container">
+        <div class="section-heading text-center">
+            <h2>Самые лучшие акции!</h2>
+            <p class="text-muted">Список самых вкусных и сочных акций в системе!</p>
+            <hr>
+        </div>
+
+        <div class="row align-items-center">
+            <div class="col-lg-6 order-lg-2">
+                <div class="p-5">
+                    <img class="img-fluid rounded-circle"
+                         src="https://sun1-26.userapi.com/dwtbpJt83giwVqfO4UPB9EsTM0P6JQQBUT5owA/DfAVAvUUNnI.jpg"
+                         alt="">
+                </div>
+            </div>
+            <div class="col-lg-6 order-lg-1">
+                <div class="p-5">
+                    <h2 class="display-4">Обучение</h2>
+                    <p><strong>Скидка 20% на обучение в "Школе Бизнеса"!</strong><br>Пройди курс обучения, который
+                        покажет и расскажет конкретные шаги для построение успешного бизнеса.
+                        Полученные знания будут полезны как новичкам, так и профессионалам. Занятия проводят действующие
+                        предприниматели или статусные люди Донецка с большим опытом в своей сфере.</p>
+                </div>
+            </div>
+        </div>
+        <div class="row align-items-center">
+            <div class="col-lg-6">
+                <div class="p-5">
+                    <img class="img-fluid rounded-circle" src="/img/1.jpg" alt="">
+                </div>
+            </div>
+            <div class="col-lg-6">
+                <div class="p-5">
+                    <h2 class="display-4">Еда и напитки</h2>
+                    <p><strong>Скидка 50% на "Бургер сет Аркадия"</strong><br>Пришло Ваше время получить
+                        гастрономическое удовольствие от разнообразия лучших бургеров нашего Ресторана:<br>
+                        1. Уникальный "Бургер от Шипилова"<br>
+                        2. Величественный "Цезарь"<br>
+                        3. Самый сырный "Чизбургер"<br>
+                        4. Нежнейший "Фиш Бургер"<br>
+                        И в дополнение ко всему - картошка фри и картошка по-деревенски!
+                        Выход 1700гр.<br>
+                        Цена: 1100₽<br>
+                        Цена со скидкой: 550₽</p>
+                </div>
+            </div>
+        </div>
+        <div class="row align-items-center">
+            <div class="col-lg-6 order-lg-2">
+                <div class="p-5">
+                    <img class="img-fluid rounded-circle" src="/img/lotus.jpg" alt="">
+                </div>
+            </div>
+            <div class="col-lg-6 order-lg-1">
+                <div class="p-5">
+                    <h2 class="display-4">Эстетика</h2>
+                    <p><strong>Скидка 20% на обучение Lotus Model Agency</strong><br>Lotus Model Agency — Лидирующий
+                        Fashion проект в Донецком регионе
+                        Представляет собой агентство международного формата. Предоставляет услуги обучения и менеджмента
+                        моделей для девушек и парней всех возрастов
+                    </p>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>--}}
+
+<section class="download bg-primary text-center" id="download">
+    <div class="container">
+        <div class="row">
+            <div class="col-md-8 mx-auto">
+                <h2 class="section-heading">Узнайте, о чем идет речь!</h2>
+                <p>Наше приложение в Telegram! Скачай клиент и перейди по ссылке!</p>
+                <div class="badges">
+                    <a class="badge-link"
+                       href="https://play.google.com/store/apps/details?id=org.telegram.messenger"><img
+                                src="/img/google-play-badge.svg" alt=""></a>
+                    <a class="badge-link" href="https://t.me/skidki_dn_bot"><img src="/img/telegram.png" alt=""></a>
+                    <a href="//showstreams.tv/"><img src="//www.free-kassa.ru/img/fk_btn/6.png" title="Бесплатный видеохостинг"></a>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+
+
+<footer>
+    <div class="container">
+        <p> Skidka Service &copy; 2020. Все права защищены</p>
+        <ul class="list-inline">
+            @isset($suppliers)
+                <li class="list-inline-item">
+                    <a href="{{$suppliers}}" id="suppliers" name="suppliers" target="_blank">Поставщику</a>
+                </li>
+            @endisset
+
+            @isset($terms)
+                <li class="list-inline-item">
+                    <a href="{{$terms}}" id="terms" name="terms" target="_blank">Пользовательское соглашение</a>
+                </li>
+            @endisset
+
+            @isset($faq)
+                <li class="list-inline-item">
+                    <a href="{{$faq}}" id="faq" name="faq" target="_blank">Навигация по телеграмм-боту</a>
+                </li>
+            @endisset
+        </ul>
+    </div>
+</footer>
+
+<a class="send-message-modal" data-toggle="modal" href="#callbackMessage"><i class="far fa-envelope"></i></a>
+
+@isset($companies)
+    <!-- Portfolio Modals -->
+    @foreach($companies as $company)
+        <!-- Modal 1 -->
+        <div class="portfolio-modal modal fade" id="portfolioModal{{$company->id}}" tabindex="-1" role="dialog"
+             aria-hidden="true">
+            <div class="modal-dialog">
+                <div class="modal-content">
+                    <div class="close-modal" data-dismiss="modal">
+                        <div class="lr">
+                            <div class="rl"></div>
+                        </div>
+                    </div>
+                    <div class="container">
+                        <div class="row">
+                            <div class="col-lg-8 mx-auto">
+                                <div class="modal-body">
+                                    <!-- Project Details Go Here -->
+                                    <h2 class="text-uppercase">{{$company->title}}</h2>
+                                    <p class="item-intro text-muted">{{$company->uniqCategories()}}</p>
+                                    <img class="img-fluid d-block mx-auto" src="{{$company->logo_url}}" alt="">
+                                    <p>{{$company->description}}</p>
+
+
+                                    @if(count($company->promotions)>0)
+                                        <div class="section-heading text-center">
+                                            <h2>Наши акции!</h2>
+                                            <p class="text-muted">Список самых вкусных и сочных акций!</p>
+                                            <hr>
+                                        </div>
+                                        <div class="row">
+
+                                            @foreach($company->promotions as $promotion)
+                                                <div class="col-md-4 col-sm-6 portfolio-item">
+                                                    <div class="portfolio-wrapper">
+                                                        <a class="portfolio-link" target="_blank"
+                                                           href="{{$promotion->getPromoUrl()}}">
+                                                            <img class="img-fluid"
+                                                                 src="{{$promotion->promo_image_url}}"
+                                                                 alt="">
+                                                        </a>
+                                                        <div class="portfolio-caption">
+                                                            <h4>{{$promotion->title}}</h4>
+
+                                                        </div>
+                                                    </div>
+
+                                                </div>
+                                            @endforeach
+                                        </div>
+                                    @endif
+                                    <button class="btn btn-primary" data-dismiss="modal" type="button">
+                                        <i class="fas fa-times"></i>
+                                        Закрыть
+                                    </button>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    @endforeach
+@endisset
+
+<div class="portfolio-modal modal" id="quiz" tabindex="-1" role="dialog" aria-hidden="true">
+    <div class="modal-dialog modal-xl">
+        <div class="modal-content">
+            <div class="close-modal" data-dismiss="modal">
+                <div class="lr">
+                    <div class="rl"></div>
+                </div>
+            </div>
+            <div class="container">
+                <div class="row">
+                    <div class="col-lg-12 mx-auto">
+                        <div class="modal-body">
+                            <iframe src="https://mrqz.me/5e29b17d3e851d004431a587" frameborder="0"
+                                    style="width:100%;min-height:600px;"></iframe>
+
+
+                        </div>
+                    </div>
+                </div>
+            </div>
         </div>
     </div>
 </div>
+
+
+<!-- Modal Messages -->
+<div class="portfolio-modal modal fade callback-modal" id="callbackMessage" tabindex="-1" role="dialog"
+     aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="close-modal" data-dismiss="modal">
+                <div class="lr">
+                    <div class="rl"></div>
+                </div>
+            </div>
+            <div class="container">
+                <div class="row">
+                    <div class="col-lg-8 mx-auto">
+                        <div class="modal-body">
+                            <!-- Project Details Go Here -->
+                            <h2 class="text-uppercase">Помогите нам стать лучше</h2>
+                            <p class="item-intro text-muted">Принимаем ваши пожелания и сообщения о неточностях или
+                                ошибках</p>
+                            <form id="feedbackForm" action="{{route("send.callback")}}" method="post">
+                                {{csrf_field()}}
+                                <div class="form-row">
+                                    <div class="col-sm-6">
+                                        <!-- Имя пользователя -->
+                                        <div class="form-group">
+                                            <label for="name" class="control-label">Имя</label>
+                                            <input id="name" type="text" name="name" class="form-control" value=""
+                                                   placeholder="Имя" minlength="2" maxlength="30" required="required">
+                                            <div class="invalid-feedback"></div>
+                                        </div>
+                                    </div>
+                                    <div class="col-sm-6">
+                                        <!-- Email пользователя -->
+                                        <div class="form-group">
+                                            <label for="phone" class="control-label">Телефон для обратной связи</label>
+                                            <input id="phone" type="text" minlength="10" name="phone"
+                                                   required="required"
+                                                   class="form-control" value="" placeholder="Номер телефона">
+                                            <div class="invalid-feedback"></div>
+                                        </div>
+                                    </div>
+                                </div>
+                                <!-- Сообщение пользователя -->
+                                <div class="form-group">
+                                    <label for="message" class="control-label">Сообщение (не менее 20 символов)</label>
+                                    <textarea id="message" name="message" class="form-control" rows="3"
+                                              placeholder="Сообщение (не менее 20 символов)" minlength="20"
+                                              maxlength="500" required="required"></textarea>
+                                    <div class="invalid-feedback"></div>
+                                </div>
+                                <!-- Капча -->
+                                {{--    <div class="form-group captcha">
+                                        <img class="img-captcha" src="/feedback/captcha/captcha.php"
+                                             data-src="/feedback/captcha/captcha.php">
+                                        <div class="btn btn-light position-relative refresh-captcha">Обновить</div>
+                                        <div class="form-group">
+                                            <label for="captcha" class="control-label">Код, показанный на
+                                                изображении</label>
+                                            <input type="text" name="captcha" maxlength="6" required="required" id="captcha"
+                                                   class="form-control captcha" placeholder="******"
+                                                   autocomplete="off" value="">
+                                            <div class="invalid-feedback"></div>
+                                        </div>
+                                    </div>--}}
+                            <!-- Пользовательское солашение -->
+                                @isset($terms)
+                                    <div class="form-group agreement">
+                                        <div class="custom-control custom-checkbox">
+                                            <input type="checkbox" name="agree" class="custom-control-input"
+                                                   id="customCheck" required>
+                                            <label class="custom-control-label" for="customCheck">Нажимая кнопку, я
+                                                принимаю
+                                                условия <a href="{{$terms}}" target="_blank">Пользовательского
+                                                    соглашения</a>
+                                                и даю своё согласие на
+                                                обработку моих персональных данных.</label>
+                                        </div>
+                                    </div>
+                            @endisset
+                            <!-- Сообщение при ошибке -->
+                                <div class="alert alert-danger form-error d-none">
+                                    Исправьте данные и отправьте форму ещё раз.
+                                </div>
+                                <!-- Кнопка для отправки формы -->
+                                <div class="submit">
+                                    <button type="submit" class="btn btn-primary position-relative">
+                                        Отправить сообщение
+                                    </button>
+                                </div>
+                            </form>
+
+
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Bootstrap core JavaScript -->
+<script src="/vendor/jquery/jquery.min.js"></script>
+<script src="/vendor/bootstrap/js/bootstrap.bundle.min.js"></script>
+
+<!-- Plugin JavaScript -->
+<script src="/vendor/jquery-easing/jquery.easing.min.js"></script>
+
+<!-- Custom scripts for this template -->
+<script src="/js/new-age.min.js"></script>
+
+<!-- Marquiz script start -->
+{{--<script src="//script.marquiz.ru/v1.js" type="application/javascript"></script>
+<script>
+    document.addEventListener("DOMContentLoaded", function() {
+        Marquiz.init({
+            id: '5e29b17d3e851d004431a587',
+            autoOpen: true,
+            autoOpenFreq: 'once',
+            openOnExit: false
+        });
+    });
+</script>--}}
+<!-- Marquiz script end -->
+
+<script type="text/javascript" src="http://swip.codylindley.com/jquery.popupWindow.js"></script>
+<script type="text/javascript" src="https://vk.com/js/api/share.js?95" charset="windows-1251"></script>
+<script>
+
+    //$('#quiz').modal('show');
+
+    if (window.location.hash != '') {
+        window.hashName = window.location.hash;
+        window.location.hash = '';
+        $(document).ready(function () {
+            $('html').animate({scrollTop: $(window.hashName).offset().top}, 2000, function () {
+                window.location.hash = window.hashName;
+            });
+        });
+    }
+
+    function onTelegramAuth(user) {
+        if (user) {
+            $("#telegramLogin").addClass("hidden");
+            $("#socials").removeClass("hidden");
+
+            var tmp_id = "" + user.id;
+            while (tmp_id.length < 10)
+                tmp_id = "0" + tmp_id;
+
+            var code = window.btoa("001" + tmp_id + "0000000000");
+
+            var url = "https://t.me/" + "{{env("APP_BOT_NAME")}}" + "?start=" + code;
+
+            localStorage.setItem("url", url);
+
+            $("#share").attr({"href": "http://www.facebook.com/sharer.php?u=" + url});
+            $("#vkShare").attr({"href": "https://vk.com/share.php?url=" + url});
+        }
+
+
+    }
+
+    !function (e) {
+        "use strict";
+
+
+        $('#share,#vkShare').popupWindow({
+            height: 500,
+            width: 800,
+            top: 50,
+            left: 50
+        });
+
+        e('a.js-scroll-trigger[href*="#"]:not([href="#"])').click(function () {
+            if (location.pathname.replace(/^\//, "") == this.pathname.replace(/^\//, "") && location.hostname == this.hostname) {
+                var a = e(this.hash);
+                if ((a = a.length ? a : e("[name=" + this.hash.slice(1) + "]")).length) return e("html, body").animate({scrollTop: a.offset().top - 54}, 1e3, "easeInOutExpo"), !1
+            }
+        }), e(".js-scroll-trigger").click(function () {
+            e(".navbar-collapse").collapse("hide")
+        }), e("body").scrollspy({target: "#mainNav", offset: 56});
+
+        function a() {
+            100 < e("#mainNav").offset().top ? e("#mainNav").addClass("navbar-shrink") : e("#mainNav").removeClass("navbar-shrink")
+        }
+
+        a(), e(window).scroll(a)
+    }(jQuery);
+</script>
 </body>
+
 </html>

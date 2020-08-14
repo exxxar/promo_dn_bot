@@ -2,8 +2,8 @@
 
 namespace App\Http\Controllers;
 
-use App\CashbackHistory;
-use App\Company;
+use App\Models\SkidkaServiceModels\CashbackHistory;
+use App\Models\SkidkaServiceModels\Company;
 use App\User;
 use BotMan\BotMan\Messages\Attachments\Image;
 use BotMan\BotMan\Messages\Outgoing\OutgoingMessage;
@@ -13,6 +13,9 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Hash;
+use Illuminate\Support\Facades\Log;
+use Telegram\Bot\FileUpload\InputFile;
+use Telegram\Bot\Laravel\Facades\Telegram;
 
 class UsersController extends Controller
 {
@@ -21,14 +24,16 @@ class UsersController extends Controller
         $this->middleware('auth');
     }
 
-    public function statistic(){
-        $count = User::count()??0;
+    public function statistic()
+    {
+        $count = User::count() ?? 0;
 
-        $dayUsers =  DB::table('users')
-                ->whereDay('created_at',  date('d') )
-                ->count()??0;
-        return ["count"=>$count,"day_users"=>$dayUsers];
+        $dayUsers = DB::table('users')
+                ->whereDay('created_at', date('d'))
+                ->count() ?? 0;
+        return ["count" => $count, "day_users" => $dayUsers];
     }
+
     /**
      * Display a listing of the resource.
      *
@@ -36,16 +41,16 @@ class UsersController extends Controller
      */
     public function index(Request $request)
     {
-        $users = User::with(["parent","spentCashBack","stats"])
+        $users = User::with(["parent", "spentCashBack", "stats"])
             ->sortable(['id' => 'desc'])
             //->orderBy('id', 'DESC')
             ->paginate(15);
 
         $count = $this->statistic()["count"];
 
-        $dayUsers =  $this->statistic()["day_users"];
+        $dayUsers = $this->statistic()["day_users"];
 
-        return view('admin.users.index', compact('users', 'count','dayUsers'))
+        return view('admin.users.index', compact('users', 'count', 'dayUsers'))
             ->with('i', ($request->get('page', 1) - 1) * 15);
     }
 
@@ -119,7 +124,7 @@ class UsersController extends Controller
     {
         //
 
-        $user = User::with(["promos", "companies", "parent", "childs"])->find($id);
+        $user = User::with(["promos", "companies", "parent", "childs","cashbackinfos","cashbackinfos.company"])->find($id);
 
         return view('admin.users.show', compact('user'));
     }
@@ -212,9 +217,11 @@ class UsersController extends Controller
     public function cashBackPage($id)
     {
 
-        $user = User::with(["companies"])->where("id", $id)->first();
+        $user = User::where("id", $id)->first();
 
-        return view('admin.users.cashback', compact('user'));
+        $companies = Company::all();
+
+        return view('admin.users.cashback', compact('user', 'companies'));
     }
 
     public function addCashBack(Request $request)
@@ -240,10 +247,11 @@ class UsersController extends Controller
                 'employee_id' => $employee->id,
             ]);
 
-
-            $botman = resolve('botman');
-            $botman->say("Вам зачислен кэшбэк в размере $bonus", $user->telegram_chat_id, TelegramDriver::class);
-
+            Telegram::sendMessage([
+                'chat_id' => $user->telegram_chat_id,
+                'parse_mode' => 'Markdown',
+                'text' => "Вам зачислен кэшбэк в размере $bonus",
+            ]);
 
             return redirect()
                 ->route('users.index')
@@ -256,16 +264,22 @@ class UsersController extends Controller
 
     }
 
-    public function search(Request $request){
-        if ($request->get("users-search")==null)
+    public function search(Request $request)
+    {
+        if ($request->get("users-search") == null
+        )
             return redirect()
                 ->route('users.index')
                 ->with('error', 'Нет данных!');
 
 
         try {
-            $user = $request->get("users-search")??'';
-            $users = User::where("name", "like", "%$user%")
+
+
+            $user = $request->get("users-search") ?? '';
+
+            $users = User::with(["promos"])
+                ->where("name", "like", "%$user%")
                 ->orWhere("email", "like", "%$user%")
                 ->orWhere("fio_from_telegram", "like", "%$user%")
                 ->orWhere("fio_from_request", "like", "%$user%")
@@ -273,17 +287,32 @@ class UsersController extends Controller
                 ->orWhere("address", "like", "%$user%")
                 ->orderBy('id', "DESC")
                 ->paginate(15);
-        }catch (\Exception $e) {
+
+
+        } catch (\Exception $e) {
+            Log::info($e->getMessage() . " " . $e->getLine());
             $users = User::orderBy('id', 'DESC')->paginate(15);
         }
 
         $count = $this->statistic()["count"];
 
-        $dayUsers =  $this->statistic()["day_users"];
+        $dayUsers = $this->statistic()["day_users"];
 
-        return view('admin.users.index', compact('users','count','dayUsers'))
+        return view('admin.users.index', compact('users', 'count', 'dayUsers'))
             ->with('i', ($request->get('page', 1) - 1) * 15);
     }
 
+
+    public function getUserPromotions(Request $request, $id)
+    {
+
+        $promotions = (User::with(["promos"])->find($id))
+            ->promos()
+            ->orderBy('position', 'DESC')
+            ->paginate(10);
+
+        return view('admin.promotions.index_panel', compact('promotions'))
+            ->with('i', ($request->get('page', 1) - 1) * 10);
+    }
 
 }

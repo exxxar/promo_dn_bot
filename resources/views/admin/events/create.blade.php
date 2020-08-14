@@ -86,10 +86,37 @@
                             <td>Выбрать компанию</td>
                             <td>
                                 <select name="company_id" class="form-control" required>
-                                    @foreach($companies as $compay)
-                                        <option value="{{$compay->id}}">{{$compay->title}}</option>
+                                    @foreach($companies as $company)
+                                        @if ($company->is_active)
+                                            <option value="{{$company->id}}">{{$company->title}}</option>
+                                        @endif
                                     @endforeach
                                 </select>
+                            </td>
+                        </tr>
+
+                        <tr>
+                            <td>Прикрепить акцию (не обязательно)</td>
+                            <td>
+                                <select name="promo_id" class="form-control">
+                                    <option value="">Не выбрана</option>
+                                    @foreach($promotions as $promotion)
+                                        @if($promotion->company->is_active)
+                                            <option value="{{$promotion->id}}">{{$promotion->title}}</option>
+                                        @endif
+                                    @endforeach
+                                </select>
+                            </td>
+                        </tr>
+
+                        <tr>
+                            <td>Показывать QR-код</td>
+                            <td>
+                                <label class="c-switch c-switch-label c-switch-pill c-switch-opposite-primary">
+                                    <input class="c-switch-input" type="checkbox"
+                                           name="need_qr">
+                                    <span class="c-switch-slider" data-checked="✓" data-unchecked="✕"></span>
+                                </label>
                             </td>
                         </tr>
 

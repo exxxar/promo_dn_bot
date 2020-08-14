@@ -47,6 +47,12 @@
                             </td>
                         </tr>
                         <tr>
+                            <td>Позиция в выдаче</td>
+                            <td>
+                                <input type="number" class="form-control" name="position" value="{{$article->position}}" required>
+                            </td>
+                        </tr>
+                        <tr>
                             <td>Раздел</td>
                             <td>
                                 <select name="part" id="part" class="form-control">

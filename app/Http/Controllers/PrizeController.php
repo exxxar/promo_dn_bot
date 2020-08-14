@@ -2,11 +2,8 @@
 
 namespace App\Http\Controllers;
 
-use App\Category;
-use App\Company;
-use App\Prize;
-use App\Promocode;
-use App\Promotion;
+use App\Models\SkidkaServiceModels\Company;
+use App\Models\SkidkaServiceModels\Prize;
 use Carbon\Carbon;
 use Illuminate\Http\Request;
 use Telegram\Bot\FileUpload\InputFile;
@@ -60,18 +57,16 @@ class PrizeController extends Controller
             'image_url' => 'required',
             'company_id' => 'required',
             'summary_activation_count' => 'required',
-            'is_active' => 'required',
         ]);
         $prize = Prize::create([
             'title' => $request->get('title') ?? '',
             'description' => $request->get('description') ?? '',
             'image_url' => $request->get('image_url') ?? '',
-            'company_id' => $request->get('company_id') ?? '',
+            'company_id' => $request->get('company_id') ?? null,
 
-            'summary_activation_count' =>$request->get('summary_activation_count') ?? '',
+            'summary_activation_count' =>$request->get('summary_activation_count') ?? 0,
 
-            'is_active' =>$request->get('is_active') ?? '',
-
+            'is_active' =>$request->get('is_active')=="on",
 
             'created_at' => Carbon::now(),
             'updated_at' => Carbon::now(),
@@ -102,7 +97,8 @@ class PrizeController extends Controller
     public function edit($id)
     {
         $prize = Prize::find($id);
-        return view('admin.prizes.edit', compact('prize'));
+        $companies = Company::all();
+        return view('admin.prizes.edit', compact('prize','companies'));
     }
 
     /**
@@ -121,15 +117,15 @@ class PrizeController extends Controller
             'company_id' => 'required',
             'summary_activation_count' => 'required',
 
-            'is_active' => 'required',
 
         ]);
         $prize = Prize::find($id);
-        $prize->title = $request->get("title");
-        $prize->description = $request->get("description");
-        $prize->image_url = $request->get("image_url");
-        $prize->summary_activation_count = $request->get("summary_activation_count");
-        $prize->is_active = $request->get("is_active");
+        $prize->title = $request->get("title")??'';
+        $prize->description = $request->get("description")??'';
+        $prize->image_url = $request->get("image_url")??'';
+        $prize->summary_activation_count = $request->get("summary_activation_count")??0;
+        $prize->is_active = $request->get("is_active")=="on";
+        $prize->company_id = $request->get("company_id");
         $prize->updated_at = Carbon::now();
         $prize->save();
 

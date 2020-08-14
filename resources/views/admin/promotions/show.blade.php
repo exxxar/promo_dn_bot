@@ -24,8 +24,7 @@
                 </div>
 
 
-                <form method="post" action="{{ route('promotions.store') }}">
-                    @csrf
+
                     <table class="table mt-2">
                         <thead class="thead-light ">
                         <th>Параметр</th>
@@ -123,14 +122,14 @@
                         <tr>
                             <td>Компания</td>
                             <td>
-                                <p>{{$promotion->company->title}}</p>
+                                <p>{{$promotion->company->title??''}}</p>
                             </td>
                         </tr>
 
                         <tr>
                             <td>Категория</td>
                             <td>
-                                <p>{{$promotion->category->title}}</p>
+                                <p>{{$promotion->category->title??''}}</p>
                             </td>
                         </tr>
 
@@ -158,7 +157,7 @@
 
                         </tbody>
                     </table>
-                </form>
+
             </div>
         </div>
     </div>

@@ -35,9 +35,11 @@
                                 </div>
                                 <div class="col-md-4 form-group">
                                     <select name="company_id" class="form-control">
-                                        @foreach($companies as $company)
-                                            <option value="{{$company->id}}">{{$company->title}}</option>
-                                        @endforeach
+                                        @if(count($currentUser->companies)>0)
+                                            @foreach($currentUser->companies as $company)
+                                                <option value="{{$company->id}}">{{$company->title}}</option>
+                                            @endforeach
+                                        @endif
                                     </select>
                                 </div>
                                 <div class="col-md-4 form-group">
@@ -78,8 +80,8 @@
                                 <td>
 
 
-
-                                    <a class="btn btn-info" href="{{ route('promocodes.changestatus',$promocode->id) }}" title="Обновить статус">
+                                    <a class="btn btn-info" href="{{ route('promocodes.changestatus',$promocode->id) }}"
+                                       title="Обновить статус">
                                         {{$promocode->prize_has_taken?"Приз не получен":"Приз получен"}}
                                     </a>
                                 </td>

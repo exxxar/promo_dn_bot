@@ -17,6 +17,7 @@ class AchievementEvent
     public $trigger_type;
     public $trigger_value;
     public $user;
+    public $isComplete;
     /**
      * Create a new event instance.
      *
@@ -27,6 +28,8 @@ class AchievementEvent
         $this->user = $user;
         $this->trigger_type = $triggerType;
         $this->trigger_value = $triggerValue;
+
+        $this->isComplete = false;
     }
 
 }

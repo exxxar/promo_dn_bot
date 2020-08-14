@@ -57,7 +57,7 @@
                             <td>Выбор компании</td>
                             <td>
                                 <select name="company_id" class="form-control" required>
-                                    @foreach($user->companies as $company)
+                                    @foreach($companies as $company)
                                         <option value="{{$company->id}}">{{$company->title}}</option>
                                     @endforeach
                                 </select>

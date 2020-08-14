@@ -59,6 +59,12 @@
                             </td>
                         </tr>
                         <tr>
+                            <td>Компания отображается</td>
+                            <td>
+                                <input type="checkbox" name="is_active" class="form-control">
+                            </td>
+                        </tr>
+                        <tr>
                             <td>Ссылка на бота</td>
                             <td>
                                 <input type="url" name="telegram_bot_url" class="form-control" value="">
@@ -70,6 +76,10 @@
                                 <input type="number" min="0" max="100" name="cashback" value="" class="form-control"
                                        required>
                             </td>
+                        </tr>
+                        <tr>
+                            <td>Цена промокода(розыгрыша) за CashBack</td>
+                            <td><input type="number" min="0" name="lottery_start_price" class="form-control"></td>
                         </tr>
                         <tr>
                             <td>Адрес</td>
@@ -100,6 +110,13 @@
                             <td>
                                 <input type="url" name="logo_url" placeholder="https://example.com"
                                        pattern="http://.*|https://.*" size="200" class="form-control" required>
+                            </td>
+                        </tr>
+
+                        <tr>
+                            <td>Акционное меню (в виде статьи)</td>
+                            <td>
+                                <input type="url" name="menu_url" class="form-control">
                             </td>
                         </tr>
 

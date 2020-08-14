@@ -30,7 +30,7 @@
                             <input type="text" class="form-control pull-right" id="usersSearch"
                                    name="users-search" placeholder="Поиск по таблице">
                         </div>
-                        <div class="form-group col-md-1">
+                        <div class="form-group col-md-3">
                             <button type="submit" class="btn btn-info btn-pill pull-right">Искать</button>
                         </div>
 
@@ -62,6 +62,12 @@
                                     <a class="btn btn-link" href="{{ route('users.edit',$user->id) }}">
                                         <i class="fas fa-edit"></i>
                                     </a>
+                                    @if($user->onPromos())
+                                        <a class="btn btn-link" href="{{ route('users.promotions',$user->id) }}"
+                                           title="Поучаствовал в акции">
+                                            <i class="fas fa-audio-description"></i>
+                                        </a>
+                                    @endif
                                 </td>
                                 <td>{{$user->phone}}</td>
                                 <td>

@@ -2,8 +2,10 @@
 
 namespace App\Conversations;
 
-use App\Category;
-use App\RefferalsHistory;
+use App\Classes\BaseBot;
+use App\Models\SkidkaServiceModels\Category;
+use App\Classes\SkidkiBotMenu;
+use App\Models\SkidkaServiceModels\RefferalsHistory;
 use App\User;
 use Illuminate\Foundation\Inspiring;
 use BotMan\BotMan\Messages\Incoming\Answer;
@@ -14,79 +16,68 @@ use Illuminate\Support\Facades\Log;
 
 class StartConversation extends Conversation
 {
-    use CustomConversation;
+    use BaseBot;
 
     protected $bot;
 
     public function __construct($bot)
     {
-        $this->bot = $bot;
+
+        $this->setBot($bot);
     }
 
-    /**
-     * Start the conversation
-     */
     public function run()
     {
         try {
             $this->startWithEmptyData();
         } catch (\Exception $e) {
-            $this->fallbackMenu("Добрый день!Приветствуем вас в нашем акционном боте! Сейчас у нас технические работы.");
+            Log::error(get_class($this) . " " . $e->getMessage() . " " . $e->getLine());
+            $this->fallbackMenu(__("messages.menu_title_7"));
         }
     }
 
-    /**
-     * First question
-     */
     public function startWithEmptyData()
     {
 
-        $telegramUser = $this->bot->getUser();
+        $user = $this->getUser();
 
-        $id = $telegramUser->getId();
+        $on_refferal = RefferalsHistory::where("user_recipient_id", $user->id)->first();
 
-        $user = User::where("telegram_chat_id", $id)
-            ->first();
+        if (!$on_refferal) {
+            $skidobot = User::where("email", "skidobot@gmail.com")->first();
 
-        if ($user == null) {
-            $user = $this->createUser($telegramUser);
+            if ($skidobot) {
+                $skidobot->referrals_count += 1;
+                $skidobot->save();
 
-
-            $on_refferal = RefferalsHistory::where("user_recipient_id", $user->id)->first();
-
-            if (!$on_refferal) {
-                $skidobot = User::where("email", "skidobot@gmail.com")->first();
-
-                if ($skidobot) {
-                    $skidobot->referrals_count += 1;
-                    $skidobot->save();
-
-                    $user->parent_id = $skidobot->id;
-                    $user->save();
-                }
+                $user->parent_id = $skidobot->id;
+                $user->save();
             }
         }
 
-        $this->mainMenu("Добрый день!Приветствуем вас в нашем акционном боте! Мы рады, что Вы присоединились к нам. Все акции будут активны с 5 января.");
+        $this->mainMenu(__("messages.menu_title_8"));
 
-        $categories = Category::orderBy('id', 'DESC')
-            ->orderBy('position', 'DESC')
+        $categories = Category::orderBy('position', 'DESC')
+            ->take(config("bot.results_per_page"))
             ->get();
 
-        if (count($categories) > 0) {
-            $tmp = [];
+        if (count($categories) == 0) {
+            $this->reply(__("messages.message_4"));
+            return;
+        }
 
-            foreach ($categories as $cat) {
-                array_push($tmp, Button::create($cat->title)->value("/category " . $cat->id));
-            }
+        foreach ($categories as $cat) {
 
-            $message = Question::create("Категории акций:")
-                ->addButtons($tmp);
+            $keyboard = [
+                [
+                    ["text" => __("messages.start_con_btn_1"), "callback_data" => "/category " . $cat->id . " 0"]
+                ]
+            ];
 
+            $this->sendPhoto("*$cat->title*", $cat->image_url, $keyboard);
+        }
 
-            $this->bot->reply($message);
-        } else
-            $this->bot->reply("К сожалению, сейчас акций нет, но они появятся в ближайшее время!");
+        $this->pagination("/promo_by_category", $categories, 0, __("messages.ask_action"));
 
 
     }

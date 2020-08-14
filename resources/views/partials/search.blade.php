@@ -2,7 +2,7 @@
     @csrf
     <h2>Поиск пользователя</h2>
     <div class="form-row">
-        <div class="col form-group">
+        <div class="col-sm-12 col-md-12 form-group">
             <label for="phone">Телефон пользователя</label>
             <input class="form-control" id="phone" data-target="#livesearch-2" name="phone">
             <div id="livesearch-2"></div>

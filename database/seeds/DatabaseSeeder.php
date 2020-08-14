@@ -14,6 +14,7 @@ class DatabaseSeeder extends Seeder
     public function run()
     {
         $this->call(PrizesTableSeeder::class);
+        $this->call(UsersTableSeeder::class);
 
       /*  $users = \App\User::all();
         foreach ($users as $u)

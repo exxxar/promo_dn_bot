@@ -2,11 +2,14 @@
 
 namespace App\Http\Controllers;
 
-use App\CashbackHistory;
-use App\Company;
-use App\Promotion;
+use App\Models\SkidkaServiceModels\CashbackHistory;
+use App\Models\SkidkaServiceModels\Company;
+use App\Models\SkidkaServiceModels\Promotion;
 use App\User;
 use Carbon\Carbon;
+use Facebook\Exceptions\FacebookResponseException;
+use Facebook\Exceptions\FacebookSDKException;
+use Facebook\Facebook;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Log;
@@ -26,6 +29,35 @@ class HomeController extends Controller
         $this->middleware('auth');
     }
 
+    private function instaURL()
+    {
+        if (!session_id()) {
+            session_start();
+        }
+
+        $fb = new Facebook([
+            'app_id' => env('FACEBOOK_APP_ID'),
+            'app_secret' => env('FACEBOOK_APP_SECRET'),
+            'default_graph_version' => 'v3.2',
+            'persistent_data_handler' => 'session'
+        ]);
+
+        $helper = $fb->getRedirectLoginHelper();
+
+        $permissions = ['manage_pages',
+            'pages_show_list',
+            'publish_pages',
+            'business_management',
+            'instagram_basic',
+            'public_profile',
+            'instagram_manage_insights',
+            'instagram_manage_comments',
+            'ads_management'];
+        $loginUrl = $helper->getLoginUrl('https://skidka-service.ru/insta', $permissions);
+
+        return $loginUrl;
+    }
+
     /**
      * Show the application dashboard.
      *
@@ -36,16 +68,18 @@ class HomeController extends Controller
         $users = User::all();
         $promotions = Promotion::all();
 
+        $json_data = file_get_contents(base_path('resources/lang/ru/messages.php'));
+        $incoming_message = (json_decode($json_data, true))["menu_title_7"];
+
         $current_user = User::with(["companies"])->find(Auth::user()->id);
+
+        $instaURL = $this->instaURL();
 
         if ($request->isMethod("POST")) {
 
-            Log::info($request->get("user_phone_gen"));
             try {
                 $tmp_user = "" . (User::where("phone", "=", $request->get("user_phone_gen"))->first())->telegram_chat_id;
                 $tmp_promo = "" . $request->get("promotion_id");
-
-                Log::info($tmp_user);
 
                 while (strlen($tmp_user) < 10)
                     $tmp_user = "0" . $tmp_user;
@@ -57,14 +91,14 @@ class HomeController extends Controller
 
                 $qrimage = "https://api.qrserver.com/v1/create-qr-code/?size=150x150&data=https://t.me/" . env("APP_BOT_NAME") . "?start=$code";
 
-                return view('home', compact('users', 'promotions', 'qrimage', 'current_user', "tmp_user", "tmp_promo"));
+                return view('home', compact('users', 'promotions', 'qrimage', 'current_user', "tmp_user", "tmp_promo", 'incoming_message', 'instaURL'));
             } catch (\Exception $e) {
                 return redirect()
                     ->back();
             }
         }
 
-        return view('home', compact('users', 'promotions', 'current_user'));
+        return view('home', compact('users', 'promotions', 'current_user', 'incoming_message', 'instaURL'));
     }
 
     public function searchAjax(Request $request)
@@ -169,7 +203,6 @@ class HomeController extends Controller
     }
 
 
-
     public function announce(Request $request)
     {
 
@@ -184,18 +217,18 @@ class HomeController extends Controller
             return back()
                 ->with("success", "Заголовок или сообщение не заполнены!");
 
-        if ($send_to_type==3){
+        if ($send_to_type == 3) {
 
             $keyboard = [
                 [
-                    ['text' => "\xF0\x9F\x91\x89Переход в бота", 'url' =>"https://t.me/" . env("APP_BOT_NAME")],
+                    ['text' => "\xF0\x9F\x91\x89Переход в бота", 'url' => "https://t.me/" . env("APP_BOT_NAME")],
                 ],
             ];
 
             Telegram::sendPhoto([
                 'chat_id' => env("CHANNEL_ID"),
                 'parse_mode' => 'HTML',
-                "photo"=>InputFile::create($announce_url),
+                "photo" => InputFile::create($announce_url),
                 'disable_notification' => 'true',
 
             ]);
@@ -203,7 +236,7 @@ class HomeController extends Controller
             Telegram::sendMessage([
                 'chat_id' => env("CHANNEL_ID"),
                 'parse_mode' => 'HTML',
-                "text"=>"<b>".$announce_title."</b>\n <em>".$announce_message."</em>",
+                "text" => "<b>" . $announce_title . "</b>\n <em>" . $announce_message . "</em>",
                 'disable_notification' => 'true',
                 'reply_markup' => json_encode([
                     'inline_keyboard' =>
@@ -289,8 +322,6 @@ class HomeController extends Controller
 
     public function cabinet()
     {
-
-
         $title = urlencode('Заголовок вашей вкладки или веб-страницы');
         $url = urlencode('https://t.me/skidki_dn_bot?start=MDAxMDQ4NDY5ODcwMzAwMDAwMDAwMDA=');
         $summary = urlencode('Текстовое описание, которое вкратце рассказывает, зачем пользователям переходить по этой ссылке.');
@@ -298,5 +329,131 @@ class HomeController extends Controller
 
 
         return view("cabinet", compact('url', 'title', 'summary', 'image'));
+    }
+
+    public function content(Request $request)
+    {
+        $jsonString = file_get_contents(base_path('resources/lang/ru/messages.php'));
+        $params = json_decode($jsonString);
+
+        return view("admin.langs.index", compact('params'));
+    }
+
+    public function translations()
+    {
+        return view('admin.langs.index');
+    }
+
+
+    public function instagramCallabck()
+    {
+        if (!session_id()) {
+            session_start();
+        }
+        $fb = new Facebook([
+            'app_id' => env('FACEBOOK_APP_ID'), // Replace {app-id} with your app id
+            'app_secret' => env('FACEBOOK_APP_SECRET'),
+            'default_graph_version' => 'v3.2',
+            'persistent_data_handler' => 'session'
+        ]);
+
+        $helper = $fb->getRedirectLoginHelper();
+
+        try {
+            $accessToken = $helper->getAccessToken();
+        } catch (FacebookResponseException $e) {
+            // When Graph returns an error
+            Log::error('Graph returned an error: ' . $e->getMessage());
+            return;
+        } catch (FacebookSDKException $e) {
+            Log::error('Facebook SDK returned an error: ' . $e->getMessage());
+            return;
+        }
+
+        if (!isset($accessToken)) {
+            if ($helper->getError()) {
+                header('HTTP/1.0 401 Unauthorized');
+
+                $error = sprintf("Error:%s\nError Code:%s\nError Reason:%s\nError Description:%s",
+                    $helper->getError(),
+                    $helper->getErrorCode(),
+                    $helper->getErrorReason(),
+                    $helper->getErrorDescription()
+                );
+
+                Log::info($error);
+            } else {
+                header('HTTP/1.0 400 Bad Request');
+                Log::error('Bad request');
+            }
+            return;
+        }
+
+        Log::info("Access Token = " . $accessToken->getValue());
+        $oAuth2Client = $fb->getOAuth2Client();
+        $tokenMetadata = $oAuth2Client->debugToken($accessToken);
+
+        Log::info(print_r($tokenMetadata, true));
+        $tokenMetadata->validateAppId(env('FACEBOOK_APP_ID')); // Replace {app-id} with your app id
+        // If you know the user ID this access token belongs to, you can validate it here
+        //$tokenMetadata->validateUserId('123');
+        $tokenMetadata->validateExpiration();
+
+        if (!$accessToken->isLongLived()) {
+            // Exchanges a short-lived access token for a long-lived one
+            try {
+                $accessToken = $oAuth2Client->getLongLivedAccessToken($accessToken);
+            } catch (FacebookSDKException $e) {
+                Log::error("Error getting long-lived access token: " . $e->getMessage());
+                return;
+            }
+
+            Log::info("Long-lived=" . $accessToken->getValue());
+        }
+
+        $_SESSION['fb_access_token'] = (string)$accessToken;
+
+        ////ig_hashtag_search?user_id=17841407882850175&q=альпинадонну - находим хэштег
+        ////17913566134265893/top_media?user_id=17841407882850175&fields=caption,media_type,media_url
+        ////17913566134265893/top_media?user_id=17841407882850175
+        ////17913566134265893/recent_media?fields=caption,media_type,media_url,like_count,id,permalink&user_id=17841407882850175 - находим недавние медиа объекты с хэштегом
+        //
+        ////17841407882850175?fields=mentioned_media.media_id(18040865266238470){caption,media_type,username}   - получаем инфу о пользователе по идентификации медиа-объекта
+        //
+
+        //
+        //$requestUserPhotos = $fb->request('GET', '/17841407882850175?fields=mentioned_media.media_id(18040865266238470){caption,media_type,username}');
+
+
+        $response = $fb->sendRequest('GET', '/me/accounts', [], $accessToken);
+        $tmp = [];
+
+        $companies = json_decode($response->getBody())->data;
+
+        $hashTag = "аркадия";
+        $firstFindeUserId = null;
+
+        foreach ($companies as $company) {
+            $localId = $company->id;
+            $response = $fb->sendRequest('GET', "/$localId?fields=instagram_business_account", [], $accessToken);
+
+            if (!isset(json_decode($response->getBody(), true)["instagram_business_account"]))
+                continue;
+            $iba = json_decode($response->getBody())->instagram_business_account;
+
+            //echo $iba->id . "<br>";
+
+            $firstFindeUserId = $iba->id;
+            break;
+
+        }
+
+        if ($firstFindeUserId==null)
+        return;
+
+        $responseHashTag = $fb->sendRequest('GET', "/ig_hashtag_search?user_id=".$iba->id."&q=$hashTag", [], $accessToken);
+
+        dd($responseHashTag);
+
     }
 }

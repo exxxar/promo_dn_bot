@@ -58,10 +58,22 @@
                             <p>{{$company->position}}</p>
                         </td>
                     </tr>
+
+                    <tr>
+                        <td>Компания отображается</td>
+                        <td>
+                            @if($company->is_active)
+                                <i class="fas fa-eye"></i>
+                            @else
+                                <i class="fas fa-eye-slash"></i>
+                            @endif
+                        </td>
+                    </tr>
                     <tr>
                         <td>Ссылка на бота</td>
                         <td>
-                            <a href="{{$company->telegram_bot_url}}" target="_blank" class="btn btn-link">{{$company->telegram_bot_url}}</a>
+                            <a href="{{$company->telegram_bot_url}}" target="_blank"
+                               class="btn btn-link">{{$company->telegram_bot_url}}</a>
                         </td>
                     </tr>
                     <tr>
@@ -69,6 +81,10 @@
                         <td>
                             <p>{{$company->cashback}}</p>
                         </td>
+                    </tr>
+                    <tr>
+                        <td>Цена промокода(розыгрыша) за CashBack</td>
+                        <td><p>{{$company->lottery_start_price}}</p></td>
                     </tr>
                     <tr>
                         <td>Адрес</td>
@@ -104,18 +120,26 @@
                         </td>
                     </tr>
 
+                    @if($company->menu_url!=null)
+                        <tr>
+                            <td>Акционное меню (в виде статьи)</td>
+                            <td>
+                                <a href="{{$company->menu_url}}" target="_blank">Посмотреть статью</a>
+                            </td>
+                        </tr>
+                    @endif
                     <tr>
                         <td></td>
-                    <td>
-                        <a class="btn btn-primary" href="{{ route('companies.edit',$company->id) }}">
-                            Редактировать <i class="fas fa-edit"></i>
-                        </a>
-                        <form action="{{ route('companies.destroy', $company->id)}}" method="post">
-                            @csrf
-                            @method('DELETE')
-                            <button class="btn btn-link" type="submit">Удалить <i class="fas fa-times"></i></button>
-                        </form>
-                    </td>
+                        <td>
+                            <a class="btn btn-primary" href="{{ route('companies.edit',$company->id) }}">
+                                Редактировать <i class="fas fa-edit"></i>
+                            </a>
+                            <form action="{{ route('companies.destroy', $company->id)}}" method="post">
+                                @csrf
+                                @method('DELETE')
+                                <button class="btn btn-link" type="submit">Удалить <i class="fas fa-times"></i></button>
+                            </form>
+                        </td>
                     </tr>
 
                     </tbody>

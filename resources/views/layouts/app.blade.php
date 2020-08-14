@@ -1,199 +1,224 @@
 <!DOCTYPE html>
-<html lang="{{ str_replace('_', '-', app()->getLocale()) }}">
+<html lang="en">
 <head>
+    <base href="./">
     <meta charset="utf-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, shrink-to-fit=no">
+    <meta name="description" content="CoreUI - Open Source Bootstrap Admin Template">
+    <meta name="author" content="Łukasz Holeczek">
+    <meta name="keyword" content="Bootstrap,Admin,Template,Open,Source,jQuery,CSS,HTML,RWD,Dashboard">
+    <title>Skidka Service</title>
+    <link rel="apple-touch-icon" sizes="57x57" href="assets/favicon/apple-icon-57x57.png">
+    <link rel="apple-touch-icon" sizes="60x60" href="assets/favicon/apple-icon-60x60.png">
+    <link rel="apple-touch-icon" sizes="72x72" href="assets/favicon/apple-icon-72x72.png">
+    <link rel="apple-touch-icon" sizes="76x76" href="assets/favicon/apple-icon-76x76.png">
+    <link rel="apple-touch-icon" sizes="114x114" href="assets/favicon/apple-icon-114x114.png">
+    <link rel="apple-touch-icon" sizes="120x120" href="assets/favicon/apple-icon-120x120.png">
+    <link rel="apple-touch-icon" sizes="144x144" href="assets/favicon/apple-icon-144x144.png">
+    <link rel="apple-touch-icon" sizes="152x152" href="assets/favicon/apple-icon-152x152.png">
+    <link rel="apple-touch-icon" sizes="180x180" href="assets/favicon/apple-icon-180x180.png">
+    <link rel="icon" type="image/png" sizes="192x192" href="assets/favicon/android-icon-192x192.png">
+    <link rel="icon" type="image/png" sizes="32x32" href="assets/favicon/favicon-32x32.png">
+    <link rel="icon" type="image/png" sizes="96x96" href="assets/favicon/favicon-96x96.png">
+    <link rel="icon" type="image/png" sizes="16x16" href="assets/favicon/favicon-16x16.png">
+    <link rel="manifest" href="assets/favicon/manifest.json">
+    <meta name="msapplication-TileColor" content="#ffffff">
+    <meta name="msapplication-TileImage" content="assets/favicon/ms-icon-144x144.png">
+    <meta name="theme-color" content="#ffffff">
+    <!-- Icons-->
+    <link href="{{ asset('css/free.min.css') }}" rel="stylesheet"> <!-- icons -->
+    <link href="{{ asset('css/flag-icon.min.css') }}" rel="stylesheet"> <!-- icons -->
+    <!-- Main styles for this application-->
+    <link href="{{ asset('css/style.css') }}" rel="stylesheet">
+    <link href="{{ asset('css/pace.min.css') }}" rel="stylesheet">
 
-    <!-- CSRF Token -->
-    <meta name="csrf-token" content="{{ csrf_token() }}">
-
-    <title>{{ config('app.name', 'Laravel') }}</title>
-
-    <!-- Scripts -->
-
-    <link rel="manifest" href="{{url('/manifest.json')}}">
-
-    <!-- Fonts -->
-    <link rel="dns-prefetch" href="//fonts.gstatic.com">
-    <link href="https://fonts.googleapis.com/css?family=Nunito" rel="stylesheet">
     <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.11.2/css/all.css" rel="stylesheet">
 
+@yield('css')
 
-    <!-- Styles -->
-    <link href="{{ asset('css/app.css') }}" rel="stylesheet">
+<!-- Global site tag (gtag.js) - Google Analytics-->
+    <script async="" src="https://www.googletagmanager.com/gtag/js?id=UA-118965717-3"></script>
+    <script>
+        window.dataLayer = window.dataLayer || [];
+
+        function gtag() {
+            dataLayer.push(arguments);
+        }
+
+        gtag('js', new Date());
+        // Shared ID
+        gtag('config', 'UA-118965717-3');
+        // Bootstrap ID
+        gtag('config', 'UA-118965717-5');
+    </script>
+
+    <link href="{{ asset('css/coreui-chartjs.css') }}" rel="stylesheet">
 </head>
-<body>
-<div>
-    <nav class="navbar navbar-expand-lg navbar-light bg-white shadow-sm">
-        <div class="container">
-            <a class="navbar-brand" href="{{ url('/admin/') }}">
-                {{ config('app.name', 'PromoDN') }}
+
+
+<body class="c-app">
+
+
+<div class="c-sidebar c-sidebar-dark c-sidebar-fixed c-sidebar-lg-show" id="sidebar">
+    <div class="c-sidebar-brand">
+        <img class="c-sidebar-brand-full main-logo" src="{{asset("/logo.png")}}" alt="CoreUI Logo">
+        <img class="c-sidebar-brand-minimized main-logo" src="{{asset("/logo.png")}}" width="118" height="46"
+             alt="CoreUI Logo">
+    </div>
+    <ul class="c-sidebar-nav">
+        <li class="c-sidebar-nav-item">
+            <a class="c-sidebar-nav-link" href="{{ route('home') }}">
+                <i class="cil-cog c-sidebar-nav-icon"></i>
+                Главная страница</a>
+        </li>
+
+        <li class="c-sidebar-nav-item">
+            <a class="c-sidebar-nav-link" href="{{ route('promotions.index') }}">
+                <i class="cil-tags c-sidebar-nav-icon"></i>
+                Акции</a>
+        </li>
+        <li class="c-sidebar-nav-item">
+            <a class="c-sidebar-nav-link" href="{{ route('instapromos.index') }}">
+                <i class="cil-filter-photo c-sidebar-nav-icon"></i>
+                Акции Instagram</a>
+        </li>
+        <li class="c-sidebar-nav-item">
+            <a class="c-sidebar-nav-link" href="{{ route('events.index') }}">
+                <i class="cil-star c-sidebar-nav-icon"></i>
+                Мероприятия</a>
+        </li>
+        <li class="c-sidebar-nav-item">
+            <a class="c-sidebar-nav-link" href="{{ route('companies.index') }}">
+                <i class="cil-monitor c-sidebar-nav-icon"></i>
+                Компании</a>
+        </li>
+        <li class="c-sidebar-nav-item">
+            <a class="c-sidebar-nav-link" href="{{ route('categories.index') }}">
+                <i class="cil-puzzle c-sidebar-nav-icon"></i>
+                Категории</a>
+        </li>
+        <li class="c-sidebar-nav-item">
+            <a class="c-sidebar-nav-link" href="{{ route('users.index') }}">
+                <i class="cil-people c-sidebar-nav-icon"></i>
+                Пользователи</a>
+        </li>
+
+        <li class="c-sidebar-nav-item">
+            <a class="c-sidebar-nav-link" href="{{ route('achievements.index') }}">
+                <i class="cil-star c-sidebar-nav-icon"></i>
+                Достижения</a>
+        </li>
+        <li class="c-sidebar-nav-item">
+            <a class="c-sidebar-nav-link" href="{{ route('cashback.index') }}">
+                <i class="cil-money c-sidebar-nav-icon"></i>
+                История кэшбэка
             </a>
-            <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent"
-                    aria-controls="navbarSupportedContent" aria-expanded="false"
-                    aria-label="{{ __('Toggle navigation') }}">
-                <span class="navbar-toggler-icon"></span>
-            </button>
+        </li>
+        <li class="c-sidebar-nav-item">
+            <a class="c-sidebar-nav-link" href="{{ route('refferals.index') }}">
+                <i class="cil-qr-code c-sidebar-nav-icon"></i>
+                История рефералов
+            </a>
+        </li>
+        <li class="c-sidebar-nav-item">
+            <a class="c-sidebar-nav-link" href="{{ route('payments.index') }}">
+                <i class="cil-loop c-sidebar-nav-icon"></i>
+                История оплаты баллами
+            </a>
+        </li>
+        <li class="c-sidebar-nav-item">
+            <a class="c-sidebar-nav-link" href="{{ route('articles.index') }}">
+                <i class="cil-newspaper c-sidebar-nav-icon"></i>
+                Статьи
+            </a>
+        </li>
+        <li class="c-sidebar-nav-item">
+            <a class="c-sidebar-nav-link" href="{{ route('promocodes.index') }}">
+                <i class="cil-font c-sidebar-nav-icon"></i>
+                Промокоды
+            </a>
+        </li>
 
-            @auth
-                <div class="collapse navbar-collapse" id="navbarSupportedContent">
-                    <!-- Left Side Of Navbar -->
+        <li class="c-sidebar-nav-item">
+            <a class="c-sidebar-nav-link" href="{{ route('prizes.index') }}">
+                <i class="cil-gift c-sidebar-nav-icon"></i>
+                Призы
+            </a>
+        </li>
 
+        <li class="c-sidebar-nav-item">
+            <a class="c-sidebar-nav-link" href="{{ route('lang') }}">
+                <i class="cil-excerpt c-sidebar-nav-icon"></i>
+                Перевод
+            </a>
+        </li>
 
-                    <ul class="navbar-nav mr-auto">
-                        <li class="nav-item">
-                            <a class="nav-link" href="{{ route('promotions.index') }}">Акции</a>
-                        </li>
-                        <li class="nav-item">
-                            <a class="nav-link" href="{{ route('events.index') }}">Мероприятия</a>
-                        </li>
-                        <li class="nav-item">
-                            <a class="nav-link" href="{{ route('companies.index') }}">Компании</a>
-                        </li>
-                        <li class="nav-item">
-                            <a class="nav-link" href="{{ route('categories.index') }}">Категории</a>
-                        </li>
-                        <li class="nav-item">
-                            <a class="nav-link" href="{{ route('users.index') }}">Пользователи</a>
-                        </li>
+        <li class="c-sidebar-nav-item">
+            <a class="c-sidebar-nav-link" href="{{ route('charities.index') }}">
+                <i class="cil-arrow-thick-to-bottom c-sidebar-nav-icon"></i>
+                Благотворительные акции</a>
+        </li>
 
-                        <li class="nav-item">
-                            <a class="nav-link" href="{{ route('achievements.index') }}">Достижения</a>
-                        </li>
+        <li class="c-sidebar-nav-item">
+            <a class="c-sidebar-nav-link" href="{{ route('charityhistories.index') }}">
+                <i class="cil-action-redo c-sidebar-nav-icon"></i>
+                История донатов</a>
+        </li>
 
-                        <li class="nav-item dropdown">
-                            <a id="navbarDropdown" class="nav-link dropdown-toggle" href="#" role="button"
-                               data-toggle="dropdown" aria-haspopup="true" aria-expanded="false" v-pre>
-                               История <span class="caret"></span>
-                            </a>
+        <li class="c-sidebar-nav-item">
+            <a class="c-sidebar-nav-link" href="{{ route('geo_quests.index') }}">
+                <i class="cil-location-pin c-sidebar-nav-icon"></i>
+                Гео-задания</a>
+        </li>
 
-                            <div class="dropdown-menu dropdown-menu-right" aria-labelledby="navbarDropdown">
-                                <a class="dropdown-item" href="{{ route('cashback.index') }}">
-                                    История кэшбэка
-                                </a>
+        <li class="c-sidebar-nav-item">
+            <a class="c-sidebar-nav-link" href="{{ route('geo_positions.index') }}">
+                <i class="cil-share-boxed c-sidebar-nav-icon"></i>
+                Квестовые гео-точки</a>
+        </li>
 
-                                <a class="dropdown-item" href="{{ route('refferals.index') }}">
-                                    История рефералов
-                                </a>
+        <li class="c-sidebar-nav-item">
+            <a class="c-sidebar-nav-link" href="{{ route('geo_histories.index') }}">
+                <i class="cil-share-boxed c-sidebar-nav-icon"></i>
+                История выполнения<br>квестов</a>
+        </li>
 
-                                <a class="dropdown-item" href="{{ route('payments.index') }}">
-                                    История оплаты баллами
-                                </a>
+        <li class="c-sidebar-nav-item">
+            <a class="c-sidebar-nav-link" href="{{ route('geo_histories.index') }}">
+                <i class="cil-share-boxed c-sidebar-nav-icon"></i>
+                Бонусы пользователей<br>за квесты</a>
+        </li>
 
+        <li class="c-sidebar-nav-item">
+            <a class="c-sidebar-nav-link" href="{{ route('bot_hubs.index') }}">
+                <i class="cil-share-boxed c-sidebar-nav-icon"></i>
+                Управление ботами</a>
+        </li>
 
-                            </div>
-                        </li>
-
-                    </ul>
-
-
-                    <!-- Right Side Of Navbar -->
-                    <ul class="navbar-nav ml-auto">
-                        <!-- Authentication Links -->
-                        @guest
-                            <li class="nav-item">
-                                <a class="nav-link" href="{{ route('login') }}">{{ __('Login') }}</a>
-                            </li>
-                            @if (Route::has('register'))
-                                <li class="nav-item">
-                                    <a class="nav-link" href="{{ route('register') }}">{{ __('Register') }}</a>
-                                </li>
-                            @endif
-                            @else
-                                <li class="nav-item dropdown">
-                                    <a id="navbarDropdown" class="nav-link dropdown-toggle" href="#" role="button"
-                                       data-toggle="dropdown" aria-haspopup="true" aria-expanded="false" v-pre>
-                                        {{ Auth::user()->name }} <span class="caret"></span>
-                                    </a>
-
-                                    <div class="dropdown-menu dropdown-menu-right" aria-labelledby="navbarDropdown">
-                                        <a class="dropdown-item" href="{{ route('articles.index') }}">
-                                            Статьи
-                                        </a>
-
-                                        <a class="dropdown-item" href="{{ route('promocodes.index') }}">
-                                            Промокоды
-                                        </a>
-
-                                        <a class="dropdown-item" href="{{ route('prizes.index') }}">
-                                            Призы
-                                        </a>
-
-                                        <a class="dropdown-item" href="{{ route('logout') }}"
-                                           onclick="event.preventDefault();
-                                                     document.getElementById('logout-form').submit();">
-                                            {{ __('Logout') }}
-                                        </a>
-
-                                        <form id="logout-form" action="{{ route('logout') }}" method="POST"
-                                              style="display: none;">
-                                            @csrf
-                                        </form>
-                                    </div>
-                                </li>
-                                @endguest
-                    </ul>
-                </div>
-            @endauth
-        </div>
-    </nav>
-
-    <main class="py-4">
-        @yield('content')
-    </main>
-
-
-    <script src="{{asset('/js/app.js')}}"></script>
-
-    <script>
-        var botmanWidget = {
-            title: 'SkidkiDN - веб-версия',
-            introMessage: 'Спасибо что используете Веб-версию нашего бота. Полноценный набор функций доступен в боте telegram',
-            mainColor: '#ff9800',
-            chatServer: 'https://promodnbot.herokuapp.com/public/botman'
-        };
-
-    </script>
-    <script src='https://cdn.jsdelivr.net/npm/botman-web-widget@0/build/js/widget.js'></script>
-
-    <script src="{{asset('/js/jquery.mask.min.js')}}"></script>
-    <script src="{{asset('/js/bootstrap-typeahead.min.js')}}"></script>
-    <script>
-        $(document).ready(function () {
-            $('.phone').mask('+38(000) 000-00-00');
-
-            $('#user_phone, #phone,#user_phone_gen').typeahead({
-                source: [
-                ],
-                displayField:'phone',
-                items: 10,
-                scrollBar: false,
-                ajax: {
-                    url: '{{route('users.ajax.search')}}',
-                    timeout: 300,
-                    method: 'get',
-                    preDispatch: function (query) {
-                        return {
-                            search: query
-                        }
-                    },
-                    preProcess: function (data) {
-                        if (data.success === false) {
-                            // Hide the list, there was some error
-                            return false;
-                        }
-
-                        console.log(data);
-                        // We good!
-                        return data;
-                    }
-                }
-            });
-
-
-
-        });
-    </script>
+    </ul>
+    <button class="c-sidebar-minimizer c-class-toggler" type="button" data-target="_parent"
+            data-class="c-sidebar-minimized"></button>
 </div>
+
+@include('dashboard.shared.header')
+
+<div class="c-body" id="app">
+
+    <main class="c-main">
+
+        @yield('content')
+
+    </main>
+</div>
+@include('dashboard.shared.footer')
+
+<!-- CoreUI and necessary plugins-->
+<script src="{{ asset('js/pace.min.js') }}"></script>
+<script src="{{ asset('js/coreui.bundle.min.js') }}"></script>
+
+@yield('javascript')
+
+
 </body>
 </html>

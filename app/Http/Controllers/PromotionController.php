@@ -2,9 +2,9 @@
 
 namespace App\Http\Controllers;
 
-use App\Category;
-use App\Company;
-use App\Promotion;
+use App\Models\SkidkaServiceModels\Category;
+use App\Models\SkidkaServiceModels\Company;
+use App\Models\SkidkaServiceModels\Promotion;
 use App\User;
 use BotMan\BotMan\Messages\Attachments\Image;
 use Carbon\Carbon;
@@ -26,11 +26,13 @@ class PromotionController extends Controller
      */
     public function index(Request $request)
     {
-        $promotions = Promotion::orderBy('position', 'DESC')
-            ->paginate(15);
+        $companies = Company::with(["promotions"])
+            ->orderBy('position', 'DESC')
+            //->groupBy("title")
+            ->paginate(5);
 
-        return view('admin.promotions.index', compact('promotions'))
-            ->with('i', ($request->get('page', 1) - 1) * 15);
+        return view('admin.promotions.index', compact('companies'))
+            ->with('i', ($request->get('page', 1) - 1) * 5);
     }
 
     /**
@@ -68,14 +70,15 @@ class PromotionController extends Controller
             'category_id'=> 'required|integer',
             'refferal_bonus'=> 'integer',
             'position'=> 'required',
+            'user_can_activate_count'=> 'required',
         ]);
 
         $promotions = Promotion::create([
             'title'=>$request->get('title')??'',
             'description'=> $request->get('description')??'',
             'promo_image_url'=> $request->get('promo_image_url')??'',
-            'start_at'=> $request->get('start_at')??'',
-            'end_at'=> $request->get('end_at')??'',
+            'start_at'=>\Carbon\Carbon::parse( $request->get('start_at')??Carbon::now()),
+            'end_at'=> \Carbon\Carbon::parse( $request->get('end_at')??Carbon::now()),
             'activation_count'=> $request->get('activation_count')??'',
             'activation_text'=> $request->get('activation_text')??'',
             'location_address'=> $request->get('location_address')??'',
@@ -87,6 +90,7 @@ class PromotionController extends Controller
             'immediately_activate'=>$request->get('immediately_activate')??false,
             'refferal_bonus'=>$request->get('refferal_bonus')??0,
             'position'=>$request->get('position')??0,
+            'user_can_activate_count'=>$request->get('user_can_activate_count')??1,
             'created_at' => Carbon::now(),
             'updated_at' => Carbon::now(),
         ]);
@@ -151,6 +155,7 @@ class PromotionController extends Controller
             'company_id'=> 'required|integer',
             'category_id'=> 'required|integer',
             'refferal_bonus'=> 'integer',
+            'user_can_activate_count'=> 'required',
         ]);
 
 
@@ -158,8 +163,8 @@ class PromotionController extends Controller
         $promotion->title = $request->get("title");
         $promotion->description = $request->get("description");
         $promotion->promo_image_url = $request->get("promo_image_url");
-        $promotion->start_at = $request->get("start_at");
-        $promotion->end_at = $request->get("end_at");
+        $promotion->start_at = \Carbon\Carbon::parse( $request->get('start_at')??Carbon::now());
+        $promotion->end_at = \Carbon\Carbon::parse( $request->get('end_at')??Carbon::now());
         $promotion->immediately_activate = $request->get("immediately_activate")??false;
         $promotion->handler = $request->get("handler")??null;
         $promotion->activation_count = $request->get("activation_count");
@@ -170,6 +175,7 @@ class PromotionController extends Controller
         $promotion->category_id = $request->get("category_id");
         $promotion->refferal_bonus = $request->get("refferal_bonus");
         $promotion->position = $request->get("position")??0;
+        $promotion->user_can_activate_count = $request->get("user_can_activate_count")??1;
         $promotion->save();
 
         return redirect()
@@ -251,4 +257,31 @@ class PromotionController extends Controller
             ->route('promotions.index')
             ->with('success', 'Акция успешно добавлена в канал');
     }
+
+    public function inCategory(Request $request,$id){
+        $promotions = (Category::with(["promotions", "promotions.company"])
+            ->where("id", $id)
+            ->first())
+            ->promotions()
+            ->orderBy('position', 'DESC')
+            ->paginate(10);
+
+        return view('admin.promotions.index_panel', compact('promotions'))
+            ->with('i', ($request->get('page', 1) - 1) * 10);
+    }
+
+    public function inCompany(Request $request,$id){
+
+        $promotions = (Company::with(["promotions"])
+            ->where("id",$id)
+            ->first())
+            ->promotions()
+            ->orderBy('position', 'DESC')
+            ->paginate(10);
+
+
+        return view('admin.promotions.index_panel', compact('promotions'))
+            ->with('i', ($request->get('page', 1) - 1) * 10);
+    }
+
 }

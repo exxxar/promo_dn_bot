@@ -2,18 +2,20 @@
 
 namespace App\Conversations;
 
+use App\Classes\BaseBot;
+use App\Classes\SkidkiBotMenu;
 use BotMan\BotMan\Messages\Conversations\Conversation;
+use Illuminate\Support\Facades\Log;
 
 class StopConversation extends Conversation
 {
 
-    use CustomConversation;
-
-    protected $bot;
+    use BaseBot;
 
     public function __construct($bot)
     {
-        $this->bot = $bot;
+
+        $this->setBot($bot);
     }
 
     /**
@@ -23,7 +25,7 @@ class StopConversation extends Conversation
      */
     public function run()
     {
-        $this->mainMenu("Хорошего дня!");
+        $this->mainMenu(__("messages.menu_title_1"));
     }
 
 

@@ -13,81 +13,153 @@
 
 use App\Events\NetworkCashBackEvent;
 use App\Events\NetworkLevelRecounterEvent;
+use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Facades\Storage;
+use Intervention\Image\Facades\Image;
 use SimpleSoftwareIO\QrCode\Facades\QrCode;
+use Telegram\Bot\FileUpload\InputFile;
+use Telegram\Bot\Laravel\Facades\Telegram;
+use Trello\Client;
+use Trello\Manager;
+use Vinkla\Instagram\Instagram;
 
-Route::get('/test_crash',function (){
-    throw new \PHPUnit\Runner\Exception("asdasd");
-});
-Route::get('/test_user', function () {
-    /*  $users = \App\User::with(["parent","childs"])->get();
-      foreach($users as $user)
-          foreach ($user->childs as $key=>$u) {
-              echo ($key + 1) . ")" .$user->name." child=". $u->name . "<br>";
-               foreach ($u->childs as $u1)
-                   echo $u1->name;
-          }*/
-    //event(new NetworkLevelRecounterEvent(10));
-    //event(new NetworkCashBackEvent(6,100));
-    $user = \App\User::find(10);
-    event(new \App\Events\AchievementEvent(3, 150, $user));
-
-});
-Route::get('/cabinet', 'HomeController@cabinet');
-
-
-Route::get('/test_get_updates', 'BotManController@testGetUpdates');
-
-
-Route::get('/', function (Request $request) {
-    return view('welcome');
+Route::get("/artest", function () {
+   return view("ar");
 });
 
+Route::get("/dotest", function () {
+    $keyboard = [
+        [
+            ["text" => "test btn 0", "callback_data" => "/fff 0"]
+        ]
+    ];
+    Telegram::sendMessage([
+        'chat_id' => env("CHANNEL_ID"),
+        'parse_mode' => 'Markdown',
+        'text' => "test",
+        'disable_notification' => 'true',
+        'reply_markup' => json_encode([
+            'inline_keyboard' => $keyboard,
+        ])
+    ]);
+    /* sleep(10);
+     Telegram::editMessageText([
+         'text'=>"do",
+         'chat_id' => env("CHANNEL_ID"),
+         "message_id"=>$test["message_id"]
+     ]);
+     $keyboard = [
+         [
+             ["text"=>"test btn 2","callback_data"=>"/fff"]
+         ]
+     ];
+     Telegram::editMessageReplyMarkup([
+         'chat_id' => env("CHANNEL_ID"),
+         "message_id"=>$test["message_id"],
+         'reply_markup' => json_encode([
+             'inline_keyboard' => $keyboard,
+         ])
+     ]);
 
+
+     Log::info(print_r($test,true));*/
+});
 Route::match(['get', 'post'], '/botman', 'BotManController@handle');
-Route::get('/botman/tinker', 'BotManController@tinker');
 
 Auth::routes();
 
 Route::get('auth/telegram/callback', 'TelegramAuthController@handleTelegramCallback')->name('auth.telegram.handle');
 
+Route::get('/', 'WelcomeController@index')->name("welcome");
+
+Route::get('/terms-of-use', 'WelcomeController@terms')->name("terms");
+Route::get('/privacy-policy', 'WelcomeController@policy')->name("policy");
+
+Route::get("/insta", 'HomeController@instagramCallabck');
+Route::post('/send-request', 'WelcomeController@sendRequestFromSite')->name("send.callback");
 
 Route::prefix('admin')->group(function () {
-
-    Route::get('/', 'HomeController@index')
-        ->name('home');
-
-    Route::post('/', 'HomeController@index')
-        ->name('home.qr');
-
-
-    Route::post('/search', 'HomeController@search')
-        ->name('users.phone.search');
-
-    Route::get('/search_ajax/', 'HomeController@searchAjax')
-        ->name('users.ajax.search');
-
-
-    Route::post('/announce', 'HomeController@announce')
-        ->name('users.announce');
-
+    Route::get('/', 'HomeController@index')->name('home');
+    Route::post('/', 'HomeController@index')->name('home.qr');
+    Route::get('/lang', 'HomeController@translations')->name('lang');
     Route::get('/sender', 'HomeController@sender');
-    Route::post('/sender', 'HomeController@announceCustom')
-        ->name("sender.announce");
+    Route::post('/sender', 'HomeController@announceCustom')->name("sender.announce");
+    Route::get("/promocodes/change_status/{id}", "PromocodeController@change_status")->name("promocodes.changestatus");
+
+    Route::name('users.')->prefix('users')->group(function () {
+        Route::get("/promotions/{id}", "UsersController@getUserPromotions")->name("promotions");
+        Route::get("/cashback/{id}", "UsersController@cashBackPage")->name("cashback.index");
+        Route::any('/search', 'UsersController@search')->name("search");
+        Route::post('/search', 'HomeController@search')->name('phone.search');
+        Route::get("/show/byPhone/{phone}", "UsersController@showByPhone")->name("show.phone");
+        Route::post("/cashback/add", "HomeController@cashback")->name("cashback.add");
+        Route::post('/announce', 'HomeController@announce')->name('announce');
+        Route::get('/search_ajax', 'HomeController@searchAjax')->name('ajax.search');
+
+        Route::name('uploadphotos.')->prefix('uploadphotos')->group(function () {
+            Route::get("/", "InstaPromotionController@uploadphotos")->name("index");
+            Route::post("/accept/{id}", "InstaPromotionController@accept")->name("accept");
+            Route::get("/decline/{id}", "InstaPromotionController@decline")->name("decline");
+        });
+    });
+
+    Route::name('promotions.')->prefix('promotions')->group(function () {
+        Route::get("/copy/{id}", "PromotionController@copy")->name("copy");
+        Route::get("/channel/{id}", "PromotionController@channel")->name("channel");
+        Route::get("/incategory/{id}", "PromotionController@inCategory")->name("in_category");
+        Route::get("/incompany/{id}", "PromotionController@inCompany")->name("in_company");
+    });
+
+    Route::name('instapromos.')->prefix('instapromos')->group(function () {
+        Route::get("/channel/{id}", "InstaPromotionController@channel")->name("channel");
+        Route::get("/duplication/{id}", "InstaPromotionController@duplication")->name("duplication");
+        Route::get("/userson/{id}", "InstaPromotionController@usersOn")->name("userson");
+    });
 
 
-    Route::post("/users/cashback/add", "HomeController@cashback")
-        ->name("users.cashback.add");
+    Route::name('geo_quests.')->prefix('geo_quests')->group(function () {
+        Route::get("/channel/{id}", "GeoQuestController@channel")->name("channel");
+        Route::get("/duplication/{id}", "GeoQuestController@duplication")->name("duplication");
+        Route::get("/points/append/{id}", "GeoQuestController@append")->name("points.append");
+        Route::post("/points/store/{id}", "GeoQuestController@storePoints")->name("points.store");
+    });
+
+    Route::name('geo_positions.')->prefix('geo_positions')->group(function () {
+        Route::get("/channel/{id}", "GeoQuestController@channel")->name("channel");
+        Route::get("/duplication/{id}", "GeoQuestController@duplication")->name("duplication");
+    });
 
 
-    Route::get("/users/show/byPhone/{phone}", "UsersController@showByPhone")
-        ->name("users.show.phone");
+    Route::name('prizes.')->prefix('prizes')->group(function () {
+        Route::get("/channel/{id}", "PrizeController@channel")->name("channel");
+        Route::get("/duplication/{id}", "PrizeController@duplication")->name("duplication");
+    });
 
+    Route::name('charities.')->prefix('charities')->group(function () {
+        Route::get("/channel/{id}", "CharityController@channel")->name("channel");
+        Route::get("/duplication/{id}", "CharityController@duplication")->name("duplication");
+        Route::get("/userson/{id}", "CharityController@usersOn")->name("userson");
+    });
 
-    Route::get("/users/cashback/{id}", "UsersController@cashBackPage")->name("users.cashback.index");
+    Route::name('companies.')->prefix('companies')->group(function () {
+        Route::get("/channel/{id}", "CompanyController@channel")->name("channel");
+        Route::get("/hide/{id}", "CompanyController@hide")->name("hide");
+    });
 
-    Route::any('users/search', 'UsersController@search')->name("users.search");
+    Route::name('events.')->prefix('events')->group(function () {
+        Route::get("/channel/{id}", "EventsController@channel")->name("channel");
+    });
+
+    Route::name('achievements.')->prefix('achievements')->group(function () {
+        Route::get("/channel/{id}", "AchievementsController@channel")->name("channel");
+    });
+
+    Route::name('bot_hubs.')->prefix('bot_hubs')->group(function () {
+        Route::get("/set_webhook/{id}", "BotHubController@setWebHook")->name("setwebhook");
+        Route::get("/un_set_webhook/{id}", "BotHubController@unsetWebHook")->name("unsetwebhook");
+    });
+
 
     Route::resources([
         'articles' => 'ArticleController',
@@ -102,24 +174,19 @@ Route::prefix('admin')->group(function () {
         'achievements' => 'AchievementsController',
         'prizes' => 'PrizeController',
         'promocodes' => 'PromocodeController',
+        'instapromos' => 'InstaPromotionController',
+        'cashbackinfos' => 'CashBackInfoController',
+        'charities' => 'CharityController',
+        'charityhistories' => 'CharityHistoryController',
+        'geo_quests' => 'GeoQuestController',
+        'geo_positions' => 'GeoPositionController',
+        'geo_histories' => 'GeoHistoryController',
+        'bot_hubs' => 'BotHubController',
     ]);
-
-    Route::get("/promotions/copy/{id}","PromotionController@copy")->name("promotions.copy");
-    Route::get("/promotions/channel/{id}","PromotionController@channel")->name("promotions.channel");
-    Route::get("/events/channel/{id}","EventsController@channel")->name("events.channel");
-    Route::get("/companies/channel/{id}","CompanyController@channel")->name("companies.channel");
-    Route::get("/achievements/channel/{id}","AchievementsController@channel")->name("achievements.channel");
-    Route::get("/prizes/channel/{id}","PrizeController@channel")->name("prizes.channel");
-    Route::get("/promocodes/change_status/{id}","PromocodeController@change_status")->name("promocodes.changestatus");
-
-    Route::get("/duplication/channel/{id}","PrizeController@duplication")->name("prizes.duplication");
-
 });
 
 
-
 Route::get("/image", function (\Illuminate\Http\Request $request) {
-
     try {
         $tmp_data = base64_decode($request->get("data"));
     } catch (Exception $e) {
@@ -134,7 +201,6 @@ Route::get("/image", function (\Illuminate\Http\Request $request) {
         return response($pngImage)->header('Content-type', 'image/png');
     } catch (Exception $e) {
         return "https://api.qrserver.com/v1/create-qr-code/?size=150x150&data=https://t.me/" . env("APP_BOT_NAME");
-
     }
 });
 

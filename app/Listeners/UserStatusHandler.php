@@ -3,7 +3,7 @@
 namespace App\Listeners;
 
 use App\Events\ActivateUserEvent;
-use App\RefferalsHistory;
+use App\Models\SkidkaServiceModels\RefferalsHistory;
 use App\User;
 use Carbon\Carbon;
 use Illuminate\Queue\InteractsWithQueue;

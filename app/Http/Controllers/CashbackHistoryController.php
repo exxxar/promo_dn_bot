@@ -2,7 +2,7 @@
 
 namespace App\Http\Controllers;
 
-use App\CashbackHistory;
+use App\Models\SkidkaServiceModels\CashbackHistory;
 use Illuminate\Http\Request;
 
 class CashbackHistoryController extends Controller
@@ -29,27 +29,6 @@ class CashbackHistoryController extends Controller
     }
 
     /**
-     * Show the form for creating a new resource.
-     *
-     * @return \Illuminate\Http\Response
-     */
-    public function create()
-    {
-        //
-    }
-
-    /**
-     * Store a newly created resource in storage.
-     *
-     * @param  \Illuminate\Http\Request  $request
-     * @return \Illuminate\Http\Response
-     */
-    public function store(Request $request)
-    {
-        //
-    }
-
-    /**
      * Display the specified resource.
      *
      * @param  \App\CashbackHistory  $cashbackHistory
@@ -63,37 +42,4 @@ class CashbackHistoryController extends Controller
         return view('admin.cashback_histories.show', compact('cash'));
     }
 
-    /**
-     * Show the form for editing the specified resource.
-     *
-     * @param  \App\CashbackHistory  $cashbackHistory
-     * @return \Illuminate\Http\Response
-     */
-    public function edit(CashbackHistory $cashbackHistory)
-    {
-        //
-    }
-
-    /**
-     * Update the specified resource in storage.
-     *
-     * @param  \Illuminate\Http\Request  $request
-     * @param  \App\CashbackHistory  $cashbackHistory
-     * @return \Illuminate\Http\Response
-     */
-    public function update(Request $request, CashbackHistory $cashbackHistory)
-    {
-        //
-    }
-
-    /**
-     * Remove the specified resource from storage.
-     *
-     * @param  \App\CashbackHistory  $cashbackHistory
-     * @return \Illuminate\Http\Response
-     */
-    public function destroy(CashbackHistory $cashbackHistory)
-    {
-        //
-    }
 }

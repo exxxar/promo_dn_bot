@@ -12,7 +12,6 @@
                         </div>
                         <div class="pull-right">
                             <a class="btn btn-primary" href="{{ route('achievements.index') }}"> Назад</a>
-
                         </div>
 
 
@@ -20,8 +19,7 @@
                 </div>
 
 
-                <form method="post" action="{{ route('achievements.store') }}">
-                    @csrf
+
                     <table class="table mt-2">
                         <thead class="thead-light ">
                         <th>Параметр</th>
@@ -81,14 +79,14 @@
                             <td>Ссылка на изображение к призу</td>
                             <td>
                                 <img src="{{$achievement->prize_image_url}}" class="img-thumbnail"
-                                     style="width:150px;height:150px;" alt=""> "
+                                     style="width:150px;height:150px;object-fit: contain" alt=""> "
 
                             </td>
                         </tr>
 
                         </tbody>
                     </table>
-                </form>
+
             </div>
         </div>
     </div>

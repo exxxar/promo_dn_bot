@@ -2,10 +2,12 @@
 
 namespace App\Http\Controllers;
 
-use App\Company;
-use App\Promocode;
+use App\Models\SkidkaServiceModels\Company;
+use App\Models\SkidkaServiceModels\Promocode;
+use App\User;
 use Carbon\Carbon;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Auth;
 
 class PromocodeController extends Controller
 {
@@ -23,9 +25,10 @@ class PromocodeController extends Controller
         $promocodes = Promocode::with(["user","company"])->orderBy('id', 'DESC')
             ->paginate(15);
 
-        $companies = Company::all();
+        $currentUser = User::with(["companies"])->find(Auth::id());
+        //$companies = Company::all();
 
-        return view('admin.promocodes.index', compact('promocodes','companies'))
+        return view('admin.promocodes.index', compact('promocodes','currentUser'))
             ->with('i', ($request->get('page', 1) - 1) * 15);
     }
     /**
@@ -50,6 +53,7 @@ class PromocodeController extends Controller
     {
         $request->validate([
             'code'=> 'required|unique:promocodes',
+            'company_id'=> 'required',
         ]);
 
         $promocode = Promocode::create([

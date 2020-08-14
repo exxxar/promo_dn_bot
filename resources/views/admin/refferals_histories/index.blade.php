@@ -42,7 +42,7 @@
                                 <td>
                                     @isset($refferal->sender)
                                         <a href="{{ route('users.show',$refferal->sender->id) }}">
-                                            {{$refferal->sender->phone}}</a>
+                                            {{$refferal->sender->phone??$refferal->sender->name??$refferal->sender->telegram_chat_id}}</a>
                                     @endisset
                                 </td>
 

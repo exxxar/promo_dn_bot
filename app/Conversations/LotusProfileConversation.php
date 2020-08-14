@@ -2,16 +2,14 @@
 
 namespace App\Conversations;
 
+use App\Classes\BaseBot;
+use App\Classes\SkidkiBotMenu;
 use BotMan\BotMan\Messages\Conversations\Conversation;
 
-use App\Promotion;
+use App\Models\SkidkaServiceModels\Promotion;
 use App\User;
-use App\UserHasPromo;
-use BotMan\BotMan\Messages\Attachments\Image;
-use BotMan\BotMan\Messages\Attachments\Location;
 use BotMan\BotMan\Messages\Incoming\Answer;
 use BotMan\BotMan\Messages\Outgoing\Actions\Button;
-use BotMan\BotMan\Messages\Outgoing\OutgoingMessage;
 use BotMan\BotMan\Messages\Outgoing\Question;
 use Carbon\Carbon;
 use Illuminate\Support\Facades\Log;
@@ -19,14 +17,27 @@ use Telegram\Bot\Laravel\Facades\Telegram;
 
 class LotusProfileConversation extends Conversation
 {
-    use CustomConversation;
+    use BaseBot;
 
+    protected $about;
+    protected $model_name;
+    protected $height;
+    protected $weight;
+    protected $breast_volume;
+    protected $sex;
+    protected $waist;
+    protected $hips;
+    protected $model_school_education;
+    protected $hobby;
+    protected $education;
+    protected $wish_learn;
     protected $data;
-    protected $bot;
+    protected $on_promo;
 
     public function __construct($bot, $data)
     {
-        $this->bot = $bot;
+
+        $this->setBot($bot);
         $this->data = $data;
     }
 
@@ -45,40 +56,38 @@ class LotusProfileConversation extends Conversation
         $this->education = null;
         $this->wish_learn = null;
 
-        $telegramUser = $this->bot->getUser();
-        $id = $telegramUser->getId();
 
-        $this->user = \App\User::with(["promos"])->where("telegram_chat_id", $id)
-            ->first();
-
-
-        $on_promo = $this->user->promos()
+        $this->on_promo = $this->getUser(["promos"])->promos()
             ->where("promotion_id", "=", intval($this->data))
             ->first();
 
-        if ($on_promo) {
-            $this->bot->reply('Акция уже была пройдена ранее!');
+        $promo = Promotion::where("id", intval($this->data))->first();
+
+        if ($this->on_promo && $this->on_promo->pivot->user_activation_count <= $promo->user_can_activate_count) {
+            $this->reply(__("messages.promo_message_3"));
             return;
         }
 
         try {
             $this->askForStartPromo();
         } catch (\Exception $e) {
-            $this->bot->reply($e);
+            Log::error(get_class($this));
+            $this->mainMenu(__("messages.menu_title_1"));
         }
 
     }
 
     public function askForStartPromo()
     {
-        $question = Question::create('Анкета участников модельного агентства')
-            ->fallback('Ничего страшного, в следующий раз получится!')
+        $question = Question::create(__("messages.lotus_model_profile"))
+            ->fallback(__("messages.ask_fallback"))
             ->addButtons([
-                Button::create('Подробности')->value('promo_info'),
-                Button::create('Заполнить')->value('yes'),
-                Button::create('Нет, в другой раз')->value('no'),
+                Button::create(__("messages.start_promo_btn_1"))->value('promo_info'),
+                Button::create(__("messages.start_promo_btn_2"))->value('yes'),
+                Button::create(__("messages.start_promo_btn_3"))->value('no'),
             ]);
 
+        Log::info("1 test data=".$this->data);
 
         $this->ask($question, function (Answer $answer) {
             if ($answer->isInteractiveMessageReply()) {
@@ -86,16 +95,19 @@ class LotusProfileConversation extends Conversation
 
                 if ($selectedValue == "promo_info") {
                     $this->promoInfo();
+                    return;
                 }
 
                 if ($selectedValue == "yes") {
-                    $this->conversationMenu("Начнем-с...");
+                    $this->conversationMenu(__("messages.menu_title_2"));
                     $this->askFirstname();
+                    return;
 
                 }
 
                 if ($selectedValue == "no") {
-                    $this->say("Хорошего дня!");
+                    $this->reply(__("messages.message_1"));
+                    return;
                 }
             }
         });
@@ -105,40 +117,29 @@ class LotusProfileConversation extends Conversation
     {
 
         $promo = Promotion::find($this->data);
-        $coords = explode(",", $promo->location_coords);
-        $location_attachment = new Location($coords[0], $coords[1], [
-            'custom_payload' => true,
-        ]);
-        $attachment = new Image($promo->promo_image_url);
+        if ($promo) {
+            $coords = explode(",", $promo->location_coords);
+            $this->sendPhoto("*" . $promo->title . "*\n_" . $promo->description . "_\n*Наш адрес*:" . $promo->location_address . "\n*Координаты акции*:", $promo->promo_image_url);
+            $this->sendLocation($coords[0], $coords[1]);
+        }
 
-        $message1 = OutgoingMessage::create("*" . $promo->title . "*\n_" . $promo->description . "_\n*Наш адрес*:" . $promo->location_address . "\n*Координаты акции*:")
-            ->withAttachment($attachment);
-
-        $message2 = OutgoingMessage::create("Мы находимся тут:")
-            ->withAttachment($location_attachment);
-
-        // Reply message object
-        $this->bot->reply($message1, ["parse_mode" => "Markdown"]);
-        $this->bot->reply($message2, ["parse_mode" => "Markdown"]);
-
-        $question = Question::create('Так что на счет анкеты?')
+        $question = Question::create(__("messages.ask_lotus_profile"))
             ->addButtons([
-                Button::create('Поехали')->value('yes'),
-                Button::create('Нет, в другой раз')->value('no'),
+                Button::create(__("messages.ask_promo_btn_1"))->value('yes'),
+                Button::create(__("messages.ask_promo_btn_2"))->value('no'),
             ]);
 
         $this->ask($question, function (Answer $answer) {
-            // Detect if button was clicked:
             if ($answer->isInteractiveMessageReply()) {
                 $selectedValue = $answer->getValue();
 
                 if ($selectedValue == "yes") {
-                    $this->conversationMenu("Начнем-с...");
+                    $this->conversationMenu(__("messages.menu_title_2"));
                     $this->askFirstname();
                 }
 
                 if ($selectedValue == "no") {
-                    $this->say("Хорошего дня!");
+                    $this->say(__("messages.message_1"));
                 }
             }
         });
@@ -147,95 +148,101 @@ class LotusProfileConversation extends Conversation
 
     public function askFirstname()
     {
-        if ($this->model_name == null) {
-            $question = Question::create('Как тебя зовут?')
-                ->fallback('Спасибо что пообщался со мной:)!');
-
-            $this->ask($question, function (Answer $answer) {
-                $this->model_name = $answer->getText();
-                $this->user->fio_from_request = $answer->getText();
-                $this->user->save();
-
-                $this->askPhone();
-            });
-        } else
+        if (!is_null($this->model_name)) {
             $this->askPhone();
+            return;
+        }
+
+        $question = Question::create(__("messages.ask_name"))
+            ->fallback(__("messages.ask_fallback"));
+
+        $this->ask($question, function (Answer $answer) {
+            $this->model_name = $answer->getText()??'';
+
+            $user = $this->getUser();
+            $user->fio_from_request = $this->model_name;
+            $user->save();
+
+            $this->askPhone();
+        });
+
     }
 
     public function askPhone()
     {
-        if ($this->user->phone == null) {
-            $question = Question::create('Ваш контактный телефон')
-                ->fallback('Спасибо что пообщался со мной:)!');
+        if (!is_null($this->getUser()->phone)&&strlen(trim($this->getUser()->phone))>0) {
+            $this->askSex();
+            return;
+        }
 
-            $this->ask($question, function (Answer $answer) {
+        $question = Question::create(__("messages.ask_phone"))
+            ->fallback(__("messages.ask_fallback"));
 
-                $vowels = array("(", ")", "-", " ");
-                $tmp_phone = $answer->getText();
+        $this->ask($question, function (Answer $answer) {
 
-                Log::info($tmp_phone);
+            $vowels = array("(", ")", "-", " ");
 
-                $tmp_phone = str_replace($vowels, "", $tmp_phone);
+            $tmp_phone = str_replace($vowels, "", $answer->getText());
 
-                Log::info($tmp_phone);
+            $tmp_phone = strpos($tmp_phone, "+38") === false ?
+                "+38" . $tmp_phone :
+                $tmp_phone;
 
-                if (!strpos($tmp_phone, "+38"))
-                    $tmp_phone = "+38" . $tmp_phone;
+            if (strlen($tmp_phone)>13){
+                $this->reply(__("messages.ask_phone_error_1"));
+                $this->askPhone();
+                return;
+            }
 
-                $pattern = "/^\+380\d{3}\d{2}\d{2}\d{2}$/";
+            $pattern = "/^\+380\d{3}\d{2}\d{2}\d{2}$/";
 
-                if (preg_match($pattern, $tmp_phone) == 0) {
+            if (preg_match($pattern, $tmp_phone) == 0) {
+                $this->bot->reply(__("messages.ask_phone_error_1"));
+                $this->askPhone();
+                return;
+            } else {
 
-                    $this->bot->reply("Номер введен не верно...\n");
+                $tmp_user = User::where("phone", $tmp_phone)->first();
+
+                if ($tmp_user == null) {
+                    $user = $this->getUser();
+                    $user->phone = $tmp_phone;
+                    $user->save();
+                } else {
+                    $this->bot->reply(__("messages.ask_phone_error_2"));
                     $this->askPhone();
                     return;
-                } else {
-
-                    $tmp_user = User::where("phone", $tmp_phone)->first();
-
-                    if ($tmp_user == null) {
-
-                        $this->user->phone = $tmp_phone;
-                        $this->user->save();
-
-
-                    } else {
-                        $this->bot->reply("Пользователь с таким номером уже и так наш друг:)\n");
-                        $this->askPhone();
-                        return;
-                    }
-
                 }
 
-                $this->askSex();
-            });
-        } else
+            }
+
             $this->askSex();
+        });
+
 
     }
 
 
     public function askSex()
     {
-        if ($this->sex != null) {
+        if (!is_null($this->sex)) {
             $this->askAge();
             return;
         }
-        $question = Question::create('Ваш пол?')
-            ->fallback('Спасибо что пообщался со мной:)!')
+
+        $question = Question::create(__("messages.ask_sex"))
+            ->fallback(__("messages.ask_fallback"))
             ->addButtons([
-                Button::create("\xF0\x9F\x91\xA6Парень")->value('man'),
-                Button::create("\xF0\x9F\x91\xA7Девушка")->value('woman'),
+                Button::create(__("messages.ask_sex_btn_1"))->value('man'),
+                Button::create(__("messages.ask_sex_btn_2"))->value('woman'),
             ]);
 
         $this->ask($question, function (Answer $answer) {
-            // Detect if button was clicked:
             if ($answer->isInteractiveMessageReply()) {
                 $this->sex = $answer->getValue() == "man" ? 0 : 1;
                 $this->askAge();
             }
         });
-
 
     }
 
@@ -243,19 +250,18 @@ class LotusProfileConversation extends Conversation
 
     public function askAge()
     {
-        if ($this->user->age != null) {
+        if (!is_null($this->getUser()->age )) {
             $this->askHeight();
             return;
         }
-        $question = Question::create('Сколько тебе лет?')
-            ->fallback('Спасибо что пообщался со мной:)!');
+        $question = Question::create(__("messages.ask_age"))
+            ->fallback(__("messages.ask_fallback"));
 
         $this->ask($question, function (Answer $answer) {
-            $this->user->age = intval($answer->getText()) ?? 18;
-            $this->user->save();
-
+            $user = $this->getUser();
+            $user->age = intval($answer->getText()) ?? 18;
+            $user->save();
             $this->askHeight();
-
         });
 
 
@@ -264,20 +270,17 @@ class LotusProfileConversation extends Conversation
 
     public function askHeight()
     {
-        if ($this->height != null) {
+        if (!is_null($this->height)) {
             $this->askWeight();
             return;
         }
 
-        $question = Question::create('Ваш рост:')
-            ->fallback('Спасибо что пообщался со мной:)!');
+        $question = Question::create(__("messages.ask_height"))
+            ->fallback(__("messages.ask_fallback"));
 
         $this->ask($question, function (Answer $answer) {
-            $this->height = $answer->getText();
-
-
+            $this->height = $answer->getText()??'';
             $this->askWeight();
-
         });
 
     }
@@ -285,37 +288,32 @@ class LotusProfileConversation extends Conversation
 
     public function askWeight()
     {
-        if ($this->weight != null) {
+        if (!is_null($this->weight)) {
             $this->askBreastVolume();
             return;
         }
-        $question = Question::create('Ваш вес:')
-            ->fallback('Спасибо что пообщался со мной:)!');
+        $question = Question::create(__("messages.ask_weight"))
+            ->fallback(__("messages.ask_fallback"));
 
         $this->ask($question, function (Answer $answer) {
-            $this->weight = $answer->getText();
-
-
+            $this->weight = $answer->getText()??'';
             $this->askBreastVolume();
-
         });
-
-
     }
 
     //объем талии
 
     public function askBreastVolume()
     {
-        if ($this->breast_volume != null || $this->sex == 0) {
+        if (!is_null($this->breast_volume) || $this->sex == 0) {
             $this->askWaist();
             return;
         }
-        $question = Question::create('Ваш объем груди:')
-            ->fallback('Спасибо что пообщался со мной:)!');
+        $question = Question::create(__("messages.ask_breast_volume"))
+            ->fallback(__("messages.ask_fallback"));
 
         $this->ask($question, function (Answer $answer) {
-            $this->breast_volume = $answer->getText();
+            $this->breast_volume = $answer->getText()??'';
             $this->askWaist();
 
         });
@@ -326,87 +324,74 @@ class LotusProfileConversation extends Conversation
 
     public function askWaist()
     {
-        if ($this->waist != null || $this->sex == 0) {
+        if (!is_null($this->waist) || $this->sex == 0) {
             $this->askHips();
             return;
         }
-        $question = Question::create('Ваш объем талии:')
-            ->fallback('Спасибо что пообщался со мной:)!');
+        $question = Question::create(__("messages.ask_waist"))
+            ->fallback(__("messages.ask_fallback"));
 
         $this->ask($question, function (Answer $answer) {
-            $this->waist = $answer->getText();
+            $this->waist = $answer->getText()??'';
             $this->askHips();
-
         });
 
 
     }
 
-    //обучались в модельной школе?
 
     public function askHips()
     {
-        if ($this->hips != null || $this->sex == 0) {
+        if (!is_null($this->hips) || $this->sex == 0) {
             $this->askModelSchool();
             return;
         }
-        $question = Question::create('Ваш объем бёдер:')
-            ->fallback('Спасибо что пообщался со мной:)!');
+        $question = Question::create(__("messages.ask_hips"))
+            ->fallback(__("messages.ask_fallback"));
 
         $this->ask($question, function (Answer $answer) {
-            $this->hips = $answer->getText();
+            $this->hips = $answer->getText()??'';
             $this->askModelSchool();
-
         });
-
 
     }
 
-    //откуда узнали о нашем модельном агенстве
 
     public function askModelSchool()
     {
-        if ($this->model_school_education != null) {
+        if (!is_null($this->model_school_education)) {
             $this->askAboutUs();
             return;
         }
-        $question = Question::create('Обучались в модельной школе?')
-            ->fallback('Спасибо что пообщался со мной:)!')
+        $question = Question::create(__("messages.ask_model_school_education"))
+            ->fallback(__("messages.ask_fallback"))
             ->addButtons([
-                Button::create("\xE2\x9E\x95Да")->value('yes'),
-                Button::create("\xE2\x9D\x8CНет")->value('no'),
+                Button::create(__("messages.ask_model_school_education_btn_1"))->value('yes'),
+                Button::create(__("messages.ask_model_school_education_btn_2"))->value('no'),
             ]);
 
         $this->ask($question, function (Answer $answer) {
-            // Detect if button was clicked:
             if ($answer->isInteractiveMessageReply()) {
-
                 $this->model_school_education = $answer->getValue() == "yes" ? 1 : 0;
-
                 $this->askAboutUs();
             }
         });
-
-
     }
 
-    //ваше хобби
 
     public function askAboutUs()
     {
-        if ($this->about != null) {
+        if (is_null($this->about)) {
             $this->askHobby();
             return;
         }
-        $question = Question::create('Откуда узнали о нашем модельном агенстве?')
-            ->fallback('Спасибо что пообщался со мной:)!');
+        $question = Question::create(__("messages.ask_about"))
+            ->fallback(__("messages.ask_fallback"));
 
         $this->ask($question, function (Answer $answer) {
-            $this->about = $answer->getText();
+            $this->about = $answer->getText()??'';
             $this->askHobby();
-
         });
-
 
     }
 
@@ -414,17 +399,16 @@ class LotusProfileConversation extends Conversation
 
     public function askHobby()
     {
-        if ($this->hobby != null) {
+        if (!is_null($this->hobby) ) {
             $this->askEducation();
             return;
         }
-        $question = Question::create('Ваше хобби?')
-            ->fallback('Спасибо что пообщался со мной:)!');
+        $question = Question::create(__("messages.ask_hobby"))
+            ->fallback(__("messages.ask_fallback"));
 
         $this->ask($question, function (Answer $answer) {
-            $this->hobby = $answer->getText();
+            $this->hobby = $answer->getText()??'';
             $this->askEducation();
-
         });
 
 
@@ -434,40 +418,36 @@ class LotusProfileConversation extends Conversation
 
     public function askEducation()
     {
-        if ($this->education != null) {
+        if (!is_null($this->education)) {
             $this->askWishLearn();
             return;
         }
-        $question = Question::create('Ваше образование?')
-            ->fallback('Спасибо что пообщался со мной:)!');
+        $question = Question::create(__("messages.ask_education"))
+            ->fallback(__("messages.ask_fallback"));
 
         $this->ask($question, function (Answer $answer) {
-            $this->education = $answer->getText();
+            $this->education = $answer->getText()??'';
             $this->askWishLearn();
-
         });
 
     }
 
     public function askWishLearn()
     {
-        if ($this->wish_learn != null) {
+        if (!is_null($this->wish_learn)) {
             $this->saveData();
             return;
         }
-        $question = Question::create('Хотели бы обучаться у нас?')
-            ->fallback('Спасибо что пообщался со мной:)!')
+        $question = Question::create(__("messages.ask_wish_learn"))
+            ->fallback(__("messages.ask_fallback"))
             ->addButtons([
-                Button::create("\xE2\x9E\x95Да")->value('yes'),
-                Button::create("\xE2\x9D\x8CНет")->value('no'),
+                Button::create(__("messages.ask_wish_learn_btn_1"))->value('yes'),
+                Button::create(__('messages.ask_wish_learn_btn_2'))->value('no'),
             ]);
 
         $this->ask($question, function (Answer $answer) {
-            // Detect if button was clicked:
             if ($answer->isInteractiveMessageReply()) {
-
                 $this->wish_learn = $answer->getValue() == "yes" ? 1 : 0;
-
                 $this->saveData();
             }
         });
@@ -479,25 +459,31 @@ class LotusProfileConversation extends Conversation
     {
 
 
-        $this->mainMenu("Отлично! Вы справились!");
+        $this->mainMenu(__("messages.menu_title_4"));
 
         Telegram::sendMessage([
-            'chat_id' => "-1001176319167",
+            'chat_id' => env("LOTUS_MODEL_HUB_CHANNEL"),
             'parse_mode' => 'Markdown',
             'text' => "Новая анкета:\n"
-                . "*Ф.И.О.*:" . ($this->model_name ?? 'Не указано') . "\n"
-                . "*Возраст:*" . ($this->user->age ?? 'Не указано') . "\n"
-                . "*Телефон:*" . ($this->user->phone ?? 'Не указано') . "\n"
-                . "*Пол:*" . ($this->sex == 0 ? "Парень" : "Девушка") . "\n"
-                . "*Рост:*" . ($this->height ?? 'Не указано') . "\n"
-                . "*Вес:*" . ($this->weight ?? 'Не указано') . "\n"
-                . "*Объем груди:*" . ($this->breast_volume ?? 'Не указано') . "\n"
-                . "*Объем талии:*" . ($this->waist ?? 'Не указано') . "\n"
-                . "*Объем бёдер:*" . ($this->hips ?? 'Не указано') . "\n"
-                . "*Обучался ранее:*" . ($this->model_school_education == 1 ? "Да" : "Нет") . "\n"
-                . "*Желает обучаться:*" . ($this->wish_learn == 1 ? "Да" : "Нет") . "\n"
-                . "*Откуда узнал:*" . ($this->about ?? 'Не указано') . "\n"
-                . "*Образование:*" . ($this->education ?? 'Не указано') . "\n"
+                . "*Ф.И.О.*:" . ($this->model_name ?? __("messages.empty_data")) . "\n"
+                . "*Возраст:*" . ($this->getUser()->age ?? __("messages.empty_data")) . "\n"
+                . "*Телефон:*" . ($this->getUser()->phone ?? __("messages.empty_data")) . "\n"
+                . "*Пол:*" . ($this->sex == 0 ?
+                    __("messages.ask_sex_btn_1") :
+                    __("messages.ask_sex_btn_2")) . "\n"
+                . "*Рост:*" . ($this->height ?? __("messages.empty_data")) . "\n"
+                . "*Вес:*" . ($this->weight ?? __("messages.empty_data")) . "\n"
+                . "*Объем груди:*" . ($this->breast_volume ?? __("messages.empty_data")) . "\n"
+                . "*Объем талии:*" . ($this->waist ?? __("messages.empty_data")) . "\n"
+                . "*Объем бёдер:*" . ($this->hips ?? __("messages.empty_data")) . "\n"
+                . "*Обучался ранее:*" . ($this->model_school_education == 1 ?
+                    __("messages.ask_model_school_education_btn_1") :
+                    __("messages.ask_model_school_education_btn_2")) . "\n"
+                . "*Желает обучаться:*" . ($this->wish_learn == 1 ?
+                    __("messages.ask_wish_learn_btn_1") :
+                    __("messages.ask_wish_learn_btn_2")) . "\n"
+                . "*Откуда узнал:*" . ($this->about ?? __("messages.empty_data")) . "\n"
+                . "*Образование:*" . ($this->education ?? __("messages.empty_data")) . "\n"
             ,
             'disable_notification' => 'true'
         ]);
@@ -508,13 +494,26 @@ class LotusProfileConversation extends Conversation
 
             if ($promo->immediately_activate == 1) {
 
-                $this->user->referral_bonus_count += $promo->refferal_bonus;
-                $this->user->updated_at = Carbon::now();
+                $user = $this->getUser();
+                $user->referral_bonus_count += $promo->refferal_bonus;
+                $user->updated_at = Carbon::now();
 
-                $this->bot->reply($promo->activation_text);
+                $this->reply($promo->activation_text);
+                $user->promos()->attach($promo->id,[]);
 
-                $this->user->promos()->attach($promo->id);
+                if (is_null($this->on_promo)) {
+                    $user->promos()->attach($promo->id, ["user_activation_count" => 1]);
+                } else {
+                    if ($this->on_promo->pivot->user_activation_count <= $promo->user_can_activate_count) {
+                        $this->on_promo->pivot->user_activation_count += 1;
+                        $this->on_promo->pivot->save();
 
+                        $this->reply("У вас осталось *" . ($promo->user_can_activate_count - $this->on_promo->pivot->user_activation_count) . "* активаций.");
+
+                    }
+                }
+
+                $user->save();
                 $promo->current_activation_count += 1;
                 $promo->save();
 
@@ -522,13 +521,10 @@ class LotusProfileConversation extends Conversation
         }
 
 
-        $this->user->save();
-
-
         if ($promo->immediately_activate == 0) {
-            $this->bot->reply("Спасибо! Получите свои бонусы у нашего сотрудника по этому QR-коду.");
+            $this->reply(__("messages.message_2"));
 
-            $tmp_id = $this->user->telegram_chat_id;
+            $tmp_id = (string)$this->getUser()->telegram_chat_id;
             while (strlen($tmp_id) < 10)
                 $tmp_id = "0" . $tmp_id;
 
@@ -538,16 +534,10 @@ class LotusProfileConversation extends Conversation
 
             $code = base64_encode("003" . $tmp_id . $tmp_promo_id);
 
-            //$attachment = new Image("https://api.qrserver.com/v1/create-qr-code/?size=150x150&data=https://t.me/" . env("APP_BOT_NAME") . "?start=$code");
+            $this->sendPhoto(__("messages.message_3"),
+                env("QR_URL") . "https://t.me/" . env("APP_BOT_NAME") . "?start=$code"
+            );
 
-            $attachment = new Image(env("QR_URL")."https://t.me/" . env("APP_BOT_NAME") . "?start=$code");
-
-            // Build message object
-            $message = OutgoingMessage::create('_Код для получения бонуса по акции_')
-                ->withAttachment($attachment);
-
-            // Reply message object
-            $this->bot->reply($message, ["parse_mode" => "Markdown"]);
         }
 
 

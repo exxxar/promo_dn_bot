@@ -2,11 +2,11 @@
 
 namespace App\Listeners;
 
-use App\Achievement;
+use App\Models\SkidkaServiceModels\Achievement;
 use App\Events\AchievementEvent;
-use App\Stat;
+use App\Models\SkidkaServiceModels\Stat;
 use App\User;
-use App\UserHasAchievement;
+use App\Models\SkidkaServiceModels\UserHasAchievement;
 use Illuminate\Queue\InteractsWithQueue;
 use Illuminate\Contracts\Queue\ShouldQueue;
 use Illuminate\Support\Facades\Log;
@@ -33,6 +33,9 @@ class AchievementProcessor
      */
     public function handle(AchievementEvent $event)
     {
+
+        if ($event->isComplete == true)
+            return;
         //
         $stats = Stat::where("stat_type", $event->trigger_type)
             ->where("user_id", $event->user->id)
@@ -53,13 +56,8 @@ class AchievementProcessor
             ->where("trigger_value", "<=", $stats->stat_value)
             ->get();
 
-        Log::info("AchList=>".print_r($achList,true));
 
         $user = User::with(["achievements"])->find($event->user->id);
-
-//        Log::info("UsersAchList=>".print_r($user->achievements()->all(),true));
-
-
 
         foreach ($achList as $ach) {
             $find = $user
@@ -67,9 +65,7 @@ class AchievementProcessor
                 ->where("achievement_id", $ach->id)
                 ->first();
 
-            Log::info("ach=>$find");
             if ($find == null) {
-                Log::info("Test");
                 /*   $activated = (UserHasAchievement::where("achievement_id",$ach->id)->first())->activated;
                    if ($activated)
                        continue;*/
@@ -101,5 +97,7 @@ class AchievementProcessor
 
             }
         }
+
+        $event->isComplete = true;
     }
 }

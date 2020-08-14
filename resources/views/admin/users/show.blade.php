@@ -124,6 +124,26 @@
                     </tbody>
                 </table>
 
+                @if(isset($user->cashbackinfos))
+                    <h3>CashBack по компаниям</h3>
+                    <table>
+                        <thead>
+                        <th>№</th>
+                        <th>Компания</th>
+                        <th>CashBack</th>
+                        </thead>
+                        <tbody>
+                        @foreach($user->cashbackinfos as $key=>$cbi)
+                            <tr>
+                                <td>{{$key+1}}</td>
+                                <td>{{$cbi->company->title}}</td>
+                                <td>{{$cbi->value}}</td>
+                            </tr>
+                        @endforeach
+                        </tbody>
+                    </table>
+                @endif
+
                 @if(isset($user->promos))
                     <h3>Участие в акциях</h3>
                     <ul>

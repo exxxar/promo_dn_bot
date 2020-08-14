@@ -2,8 +2,8 @@
 
 namespace App\Http\Controllers;
 
-use App\Company;
-use App\Event;
+use App\Models\SkidkaServiceModels\Company;
+use App\Models\SkidkaServiceModels\Event;
 use Carbon\Carbon;
 use Illuminate\Http\Request;
 use Telegram\Bot\FileUpload\InputFile;
@@ -61,6 +61,7 @@ class CompanyController extends Controller
             'bailee' => 'required',
             'logo_url' => 'required',
             'position' => 'required',
+            'lottery_start_price' => 'required',
         ]);
 
 
@@ -73,7 +74,10 @@ class CompanyController extends Controller
             'bailee' => $request->get('bailee') ?? '',
             'logo_url' => $request->get('logo_url') ?? '',
             'position' => $request->get('position') ?? 0,
+            'is_active' => $request->get('is_active') ?? false,
             'telegram_bot_url' => $request->get('telegram_bot_url') ?? '',
+            'menu_url' => $request->get('menu_url') ?? null,
+            'lottery_start_price' => $request->get('lottery_start_price') ?? 1000,
             'created_at' => Carbon::now(),
             'updated_at' => Carbon::now(),
         ]);
@@ -128,6 +132,7 @@ class CompanyController extends Controller
             'bailee' => 'required',
             'logo_url' => 'required',
             'position' => 'required',
+            'lottery_start_price' => 'required',
         ]);
 
 
@@ -140,7 +145,10 @@ class CompanyController extends Controller
         $company->bailee = $request->get('bailee') ?? '';
         $company->logo_url = $request->get('logo_url') ?? '';
         $company->position = $request->get('position') ?? 0;
+        $company->is_active = $request->get('is_active') ?? false;
+        $company->menu_url = $request->get('menu_url') ?? null;
         $company->telegram_bot_url = $request->get('telegram_bot_url') ?? '';
+        $company->lottery_start_price = $request->get('lottery_start_price') ?? 1000;
         $company->save();
 
         return redirect()
@@ -170,15 +178,19 @@ class CompanyController extends Controller
 
         $keyboard = [
             [
-                ['text' => "\xF0\x9F\x91\x89Переход в бота", 'url' =>"https://t.me/" . env("APP_BOT_NAME")],
+                ['text' => "\xF0\x9F\x91\x89Акционный бот", 'url' =>"https://t.me/" . env("APP_BOT_NAME")],
             ],
         ];
 
         if (strlen(trim($company->telegram_bot_url)) > 0)
-            array_push($tmp_keyboards, [
-                ['text' => "\xF0\x9F\x91\x89Перейти в бота", 'url' => $company->telegram_bot_url],
+            array_push($keyboard, [
+                ['text' => "\xF0\x9F\x91\x89Бот компании", 'url' => $company->telegram_bot_url],
             ]);
 
+        if (!is_null($company->menu_url))
+            array_push($keyboard,[
+                ["text"=>"\xE2\x9D\x97\xE2\x9D\x97\xE2\x9D\x97Акционное меню\xE2\x9D\x97\xE2\x9D\x97\xE2\x9D\x97","url"=>$company->menu_url]
+            ]);
 
         Telegram::sendPhoto([
             'chat_id' => "-1001392337757",
@@ -195,5 +207,15 @@ class CompanyController extends Controller
         return redirect()
             ->route('companies.index')
             ->with('success', 'Компания успешно добавлена в канал');
+    }
+
+    public function hide(Request $request,$id){
+        $company = Company::find($id);
+        $company->is_active = !$company->is_active;
+        $company->save();
+
+        return redirect()
+            ->route('companies.index')
+            ->with('success', 'Статус компании изменен!');
     }
 }

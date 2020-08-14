@@ -38,6 +38,7 @@
                         <tr>
                             <th scope="col">#</th>
                             <th scope="col">Ссылка</th>
+                            <th scope="col">Позиция</th>
                             <th scope="col">Раздел</th>
                             <th scope="col">Состояние</th>
                             <th scope="col">Действие</th>
@@ -55,6 +56,7 @@
                                     </a>
 
                                 </td>
+                                <td>{{$article->position}}</td>
                                 <td>
 
                                     {{$article->part->key}}

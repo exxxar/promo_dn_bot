@@ -64,6 +64,13 @@
                         </tr>
 
                         <tr>
+                            <td>Компания отображается</td>
+                            <td>
+                                <input type="checkbox" name="is_active" class="form-control" value="{{$company->is_active?"checked":""}}">
+                            </td>
+                        </tr>
+
+                        <tr>
                             <td>Ссылка на бота</td>
                             <td>
                                 <input type="url" name="telegram_bot_url" class="form-control" value="{{$company->telegram_bot_url}}">
@@ -76,6 +83,10 @@
                                 <input type="number" min="0" max="100" name="cashback" value="{{$company->cashback}}" class="form-control"
                                        required>
                             </td>
+                        </tr>
+                        <tr>
+                            <td>Цена промокода(розыгрыша) за CashBack</td>
+                            <td><input type="number" min="0" name="lottery_start_price" value="{{$company->lottery_start_price}}" class="form-control"></td>
                         </tr>
                         <tr>
                             <td>Адрес</td>
@@ -110,6 +121,13 @@
                                 <input type="url" name="logo_url" value="{{$company->logo_url}}"
                                        placeholder="https://example.com" pattern="http://.*|https://.*" size="200"
                                        class="form-control" required>
+                            </td>
+                        </tr>
+
+                        <tr>
+                            <td>Акционное меню (в виде статьи)</td>
+                            <td>
+                                <input type="url" name="menu_url"  value="{{$company->menu_url}}" class="form-control">
                             </td>
                         </tr>
 

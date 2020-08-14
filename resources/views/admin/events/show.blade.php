@@ -20,8 +20,6 @@
                 </div>
 
 
-                <form method="post" action="{{ route('events.store') }}">
-                    @csrf
                     <table class="table mt-2">
                         <thead class="thead-light ">
                         <th>Параметр</th>
@@ -80,6 +78,18 @@
                             </td>
                         </tr>
 
+
+                        @if($event->promo_id!=null)
+                            <tr>
+                                <td>Связанная акция</td>
+                                <td>
+                                    <a class="btn btn-link" href="{{ route('promotions.index',$event->promo_id) }}">
+                                        <i class="fas fa-link"></i> {{$event->promotion->title}}
+                                    </a>
+                                </td>
+                            </tr>
+                        @endif
+
                         <tr>
                             <td></td>
                             <td>
@@ -89,13 +99,14 @@
                                 <form action="{{ route('events.destroy', $event->id)}}" method="post">
                                     @csrf
                                     @method('DELETE')
-                                    <button class="btn btn-link" type="submit">Удалить <i class="fas fa-times"></i></button>
+                                    <button class="btn btn-link" type="submit">Удалить <i class="fas fa-times"></i>
+                                    </button>
                                 </form>
                             </td>
                         </tr>
                         </tbody>
                     </table>
-                </form>
+
             </div>
         </div>
     </div>

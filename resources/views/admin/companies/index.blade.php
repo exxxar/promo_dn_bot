@@ -30,46 +30,46 @@
                     </div>
                 </div>
 
-                    <h1>Компании</h1>
+                <h1>Компании</h1>
                 @isset($companies)
-                    <table class="table mt-2">
-
-                        <thead class="thead-light">
-                        <tr>
-                            <th scope="col">#</th>
-                            <th scope="col">Название</th>
-                            <th scope="col">Описание</th>
-                            <th scope="col">Действие</th>
-
-                        </tr>
-                        </thead>
-                        <tbody>
+                    <div class="row justify-content-around">
                         @foreach($companies as $key => $company)
-                            <tr>
-                                <td>{{$key + 1}}</td>
-                                <td><a href="{{ route('companies.show',$company->id) }}">
-                                        {{$company->title}}</a>
 
+                            <div class="card card-accent-success" style="width: 300px">
+                                <div class="card-header ">
                                     <a class="btn btn-link" href="{{ route('companies.edit',$company->id) }}">
                                         <i class="fas fa-edit"></i>
                                     </a>
-                                </td>
-                                <td>{{$company->description}}</td>
-                                <td>
-                                    <a class="btn btn-link" href="{{ route('companies.channel',$company->id) }}" title="Отправить в канал">
+                                    <a class="btn btn-link" href="{{ route('companies.channel',$company->id) }}"
+                                       title="Отправить в канал">
                                         <i class="fab fa-telegram"></i>
                                     </a>
-                                    <form action="{{ route('companies.destroy', $company->id)}}" method="post">
+                                    <a class="btn btn-link" href="{{ route('companies.hide',$company->id) }}"
+                                       title="Скрыть компанию, акции и мероприятия!">
+                                        @if($company->is_active)
+                                            <i class="fas fa-eye"></i>
+                                        @else
+                                            <i class="fas fa-eye-slash"></i>
+                                        @endif
+                                    </a>
+                                    <form class="btn btn-link" action="{{ route('companies.destroy', $company->id)}}" method="post">
                                         @csrf
                                         @method('DELETE')
                                         <button class="btn btn-link" type="submit"><i class="fas fa-times"></i></button>
                                     </form>
-                                </td>
-                            </tr>
-                        @endforeach
+                                </div>
+                                <img class="card-img-top" src="{{$company->logo_url}}">
+                                <div class="card-body">
+                                    <h5 class="card-title">{{$company->title}}</h5>
+                                    <a class="btn btn-primary" href="{{ route('companies.show',$company->id) }}">
+                                        Подробнее</a>
+                                    <a class="btn btn-info" href="{{ route('promotions.in_company',$company->id) }}">
+                                        Акции в компании</a>
+                                </div>
+                            </div>
 
-                        </tbody>
-                    </table>
+                        @endforeach
+                    </div>
 
                     {{ $companies->links() }}
                 @endisset

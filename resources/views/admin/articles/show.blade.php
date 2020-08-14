@@ -23,8 +23,6 @@
                 </div>
 
 
-                <form method="post" action="{{ route('articles.store') }}">
-                    @csrf
                     <table class="table mt-2">
                         <thead class="thead-light ">
                         <th>Параметр</th>
@@ -35,6 +33,12 @@
                             <td>Ссылка</td>
                             <td>
                                 <a href="{{$article->url}}" target="_blank">{{$article->url}}</a>
+                            </td>
+                        </tr>
+                        <tr>
+                            <td>Позиция</td>
+                            <td>
+                                <p>{{$article->position}}</p>
                             </td>
                         </tr>
                         <tr>
@@ -73,7 +77,7 @@
 
                         </tbody>
                     </table>
-                </form>
+
             </div>
         </div>
     </div>

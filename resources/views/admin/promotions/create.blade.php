@@ -11,7 +11,7 @@
                             <h2>Добавление новой акции</h2>
                         </div>
                         <div class="pull-right">
-                            <a class="btn btn-primary" href="{{ route('companies.index') }}"> Назад</a>
+                            <a class="btn btn-primary" href="{{ route('promotions.index') }}"> Назад</a>
                         </div>
 
                         @if (count($errors) > 0)
@@ -86,6 +86,16 @@
                                 <input type="number" min="0" max="1000000" name="activation_count" class="form-control" required>
                             </td>
                         </tr>
+
+                        <tr>
+                            <td>Колличество активаций для одного пользователя</td>
+                            <td>
+                                <input type="number" min="1" max="1000000" name="user_can_activate_count" class="form-control" required>
+                            </td>
+                        </tr>
+
+
+
                         <tr>
                             <td>Адрес расположения</td>
                             <td>

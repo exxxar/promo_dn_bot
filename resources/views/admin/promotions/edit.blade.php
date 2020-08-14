@@ -63,6 +63,14 @@
                         </tr>
 
                         <tr>
+                            <td>Колличество активаций для одного пользователя</td>
+                            <td>
+                                <input type="number" min="1" max="1000000" value="{{$promotion->user_can_activate_count}}" name="user_can_activate_count" class="form-control" required>
+                            </td>
+                        </tr>
+
+
+                        <tr>
                             <td>Ссылка на изображение к акции</td>
                             <td>
                                 <input type="url" name="promo_image_url" value="{{$promotion->promo_image_url}}"
@@ -75,7 +83,7 @@
                         <tr>
                             <td>Дата и время начала акции</td>
                             <td>
-                                <input type="datetime-local" value="{{$promotion->start_at}}" name="start_at"
+                                <input type="datetime-local" value="{{$promotion->start_at->format("Y-m-d").'T'.$promotion->start_at->format("H:m:s")}}" name="start_at"
                                        class="form-control"
                                        required>
                             </td>
@@ -83,7 +91,7 @@
                         <tr>
                             <td>Дата и время окончания акции</td>
                             <td>
-                                <input type="datetime-local" value="{{$promotion->end_at}}" name="end_at"
+                                <input type="datetime-local" value="{{$promotion->end_at->format("Y-m-d").'T'.$promotion->end_at->format("H:m:s")}}" name="end_at"
                                        class="form-control"
                                        required>
                             </td>

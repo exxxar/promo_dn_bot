@@ -81,8 +81,10 @@
                         <tr>
                             <td>Дата и время начала мероприятия</td>
                             <td>
-                               <p>Старая дата: {{$event->start_at}}</p>
-                                <input type="datetime-local" value="{{$event->start_at}}" name="start_at"
+
+                                <input type="datetime-local"
+                                       value="{{$event->start_at->format("Y-m-d").'T'.$event->start_at->format("H:m:s")}}"
+                                       name="start_at"
                                        class="form-control"
                                        required>
                             </td>
@@ -90,10 +92,24 @@
                         <tr>
                             <td>Дата и время окончания мероприятия</td>
                             <td>
-                                <p>Старая дата: {{$event->end_at}}</p>
-                                <input type="datetime-local" value="{{$event->end_at}}" name="end_at"
+
+                                <input type="datetime-local"
+                                       value="{{$event->end_at->format("Y-m-d").'T'.$event->end_at->format("H:m:s")}}"
+                                       name="end_at"
                                        class="form-control"
                                        required>
+                            </td>
+                        </tr>
+
+                        <tr>
+                            <td>Показывать QR-код</td>
+                            <td>
+                                <label class="c-switch c-switch-label c-switch-pill c-switch-opposite-primary">
+                                    <input class="c-switch-input" type="checkbox"
+                                           name="need_qr" {{$event->need_qr?'checked':''}}>
+                                    <span class="c-switch-slider" data-checked="✓" data-unchecked="✕"></span>
+                                </label>
+
                             </td>
                         </tr>
 
@@ -101,11 +117,33 @@
                             <td>Выбрать компанию</td>
                             <td>
                                 <select name="company_id" class="form-control" required>
-                                    @foreach($companies as $compay)
-                                        @if($event->company_id==$compay->id)
-                                            <option value="{{$compay->id}}" selected>{{$compay->title}}</option>
+                                    @foreach($companies as $company)
+                                        @if($event->company_id==$company->id)
+                                            <option value="{{$company->id}}" selected>{{$company->title}}</option>
                                         @else
-                                            <option value="{{$compay->id}}">{{$compay->title}}</option>
+                                            @if($company->is_active)
+                                                <option value="{{$company->id}}">{{$company->title}}</option>
+                                            @endif
+                                        @endif
+                                    @endforeach
+                                </select>
+                            </td>
+                        </tr>
+
+                        <tr>
+                            <td>Прикрепить акцию (не обязательно)</td>
+                            <td>
+                                <select name="promo_id" class="form-control">
+                                    <option value="">Не выбрано</option>
+
+                                    @foreach($promotions as $promotion)
+
+                                        @if($event->promo_id==$promotion->id)
+                                            <option value="{{$promotion->id}}" selected>{{$promotion->title}}</option>
+                                        @else
+                                            @if($promotion->company->is_active)
+                                                <option value="{{$promotion->id}}">{{$promotion->title}}</option>
+                                            @endif
                                         @endif
                                     @endforeach
                                 </select>
